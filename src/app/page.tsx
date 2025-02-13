@@ -2,19 +2,20 @@
 
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { debounce } from '@/shared/utils/debounce';
+// import { debounce } from '@/shared/utils/debounce';
+import { throttle } from '@/shared/utils/throttle';
 
 export function MenuBar() {
   const [isScrollToTop, setIsScrollToTop] = useState<boolean>(false);
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      if (window.scrollY > 200) {
         setIsScrollToTop(false);
       } else {
         setIsScrollToTop(true);
       }
     };
-    window.addEventListener('scroll', debounce(handleScroll, 10));
+    window.addEventListener('scroll', throttle(handleScroll, 200));
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -23,7 +24,7 @@ export function MenuBar() {
     <div className="max-w-full bg-white mx-auto sticky top-0">
       <div
         className={`max-w-5xl mx-auto flex justify-evenly p-4 rounded-b-3xl
- transition-shadow ${isScrollToTop ? '' : 'shadow-xl'}`}
+ transition-shadow ${isScrollToTop ? 'shadow-sm' : 'shadow-xl'}`}
       >
         <div>Intro</div>
         <div>Products</div>
