@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 // import { debounce } from '@/shared/utils/debounce';
 import { throttle } from '@/shared/utils/throttle';
 
-export function MenuBar() {
+function MenuBar() {
   const [isScrollToTop, setIsScrollToTop] = useState<boolean>(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +51,7 @@ export function MenuBar() {
   );
 }
 
-export function Draft() {
+function Draft() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
