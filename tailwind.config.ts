@@ -26,6 +26,9 @@ export default {
           '100%': { opacity: '0' },
         },
       },
+      maxHeight: {
+        '128': '32rem',
+      },
     },
   },
   plugins: [],

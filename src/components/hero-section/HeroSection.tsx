@@ -18,10 +18,12 @@ export function HeroSection() {
   const [opacity, setOpacity] = useState<string[]>([]);
   const [translateY, setTranslateY] = useState<string[]>([]);
   const [zIndex, setZIndex] = useState<string[]>([]);
+  const [contrast, setContrast] = useState<string[]>([]);
   const [imgOrders, setImgOrders] = useState<string[]>(arr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
 
   useEffect(() => {
+    setContrast(['contrast-100', 'contrast-75', 'contrast-50', 'contrast-0']);
     setTranslateX([
       '-translate-x-9',
       '-translate-x-6',
@@ -34,13 +36,13 @@ export function HeroSection() {
       '-translate-y-3',
       '-translate-y-0',
     ]);
-    setOpacity(['opacity-100', 'opacity-80', 'opacity-60', 'opacity-0']);
+    setOpacity(['opacity-100', 'opacity-70', 'opacity-50', 'opacity-0']);
     setZIndex(['z-30', 'z-20', 'z-10', 'z-0']);
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setStartTransitions(false);
+      setStartTransitions(() => false);
       setImgOrders((prev) => {
         const newArr = [...prev.slice(1), prev[0]];
         return newArr;
@@ -53,8 +55,8 @@ export function HeroSection() {
   useEffect(() => {
     if (startTransitions === false) {
       const timer = setTimeout(() => {
-        setStartTransitions(true);
-      }, 4500);
+        setStartTransitions(() => true);
+      }, 4250);
 
       return () => clearTimeout(timer);
     }
@@ -81,6 +83,7 @@ export function HeroSection() {
           let o = opacity[transitionIndex];
           let tranformX = translateX[transitionIndex];
           let tranformY = translateY[transitionIndex];
+          const zoomIn = index === 0 ? 'hover:scale-110' : 'hover:scale-100';
 
           if (startTransitions) {
             if (index === 0) {
@@ -97,10 +100,10 @@ export function HeroSection() {
           return (
             <div
               key={img}
-              className={`w-2/3 md:w-4/5 h-4/5 absolute transition-all duration-300 ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${o}`}
+              className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${o}`}
             >
               <div
-                className={`w-full h-4/5 rounded-xl aspect-square bg-center bg-cover bg-no-repeat ${img}`}
+                className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} ${contrast[index]}`}
               ></div>
             </div>
           );
