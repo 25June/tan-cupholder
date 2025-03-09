@@ -1,17 +1,14 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
-const arr = [
+const heroImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
   "bg-[url('/IMG_7197.jpg')]",
   "bg-[url('/IMG_7278.jpg')]",
   "bg-[url('/IMG_8884.jpg')]",
-
-  // '/IMG_7197.jpg',
-  // '/IMG_7278.jpg',
-  // '/IMG_8884.jpg',
-  // '/IMG_8677 copy.jpg',
 ];
+
+const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 
 export function HeroSection() {
   const [translateX, setTranslateX] = useState<string[]>([]);
@@ -19,7 +16,7 @@ export function HeroSection() {
   const [translateY, setTranslateY] = useState<string[]>([]);
   const [zIndex, setZIndex] = useState<string[]>([]);
   const [contrast, setContrast] = useState<string[]>([]);
-  const [imgOrders, setImgOrders] = useState<string[]>(arr);
+  const [imgOrders, setImgOrders] = useState<string[]>(heroImageArr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
 
   useEffect(() => {
@@ -62,19 +59,39 @@ export function HeroSection() {
     }
   }, [startTransitions]);
   return (
-    <div className="max-w-full w-screen h-screen bg-white flex align-middle justify-center">
+    <div className="max-w-8xl w-screen h-screen bg-white flex align-middle justify-center mx-auto">
       <div className="relative w-full h-full flex justify-end pt-24">
         <div className="w-4/5">
           <Image
             src="/logo.png"
             alt="TAN cupholder logo"
-            width={350}
-            height={350}
+            width={200}
+            height={200}
             className={`rounded-full`}
           />
-          <h1 className="pl-10 font-sans text-5xl subpixel-antialiased font-semibold tracking-wide">
-            Back to Resilian Material
-          </h1>
+          <div className="pl-10">
+            <h1 className="font-sans text-5xl subpixel-antialiased font-semibold tracking-wider mb-3">
+              Back to <br /> Resiliant Material
+            </h1>
+            <p className="font-light leading-6 text-gray-600 mb-2">
+              Colorful Model, Various Types, Amazing Endurant!!!
+            </p>
+            <button
+              type="button"
+              className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
+            >
+              Shop now
+            </button>
+            <div className="flex gap-2 mt-6">
+              {variants.map((item) => {
+                return (
+                  <div key={item} className="p-4 border-2 rounded-lg">
+                    <Image width={64} height={64} src={item} alt={item} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
       <div className="relative w-full h-full flex justify-center pt-32">
@@ -100,10 +117,10 @@ export function HeroSection() {
           return (
             <div
               key={img}
-              className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${o}`}
+              className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
             >
               <div
-                className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} ${contrast[index]}`}
+                className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} `}
               ></div>
             </div>
           );

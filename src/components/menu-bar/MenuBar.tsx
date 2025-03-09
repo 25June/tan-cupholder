@@ -1,26 +1,14 @@
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { throttle } from '@/shared/utils/throttle';
 
-export function MenuBar() {
-  const [isScrollToTop, setIsScrollToTop] = useState<boolean>(false);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 200) {
-        setIsScrollToTop(false);
-      } else {
-        setIsScrollToTop(true);
-      }
-    };
-    window.addEventListener('scroll', throttle(handleScroll, 200));
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+interface Props {
+  isScrollToTop: boolean;
+}
+
+export function MenuBar({ isScrollToTop }: Props) {
   return (
-    <div className="max-w-full bg-white mx-auto sticky top-0 z-50">
+    <div className="max-w-screen w-full mx-auto absolute z-50">
       <div
-        className={`max-w-5xl mx-auto flex justify-evenly p-4 rounded-b-3xl
+        className={`max-w-5xl bg-white mx-auto flex justify-evenly p-4 rounded-b-3xl
  transition-shadow ${isScrollToTop ? 'shadow-sm' : 'shadow-xl'}`}
       >
         <div>Intro</div>

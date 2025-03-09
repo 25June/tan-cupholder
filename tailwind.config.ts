@@ -11,6 +11,9 @@ export default {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        'logo-orange': '#f57722',
+        'logo-orange-border': '#ec8c4c',
+        'logo-text': '#493213',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out', // Adjust duration and easing
@@ -25,6 +28,9 @@ export default {
           '0%': { opacity: '1' },
           '100%': { opacity: '0' },
         },
+      },
+      maxWidth: {
+        '8xl': '90rem',
       },
       maxHeight: {
         '128': '32rem',

@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
+import { useState, useEffect } from 'react';
+import { throttle } from '@/shared/utils/throttle';
 
 function Draft() {
   return (
@@ -106,12 +108,34 @@ function Draft() {
 }
 
 export default function Home() {
+  const [isScrollToTop, setIsScrollToTop] = useState<boolean>(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsScrollToTop(false);
+      } else {
+        setIsScrollToTop(true);
+      }
+    };
+    window.addEventListener('scroll', throttle(handleScroll, 200));
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
     <div>
-      <MenuBar />
-      <HeroSection />
-      <Draft />
-      <Draft />
+      <MenuBar isScrollToTop={isScrollToTop} />
+      <div className="h-screen flex flex-col overflow-y-auto text-logo-text snap-y snap-proximity scroll-smooth">
+        <div className="snap-center pt-14">
+          <HeroSection />
+        </div>
+        <div className="snap-center">
+          <Draft />
+        </div>
+        <div className="snap-center">
+          <Draft />
+        </div>
+      </div>
     </div>
   );
 }
