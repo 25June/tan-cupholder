@@ -14,7 +14,7 @@ export function HeroSection() {
   const [translateX, setTranslateX] = useState<string[]>([]);
   const [opacity, setOpacity] = useState<string[]>([]);
   const [translateY, setTranslateY] = useState<string[]>([]);
-  const [zIndex, setZIndex] = useState<string[]>([]);
+  const [zIndex] = useState<string[]>(['z-30', 'z-20', 'z-10', 'z-0']);
   const [contrast, setContrast] = useState<string[]>([]);
   const [imgOrders, setImgOrders] = useState<string[]>(heroImageArr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
@@ -34,7 +34,6 @@ export function HeroSection() {
       '-translate-y-0',
     ]);
     setOpacity(['opacity-100', 'opacity-70', 'opacity-50', 'opacity-0']);
-    setZIndex(['z-30', 'z-20', 'z-10', 'z-0']);
   }, []);
 
   useEffect(() => {
@@ -59,72 +58,83 @@ export function HeroSection() {
     }
   }, [startTransitions]);
   return (
-    <div className="max-w-8xl w-screen h-screen bg-white flex align-middle justify-center mx-auto">
-      <div className="relative w-full h-full flex justify-end pt-24">
-        <div className="w-4/5">
-          <Image
-            src="/logo.png"
-            alt="TAN cupholder logo"
-            width={200}
-            height={200}
-            className={`rounded-full`}
-          />
-          <div className="pl-10">
-            <h1 className="font-sans text-5xl subpixel-antialiased font-semibold tracking-wider mb-3">
-              Back to <br /> Resiliant Material
-            </h1>
-            <p className="font-light leading-6 text-gray-600 mb-2">
-              Colorful Model, Various Types, Amazing Endurant!!!
-            </p>
-            <button
-              type="button"
-              className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
-            >
-              Shop now
-            </button>
-            <div className="flex gap-2 mt-6">
-              {variants.map((item) => {
-                return (
-                  <div key={item} className="p-4 border-2 rounded-lg">
-                    <Image width={64} height={64} src={item} alt={item} />
-                  </div>
-                );
-              })}
+    <div className="relative">
+      <div className="max-w-8xl w-screen h-screen bg-white flex align-middle justify-center mx-auto pt-14">
+        <div className="relative w-full h-full flex justify-end pt-16">
+          <div className="w-4/5">
+            <Image
+              src="/logo.png"
+              alt="TAN cupholder logo"
+              width={200}
+              height={200}
+              className={`rounded-full`}
+            />
+            <div className="pl-10">
+              <h1 className="font-sans text-5xl subpixel-antialiased font-semibold tracking-wider mb-3">
+                Back to <br /> Resiliant Material
+              </h1>
+              <p className="font-light leading-6 text-gray-600 mb-4">
+                Colorful Model, Various Types, Amazing Endurant!!!
+              </p>
+              <button
+                type="button"
+                className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
+              >
+                Shop now
+              </button>
+              <div className="flex gap-2 mt-6">
+                {variants.map((item) => {
+                  return (
+                    <div key={item} className="p-4 border-2 rounded-lg">
+                      <Image width={64} height={64} src={item} alt={item} />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="relative w-full h-full flex justify-center pt-32">
-        {imgOrders.map((img, index) => {
-          let transitionIndex = index;
-          let o = opacity[transitionIndex];
-          let tranformX = translateX[transitionIndex];
-          let tranformY = translateY[transitionIndex];
-          const zoomIn = index === 0 ? 'hover:scale-110' : 'hover:scale-100';
+        <div className="relative w-full h-full flex justify-center pt-28">
+          {imgOrders.map((img, index) => {
+            let transitionIndex = index;
+            let o = opacity[transitionIndex];
+            let tranformX = translateX[transitionIndex];
+            let tranformY = translateY[transitionIndex];
+            const zoomIn = index === 0 ? 'hover:scale-110' : 'hover:scale-100';
 
-          if (startTransitions) {
-            if (index === 0) {
-              o = 'opacity-0';
-              tranformX = '-translate-x-12';
-              tranformY = '-translate-y-12';
-            } else {
-              transitionIndex = index - 1;
-              o = opacity[transitionIndex];
-              tranformX = translateX[transitionIndex];
-              tranformY = translateY[transitionIndex];
+            if (startTransitions) {
+              if (index === 0) {
+                o = 'opacity-0';
+                tranformX = '-translate-x-12';
+                tranformY = '-translate-y-12';
+              } else {
+                transitionIndex = index - 1;
+                o = opacity[transitionIndex];
+                tranformX = translateX[transitionIndex];
+                tranformY = translateY[transitionIndex];
+              }
             }
-          }
-          return (
-            <div
-              key={img}
-              className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
-            >
+            return (
               <div
-                className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} `}
-              ></div>
-            </div>
-          );
-        })}
+                key={img}
+                className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
+              >
+                <div
+                  className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} `}
+                ></div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="absolute bottom-0 w-screen">
+        <Image
+          src={'/bottom-wave.svg'}
+          width={160}
+          height={90}
+          alt="wave"
+          className="w-screen"
+        />
       </div>
     </div>
   );

@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
+import { CategorySection } from '@/components/category-section/CategorySection';
+import { ProductSlider } from '@/components/product-slider/ProductSlider';
 import { useState, useEffect } from 'react';
 import { throttle } from '@/shared/utils/throttle';
 
@@ -126,11 +128,14 @@ export default function Home() {
     <div>
       <MenuBar isScrollToTop={isScrollToTop} />
       <div className="h-screen flex flex-col overflow-y-auto text-logo-text snap-y snap-proximity scroll-smooth">
-        <div className="snap-center pt-14">
+        <div className="snap-center">
           <HeroSection />
         </div>
+        <div className="snap-center bg-logo-orange-border">
+          <CategorySection />
+        </div>
         <div className="snap-center">
-          <Draft />
+          <ProductSlider />
         </div>
         <div className="snap-center">
           <Draft />

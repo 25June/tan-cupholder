@@ -8,6 +8,12 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'from-white-to-transparent-180deg':
+          'linear-gradient(180deg, rgba(255, 255, 255, 0) 48.29%, rgba(249, 249, 249, 0.95) 71.06%)',
+        'from-white-to-transparent-270deg':
+          'linear-gradient(270deg, rgba(255, 255, 255, 0) 48.29%, rgba(249, 249, 249, 0.95) 71.06%)',
+      },
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
