@@ -37,6 +37,7 @@ export default {
       },
       maxWidth: {
         '8xl': '90rem',
+        'extra-20vw': 'calc(100vw + 20vw)',
       },
       maxHeight: {
         '128': '32rem',

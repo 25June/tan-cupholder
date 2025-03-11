@@ -23,7 +23,7 @@ export const CategorySection = () => {
           </div>
         </div>
         <div className="flex gap-8 flex-col grow w-full">
-          <div className="bg-white border-4 border-white rounded-2xl min-w-96 w-full min-h-96 overflow-hidden">
+          <div className="bg-white border-4 border-white rounded-2xl min-w-96 w-full max-h-96 min-h-64 h-full overflow-hidden">
             <div
               className={`w-full h-full max-h-96 bg-right bg-cover bg-no-repeat ${exampleImageArr[1]}`}
             >
@@ -37,7 +37,7 @@ export const CategorySection = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white border-4 border-white rounded-2xl min-w-96 w-full min-h-96 overflow-hidden">
+          <div className="bg-white border-4 border-white rounded-2xl min-w-96 w-full max-h-96 min-h-64 h-full overflow-hidden">
             <div
               className={`w-full h-full max-h-96 bg-right bg-cover bg-no-repeat ${exampleImageArr[2]} `}
             >

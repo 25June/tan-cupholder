@@ -59,7 +59,7 @@ export function HeroSection() {
   }, [startTransitions]);
   return (
     <div className="relative">
-      <div className="max-w-8xl w-screen h-screen bg-white flex align-middle justify-center mx-auto pt-14">
+      <div className="max-w-8xl w-screen h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full h-full flex justify-end pt-16">
           <div className="w-4/5">
             <Image
