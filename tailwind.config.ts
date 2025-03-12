@@ -37,10 +37,13 @@ export default {
       },
       maxWidth: {
         '8xl': '90rem',
-        'extra-20vw': 'calc(100vw + 20vw)',
+        'extra-20vw': 'calc(100vw)',
       },
       maxHeight: {
         '128': '32rem',
+      },
+      outlineOffset: {
+        '8': '8px',
       },
     },
   },

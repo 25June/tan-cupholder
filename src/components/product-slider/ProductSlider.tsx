@@ -52,8 +52,19 @@ const mockData = [
 ];
 
 export const ProductSlider = () => {
+  const numberWithCommas = (x: number) => {
+    let parts = x.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parts.join(',');
+  };
+
+  const calculatePercent = (price: number, percent: number) => {
+    const actualPrice = price - (price / 100) * percent;
+    const ceilingNumber = Math.ceil(actualPrice);
+    return numberWithCommas(ceilingNumber);
+  };
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
       <div className="relative z-20 max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <main className="w-full gap-8 row-start-2 text-center ">
           <h2 className="text-lg antialiased text-slate-400 ">Our Products</h2>
@@ -87,12 +98,15 @@ export const ProductSlider = () => {
             </button>
           </div>
           <div className="static min-h-96">
-            <div className="absolute z-20 flex gap-8 max-w-extra-20vw w-full overflow-scroll">
+            <div className="absolute z-20 flex gap-8 max-w-extra-20vw w-full overflow-scroll py-4 px-2">
               {mockData.map((item) => {
                 return (
-                  <div key={item.id}>
-                    <div className="relative">
-                      <div className="absolute text-xs font-semibold top-2 left-2 text-slate-100 rounded-full bg-logo-orange py-1 px-2">
+                  <div
+                    key={item.id}
+                    className="shadow-md hover:shadow-2xl transition-shadow duration-300 rounded-xl"
+                  >
+                    <div className="relative rounded-xl overflow-hidden outline outline-2 -outline-offset-8 outline-slate-100">
+                      <div className="absolute text-xs font-semibold top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2">
                         {item.sale}%
                       </div>
                       <Image
@@ -102,6 +116,21 @@ export const ProductSlider = () => {
                         alt={item.image}
                         className="w-72 h-72 min-w-72"
                       />
+                    </div>
+                    <div className="relative text-left p-2">
+                      <div className="text-sm font-light text-slate-500">
+                        {item.type}
+                      </div>
+                      <h4 className="text-lg font-semibold">{item.name}</h4>
+                      <div>
+                        <span className="text-slate-400 line-through decoration-slate-400">
+                          {numberWithCommas(item.price)} vnd
+                        </span>
+                        {' -> '}
+                        <span className="font-medium">
+                          {calculatePercent(item.price, item.sale)} vnd
+                        </span>
+                      </div>
                     </div>
                   </div>
                 );
