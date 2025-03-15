@@ -33,22 +33,6 @@ const mockData = [
     type: 'Type 1',
     image: '/IMG_7210.jpg',
   },
-  {
-    id: '5',
-    name: 'Product 5',
-    price: 89900,
-    sale: 20,
-    type: 'Type 1',
-    image: '/IMG_8677.jpg',
-  },
-  {
-    id: '6',
-    name: 'Product 6',
-    price: 89900,
-    sale: 20,
-    type: 'Type 1',
-    image: '/IMG_8803.jpg',
-  },
 ];
 
 export const ProductSlider = () => {
@@ -64,14 +48,14 @@ export const ProductSlider = () => {
     return numberWithCommas(ceilingNumber);
   };
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative">
       <div className="relative z-20 max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <main className="w-full gap-8 row-start-2 text-center ">
+        <main className="w-full gap-8 row-start-2 text-center">
           <h2 className="text-lg antialiased text-slate-400 ">Our Products</h2>
           <h3 className="text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ">
             Our Products Collections
           </h3>
-          <div className="flex gap-8 justify-center  mb-20">
+          <div className="flex gap-8 justify-center mb-10">
             <button
               type="button"
               className="text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
@@ -97,16 +81,16 @@ export const ProductSlider = () => {
               Featured Products
             </button>
           </div>
-          <div className="static min-h-96">
-            <div className="absolute z-20 flex gap-8 max-w-extra-20vw w-full overflow-scroll py-4 px-2">
+          <div>
+            <div className="relative grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8 py-2 px-2">
               {mockData.map((item) => {
                 return (
                   <div
                     key={item.id}
-                    className="shadow-md hover:shadow-2xl transition-shadow duration-300 rounded-xl"
+                    className="relative justify-self-center shadow-md hover:shadow-2xl transition-shadow duration-300 rounded-xl w-auto"
                   >
-                    <div className="relative rounded-xl overflow-hidden outline outline-2 -outline-offset-8 outline-slate-100">
-                      <div className="absolute text-xs font-semibold top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2">
+                    <div className="relative bg-black rounded-xl overflow-hidden outline outline-2 -outline-offset-8 outline-slate-100 transition-all duration-300 ">
+                      <div className="z-10 absolute text-xs font-semibold top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2">
                         {item.sale}%
                       </div>
                       <Image
@@ -114,7 +98,7 @@ export const ProductSlider = () => {
                         width={300}
                         height={300}
                         alt={item.image}
-                        className="w-72 h-72 min-w-72"
+                        className="w-72 h-72 min-w-72 hover:scale-110 transform-none transition-all duration-300"
                       />
                     </div>
                     <div className="relative text-left p-2">
