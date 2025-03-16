@@ -7,7 +7,7 @@ import { CategorySection } from '@/components/category-section/CategorySection';
 import { ProductSlider } from '@/components/product-slider/ProductSlider';
 import { useState, useEffect } from 'react';
 import { throttle } from '@/shared/utils/throttle';
-
+import { Faq } from '@/components/faq/Faq';
 function Draft() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -139,6 +139,9 @@ export default function Home() {
         </div>
         <div className="snap-center">
           <Draft />
+        </div>
+        <div className="snap-center">
+          <Faq />
         </div>
       </div>
     </div>
