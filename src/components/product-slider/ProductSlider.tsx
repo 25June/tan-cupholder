@@ -37,7 +37,7 @@ const mockData = [
 
 export const ProductSlider = () => {
   const numberWithCommas = (x: number) => {
-    let parts = x.toString().split('.');
+    const parts = x.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     return parts.join(',');
   };
