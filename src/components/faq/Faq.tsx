@@ -72,13 +72,13 @@ export const Faq = () => {
                   </button>
                 </div>
                 <div
-                  className={`bg-logo-orange overflow-hidden rounded-md relative -top-3 transition-all duration-300 ${
+                  className={`bg-logo-orange max-h-full overflow-hidden rounded-md relative -top-3 transition-all duration-300 ${
                     item.opened ? '-translate-y-0' : '-translate-y-6'
                   }`}
                 >
                   <div
-                    className={`transition-all duration-300 text-white px-4 ${
-                      item.opened ? `pt-6 pb-4 h-auto` : 'h-0'
+                    className={`transition-all duration-300 text-white px-4 overflow-hidden ${
+                      item.opened ? `pt-6 pb-4 max-h-128` : 'max-h-0'
                     }`}
                   >
                     {item.answer}

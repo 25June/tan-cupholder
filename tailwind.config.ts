@@ -45,6 +45,10 @@ export default {
       outlineOffset: {
         '8': '8px',
       },
+      transitionProperty: {
+        'max-height': 'max-height',
+        spacing: 'margin, padding',
+      },
     },
   },
   plugins: [],
