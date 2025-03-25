@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Image from 'next/image';
+import { div } from 'motion/react-client';
 
 const mockData = [
   {
@@ -42,52 +44,63 @@ export const Faq = () => {
     );
   };
   return (
-    <div className="relative max-w-6xl mx-auto min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="w-full">
-        <h3 className="text-center font-bold text-1xl text-slate-500 tracking-wide">
-          FAQ
-        </h3>
-        <h4 className="text-center font-semibold text-4xl">
-          Question? Look here
-        </h4>
-        <div className="mt-8 space-y-4 transition-all duration-300">
-          {data.map((item) => {
-            return (
-              <div
-                key={item.id}
-                className="relative transition-all duration-300"
-              >
+    <div className="relative">
+      <div className="relative max-w-6xl mx-auto min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="w-full">
+          <h3 className="text-center font-bold text-1xl text-slate-500 tracking-wide">
+            FAQ
+          </h3>
+          <h4 className="text-center font-semibold text-4xl">
+            Question? Look here
+          </h4>
+          <div className="mt-8 space-y-4 transition-all duration-300">
+            {data.map((item) => {
+              return (
                 <div
-                  onClick={() => onClick(item.id)}
-                  className="relative z-10 bg-white p-4 flex justify-between justify-items-center border-logo-orange-border border-2 rounded-md border-solid "
-                >
-                  <p className="font-semibold">{item.title}</p>
-                  <button
-                    onClick={(e) => {
-                      onClick(item.id);
-                      e.stopPropagation();
-                    }}
-                  >
-                    {item.opened ? 'Collapse' : 'Expand'}
-                  </button>
-                </div>
-                <div
-                  className={`bg-logo-orange max-h-full overflow-hidden rounded-md relative -top-3 transition-all duration-300 ${
-                    item.opened ? '-translate-y-0' : '-translate-y-6'
-                  }`}
+                  key={item.id}
+                  className="relative transition-all duration-300"
                 >
                   <div
-                    className={`transition-all duration-300 text-white px-4 overflow-hidden ${
-                      item.opened ? `pt-6 pb-4 max-h-128` : 'max-h-0'
+                    onClick={() => onClick(item.id)}
+                    className="relative z-10 bg-white p-4 flex justify-between justify-items-center border-logo-orange-border border-2 rounded-md border-solid "
+                  >
+                    <p className="font-semibold">{item.title}</p>
+                    <button
+                      onClick={(e) => {
+                        onClick(item.id);
+                        e.stopPropagation();
+                      }}
+                    >
+                      {item.opened ? 'Collapse' : 'Expand'}
+                    </button>
+                  </div>
+                  <div
+                    className={`bg-logo-orange max-h-full overflow-hidden rounded-md relative -top-3 transition-all duration-300 ${
+                      item.opened ? '-translate-y-0' : '-translate-y-6'
                     }`}
                   >
-                    {item.answer}
+                    <div
+                      className={`transition-all duration-300 text-white px-4 overflow-hidden ${
+                        item.opened ? `pt-6 pb-4 max-h-128` : 'max-h-0'
+                      }`}
+                    >
+                      {item.answer}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
+      </div>
+      <div className="absolute bottom-0 w-screen">
+        <Image
+          src={'/bottom-wave.svg'}
+          width={160}
+          height={90}
+          alt="wave"
+          className="w-screen"
+        />
       </div>
     </div>
   );
