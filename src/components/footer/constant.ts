@@ -48,34 +48,34 @@ export const socialMedias = [
 export const menus = [
   [
     {
-      name: 'Tại sao TaN?',
+      name: 'Why TaN?',
       href: 'https://news.predictmobile.com/why-predict',
     },
     {
-      name: 'Loại Vải',
+      name: 'Materials',
       href: 'https://news.predictmobile.com/how-it-works/key-features',
     },
     {
-      name: 'Thiết Kế',
+      name: 'Design',
       href: 'https://news.predictmobile.com/how-it-works',
     },
     {
-      name: 'Sản Phẩm Mới',
+      name: 'New Products',
       href: 'https://news.predictmobile.com/news/',
     },
   ],
   [
     {
-      name: 'Về Chúng Tôi',
+      name: 'About Us',
       href: 'https://news.predictmobile.com/about',
     },
     {
-      name: 'Câu Hỏi',
+      name: 'Questions',
       href: 'https://news.predictmobile.com/faqs/',
     },
-    { name: 'Liên Hệ', href: 'https://news.predictmobile.com/contact' },
+    { name: 'Contact Us', href: 'https://news.predictmobile.com/contact' },
     {
-      name: 'Chính Sách',
+      name: 'Policy',
       href: 'https://news.predictmobile.com/privacy-policy',
     },
   ],

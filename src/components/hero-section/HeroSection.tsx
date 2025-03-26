@@ -1,3 +1,4 @@
+import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
@@ -70,7 +71,9 @@ export function HeroSection() {
               className={`rounded-full`}
             />
             <div className="pl-10">
-              <h1 className="font-sans text-5xl subpixel-antialiased font-semibold tracking-wider mb-3">
+              <h1
+                className={`${yuseiMagic.className} text-5xl subpixel-antialiased font-semibold tracking-wider mb-3`}
+              >
                 Back to <br /> Resiliant Material
               </h1>
               <p className="font-light leading-6 text-gray-600 mb-4">

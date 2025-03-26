@@ -1,3 +1,4 @@
+import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 
 const mockData = [
@@ -49,13 +50,15 @@ export const ProductSlider = () => {
   };
   return (
     <div className="relative">
-      <div className="relative z-20 max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="relative z-20 max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 ">
         <main className="w-full gap-8 row-start-2 text-center">
-          <h2 className="text-lg antialiased text-slate-400 ">Our Products</h2>
-          <h3 className="text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ">
-            Our Products Collections
+          <h2 className={`text-lg text-slate-400`}>Environment Friendly</h2>
+          <h3
+            className={`text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ${yuseiMagic.className}`}
+          >
+            Low Impact Collections
           </h3>
-          <div className="flex gap-8 justify-center mb-10">
+          <div className="flex gap-8 justify-center mb-10 font-extrabold">
             <button
               type="button"
               className="text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
@@ -90,7 +93,7 @@ export const ProductSlider = () => {
                     className="relative justify-self-center shadow-md hover:shadow-2xl transition-shadow duration-300 rounded-xl w-auto"
                   >
                     <div className="relative bg-black rounded-xl overflow-hidden outline outline-2 -outline-offset-8 outline-slate-100 transition-all duration-300 ">
-                      <div className="z-10 absolute text-xs font-semibold top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2">
+                      <div className="z-10 absolute text-xs top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2 tracking-wider font-black">
                         {item.sale}%
                       </div>
                       <Image

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { div } from 'motion/react-client';
+import { yuseiMagic } from '@/styles/fonts';
 
 const mockData = [
   {
@@ -45,12 +46,14 @@ export const Faq = () => {
   };
   return (
     <div className="relative">
-      <div className="relative max-w-6xl mx-auto min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="relative max-w-6xl mx-auto min-h-screen p-8 pb-20 gap-16 sm:p-20">
         <div className="w-full">
           <h3 className="text-center font-bold text-1xl text-slate-500 tracking-wide">
             FAQ
           </h3>
-          <h4 className="text-center font-semibold text-4xl">
+          <h4
+            className={`text-center font-semibold text-4xl ${yuseiMagic.className}`}
+          >
             Question? Look here
           </h4>
           <div className="mt-8 space-y-4 transition-all duration-300">

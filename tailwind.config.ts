@@ -23,7 +23,8 @@ export default {
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out', // Adjust duration and easing
-        'fade-out': 'fadeOut 0.5s ease-in-out', // Adjust duration and easing
+        'fade-out': 'fadeOut 0.5s ease-in-out', // Adjust duration and easing,
+        'shadow-pulse': 'shadow-pulse 3s infinite',
       },
       keyframes: {
         fadeIn: {
@@ -33,6 +34,14 @@ export default {
         fadeOut: {
           '0%': { opacity: '1' },
           '100%': { opacity: '0' },
+        },
+        'shadow-pulse': {
+          '0%': { boxShadow: '0 25px 50px -12px rgba(255, 255, 255, 0.7)' }, // White shadow
+          '50%': {
+            boxShadow:
+              '0 20px 25px -5px rgba(236, 140, 76, 0.5), 0 8px 10px -6px rgba(236, 140, 76, 0.5)',
+          }, // Orange shadow
+          '100%': { boxShadow: '0 25px 50px -12px rgba(255, 255, 255, 0.7)' }, // Back to white
         },
       },
       maxWidth: {

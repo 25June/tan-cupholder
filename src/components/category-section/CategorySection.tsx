@@ -6,7 +6,7 @@ const exampleImageArr = [
 
 export const CategorySection = () => {
   return (
-    <div className="relative max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="relative max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="w-full flex gap-8 row-start-2 justify-stretch justify-items-stretch items-stretch">
         <div className="bg-white border-4 border-white rounded-2xl w-1/2 min-w-96 overflow-hidden">
           <div
