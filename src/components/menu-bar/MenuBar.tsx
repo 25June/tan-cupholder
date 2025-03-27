@@ -1,11 +1,7 @@
 import { View } from '@/constants/common';
 import Image from 'next/image';
 
-interface Props {
-  readonly isScrollToTop: boolean;
-}
-
-export function MenuBar({ isScrollToTop }: Props) {
+export function MenuBar() {
   const scrollToView = (id: string) => {
     const element = document.getElementById(id);
     console.log(element);

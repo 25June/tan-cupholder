@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     if (divRef.current !== null) {
       const element = divRef.current;
-      const handleScroll = (e: any) => {
+      const handleScroll = () => {
         if (element.scrollTop > 600) {
           setIsScrollToTop(() => false);
         } else {
@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <div>
-      <MenuBar isScrollToTop={isScrollToTop} />
+      <MenuBar />
       <div
         ref={divRef}
         className="h-screen flex flex-col overflow-y-auto text-logo-text snap-y snap-proximity scroll-smooth"
