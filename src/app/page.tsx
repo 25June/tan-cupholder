@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import { throttle } from '@/shared/utils/throttle';
 import { Faq } from '@/components/faq/Faq';
 import { Footer } from '@/components/footer/Footer';
+import { View } from '@/constants/common';
 
 export default function Home() {
   const divRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,7 @@ export default function Home() {
       };
     }
   }, [divRef]);
-  console.log({ isScrollToTop });
+
   return (
     <div>
       <MenuBar isScrollToTop={isScrollToTop} />
@@ -36,16 +37,16 @@ export default function Home() {
         ref={divRef}
         className="h-screen flex flex-col overflow-y-auto text-logo-text snap-y snap-proximity scroll-smooth"
       >
-        <div className="snap-center">
+        <div className="snap-center" id={View.HERO}>
           <HeroSection />
         </div>
-        <div className="snap-center bg-logo-orange-border">
+        <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
           <CategorySection />
         </div>
-        <div className="snap-center">
+        <div className="snap-center" id={View.PRODUCT}>
           <ProductSlider />
         </div>
-        <div>
+        <div id={View.FAQ}>
           <Faq />
         </div>
         <div>

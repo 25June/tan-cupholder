@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { div } from 'motion/react-client';
+import { motion } from 'motion/react';
 import { yuseiMagic } from '@/styles/fonts';
 
 const mockData = [
