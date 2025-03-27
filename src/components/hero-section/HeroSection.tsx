@@ -6,7 +6,7 @@ const heroImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
   "bg-[url('/IMG_7197.jpg')]",
   "bg-[url('/IMG_7278.jpg')]",
-  "bg-[url('/IMG_8884.jpg')]",
+  "bg-[url('/IMG_8884.JPG')]",
 ];
 
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
