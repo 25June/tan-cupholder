@@ -1,3 +1,4 @@
+import * as motion from 'motion/react-client';
 import { useState } from 'react';
 import Image from 'next/image';
 import { yuseiMagic } from '@/styles/fonts';
@@ -47,52 +48,97 @@ export const Faq = () => {
     <div className="relative">
       <div className="relative max-w-6xl mx-auto min-h-screen p-8 pb-20 gap-16 sm:p-20">
         <div className="w-full">
-          <h3 className="text-center font-bold text-1xl text-slate-500 tracking-wide">
+          <motion.h3
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center font-bold text-1xl text-slate-500 tracking-wide"
+          >
             FAQ
-          </h3>
-          <h4
+          </motion.h3>
+          <motion.h4
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
             className={`text-center font-semibold text-4xl ${yuseiMagic.className}`}
           >
             Question? Look here
-          </h4>
-          <div className="mt-8 space-y-4 transition-all duration-300">
+          </motion.h4>
+          <motion.div
+            initial="offscreen"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              offscreen: {
+                transition: {
+                  staggerChildren: 0.05,
+                  delayChildren: 0.1,
+                },
+              },
+              visible: {
+                transition: {
+                  staggerChildren: 0.1,
+                  staggerDirection: 0.15,
+                },
+              },
+            }}
+            className="mt-8 space-y-4 transition-all duration-300"
+          >
             {data.map((item) => {
               return (
-                <div
+                <motion.div
+                  viewport={{ once: true }}
+                  variants={{
+                    offscreen: {
+                      opacity: 0.75,
+                      scale: 0.75,
+                    },
+                    visible: {
+                      opacity: 1,
+                      scale: 1,
+                      transition: {
+                        duration: 0.25,
+                        ease: [0, 0.71, 0.2, 1.01],
+                      },
+                    },
+                  }}
                   key={item.id}
                   className="relative transition-all duration-300"
                 >
-                  <div
+                  <motion.button
                     onClick={() => onClick(item.id)}
-                    className="relative z-10 bg-white p-4 flex justify-between justify-items-center border-logo-orange-border border-2 rounded-md border-solid "
+                    className={`relative z-10 p-4 transition-all duration-300 flex justify-between justify-items-center border-logo-orange-border border-2 rounded-md border-solid w-full text-left ${
+                      item.opened
+                        ? 'bg-logo-orange text-white'
+                        : 'bg-white text-logo-text'
+                    }`}
                   >
-                    <p className="font-semibold">{item.title}</p>
-                    <button
-                      onClick={(e) => {
-                        onClick(item.id);
-                        e.stopPropagation();
-                      }}
+                    <p
+                      className={`transition-all duration-300 ${
+                        item.opened ? 'font-bold' : 'font-semibold'
+                      }`}
                     >
-                      {item.opened ? 'Collapse' : 'Expand'}
-                    </button>
-                  </div>
+                      {item.title}
+                    </p>
+                    <span>{item.opened ? 'Collapse' : 'Expand'}</span>
+                  </motion.button>
                   <div
-                    className={`bg-logo-orange max-h-full overflow-hidden rounded-md relative -top-3 transition-all duration-300 ${
+                    className={`bg-white max-h-full overflow-hidden rounded-md relative -top-3 transition-all duration-300 ${
                       item.opened ? '-translate-y-0' : '-translate-y-6'
                     }`}
                   >
                     <div
-                      className={`transition-all duration-300 text-white px-4 overflow-hidden ${
+                      className={`transition-all duration-300 text-logo-text px-4 overflow-hidden ${
                         item.opened ? `pt-6 pb-4 max-h-128` : 'max-h-0'
                       }`}
                     >
                       {item.answer}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </div>
       <div className="absolute bottom-0 w-screen">
