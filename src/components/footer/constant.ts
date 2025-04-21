@@ -33,12 +33,12 @@ export const durationRight: Variants = {
 export const socialMedias = [
   {
     image: '/linked.svg',
-    link: 'https://www.linkedin.com/company/predict-mobile',
+    link: 'https://www.linkedin.com/company/tan',
   },
-  { image: '/twitter.svg', link: 'https://twitter.com/predictmobile' },
+  { image: '/twitter.svg', link: 'https://twitter.com/tan' },
   {
     image: '/facebook.svg',
-    link: 'https://www.facebook.com/predictmobile',
+    link: 'https://www.facebook.com/tan',
   },
   {
     image: '/youtube.svg',
@@ -49,34 +49,34 @@ export const menus = [
   [
     {
       name: 'Why TaN?',
-      href: 'https://news.predictmobile.com/why-predict',
+      href: 'https://news.tan.com/why-tan',
     },
     {
       name: 'Materials',
-      href: 'https://news.predictmobile.com/how-it-works/key-features',
+      href: 'https://news.tan.com/how-it-works/key-features',
     },
     {
       name: 'Design',
-      href: 'https://news.predictmobile.com/how-it-works',
+      href: 'https://news.tan.com/how-it-works',
     },
     {
       name: 'New Products',
-      href: 'https://news.predictmobile.com/news/',
+      href: 'https://news.tan.com/news/',
     },
   ],
   [
     {
       name: 'About Us',
-      href: 'https://news.predictmobile.com/about',
+      href: 'https://news.tan.com/about',
     },
     {
       name: 'Questions',
-      href: 'https://news.predictmobile.com/faqs/',
+      href: 'https://news.tan.com/faqs/',
     },
-    { name: 'Contact Us', href: 'https://news.predictmobile.com/contact' },
+    { name: 'Contact Us', href: 'https://news.tan.com/contact' },
     {
       name: 'Policy',
-      href: 'https://news.predictmobile.com/privacy-policy',
+      href: 'https://news.tan.com/privacy-policy',
     },
   ],
 ];
