@@ -1,3 +1,4 @@
+import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -63,29 +64,67 @@ export function HeroSection() {
       <div className="max-w-8xl w-screen h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full h-full flex justify-end pt-16">
           <div className="w-4/5">
-            <Image
-              src="/logo.png"
-              alt="TAN cupholder logo"
-              width={200}
-              height={200}
-              className={`rounded-full`}
-            />
-            <div className="pl-10">
-              <h1
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.4,
+                scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
+              }}
+            >
+              <Image
+                src="/logo.png"
+                alt="TAN cupholder logo"
+                width={200}
+                height={200}
+                className={`rounded-full`}
+              />
+            </motion.div>
+
+            <motion.div className="pl-10">
+              <motion.h1
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.35,
+                  scale: { type: 'spring', visualDuration: 0.35, bounce: 0.5 },
+                }}
                 className={`${yuseiMagic.className} text-5xl subpixel-antialiased font-semibold tracking-wider mb-3`}
               >
                 Back to <br /> Resiliant Material
-              </h1>
-              <p className="font-light leading-6 text-gray-600 mb-4">
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.35,
+                  scale: { type: 'spring', visualDuration: 0.35, bounce: 0.5 },
+                }}
+                className="font-light leading-6 text-gray-600 mb-4"
+              >
                 Colorful Model, Various Types, Amazing Endurant!!!
-              </p>
-              <button
+              </motion.p>
+              <motion.button
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.4,
+                  scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
+                }}
                 type="button"
                 className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
               >
                 Shop now
-              </button>
-              <div className="flex gap-2 mt-6">
+              </motion.button>
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.5,
+                  scale: { type: 'spring', visualDuration: 0.5, bounce: 0.5 },
+                }}
+                className="flex gap-2 mt-6"
+              >
                 {variants.map((item) => {
                   return (
                     <div key={item} className="p-4 border-2 rounded-lg">
@@ -93,8 +132,8 @@ export function HeroSection() {
                     </div>
                   );
                 })}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
         <div className="relative w-full h-full flex justify-center pt-28">
