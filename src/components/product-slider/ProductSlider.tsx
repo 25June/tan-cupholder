@@ -1,54 +1,12 @@
 import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
-
-const mockData = [
-  {
-    id: '1',
-    name: 'Product 1',
-    price: 89900,
-    sale: 20,
-    type: 'Type 1',
-    image: '/IMG_7210.jpg',
-  },
-  {
-    id: '2',
-    name: 'Product 2',
-    price: 89900,
-    sale: 20,
-    type: 'Type 1',
-    image: '/IMG_7281.jpg',
-  },
-  {
-    id: '3',
-    name: 'Product 3',
-    price: 89900,
-    sale: 20,
-    type: 'Type 1',
-    image: '/IMG_7341.jpg',
-  },
-  {
-    id: '4',
-    name: 'Product 4',
-    price: 89900,
-    sale: 20,
-    type: 'Type 1',
-    image: '/IMG_7210.jpg',
-  },
-];
-
+import { mockProducts } from '@/mocks/products';
+import {
+  numberWithCommas,
+  calculatePercent,
+} from '@/shared/utils/formatNumber';
 export const ProductSlider = () => {
-  const numberWithCommas = (x: number) => {
-    const parts = x.toString().split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return parts.join(',');
-  };
-
-  const calculatePercent = (price: number, percent: number) => {
-    const actualPrice = price - (price / 100) * percent;
-    const ceilingNumber = Math.ceil(actualPrice);
-    return numberWithCommas(ceilingNumber);
-  };
   return (
     <div className="relative">
       <div className="relative z-20 max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 ">
@@ -102,7 +60,7 @@ export const ProductSlider = () => {
           </motion.div>
           <div>
             <div className="relative grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8 py-2 px-2">
-              {mockData.map((item, index) => {
+              {mockProducts.map((item, index) => {
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
