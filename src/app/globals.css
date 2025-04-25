@@ -3,6 +3,13 @@
   themes: light --default;
 }
 
+@plugin "daisyui/theme" {
+  name: 'light';
+  default: true;
+  --color-primary: #ec8c4c;
+  --color-primary-content: #f57722;
+}
+
 @theme {
   --color-logo-orange: #f57722;
   --color-logo-orange-border: #ec8c4c;
@@ -11,7 +18,6 @@
   --spacing-8xl: 90rem;
   --spacing-extra-20vw: calc(100vw);
   --spacing-128: 32rem;
-  --spacing-8: 8px;
 
   --animate-fadeIn: fadeIn 0.5s ease-in-out;
   --animate-fadeOut: fadeOut 0.5s ease-in-out;

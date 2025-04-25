@@ -2,7 +2,7 @@
 
 import { yuseiMagic } from '@/styles/fonts';
 import { useProduct } from '@/hooks/useProduct';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import {
@@ -11,12 +11,37 @@ import {
 } from '@/shared/utils/formatNumber';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Spinner from '@/components/spinner/Spinner';
+import { debounce } from '@/shared/utils/debounce';
 
 export default function Page() {
-  const { products, isLoading, onGetProducts } = useProduct();
+  const { products, isLoading, onGetProducts, isEnd } = useProduct();
+  const observerTarget = useRef(null);
+
   useEffect(() => {
-    onGetProducts();
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        console.log(entries[0].isIntersecting, isLoading, isEnd);
+        if (entries[0].isIntersecting && !isLoading && !isEnd) {
+          onGetProducts();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [isLoading]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onGetProducts(e.target.value || '');
+  };
 
   return (
     <div>
@@ -27,7 +52,7 @@ export default function Page() {
         ></div>
       </div>
       <div className="relative h-full max-w-8xl mx-auto p-8 pb-20 gap-16 sm:p-20 ">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-end">
           <div>
             <motion.h2
               initial={{ opacity: 0 }}
@@ -46,8 +71,8 @@ export default function Page() {
               Low Impact Collections
             </motion.h3>
           </div>
-          <div>
-            <label className="input input-md">
+          <div className="mb-4 w-64">
+            <label className="input input-md input-primary">
               <svg
                 className="h-[1em] opacity-50"
                 xmlns="http://www.w3.org/2000/svg"
@@ -64,23 +89,28 @@ export default function Page() {
                   <path d="m21 21-4.3-4.3"></path>
                 </g>
               </svg>
-              <input type="search" className="grow" placeholder="Search" />
+              <input
+                type="search"
+                className="grow"
+                placeholder="Search"
+                onChange={debounce(handleSearch, 500)}
+              />
             </label>
           </div>
         </div>
 
-        <div className="relative grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8 py-2 px-2">
-          {products.map((item, index) => {
+        <div className="relative grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-y-8 gap-x-8 py-2 px-2">
+          {products.map((item) => {
             return (
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{
-                  duration: 0.25 * (index + 1),
+                  duration: 0.25,
                   scale: {
                     type: 'spring',
-                    visualDuration: 0.25 * (index + 1),
+                    visualDuration: 0.25,
                     bounce: 0.25,
                   },
                 }}
@@ -118,7 +148,9 @@ export default function Page() {
             );
           })}
         </div>
-        {isLoading && <Spinner />}
+        <div ref={observerTarget} className="flex justify-center items-center">
+          {isLoading && <Spinner />}
+        </div>
       </div>
     </div>
   );

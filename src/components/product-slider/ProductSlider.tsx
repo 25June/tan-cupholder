@@ -6,7 +6,54 @@ import {
   numberWithCommas,
   calculatePercent,
 } from '@/shared/utils/formatNumber';
+import { useEffect, useState, useRef } from 'react';
+
 export const ProductSlider = () => {
+  const [displayedProducts, setDisplayedProducts] = useState(
+    mockProducts.slice(0, 8)
+  );
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const observerTarget = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) {
+          loadMoreProducts();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [loading]);
+
+  const loadMoreProducts = () => {
+    setLoading(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      const nextPage = page + 1;
+      const startIndex = (nextPage - 1) * 8;
+      const endIndex = startIndex + 8;
+      const newProducts = mockProducts.slice(startIndex, endIndex);
+
+      if (newProducts.length > 0) {
+        setDisplayedProducts((prev) => [...prev, ...newProducts]);
+        setPage(nextPage);
+      }
+      setLoading(false);
+    }, 1000);
+  };
+
   return (
     <div className="relative">
       <div className="relative z-20 max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 ">
@@ -60,7 +107,7 @@ export const ProductSlider = () => {
           </motion.div>
           <div>
             <div className="relative grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8 py-2 px-2">
-              {mockProducts.map((item, index) => {
+              {displayedProducts.map((item, index) => {
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
@@ -107,6 +154,13 @@ export const ProductSlider = () => {
                   </motion.div>
                 );
               })}
+            </div>
+            <div ref={observerTarget} className="h-10 w-full">
+              {loading && (
+                <div className="flex justify-center items-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-logo-orange"></div>
+                </div>
+              )}
             </div>
           </div>
         </main>
