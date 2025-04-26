@@ -6,6 +6,7 @@ export interface Product {
   type: string;
   image: string;
 }
+
 export interface GetProductsResponse {
   data: Product[];
   total: number;

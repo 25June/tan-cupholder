@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Product, GetProductsResponse } from '@/models/product';
-import { getProducts } from '@/api/product';
+import { getProducts, getProduct } from '@/api/product';
 
-export const useProduct = () => {
+export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [limit] = useState<number>(8);
@@ -13,7 +13,7 @@ export const useProduct = () => {
 
   const handleGetProducts = (keywords?: string) => {
     setIsLoading(true);
-    const response = getProducts(page, limit, keyword, total, isEnd, keywords);
+    const response = getProducts(page, limit, keyword, total, keywords);
 
     return response
       .then((data: GetProductsResponse) => {
@@ -21,7 +21,6 @@ export const useProduct = () => {
         setPage(data.page);
         setIsEnd(data.isEnd);
         setKeyword(data.keywords || '');
-        console.log({ data });
         if (typeof keywords === 'string') {
           setProducts(data.data);
         } else {
@@ -32,4 +31,24 @@ export const useProduct = () => {
   };
 
   return { products, isLoading, onGetProducts: handleGetProducts, isEnd };
+};
+
+export const useProduct = () => {
+  const [product, setProduct] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleGetProduct = (id: string) => {
+    setIsLoading(true);
+    const response = getProduct(id);
+
+    return response
+      .then((data: Product | null) => {
+        if (data) {
+          setProduct(data);
+        }
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  return { product, isLoading, onGetProduct: handleGetProduct };
 };

@@ -1,16 +1,17 @@
 'use client';
 
 import { yuseiMagic } from '@/styles/fonts';
-import { useProduct } from '@/hooks/useProduct';
+import { useProducts } from '@/hooks/useProduct';
 import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Spinner from '@/components/spinner/Spinner';
 import { debounce } from '@/shared/utils/debounce';
 import Card from '@/components/card/Card';
+import { Footer } from '@/components/footer/Footer';
 
 export default function Page() {
-  const { products, isLoading, onGetProducts, isEnd } = useProduct();
+  const { products, isLoading, onGetProducts, isEnd } = useProducts();
   const observerTarget = useRef(null);
 
   useEffect(() => {
@@ -103,6 +104,7 @@ export default function Page() {
           {isLoading && <Spinner />}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

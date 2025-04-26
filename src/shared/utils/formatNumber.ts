@@ -7,5 +7,5 @@ export const numberWithCommas = (x: number) => {
 export const calculatePercent = (price: number, percent: number) => {
   const actualPrice = price - (price / 100) * percent;
   const ceilingNumber = Math.ceil(actualPrice);
-  return numberWithCommas(ceilingNumber);
+  return ceilingNumber;
 };

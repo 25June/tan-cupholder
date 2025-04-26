@@ -8,6 +8,8 @@ import {
 import { Product } from '@/models/product';
 import ArrowLongRight from '@/components/icons/ArrowLongRight';
 import Eye from '@/components/icons/Eye';
+import { formatPrice } from '@/shared/utils/formatPrice';
+
 interface CardProps {
   readonly item: Product;
 }
@@ -52,7 +54,7 @@ export default function Card({ item }: CardProps) {
           </span>
           <ArrowLongRight className="size-4" />
           <span className="text-logo-orange font-extrabold">
-            {calculatePercent(item.price, item.sale)} vnd
+            {formatPrice(calculatePercent(item.price, item.sale), '')}
           </span>
         </div>
         <div className="w-full text-right mt-4">

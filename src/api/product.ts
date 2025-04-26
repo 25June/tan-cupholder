@@ -1,12 +1,11 @@
 import { mockProducts } from '@/mocks/products';
-import { GetProductsResponse } from '@/models/product';
+import { GetProductsResponse, Product } from '@/models/product';
 
 export const getProducts = async (
   page: number,
   limit: number,
   keyword: string,
   total: number,
-  isEnd: boolean,
   keywords?: string
 ) => {
   return new Promise<GetProductsResponse>((resolve) => {
@@ -74,6 +73,15 @@ export const getProducts = async (
           keywords: '',
         });
       }
+    }, 1000);
+  });
+};
+
+export const getProduct = (id: string) => {
+  return new Promise<Product | null>((resolve) => {
+    setTimeout(() => {
+      const product = mockProducts.find((product) => product.id === id);
+      resolve(product || null);
     }, 1000);
   });
 };
