@@ -7,7 +7,7 @@
   name: 'light';
   default: true;
   --color-primary: #ec8c4c;
-  --color-primary-content: #f57722;
+  --color-primary-content: oklch(100% 0 0);
 }
 
 @theme {

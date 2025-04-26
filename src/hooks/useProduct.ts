@@ -1,41 +1,32 @@
-import { mockProducts } from '@/mocks/products';
 import { useState } from 'react';
-import { Product } from '@/models/product';
+import { Product, GetProductsResponse } from '@/models/product';
+import { getProducts } from '@/api/product';
 
 export const useProduct = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [limit] = useState<number>(8);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [isEnd, setIsEnd] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>('');
+  const [total, setTotal] = useState<number>(0);
 
   const handleGetProducts = (keywords?: string) => {
     setIsLoading(true);
-    const response = new Promise<Product[]>((resolve) => {
-      setTimeout(() => {
-        const nextPage = page + 1;
-        setPage(nextPage);
-        if (keywords) {
-          resolve(
-            mockProducts.filter((product) =>
-              product.name
-                .toLocaleLowerCase()
-                .includes(keywords.toLocaleLowerCase())
-            )
-          );
-        } else {
-          const result = mockProducts.slice((page - 1) * limit, page * limit);
-          resolve(result);
-        }
-      }, 1000);
-    });
+    const response = getProducts(page, limit, keyword, total, isEnd, keywords);
 
     return response
-      .then((value: Product[]) => {
-        if (value.length === 0) {
-          setIsEnd(true);
+      .then((data: GetProductsResponse) => {
+        setTotal(data.total);
+        setPage(data.page);
+        setIsEnd(data.isEnd);
+        setKeyword(data.keywords || '');
+        console.log({ data });
+        if (typeof keywords === 'string') {
+          setProducts(data.data);
+        } else {
+          setProducts((prev) => [...prev, ...data.data]);
         }
-        setProducts((prev) => [...prev, ...value]);
       })
       .finally(() => setIsLoading(false));
   };

@@ -6,3 +6,10 @@ export interface Product {
   type: string;
   image: string;
 }
+export interface GetProductsResponse {
+  data: Product[];
+  total: number;
+  isEnd: boolean;
+  page: number;
+  keywords?: string;
+}
