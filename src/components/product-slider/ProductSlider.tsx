@@ -4,14 +4,33 @@ import Image from 'next/image';
 import { mockProducts } from '@/mocks/products';
 import Card from '@/components/card/Card';
 import { useEffect, useState, useRef } from 'react';
+import { chunkArray } from '@/shared/utils/chunkArray';
+import { useQueryMedia } from '@/hooks/useQueryLayout';
+import { ScreenLayout } from '@/constants/common';
+import ArrowRightCircle from '@/components/icons/ArrowRightCircle';
+import ArrowLeftCircle from '@/components/icons/ArrowLeftCircle';
 
 export const ProductSlider = () => {
-  const [displayedProducts, setDisplayedProducts] = useState(
-    mockProducts.slice(0, 8)
-  );
+  const currentLayout = useQueryMedia();
+  const [chunkNumber, setChunkNumber] = useState(1);
+  const [displayedProducts, setDisplayedProducts] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const observerTarget = useRef(null);
+  const productArrayRef = useRef(null);
+
+  useEffect(() => {
+    if (currentLayout === ScreenLayout.Tablet) {
+      setChunkNumber(2);
+      setDisplayedProducts(chunkArray(mockProducts.slice(0, 8), 2));
+    } else if (currentLayout === ScreenLayout.Desktop) {
+      setChunkNumber(3);
+      setDisplayedProducts(chunkArray(mockProducts.slice(0, 8), 3));
+    } else {
+      setChunkNumber(1);
+      setDisplayedProducts(chunkArray(mockProducts.slice(0, 8), 1));
+    }
+  }, [currentLayout]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -34,6 +53,19 @@ export const ProductSlider = () => {
     };
   }, [loading]);
 
+  const onScroll = (step: number) => {
+    const container = productArrayRef.current as HTMLDivElement | null;
+    console.log('Container:', container);
+    if (container) {
+      const scrollAmount = container.scrollWidth / chunkNumber;
+      console.log('Scroll Amount:', scrollAmount);
+      container.scrollBy({
+        left: step * scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const loadMoreProducts = () => {
     setLoading(true);
     // Simulate API call delay
@@ -53,7 +85,7 @@ export const ProductSlider = () => {
 
   return (
     <div className="relative">
-      <div className="relative z-20 max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 ">
+      <div className="relative z-20 w-full max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 overflow-hidden">
         <main className="w-full gap-8 row-start-2 text-center">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -102,23 +134,44 @@ export const ProductSlider = () => {
               Featured Products
             </button>
           </motion.div>
-          <div>
-            <div className="relative grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8 py-2 px-2">
-              {displayedProducts.map((item, index) => {
-                return <Card item={item} key={index} />;
-              })}
-            </div>
-            <div ref={observerTarget} className="h-10 w-full">
-              {loading && (
-                <div className="flex justify-center items-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-logo-orange"></div>
+          <div
+            ref={productArrayRef}
+            className="relative flex flex-row overflow-x-auto gap-8 py-2 px-2 mx-auto snap-x snap-mandatory max-w-[80vw] sm:max-w-[100] md:max-w-[90vw] lg:max-w-[1376px]"
+          >
+            {displayedProducts.map((chunk, index) => {
+              const isFirstChunk = index === 0;
+              const isLastChunk = index === displayedProducts.length - 1;
+              return (
+                <div
+                  className="relative w-full flex-shrink-0 flex flex-row gap-8 justify-center snap-center snap-always"
+                  key={index}
+                >
+                  {!isFirstChunk && (
+                    <div className="absolute left-0 h-full flex items-center">
+                      <button onClick={() => onScroll(-1)}>
+                        <ArrowLeftCircle className="size-6 stroke-logo-orange-border" />
+                      </button>
+                    </div>
+                  )}
+                  {Array.from({ length: chunkNumber }).map((_, idx) => {
+                    return chunk[idx] ? (
+                      <Card item={chunk[idx]} key={idx} />
+                    ) : null;
+                  })}
+                  {!isLastChunk && (
+                    <div className="absolute right-0 h-full flex items-center">
+                      <button onClick={() => onScroll(1)}>
+                        <ArrowRightCircle className="size-6 stroke-logo-orange-border" />
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              );
+            })}
           </div>
         </main>
       </div>
-      <div className="absolute top-0 w-screen">
+      <div className="absolute -top-1 w-screen">
         <Image
           src={'/top-wave.svg'}
           width={160}

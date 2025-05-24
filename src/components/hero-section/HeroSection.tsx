@@ -169,7 +169,7 @@ export function HeroSection() {
           })}
         </div>
       </div>
-      <div className="absolute bottom-0 w-screen">
+      <div className="absolute -bottom-1 w-screen">
         <Image
           src={'/bottom-wave.svg'}
           width={160}
