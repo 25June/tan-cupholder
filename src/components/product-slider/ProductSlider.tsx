@@ -1,3 +1,5 @@
+'use client';
+
 import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
@@ -10,12 +12,12 @@ import { ScreenLayout } from '@/constants/common';
 import ArrowRightCircle from '@/components/icons/ArrowRightCircle';
 import ArrowLeftCircle from '@/components/icons/ArrowLeftCircle';
 
-export const ProductSlider = () => {
+const ProductSlider = () => {
   const currentLayout = useQueryMedia();
-  const [chunkNumber, setChunkNumber] = useState(1);
+  const [chunkNumber, setChunkNumber] = useState<number>(1);
   const [displayedProducts, setDisplayedProducts] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
   const observerTarget = useRef(null);
   const productArrayRef = useRef(null);
 
@@ -55,10 +57,8 @@ export const ProductSlider = () => {
 
   const onScroll = (step: number) => {
     const container = productArrayRef.current as HTMLDivElement | null;
-    console.log('Container:', container);
     if (container) {
       const scrollAmount = container.scrollWidth / chunkNumber;
-      console.log('Scroll Amount:', scrollAmount);
       container.scrollBy({
         left: step * scrollAmount,
         behavior: 'smooth',
@@ -136,7 +136,7 @@ export const ProductSlider = () => {
           </motion.div>
           <div
             ref={productArrayRef}
-            className="relative flex flex-row overflow-x-auto gap-8 py-2 px-2 mx-auto snap-x snap-mandatory max-w-[80vw] sm:max-w-[100] md:max-w-[90vw] lg:max-w-[1376px]"
+            className="relative flex flex-row overflow-x-auto gap-8 py-2 px-2 mx-auto snap-x snap-mandatory max-w-[80vw] sm:max-w-[90vw] md:max-w-[90vw] lg:max-w-[1024px]"
           >
             {displayedProducts.map((chunk, index) => {
               const isFirstChunk = index === 0;
@@ -183,3 +183,5 @@ export const ProductSlider = () => {
     </div>
   );
 };
+
+export default ProductSlider;

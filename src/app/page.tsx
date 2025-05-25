@@ -4,20 +4,19 @@ import { motion, useScroll } from 'motion/react';
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
 import { CategorySection } from '@/components/category-section/CategorySection';
-import { ProductSlider } from '@/components/product-slider/ProductSlider';
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { Faq } from '@/components/faq/Faq';
 import { Footer } from '@/components/footer/Footer';
 import { View } from '@/constants/common';
+import dynamic from 'next/dynamic';
+const NoSSRProductSlider = dynamic(
+  () => import('@/components/product-slider/ProductSlider').then((mod) => mod),
+  { ssr: false }
+);
 
 export default function Home() {
   const divRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: divRef });
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   return (
     <div>
       <MenuBar />
@@ -47,11 +46,9 @@ export default function Home() {
         <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
           <CategorySection />
         </div>
-        {isClient ? (
-          <div className="snap-center" id={View.PRODUCT}>
-            <ProductSlider />
-          </div>
-        ) : null}
+        <div className="snap-center" id={View.PRODUCT}>
+          <NoSSRProductSlider />
+        </div>
         <div id={View.FAQ}>
           <Faq />
         </div>

@@ -103,11 +103,11 @@ export const Faq = () => {
                     },
                   }}
                   key={item.id}
-                  className="relative transition-all duration-300"
+                  className="relative transition-all duration-300 cursor-pointer"
                 >
                   <motion.button
                     onClick={() => onClick(item.id)}
-                    className={`relative z-10 p-4 transition-all duration-300 flex justify-between justify-items-center border-logo-orange-border border-2 rounded-md border-solid w-full text-left ${
+                    className={`relative z-10 p-4 transition-all duration-300 flex justify-between justify-items-center border-logo-orange-border border-2 rounded-md border-solid w-full text-left cursor-pointer ${
                       item.opened
                         ? 'bg-logo-orange text-white'
                         : 'bg-white text-logo-text'

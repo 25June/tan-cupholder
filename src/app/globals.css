@@ -53,7 +53,7 @@
 
 .bg-from-white-to-transparent-180deg {
   background-image: linear-gradient(
-    270deg,
+    180deg,
     rgba(255, 255, 255, 0) 48.29%,
     rgba(249, 249, 249, 0.95) 71.06%
   );
@@ -83,4 +83,8 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Coming soon', Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }

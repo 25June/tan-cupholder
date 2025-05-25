@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { debounce } from '@/shared/utils/debounce';
 import { ScreenLayout } from '@/constants/common';
 
-const breakpoints: Record<ScreenLayout, string> = {
-  mobile: '(max-width: 767px)', // Up to 767px wide (typical phone portrait)
-  tablet: '(min-width: 768px) and (max-width: 1023px)', // 768px to 1023px (typical tablet portrait)
-  desktop: '(min-width: 1024px)', // 1024px and up (typical desktop)
+const breakpoints: Record<ScreenLayout, (size: number) => boolean> = {
+  mobile: (size: number) => size < 768, // Up to 767px wide (typical phone portrait)
+  tablet: (size: number) => size > 768 && size < 1023, // 768px to 1023px (typical tablet portrait)
+  desktop: (size: number) => size > 1024, // 1024px and up (typical desktop)
 };
 
 export const useQueryMedia = () => {
@@ -16,9 +16,12 @@ export const useQueryMedia = () => {
 
   useEffect(() => {
     const getScreenLayout = (): ScreenLayout => {
+      console.log('Checking screen layout...', window.innerWidth);
       for (const layout in breakpoints) {
-        const mediaQueryString = breakpoints[layout as ScreenLayout];
-        if (window.matchMedia(mediaQueryString).matches) {
+        const isMatched = breakpoints[layout as ScreenLayout](
+          window.innerWidth
+        );
+        if (isMatched) {
           return layout as ScreenLayout;
         }
       }

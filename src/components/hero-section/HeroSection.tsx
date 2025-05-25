@@ -1,3 +1,5 @@
+'use client';
+
 import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
@@ -59,6 +61,7 @@ export function HeroSection() {
       return () => clearTimeout(timer);
     }
   }, [startTransitions]);
+
   return (
     <div className="relative">
       <div className="max-w-8xl w-screen h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
