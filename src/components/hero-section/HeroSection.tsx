@@ -1,9 +1,8 @@
-'use client';
-
 import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const heroImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
@@ -15,6 +14,7 @@ const heroImageArr = [
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 
 export function HeroSection() {
+  const router = useRouter();
   const [translateX, setTranslateX] = useState<string[]>([]);
   const [opacity, setOpacity] = useState<string[]>([]);
   const [translateY, setTranslateY] = useState<string[]>([]);
@@ -108,6 +108,7 @@ export function HeroSection() {
                 Colorful Model, Various Types, Amazing Endurant!!!
               </motion.p>
               <motion.button
+                onClick={() => router.push('/products')}
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{
