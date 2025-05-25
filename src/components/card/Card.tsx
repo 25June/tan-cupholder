@@ -29,7 +29,7 @@ export default function Card({ item }: CardProps) {
           bounce: 0.25,
         },
       }}
-      className="relative justify-self-center shadow-md hover:shadow-2xl transition-shadow duration-300 rounded-xl w-auto min-w-72"
+      className="relative justify-self-center shadow-md hover:shadow-lg transition-shadow duration-300 rounded-xl w-auto min-w-72"
     >
       <div className="relative bg-black rounded-xl overflow-hidden outline outline-2 -outline-offset-8 outline-slate-100 transition-all duration-300 ">
         <div className="z-10 absolute text-xs top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2 tracking-wider font-black">

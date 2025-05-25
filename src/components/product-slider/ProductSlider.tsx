@@ -136,7 +136,7 @@ const ProductSlider = () => {
           </motion.div>
           <div
             ref={productArrayRef}
-            className="relative flex flex-row overflow-x-auto gap-8 py-2 px-2 mx-auto snap-x snap-mandatory max-w-[80vw] sm:max-w-[90vw] md:max-w-[90vw] lg:max-w-[1024px]"
+            className="relative flex flex-row overflow-x-auto gap-8 py-4 px-2 mx-auto snap-x snap-mandatory max-w-[80vw] sm:max-w-[90vw] md:max-w-[90vw] lg:max-w-[1024px]"
           >
             {displayedProducts.map((chunk, index) => {
               const isFirstChunk = index === 0;
