@@ -4,21 +4,46 @@ import { motion, useScroll } from 'motion/react';
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
 import { CategorySection } from '@/components/category-section/CategorySection';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Faq } from '@/components/faq/Faq';
 import { Footer } from '@/components/footer/Footer';
-import { View } from '@/constants/common';
+import { View, ScreenLayout } from '@/constants/common';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { useQueryMedia } from '@/hooks/useQueryLayout';
+
 const NoSSRProductSlider = dynamic(
   () => import('@/components/product-slider/ProductSlider').then((mod) => mod),
   { ssr: false }
 );
 
 export default function Home() {
+  const currentLayout = useQueryMedia();
+  const [loadingMedia, setLoadingMedia] = useState<boolean>(true);
   const divRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: divRef });
+
+  useEffect(() => {
+    if (currentLayout === ScreenLayout.Mobile) {
+      setLoadingMedia(false);
+    }
+  }, [currentLayout]);
+
   return (
     <div>
+      <div
+        className={`fixed w-screen h-screen flex items-center justify-center bg-white transition-all duration-300 ease-in-out ${
+          loadingMedia ? 'z-1000 opacity-100' : 'opacity-0 z-0'
+        }`}
+      >
+        <Image
+          src="/logo.png"
+          alt="TAN cupholder logo"
+          width={200}
+          height={200}
+          className={`rounded-full animate-fade-in-out`}
+        />
+      </div>
       <MenuBar />
       <motion.div
         id="scroll-indicator"
@@ -41,7 +66,7 @@ export default function Home() {
         className="h-screen flex flex-col overflow-y-scroll text-logo-text snap-y snap-proximity scroll-smooth"
       >
         <div className="snap-center" id={View.HERO}>
-          <HeroSection />
+          <HeroSection setReady={setLoadingMedia} />
         </div>
         <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
           <CategorySection />

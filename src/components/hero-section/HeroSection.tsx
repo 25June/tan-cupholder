@@ -1,10 +1,17 @@
 import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { useRouter } from 'next/navigation';
 
 const heroImageArr = [
+  '/IMG_8677.jpg',
+  '/IMG_7197.jpg',
+  '/IMG_7278.jpg',
+  '/IMG_8884.JPG',
+];
+
+const bgHeroImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
   "bg-[url('/IMG_7197.jpg')]",
   "bg-[url('/IMG_7278.jpg')]",
@@ -13,7 +20,11 @@ const heroImageArr = [
 
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 
-export function HeroSection() {
+interface Props {
+  setReady: Dispatch<SetStateAction<boolean>>;
+}
+
+export function HeroSection({ setReady }: Props) {
   const router = useRouter();
   const [translateX, setTranslateX] = useState<string[]>([]);
   const [opacity, setOpacity] = useState<string[]>([]);
@@ -65,8 +76,8 @@ export function HeroSection() {
   return (
     <div className="relative">
       <div className="max-w-8xl w-screen h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
-        <div className="relative w-full h-full flex justify-end pt-16">
-          <div className="w-4/5">
+        <div className="relative w-full h-full flex justify-start lg:justify-end pt-4 md:pt-16">
+          <div className="w-5/5 lg:w-4/5">
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -92,7 +103,7 @@ export function HeroSection() {
                   duration: 0.35,
                   scale: { type: 'spring', visualDuration: 0.35, bounce: 0.5 },
                 }}
-                className={`${yuseiMagic.className} text-5xl subpixel-antialiased font-semibold tracking-wider mb-3`}
+                className={`${yuseiMagic.className} text-3xl md:text-5xl subpixel-antialiased font-semibold tracking-wider mb-3`}
               >
                 Back to <br /> Resiliant Material
               </motion.h1>
@@ -131,7 +142,10 @@ export function HeroSection() {
               >
                 {variants.map((item) => {
                   return (
-                    <div key={item} className="p-4 border-2 rounded-lg">
+                    <div
+                      key={item}
+                      className="p-2 md:p-4 border-2 border-stone-500 rounded-lg w-[64px] md:w-full"
+                    >
                       <Image width={64} height={64} src={item} alt={item} />
                     </div>
                   );
@@ -140,7 +154,7 @@ export function HeroSection() {
             </motion.div>
           </div>
         </div>
-        <div className="relative w-full h-full flex justify-center pt-28">
+        <div className="relative w-full h-full hidden md:flex justify-center pt-28">
           {imgOrders.map((img, index) => {
             let transitionIndex = index;
             let o = opacity[transitionIndex];
@@ -166,8 +180,17 @@ export function HeroSection() {
                 className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
               >
                 <div
-                  className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} `}
-                ></div>
+                  className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${bgHeroImageArr} ${zoomIn} `}
+                >
+                  <Image
+                    src={heroImageArr[index]}
+                    alt={`hero-image-${index}`}
+                    width={800}
+                    height={800}
+                    className="w-full h-full object-cover transition-transform duration-300 none"
+                    onLoad={() => setReady(false)}
+                  />
+                </div>
               </div>
             );
           })}

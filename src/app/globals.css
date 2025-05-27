@@ -22,30 +22,42 @@
   --animate-fadeIn: fadeIn 0.5s ease-in-out;
   --animate-fadeOut: fadeOut 0.5s ease-in-out;
   --animate-shadow-pulse: shadow-pulse 3s infinite;
+  --animate-fade-in-out: fade-in-out 1s infinite;
   @keyframes fadeIn {
-    '0%' {
-      opacity: '0';
+    0% {
+      opacity: 0;
     }
-    '100%' {
-      opacity: '1';
+    100% {
+      opacity: 1;
     }
   }
   @keyframes fadeOut {
-    '0%' {
-      opacity: '1';
+    0% {
+      opacity: 1;
     }
-    '100%' {
-      opacity: '0';
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-in-out {
+    0% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.5;
     }
   }
   @keyframes shadow-pulse {
-    '0%' {
+    0% {
       box-shadow: '0 25px 50px -12px rgba(255, 255, 255, 0.7)';
     }
-    '50%' {
+    50% {
       box-shadow: '0 20px 25px -5px rgba(236, 140, 76, 0.5), 0 8px 10px -6px rgba(236, 140, 76, 0.5)';
     }
-    '100%' {
+    100% {
       box-shadow: '0 25px 50px -12px rgba(255, 255, 255, 0.7)';
     }
   }
