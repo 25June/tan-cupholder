@@ -79,6 +79,10 @@
   );
 }
 
+.menu li > *:not(ul):not(.menu-title):not(details):active {
+  @apply bg-logo-orange-border text-white;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #5a5454;

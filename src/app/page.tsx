@@ -18,6 +18,7 @@ const NoSSRProductSlider = dynamic(
 );
 
 export default function Home() {
+  const [removeLoading, setRemoveLoading] = useState<boolean>(false);
   const currentLayout = useQueryMedia();
   const [loadingMedia, setLoadingMedia] = useState<boolean>(true);
   const divRef = useRef<HTMLDivElement>(null);
@@ -29,38 +30,35 @@ export default function Home() {
     }
   }, [currentLayout]);
 
+  useEffect(() => {
+    if (!loadingMedia) {
+      const timer = setTimeout(() => {
+        setRemoveLoading(true);
+      }, 3000); // Simulate loading time
+
+      return () => clearTimeout(timer);
+    }
+  }, [loadingMedia]);
+
   return (
     <div>
-      <div
-        className={`fixed w-screen h-screen flex items-center justify-center bg-white transition-all duration-300 ease-in-out ${
-          loadingMedia ? 'z-1000 opacity-100' : 'opacity-0 z-0'
-        }`}
-      >
-        <Image
-          src="/logo.png"
-          alt="TAN cupholder logo"
-          width={200}
-          height={200}
-          className={`rounded-full animate-fade-in-out`}
-        />
-      </div>
-      <MenuBar />
-      <motion.div
-        id="scroll-indicator"
-        style={{
-          scaleX: scrollYProgress,
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 5,
-          originX: 0,
-          zIndex: 100,
-          borderBottomRightRadius: '5px',
-          borderTopRightRadius: '5px',
-          backgroundColor: '#f57722',
-        }}
-      />
+      {!removeLoading && (
+        <div
+          className={`fixed w-screen h-screen flex items-center justify-center bg-white transition-all duration-300 ease-in-out ${
+            loadingMedia ? 'z-1000 opacity-100' : 'opacity-0 z-0'
+          }`}
+        >
+          <Image
+            src="/logo.png"
+            alt="TAN cupholder logo"
+            width={200}
+            height={200}
+            className={`rounded-full animate-fade-in-out`}
+          />
+        </div>
+      )}
+      <MenuBar scrollYProgress={scrollYProgress} />
+
       <div
         ref={divRef}
         className="h-screen flex flex-col overflow-y-scroll text-logo-text snap-y snap-proximity scroll-smooth"

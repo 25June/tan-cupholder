@@ -144,7 +144,7 @@ export function HeroSection({ setReady }: Props) {
                   return (
                     <div
                       key={item}
-                      className="p-2 md:p-4 border-2 border-stone-500 rounded-lg w-[64px] md:w-full"
+                      className="p-2 md:p-4 border-2 border-stone-500 rounded-lg w-[64px] md:w-[100px]"
                     >
                       <Image width={64} height={64} src={item} alt={item} />
                     </div>
