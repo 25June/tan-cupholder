@@ -21,7 +21,7 @@ const bgHeroImageArr = [
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 
 interface Props {
-  setReady: Dispatch<SetStateAction<boolean>>;
+  readonly setReady: Dispatch<SetStateAction<boolean>>;
 }
 
 export function HeroSection({ setReady }: Props) {
@@ -131,6 +131,17 @@ export function HeroSection({ setReady }: Props) {
               >
                 Shop now
               </motion.button>
+              <motion.p
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.35,
+                  scale: { type: 'spring', visualDuration: 0.35, bounce: 0.5 },
+                }}
+                className="font-sm font-light leading-6 text-gray-600 mt-4"
+              >
+                Carry various bottle/cup shapes!!!
+              </motion.p>
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -138,7 +149,7 @@ export function HeroSection({ setReady }: Props) {
                   duration: 0.5,
                   scale: { type: 'spring', visualDuration: 0.5, bounce: 0.5 },
                 }}
-                className="flex gap-2 mt-6"
+                className="flex gap-2 mt-2"
               >
                 {variants.map((item) => {
                   return (

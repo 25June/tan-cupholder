@@ -85,13 +85,13 @@ const ProductSlider = () => {
 
   return (
     <div className="relative">
-      <div className="relative z-20 w-full max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 overflow-hidden">
+      <div className="relative z-20 w-full max-w-screen md:max-w-8xl mx-auto grid grid-rows-[40px_1fr_20px] items-center min-h-screen p-4 md:p-8 pb-10 md:pb-20 gap:8 md:gap-16 overflow-hidden">
         <main className="w-full gap-8 row-start-2 text-center">
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className={`text-lg text-slate-400`}
+            className={`text-md md:text-lg text-slate-400`}
           >
             Environment Friendly
           </motion.h2>
@@ -99,7 +99,7 @@ const ProductSlider = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className={`text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ${yuseiMagic.className}`}
+            className={`text-xl md:text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ${yuseiMagic.className}`}
           >
             Low Impact Collections
           </motion.h3>
@@ -107,36 +107,36 @@ const ProductSlider = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="flex gap-8 justify-center mb-10 font-extrabold"
+            className="flex gap-2 md:gap-8 justify-center flex-wrap mb-2 md:mb-10 font-extrabold"
           >
             <button
               type="button"
-              className="text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
+              className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
               All Product
             </button>
             <button
               type="button"
-              className="text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
+              className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
               Latest Products
             </button>
             <button
               type="button"
-              className="text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
+              className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
               Best Seller
             </button>
             <button
               type="button"
-              className="text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
+              className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
               Featured Products
             </button>
           </motion.div>
           <div
             ref={productArrayRef}
-            className="relative flex flex-row overflow-x-auto gap-8 py-4 px-2 mx-auto snap-x snap-mandatory max-w-[80vw] sm:max-w-[90vw] md:max-w-[90vw] lg:max-w-[1024px]"
+            className="relative flex flex-row overflow-x-auto gap-8 py-4 px-2 mx-auto snap-x snap-mandatory max-w-[90vw] lg:max-w-[1024px]"
           >
             {displayedProducts.map((chunk, index) => {
               const isFirstChunk = index === 0;
@@ -147,7 +147,7 @@ const ProductSlider = () => {
                   key={index}
                 >
                   {!isFirstChunk && (
-                    <div className="absolute left-0 h-full flex items-center">
+                    <div className="absolute -left-2 md:left-0 h-full flex items-center">
                       <button onClick={() => onScroll(-1)}>
                         <ArrowLeftCircle className="size-6 stroke-logo-orange-border" />
                       </button>
@@ -159,7 +159,7 @@ const ProductSlider = () => {
                     ) : null;
                   })}
                   {!isLastChunk && (
-                    <div className="absolute right-0 h-full flex items-center">
+                    <div className="absolute -right-2 md:right-0 h-full flex items-center">
                       <button onClick={() => onScroll(1)}>
                         <ArrowRightCircle className="size-6 stroke-logo-orange-border" />
                       </button>
