@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll } from 'motion/react';
+import { useScroll } from 'motion/react';
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
 import { CategorySection } from '@/components/category-section/CategorySection';
