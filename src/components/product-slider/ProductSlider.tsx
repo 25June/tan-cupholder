@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
@@ -13,6 +14,7 @@ import ArrowRightCircle from '@/components/icons/ArrowRightCircle';
 import ArrowLeftCircle from '@/components/icons/ArrowLeftCircle';
 
 const ProductSlider = () => {
+  const t = useTranslations('HomePage.ProductSliderSection');
   const currentLayout = useQueryMedia();
   const [chunkNumber, setChunkNumber] = useState<number>(1);
   const [displayedProducts, setDisplayedProducts] = useState<any[]>([]);
@@ -93,7 +95,7 @@ const ProductSlider = () => {
             viewport={{ once: true }}
             className={`text-md md:text-lg text-slate-400`}
           >
-            Environment Friendly
+            {t('title')}
           </motion.h2>
           <motion.h3
             initial={{ opacity: 0 }}
@@ -101,7 +103,7 @@ const ProductSlider = () => {
             viewport={{ once: true }}
             className={`text-xl md:text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ${yuseiMagic.className}`}
           >
-            Low Impact Collections
+            {t('subtitle')}
           </motion.h3>
           <motion.div
             initial={{ opacity: 0 }}
@@ -113,25 +115,25 @@ const ProductSlider = () => {
               type="button"
               className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
-              All Product
+              {t('allProducts')}
             </button>
             <button
               type="button"
               className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
-              Latest Products
+              {t('latestProducts')}
             </button>
             <button
               type="button"
               className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
-              Best Seller
+              {t('bestSellers')}
             </button>
             <button
               type="button"
               className="text-sm md:text-lg tracking-wide text-logo-orange hover:text-slate-100 rounded-full transition-all duration-300 border-logo-orange border-2 hover:bg-logo-orange py-1 px-4"
             >
-              Featured Products
+              {t('featuredProducts')}
             </button>
           </motion.div>
           <div

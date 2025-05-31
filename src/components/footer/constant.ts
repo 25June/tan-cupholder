@@ -45,37 +45,37 @@ export const socialMedias = [
     link: 'https://www.youtube.com/channel/UCxQGjFBoYBtfj3gNZhZEwww?view_as=subscriber',
   },
 ];
-export const menus = [
+export const menus = (t: any) => [
   [
     {
-      name: 'Why TaN?',
+      name: t('whyTan'),
       href: 'https://news.tan.com/why-tan',
     },
     {
-      name: 'Materials',
+      name: t('materials'),
       href: 'https://news.tan.com/how-it-works/key-features',
     },
     {
-      name: 'Design',
+      name: t('design'),
       href: 'https://news.tan.com/how-it-works',
     },
     {
-      name: 'New Products',
+      name: t('newProducts'),
       href: 'https://news.tan.com/news/',
     },
   ],
   [
     {
-      name: 'About Us',
+      name: t('aboutUs'),
       href: 'https://news.tan.com/about',
     },
     {
-      name: 'Questions',
+      name: t('questions'),
       href: 'https://news.tan.com/faqs/',
     },
-    { name: 'Contact Us', href: 'https://news.tan.com/contact' },
+    { name: t('contactUs'), href: 'https://news.tan.com/contact' },
     {
-      name: 'Policy',
+      name: t('privacyPolicy'),
       href: 'https://news.tan.com/privacy-policy',
     },
   ],

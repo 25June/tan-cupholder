@@ -3,6 +3,7 @@ import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const heroImageArr = [
   '/IMG_8677.jpg',
@@ -25,6 +26,7 @@ interface Props {
 }
 
 export function HeroSection({ setReady }: Props) {
+  const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
   const [translateX, setTranslateX] = useState<string[]>([]);
   const [opacity, setOpacity] = useState<string[]>([]);
@@ -122,7 +124,9 @@ export function HeroSection({ setReady }: Props) {
                 }}
                 className={`${yuseiMagic.className} text-3xl md:text-5xl subpixel-antialiased font-semibold tracking-wider mb-3`}
               >
-                Back to <br /> Resiliant Material
+                {t.rich('title', {
+                  br: () => <br />,
+                })}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, scale: 0 }}
@@ -133,7 +137,7 @@ export function HeroSection({ setReady }: Props) {
                 }}
                 className="font-light leading-6 text-gray-600 mb-4"
               >
-                Colorful Model, Various Types, Amazing Endurant!!!
+                {t('subtitle')}
               </motion.p>
               <motion.button
                 onClick={() => router.push('/products')}
@@ -146,7 +150,7 @@ export function HeroSection({ setReady }: Props) {
                 type="button"
                 className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
               >
-                Shop now
+                {t('button')}
               </motion.button>
               <motion.p
                 initial={{ opacity: 0, scale: 0 }}
@@ -157,7 +161,7 @@ export function HeroSection({ setReady }: Props) {
                 }}
                 className="font-sm font-light leading-6 text-gray-600 mt-4"
               >
-                Carry various bottle/cup shapes!!!
+                {t('caption')}
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}

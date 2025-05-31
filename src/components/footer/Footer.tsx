@@ -1,8 +1,10 @@
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 import { durationLeft, durationRight, menus, socialMedias } from './constant';
 import { yuseiMagic } from '@/styles/fonts';
 
 export const Footer = () => {
+  const t = useTranslations('HomePage.FooterSection');
   return (
     <div className="bg-logo-orange-border">
       <footer className="text-[16px] text-white max-w-8xl mx-auto leading-[24px] grid sm:grid-cols-2 grid-cols-1 justify-between  sm:px-8 px-4 py-[40px] sm:py-[64px] font-bold">
@@ -38,7 +40,7 @@ export const Footer = () => {
             variants={durationLeft}
             className="!opacity-70"
           >
-            68 Dương Bá Trạc, Phường 1, Quận 8, Thành phố Hồ Chí Minh
+            {t('address')}
           </motion.p>
           <motion.div
             viewport={{ once: true }}
@@ -54,7 +56,7 @@ export const Footer = () => {
               whileTap={{ x: 3 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              0808 501 4080 (freephone)
+              {t('phone')}
             </motion.a>
             <motion.a
               target="_blank"
@@ -66,7 +68,7 @@ export const Footer = () => {
               whileTap={{ x: 3 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              tan@gmail.com
+              {t('email')}
             </motion.a>
             <motion.div
               className="flex gap-4"
@@ -123,8 +125,12 @@ export const Footer = () => {
             variants={durationLeft}
             className="md:hidden sm:flex hidden flex-col sm:gap-3 gap-5 mt-auto !opacity-50"
           >
-            <p>Copyright © {new Date().getFullYear()} TaN</p>
-            <span>All rights reserved</span>
+            <p>
+              {t('copyright', {
+                year: new Date().getFullYear(),
+              })}
+            </p>
+            <span>{t('allRightsReserved')}</span>
           </motion.div>
         </motion.div>
         <motion.div
@@ -179,9 +185,9 @@ export const Footer = () => {
               variants={durationRight}
               className={`md:hidden sm:block hidden text-white font-black text-[20px] leading-[30px] ${yuseiMagic.className}`}
             >
-              More Details
+              {t('moreDetails')}
             </motion.p>
-            {menus.map((menu, index) => (
+            {menus(t).map((menu, index) => (
               <motion.div
                 key={index}
                 viewport={{ once: true }}
@@ -222,8 +228,12 @@ export const Footer = () => {
               variants={durationRight}
               className="md:flex hidden flex-col sm:gap-3 gap-5"
             >
-              <p>Copyright © {new Date().getFullYear()} TaN</p>
-              <span>All rights reserved</span>
+              <p>
+                {t('copyright', {
+                  year: new Date().getFullYear(),
+                })}
+              </p>
+              <span>{t('allRightsReserved')}</span>
             </motion.div>
           </motion.div>
           <motion.div
@@ -231,8 +241,12 @@ export const Footer = () => {
             variants={durationLeft}
             className="sm:hidden flex flex-col gap-5"
           >
-            <p>Copyright © {new Date().getFullYear()} TaN</p>
-            <span>All rights reserved</span>
+            <p>
+              {t('copyright', {
+                year: new Date().getFullYear(),
+              })}
+            </p>
+            <span>{t('allRightsReserved')}</span>
           </motion.div>
         </motion.div>
       </footer>

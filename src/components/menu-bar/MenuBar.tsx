@@ -1,4 +1,5 @@
 import { View } from '@/constants/common';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { motion, MotionValue } from 'motion/react';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
@@ -8,6 +9,8 @@ interface MenuBarProps {
 }
 
 export function MenuBar({ scrollYProgress }: MenuBarProps) {
+  const t = useTranslations('Menu');
+
   const scrollToView = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -45,7 +48,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
             className="hidden md:block"
           >
             <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-              Home
+              {t('home')}
             </p>
           </button>
           <button
@@ -53,7 +56,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
             className="hidden md:block"
           >
             <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-              Categories
+              {t('categories')}
             </p>
           </button>
           <div className="relative grow md:grow-0 flex gap-2 justify-start">
@@ -72,7 +75,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
               className="blocl md:hidden"
             >
               <p className="font-black font-extrabold tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Think About Nature
+                {t('appName')}
               </p>
             </button>
           </div>
@@ -82,7 +85,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
             className="hidden md:block"
           >
             <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-              Collections
+              {t('collections')}
             </p>
           </button>
           <button
@@ -90,7 +93,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
             className="hidden md:block"
           >
             <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-              Faq
+              ({t('faq')})
             </p>
           </button>
           <DropdownMenu navigateToView={scrollToView} />

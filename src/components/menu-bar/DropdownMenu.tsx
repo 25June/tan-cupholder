@@ -1,4 +1,5 @@
 import Menu from '../icons/Menu';
+import { useTranslations } from 'next-intl';
 import { View } from '@/constants/common';
 
 interface DropdownMenuProps {
@@ -6,6 +7,9 @@ interface DropdownMenuProps {
 }
 
 export default function DropdownMenu({ navigateToView }: DropdownMenuProps) {
+  const t = useTranslations('Menu');
+  const menuItemClass =
+    'font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer';
   return (
     <div className="block md:hidden">
       <button
@@ -23,30 +27,22 @@ export default function DropdownMenu({ navigateToView }: DropdownMenuProps) {
         >
           <li>
             <button onClick={() => navigateToView(View.HERO)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Home
-              </p>
+              <p className={menuItemClass}>{t('home')}</p>
             </button>
           </li>
           <li>
             <button onClick={() => navigateToView(View.CATEGORY)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Categories
-              </p>
+              <p className={menuItemClass}>{t('categories')}</p>
             </button>
           </li>
           <li>
             <button onClick={() => navigateToView(View.PRODUCT)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Collections
-              </p>
+              <p className={menuItemClass}>{t('collections')}</p>
             </button>
           </li>
           <li>
             <button onClick={() => navigateToView(View.FAQ)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Faq
-              </p>
+              <p className={menuItemClass}>{t('faq')}</p>
             </button>
           </li>
         </ul>

@@ -1,0 +1,80 @@
+{
+  "HomePage": {
+    "HeroSection": {
+      "title": "Back to <br></br> Resiliant Material",
+      "subtitle": "Colorful Model, Various Types, Amazing Endurant!!!",
+      "button": "Explore Now",
+      "caption": "Carry various bottle/cup shapes!!!"
+    },
+    "CategorySection": {
+      "itemTitle": "Title",
+      "itemDescription": "Description",
+      "itemPrice": "Price",
+      "itemButton": "View Details"
+    },
+    "ProductSliderSection": {
+      "title": "Environment Friendly",
+      "subtitle": "Low Impact Collections",
+      "allProducts": "All Products",
+      "latestProducts": "Latest Products",
+      "bestSellers": "Best Sellers",
+      "featuredProducts": "Featured Products"
+    },
+    "FaqSection": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "We are here to help you",
+      "question1": {
+        "title": "What is Resiliant Material?",
+        "answer": "Resiliant Material is a sustainable and durable material designed for various applications."
+      },
+      "question2": {
+        "title": "How do I care for my Resiliant Material products?",
+        "answer": "Simply clean with a damp cloth and avoid harsh chemicals."
+      },
+      "question3": {
+        "title": "Where can I buy Resiliant Material products?",
+        "answer": "You can purchase our products directly from our website or authorized retailers."
+      },
+      "question4": {
+        "title": "What is the warranty on Resiliant Material products?",
+        "answer": "We offer a 2-year warranty on all our products against manufacturing defects."
+      },
+      "question5": {
+        "title": "Can I return or exchange my Resiliant Material products?",
+        "answer": "Yes, we accept returns and exchanges within 30 days of purchase, provided the product is in its original condition."
+      }
+    },
+    "FooterSection": {
+      "address": "123 Resiliant St, Eco City, EC 12345",
+      "phone": "+1 (234) 567-8900",
+      "email": "thinkaboutnature@gmail.com",
+      "copyright": "Copyright © {year} TaN.",
+      "allRightsReserved": "All rights reserved.",
+      "moreDetails": "More details",
+      "whyTan": "Why TaN?",
+      "materials": "Materials",
+      "design": "Design",
+      "newProducts": "New Products",
+      "questions": "Questions",
+      "aboutUs": "About Us",
+      "contactUs": "Contact Us",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service",
+      "followUs": "Follow Us",
+      "subscribeNewsletter": "Subscribe to our Newsletter",
+      "newsletterPlaceholder": "Enter your email address",
+      "subscribeButton": "Subscribe"
+    }
+  },
+  "ProductsPage": {
+    "title": "Environment Friendly",
+    "subtitle": "Low Impact Collections"
+  },
+  "Menu": {
+    "home": "Home",
+    "categories": "Categories",
+    "collections": "Collections",
+    "faq": "FAQ",
+    "appName": "Think About Nature"
+  }
+}

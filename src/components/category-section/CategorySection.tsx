@@ -1,4 +1,5 @@
 import * as motion from 'motion/react-client';
+import { useTranslations } from 'next-intl';
 
 const exampleImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
@@ -7,6 +8,7 @@ const exampleImageArr = [
 ];
 
 export const CategorySection = () => {
+  const t = useTranslations('HomePage.CategorySection');
   return (
     <div className="relative max-w-screen md:max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-full md:min-h-screen p-4 md:p-8 pb-20 gap-16 ">
       <main className="w-[90vw] md:w-full flex flex-col md:flex-row gap-8 row-start-2 justify-stretch justify-items-stretch items-stretch">
@@ -20,11 +22,11 @@ export const CategorySection = () => {
             className={`w-full h-full bg-left md:bg-top bg-cover bg-no-repeat ${exampleImageArr[0]}`}
           >
             <div className="w-full h-96 md:h-full bg-from-white-to-transparent-270deg flex justify-end flex-col p-7">
-              <h3>Title</h3>
-              <p>Description:</p>
-              <p>Price</p>
+              <h3>{t('itemTitle')}</h3>
+              <p>{t('itemDescription')}</p>
+              <p>{t('itemPrice')}</p>
               <div>
-                <button>View detail</button>
+                <button>{t('itemButton')}</button>
               </div>
             </div>
           </div>
@@ -40,11 +42,11 @@ export const CategorySection = () => {
               className={`h-full max-h-96 bg-left md:bg-right bg-cover bg-no-repeat ${exampleImageArr[1]}`}
             >
               <div className="w-full h-96 md:h-full bg-from-white-to-transparent-270deg flex justify-end flex-col p-7">
-                <h3>Title</h3>
-                <p>Description:</p>
-                <p>Price</p>
+                <h3>{t('itemTitle')}</h3>
+                <p>{t('itemDescription')}</p>
+                <p>{t('itemPrice')}</p>
                 <div>
-                  <button>View detail</button>
+                  <button>{t('itemButton')}</button>
                 </div>
               </div>
             </div>
@@ -59,11 +61,11 @@ export const CategorySection = () => {
               className={`w-full h-full max-h-96 bg-left md:bg-right bg-cover bg-no-repeat ${exampleImageArr[2]} `}
             >
               <div className="w-full h-96 md:h-full bg-from-white-to-transparent-270deg flex justify-end flex-col p-7">
-                <h3>Title</h3>
-                <p>Description:</p>
-                <p>Price</p>
+                <h3>{t('itemTitle')}</h3>
+                <p>{t('itemDescription')}</p>
+                <p>{t('itemPrice')}</p>
                 <div>
-                  <button>View detail</button>
+                  <button>{t('itemButton')}</button>
                 </div>
               </div>
             </div>

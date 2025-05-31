@@ -1,9 +1,11 @@
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
 import { View } from '@/constants/common';
 
 const StaticMenuBar = () => {
+  const t = useTranslations('Menu');
   const router = useRouter();
   const onNavigate = (view: string) => {
     if (view === View.HERO) {
@@ -36,7 +38,7 @@ const StaticMenuBar = () => {
             className="blocl md:hidden"
           >
             <p className="font-black font-extrabold tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-              Think About Nature
+              {t('appName')}
             </p>
           </button>
         </div>
@@ -45,7 +47,7 @@ const StaticMenuBar = () => {
           className="hidden md:block"
         >
           <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            Home
+            {t('home')}
           </p>
         </button>
         <button
@@ -53,7 +55,7 @@ const StaticMenuBar = () => {
           className="hidden md:block"
         >
           <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            Categories
+            {t('categories')}
           </p>
         </button>
         <button
@@ -61,7 +63,7 @@ const StaticMenuBar = () => {
           className="hidden md:block"
         >
           <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            Collections
+            {t('collections')}
           </p>
         </button>
         <button
@@ -69,7 +71,7 @@ const StaticMenuBar = () => {
           className="hidden md:block"
         >
           <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            Faq
+            {t('faq')}
           </p>
         </button>{' '}
         <DropdownMenu navigateToView={onNavigate} />

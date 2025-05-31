@@ -1,0 +1,80 @@
+{
+  "HomePage": {
+    "HeroSection": {
+      "title": "Trở lại với <br></br> Vật liệu bền vững",
+      "subtitle": "Mẫu mã đa sắc, Đa dạng kiểu dáng, Độ bền vượt trội!!!",
+      "button": "Khám phá ngay",
+      "caption": "Phù hợp nhiều hình dạng chai/cốc!!!"
+    },
+    "CategorySection": {
+      "itemTitle": "Tiêu đề",
+      "itemDescription": "Mô tả",
+      "itemPrice": "Giá",
+      "itemButton": "Xem chi tiết"
+    },
+    "ProductSliderSection": {
+      "title": "Thân thiện môi trường",
+      "subtitle": "Bộ sưu tập ít tác động",
+      "allProducts": "Tất cả sản phẩm",
+      "latestProducts": "Sản phẩm mới nhất",
+      "bestSellers": "Bán chạy nhất",
+      "featuredProducts": "Sản phẩm nổi bật"
+    },
+    "FaqSection": {
+      "title": "Những câu hỏi thường gặp",
+      "subtitle": "Chúng tôi luôn sẵn lòng hỗ trợ bạn",
+      "question1": {
+        "title": "Vật liệu bền vững là gì?",
+        "answer": "Vật liệu bền vững là loại vật liệu thân thiện với môi trường và có độ bền cao, được thiết kế cho nhiều ứng dụng khác nhau."
+      },
+      "question2": {
+        "title": "Làm thế nào để bảo quản sản phẩm làm từ vật liệu bền vững?",
+        "answer": "Bạn chỉ cần lau sạch bằng khăn ẩm và tránh các hóa chất tẩy rửa mạnh."
+      },
+      "question3": {
+        "title": "Tôi có thể mua sản phẩm làm từ vật liệu bền vững ở đâu?",
+        "answer": "Bạn có thể mua sản phẩm của chúng tôi trực tiếp từ trang web hoặc các nhà bán lẻ ủy quyền."
+      },
+      "question4": {
+        "title": "Chính sách bảo hành cho sản phẩm làm từ vật liệu bền vững là gì?",
+        "answer": "Chúng tôi bảo hành 2 năm cho tất cả sản phẩm đối với các lỗi từ nhà sản xuất."
+      },
+      "question5": {
+        "title": "Tôi có thể trả lại hoặc đổi sản phẩm làm từ vật liệu bền vững không?",
+        "answer": "Có, chúng tôi chấp nhận đổi trả trong vòng 30 ngày kể từ ngày mua, với điều kiện sản phẩm còn nguyên trạng."
+      }
+    },
+    "FooterSection": {
+      "address": "123 Đường Bền Vững, Thành phố Sinh Thái, EC 12345",
+      "phone": "+1 (234) 567-8900",
+      "email": "thinkaboutnature@gmail.com",
+      "copyright": "Bản quyền © {year} TaN.",
+      "allRightsReserved": "Mọi quyền được bảo lưu.",
+      "moreDetails": "Xem thêm",
+      "whyTan": "Tại sao chọn TaN?",
+      "materials": "Vật liệu",
+      "design": "Thiết kế",
+      "newProducts": "Sản phẩm mới",
+      "questions": "Câu hỏi",
+      "aboutUs": "Về chúng tôi",
+      "contactUs": "Liên hệ",
+      "privacyPolicy": "Chính sách bảo mật",
+      "termsOfService": "Điều khoản dịch vụ",
+      "followUs": "Theo dõi chúng tôi",
+      "subscribeNewsletter": "Đăng ký nhận bản tin của chúng tôi",
+      "newsletterPlaceholder": "Nhập địa chỉ email của bạn",
+      "subscribeButton": "Đăng ký"
+    }
+  },
+  "ProductsPage": {
+    "title": "Thân thiện môi trường",
+    "subtitle": "Bộ sưu tập ít tác động"
+  },
+  "Menu": {
+    "home": "Trang chủ",
+    "categories": "Danh mục",
+    "collections": "Bộ sưu tập",
+    "faq": "Hỏi đáp",
+    "appName": "Think About Nature"
+  }
+}
