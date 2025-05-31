@@ -31,7 +31,7 @@ export function HeroSection({ setReady }: Props) {
   const [translateY, setTranslateY] = useState<string[]>([]);
   const [zIndex] = useState<string[]>(['z-30', 'z-20', 'z-10', 'z-0']);
   const [contrast, setContrast] = useState<string[]>([]);
-  const [imgOrders, setImgOrders] = useState<string[]>(heroImageArr);
+  const [imgOrders, setImgOrders] = useState<string[]>(bgHeroImageArr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
 
   useEffect(() => {
@@ -75,6 +75,23 @@ export function HeroSection({ setReady }: Props) {
 
   return (
     <div className="relative">
+      <div className="hidden">
+        {imgOrders.map((img, index) => {
+          return (
+            <Image
+              key={index}
+              src={heroImageArr[index]}
+              alt={`hero-image-${index}`}
+              width={800}
+              height={800}
+              className="w-full h-full object-cover transition-transform duration-300 hidden"
+              onLoad={() => setReady(false)}
+              priority
+            />
+          );
+        })}
+      </div>
+
       <div className="max-w-8xl w-screen h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full h-full flex justify-start lg:justify-end pt-4 md:pt-16">
           <div className="w-5/5 lg:w-4/5">
@@ -191,17 +208,8 @@ export function HeroSection({ setReady }: Props) {
                 className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
               >
                 <div
-                  className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${bgHeroImageArr} ${zoomIn} `}
-                >
-                  <Image
-                    src={heroImageArr[index]}
-                    alt={`hero-image-${index}`}
-                    width={800}
-                    height={800}
-                    className="w-full h-full object-cover transition-transform duration-300 none"
-                    onLoad={() => setReady(false)}
-                  />
-                </div>
+                  className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} `}
+                ></div>
               </div>
             );
           })}
@@ -214,6 +222,7 @@ export function HeroSection({ setReady }: Props) {
           height={90}
           alt="wave"
           className="w-screen"
+          priority
         />
       </div>
     </div>

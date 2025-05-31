@@ -44,17 +44,17 @@ export default function Page() {
       <StaticMenuBar />
       <div>
         <div
-          className={`w-screen h-96 bg-center bg-cover bg-no-repeat bg-[url('/IMG_7197.jpg')]`}
+          className={`w-screen h-48 md:h-96 bg-center bg-cover bg-no-repeat bg-[url('/IMG_7197.jpg')]`}
         ></div>
       </div>
-      <div className="relative h-full max-w-8xl mx-auto p-8 pb-20 gap-16 sm:p-20 ">
-        <div className="flex justify-between items-end">
-          <div>
+      <div className="relative h-full max-w-8xl mx-auto p-4 pb-20 gap-16 md:p-20 ">
+        <div className="flex justify-between items-start md:items-end flex-col md:flex-row">
+          <div className="shink-0">
             <motion.h2
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className={`text-lg text-slate-400`}
+              className={`text-md md:text-lg text-slate-400`}
             >
               Environment Friendly
             </motion.h2>
@@ -62,13 +62,13 @@ export default function Page() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className={`text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ${yuseiMagic.className}`}
+              className={`text-xl md:text-3xl antialiased text-logo-orange font-bold tracking-wide mb-4 ${yuseiMagic.className}`}
             >
               Low Impact Collections
             </motion.h3>
           </div>
-          <div className="mb-4 w-64">
-            <label className="input input-md input-primary">
+          <div className="mb-4 w-full md:w-64">
+            <label className="input input-md input-primary w-full">
               <svg
                 className="h-[1em] opacity-50"
                 xmlns="http://www.w3.org/2000/svg"

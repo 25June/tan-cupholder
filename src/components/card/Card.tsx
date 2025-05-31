@@ -7,7 +7,7 @@ import {
 } from '@/shared/utils/formatNumber';
 import { Product } from '@/models/product';
 import ArrowLongRight from '@/components/icons/ArrowLongRight';
-import Eye from '@/components/icons/Eye';
+import ArrowRightCircleSolid from '@/components/icons/ArrowRightCircleSolid';
 import { formatPrice } from '@/shared/utils/formatPrice';
 
 interface CardProps {
@@ -63,7 +63,7 @@ export default function Card({ item }: CardProps) {
             className="btn btn-primary btn-sm text-right"
           >
             View
-            <Eye className="size-4" />
+            <ArrowRightCircleSolid className="size-4" />
           </button>
         </div>
       </div>

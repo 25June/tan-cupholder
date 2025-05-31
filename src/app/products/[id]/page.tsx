@@ -1,7 +1,7 @@
 'use client';
 
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
-import Spinner from '@/components/spinner/Spinner';
+import ProductDetailSkeleton from '@/components/skeleton/ProductDetail.skeleton';
 import { useEffect } from 'react';
 import Image from 'next/image';
 import { useProduct } from '@/hooks/useProduct';
@@ -24,25 +24,25 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen">
       <StaticMenuBar />
-      <div className="relative min-h-screen flex flex-col justify-between mt-24">
-        {isLoading && (
-          <div className="flex justify-center pt-24">
-            <Spinner />
-          </div>
-        )}
+
+      <div className="relative h-full flex flex-col justify-between mt-8 md:mt-24 p-4">
+        {isLoading && <ProductDetailSkeleton />}
         {product && (
-          <div className="w-full max-w-7xl mx-auto flex gap-12">
-            <div className="flex flex-1 gap-4">
-              <div className="flex-1 flex flex-col gap-2">
+          <div className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row">
+            <div className="flex flex-1 gap-4 flex-col-reverse md:flex-row">
+              <div className="flex-1 hidden md:flex flex-row md:flex-col gap-2">
                 {Array.from({ length: 3 }).map((_, index) => (
-                  <Image
+                  <div
                     key={index}
-                    src={product.image}
-                    alt={product.name}
-                    width={600}
-                    height={600}
-                    className="min-w-24 rounded-md"
-                  />
+                    className="min-w-12 md:min-w-24 rounded-md overflow-hidden cursor-pointer transition-transform hover:scale-105"
+                  >
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={600}
+                      height={600}
+                    />
+                  </div>
                 ))}
               </div>
               <div>
@@ -89,9 +89,9 @@ export default function ProductPage() {
             </div>
           </div>
         )}
-        <div className={`mt-36 `}>
-          <Footer />
-        </div>
+      </div>
+      <div className="mt-8 md:mt-24">
+        <Footer />
       </div>
     </div>
   );

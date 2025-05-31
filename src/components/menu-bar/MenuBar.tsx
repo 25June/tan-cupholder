@@ -1,61 +1,7 @@
 import { View } from '@/constants/common';
 import Image from 'next/image';
-import Menu from '../icons/Menu';
 import { motion, MotionValue } from 'motion/react';
-
-interface DropdownMenuProps {
-  readonly scrollToView: (id: string) => void;
-}
-
-function DropdownMenu({ scrollToView }: DropdownMenuProps) {
-  return (
-    <div className="block md:hidden">
-      <button
-        className="btn btn-sm btn-circle bg-transparent border-0"
-        popoverTarget="popover-1"
-        style={{ anchorName: '--anchor-1' } as React.CSSProperties}
-      >
-        <Menu />
-      </button>
-      <div className="dropdown dropdown-end">
-        <ul
-          className="dropdown menu bg-white rounded-box w-56"
-          popover="auto"
-          id="popover-1"
-        >
-          <li>
-            <button onClick={() => scrollToView(View.HERO)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Home
-              </p>
-            </button>
-          </li>
-          <li>
-            <button onClick={() => scrollToView(View.CATEGORY)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Categories
-              </p>
-            </button>
-          </li>
-          <li>
-            <button onClick={() => scrollToView(View.PRODUCT)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Collections
-              </p>
-            </button>
-          </li>
-          <li>
-            <button onClick={() => scrollToView(View.FAQ)}>
-              <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-                Faq
-              </p>
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  );
-}
+import DropdownMenu from '@/components/menu-bar/DropdownMenu';
 
 interface MenuBarProps {
   readonly scrollYProgress: MotionValue<number>;
@@ -117,7 +63,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
                 alt="TAN cupholder logo"
                 width={48}
                 height={48}
-                className={`rounded-full absolute w-8 md:w-12 h-8 md:h-12 transition-opacity`}
+                className={`rounded-full absolute w-8 md:w-12 h-8 md:h-12 transition-opacity cursor-pointer`}
                 priority
               />
             </div>
@@ -147,7 +93,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
               Faq
             </p>
           </button>
-          <DropdownMenu scrollToView={scrollToView} />
+          <DropdownMenu navigateToView={scrollToView} />
         </div>
       </div>
     </div>
