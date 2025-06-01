@@ -11,7 +11,7 @@ import { View, ScreenLayout } from '@/constants/common';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useQueryMedia } from '@/hooks/useQueryLayout';
-import { useTranslations, useLocale } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 
 const NoSSRProductSlider = dynamic(
@@ -27,7 +27,6 @@ export default function Home() {
   const { scrollYProgress } = useScroll({ container: divRef });
 
   const router = useRouter();
-  const t = useTranslations('HomePage');
   const currentLocale = useLocale();
   const pathname = usePathname();
 
