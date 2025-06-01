@@ -21,7 +21,7 @@ export default function DropdownMenu({ navigateToView }: DropdownMenuProps) {
       </button>
       <div className="dropdown dropdown-end">
         <ul
-          className="dropdown menu bg-white rounded-box w-56"
+          className="dropdown menu bg-white rounded-box w-36"
           popover="auto"
           id="popover-1"
         >

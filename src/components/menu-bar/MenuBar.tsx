@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { motion, MotionValue } from 'motion/react';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
+import TranslateDropdown from '../translate-dropdown/TranslateDropdown';
 
 interface MenuBarProps {
   readonly scrollYProgress: MotionValue<number>;
@@ -20,7 +21,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
   return (
     <div className="max-w-screen w-full mx-auto absolute top-2 md:top-5 z-50">
       <div className="max-w-[95vw] md:max-w-5xl rounded-3xl mx-auto bg-white overflow-hidden transition-shadow shadow-2xl">
-        <div className="relative ">
+        <div className="relative">
           <motion.div
             id="scroll-indicator"
             style={{
@@ -37,6 +38,9 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
               backgroundColor: '#f57722',
             }}
           />
+          <div className="absolute hidden md:block right-4 top-3">
+            <TranslateDropdown id={'2'} />
+          </div>
         </div>
 
         <div
@@ -96,6 +100,9 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
               ({t('faq')})
             </p>
           </button>
+          <div className="block md:hidden">
+            <TranslateDropdown id={'3'} />
+          </div>
           <DropdownMenu navigateToView={scrollToView} />
         </div>
       </div>
