@@ -2,9 +2,11 @@ import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { durationLeft, durationRight, menus, socialMedias } from './constant';
 import { yuseiMagic } from '@/styles/fonts';
+import { useRouter } from 'next/navigation';
 
-export const Footer = () => {
+export default function Footer() {
   const t = useTranslations('HomePage.FooterSection');
+  const route = useRouter();
   return (
     <div className="bg-logo-orange-border">
       <footer className="text-[16px] text-white max-w-8xl mx-auto leading-[24px] grid sm:grid-cols-2 grid-cols-1 justify-between  sm:px-8 px-4 py-[40px] sm:py-[64px] font-bold">
@@ -197,6 +199,11 @@ export const Footer = () => {
                   <motion.a
                     target="_self"
                     viewport={{ once: true }}
+                    onClick={() =>
+                      item.href.includes('https')
+                        ? window.open(item.href, '_blank')
+                        : route.push(item.href)
+                    }
                     href={item.href}
                     whileHover={{ x: 3 }}
                     whileTap={{ x: 3 }}
@@ -252,4 +259,4 @@ export const Footer = () => {
       </footer>
     </div>
   );
-};
+}

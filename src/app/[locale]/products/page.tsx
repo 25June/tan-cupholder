@@ -8,7 +8,7 @@ import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Spinner from '@/components/spinner/Spinner';
 import { debounce } from '@/shared/utils/debounce';
 import Card from '@/components/card/Card';
-import { Footer } from '@/components/footer/Footer';
+import Footer from '@/components/footer/Footer';
 
 export default function Page() {
   const { products, isLoading, onGetProducts, isEnd } = useProducts();

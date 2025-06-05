@@ -49,34 +49,34 @@ export const menus = (t: any) => [
   [
     {
       name: t('whyTan'),
-      href: 'https://news.tan.com/why-tan',
+      href: '/inspiration',
     },
     {
       name: t('materials'),
-      href: 'https://news.tan.com/how-it-works/key-features',
+      href: '/material',
     },
     {
       name: t('design'),
-      href: 'https://news.tan.com/how-it-works',
+      href: '/design',
     },
     {
       name: t('newProducts'),
-      href: 'https://news.tan.com/news/',
+      href: '/news',
     },
   ],
   [
     {
       name: t('aboutUs'),
-      href: 'https://news.tan.com/about',
+      href: '/about-us',
     },
     {
       name: t('questions'),
-      href: 'https://news.tan.com/faqs/',
+      href: '/questions',
     },
-    { name: t('contactUs'), href: 'https://news.tan.com/contact' },
+    { name: t('contactUs'), href: '/contact-us' },
     {
       name: t('privacyPolicy'),
-      href: 'https://news.tan.com/privacy-policy',
+      href: '/privacy-policy',
     },
   ],
 ];

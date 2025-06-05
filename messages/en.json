@@ -76,5 +76,57 @@
     "collections": "Collections",
     "faq": "FAQ",
     "appName": "Think About Nature"
+  },
+  "InspirationPage": {
+    "title": "Inspiration",
+    "paragraph1": "In a world brimming with disposable solutions, the vision for 'Think About Nature' (TaN) blossomed from a simple, yet profound observation: the fleeting life of a plastic cup holder. Our founder, a fervent advocate for environmental stewardship, witnessed countless single-use holders discarded, contributing to ever-growing landfills. This stark reality sparked an idea: what if everyday items could be crafted with purpose, designed to endure, and born from materials that honored our planet? The answer lay in resilient cotton, a material both robust and renewable, offering a hopeful alternative to the conventional.",
+    "paragraph2": "Driven by this vision, the journey began to transform resilient cotton into something beautiful and functional: a cup holder that defies obsolescence. Each stitch, each curve, was meticulously designed to cradle various cup shapes, from slim coffee tumblers to wide-mouthed water bottles, embodying versatility without compromise. But beyond its practical charm, the TaN cup holder is a silent testament to a larger philosophy. It’s a gentle reminder that conscious choices, even in small everyday items, can weave a tapestry of change, proving that durability and design can walk hand-in-hand with environmental responsibility."
+  },
+  "MaterialPage": {
+    "title": "Material",
+    "paragraph1": "Resiliant cotton is a revolutionary material that combines the best of both worlds: durability and sustainability. Unlike traditional cotton, which can be prone to wear and tear, resilient cotton is engineered to withstand the rigors of daily use while maintaining its integrity and appearance. This makes it an ideal choice for products that are designed to last, such as our cup holders.",
+    "paragraph2": "The process of creating resilient cotton involves advanced textile technology that enhances the fibers' strength and resilience. This means that products made from resilient cotton not only look good but also perform exceptionally well over time. They resist fraying, fading, and stretching, ensuring that your investment in quality lasts longer than conventional materials."
+  },
+  "DesignPage": {
+    "title": "Design",
+    "paragraph1": "At TaN, we believe that design is not just about aesthetics; it's about functionality and sustainability. Our cup holders are designed with the user in mind, offering a perfect blend of style and practicality. The sleek lines and modern finishes make them a stylish accessory for any beverage, while the innovative design allows them to accommodate various cup shapes and sizes.",
+    "paragraph2": "Each TaN cup holder is crafted with attention to detail, ensuring that it not only looks good but also performs exceptionally well. The ergonomic design provides a comfortable grip, making it easy to carry your drinks on the go. Plus, the resilient cotton material ensures that your cup holder will withstand the test of time, making it a reliable companion for all your adventures."
+  },
+  "NewProductsPage": {
+    "title": "New Products",
+    "subtitle": "Discover our latest additions"
+  },
+  "AboutUsPage": {
+    "title": "About Us",
+    "founder1": {
+      "name": "John Doe",
+      "role": "Founder & CEO",
+      "bio": "John is a passionate environmentalist and entrepreneur who founded TaN to create sustainable products that make a difference. With a background in textile engineering, he is dedicated to innovating materials that are both durable and eco-friendly."
+    },
+    "founder2": {
+      "name": "Jane Smith",
+      "role": "Co-Founder & Designer",
+      "bio": "Jane is a creative designer with a love for nature. She believes in the power of design to inspire change and has played a key role in developing TaN's unique product line that combines style with sustainability."
+    },
+    "founder3": {
+      "name": "Emily Johnson",
+      "role": "Sustainability Expert",
+      "bio": "Emily is a sustainability advocate with years of experience in environmental conservation. She ensures that TaN's practices align with our commitment to protecting the planet, from sourcing materials to production processes."
+    }
+  },
+  "ContactUsPage": {
+    "title": "Contact Us",
+    "paragraph1": "We love hearing from our customers! Whether you have a question about our products, need assistance with an order, or just want to share your thoughts, we're here to help. Your feedback is invaluable to us as we strive to improve and innovate.",
+    "paragraph2": "Feel free to reach out via email at thinkaboutnature@gmail.com"
+  },
+  "QuestionsPage": {
+    "title": "Questions",
+    "paragraph1": "Have questions about our products or policies? Check out our FAQ section for answers to common inquiries. If you can't find what you're looking for, don't hesitate to contact us directly.",
+    "paragraph2": "We're here to assist you with any concerns or queries you may have."
+  },
+  "PrivacyPolicyPage": {
+    "title": "Privacy Policy",
+    "paragraph1": "At TaN, we take your privacy seriously. This Privacy Policy outlines how we collect, use, and protect your personal information. We are committed to ensuring that your privacy is protected and that your information is used responsibly.",
+    "paragraph2": "By using our website, you consent to the collection and use of your information in accordance with this policy."
   }
 }

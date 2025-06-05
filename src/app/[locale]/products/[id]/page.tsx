@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import Quantity from '@/components/quantity/Quantity';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { calculatePercent } from '@/shared/utils/formatNumber';
-import { Footer } from '@/components/footer/Footer';
+import Footer from '@/components/footer/Footer';
 
 export default function ProductPage() {
   const { id } = useParams();

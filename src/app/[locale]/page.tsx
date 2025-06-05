@@ -6,7 +6,7 @@ import { HeroSection } from '@/components/hero-section/HeroSection';
 import { CategorySection } from '@/components/category-section/CategorySection';
 import { useEffect, useRef, useState } from 'react';
 import { Faq } from '@/components/faq/Faq';
-import { Footer } from '@/components/footer/Footer';
+import Footer from '@/components/footer/Footer';
 import { View, ScreenLayout } from '@/constants/common';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -41,7 +41,7 @@ export default function Home() {
   }, [loadingMedia]);
 
   return (
-    <div>
+    <div className="relative min-h-screen">
       {!removeLoading && (
         <div
           className={`fixed w-screen h-screen flex items-center justify-center bg-white transition-all duration-300 ease-in-out ${
