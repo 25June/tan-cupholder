@@ -61,7 +61,7 @@ export const menus = (t: any) => [
     },
     {
       name: t('newProducts'),
-      href: '/news',
+      href: '/products',
     },
   ],
   [
@@ -71,7 +71,7 @@ export const menus = (t: any) => [
     },
     {
       name: t('questions'),
-      href: '/questions',
+      href: '/question',
     },
     { name: t('contactUs'), href: '/contact-us' },
     {

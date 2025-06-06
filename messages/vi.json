@@ -81,5 +81,52 @@
     "title": "Cảm Hứng",
     "paragraph1": "Trong một thế giới tràn ngập các giải pháp dùng một lần, tầm nhìn cho 'Think About Nature' (TaN) đã nảy nở từ một quan sát đơn giản nhưng sâu sắc: vòng đời ngắn ngủi của một chiếc giá đỡ cốc nhựa. Người sáng lập của chúng tôi, một người ủng hộ nhiệt thành cho việc bảo vệ môi trường, đã chứng kiến vô số giá đỡ dùng một lần bị vứt bỏ, góp phần vào những bãi rác ngày càng lớn. Thực tế khắc nghiệt này đã khơi dậy một ý tưởng: điều gì sẽ xảy ra nếu các vật dụng hàng ngày có thể được chế tác với mục đích, được thiết kế để bền bỉ và được tạo ra từ những vật liệu tôn trọng hành tinh của chúng ta? Câu trả lời nằm ở bông vải bền vững, một vật liệu vừa chắc chắn vừa có thể tái tạo, mang đến một giải pháp thay thế đầy hy vọng cho những sản phẩm thông thường.",
     "paragraph2": "Được thúc đẩy bởi tầm nhìn này, hành trình biến bông vải bền vững thành một sản phẩm đẹp và tiện dụng đã bắt đầu: một chiếc giá đỡ cốc thách thức sự lỗi thời. Từng đường may, từng đường cong đều được thiết kế tỉ mỉ để ôm trọn nhiều hình dạng cốc khác nhau, từ ly cà phê thon gọn đến bình nước miệng rộng, thể hiện sự linh hoạt mà không cần phải thỏa hiệp. Nhưng ngoài vẻ đẹp thực dụng, giá đỡ cốc TaN còn là một minh chứng thầm lặng cho một triết lý lớn hơn. Đó là một lời nhắc nhở nhẹ nhàng rằng những lựa chọn có ý thức, ngay cả trong những vật dụng nhỏ hàng ngày, cũng có thể dệt nên một tấm thảm thay đổi, chứng minh rằng độ bền và thiết kế có thể song hành cùng trách nhiệm với môi trường."
+  },
+  "MaterialPage": {
+    "title": "Chất liệu",
+    "paragraph1": "Vải bông đàn hồi là một vật liệu cách mạng kết hợp những gì tốt nhất của cả hai thế giới: độ bền và tính bền vững. Không giống như bông truyền thống, vốn dễ bị hao mòn, bông đàn hồi được thiết kế để chịu được sự khắc nghiệt của việc sử dụng hàng ngày trong khi vẫn giữ được sự nguyên vẹn và vẻ ngoài của nó. Điều này làm cho nó trở thành một lựa chọn lý tưởng cho các sản phẩm được thiết kế để bền lâu, chẳng hạn như giá đỡ cốc của chúng tôi.",
+    "paragraph2": "Quy trình tạo ra bông đàn hồi liên quan đến công nghệ dệt may tiên tiến giúp tăng cường độ bền và khả năng phục hồi của sợi. Điều này có nghĩa là các sản phẩm làm từ bông đàn hồi không chỉ trông đẹp mà còn hoạt động đặc biệt tốt theo thời gian. Chúng chống lại sự sờn, phai màu và co giãn, đảm bảo rằng khoản đầu tư của bạn vào chất lượng bền lâu hơn các vật liệu thông thường."
+  },
+  "DesignPage": {
+    "title": "Thiết kế",
+    "paragraph1": "Tại TaN, chúng tôi tin rằng thiết kế không chỉ là về tính thẩm mỹ; đó là về chức năng và tính bền vững. Giá đỡ cốc của chúng tôi được thiết kế có tính đến người dùng, mang đến sự kết hợp hoàn hảo giữa phong cách và tính thực dụng. Các đường nét bóng bẩy và lớp hoàn thiện hiện đại làm cho chúng trở thành một phụ kiện thời trang cho bất kỳ đồ uống nào, trong khi thiết kế sáng tạo cho phép chúng chứa nhiều hình dạng và kích cỡ cốc khác nhau.",
+    "paragraph2": "Mỗi giá đỡ cốc của TaN đều được chế tạo với sự chú ý đến từng chi tiết, đảm bảo rằng nó không chỉ trông đẹp mà còn hoạt động đặc biệt tốt. Thiết kế tiện dụng mang lại cảm giác cầm nắm thoải mái, giúp bạn dễ dàng mang đồ uống khi di chuyển. Ngoài ra, chất liệu bông đàn hồi đảm bảo rằng giá đỡ cốc của bạn sẽ chịu được thử thách của thời gian, làm cho nó trở thành một người bạn đồng hành đáng tin cậy cho mọi cuộc phiêu lưu của bạn."
+  },
+  "NewProductsPage": {
+    "title": "Sản phẩm mới",
+    "subtitle": "Khám phá các sản phẩm mới nhất của chúng tôi"
+  },
+  "AboutUsPage": {
+    "title": "Về chúng tôi",
+    "founder1": {
+      "name": "John Doe",
+      "role": "Người sáng lập & Giám đốc điều hành",
+      "bio": "John là một nhà môi trường và doanh nhân đầy nhiệt huyết, người đã thành lập TaN để tạo ra các sản phẩm bền vững tạo nên sự khác biệt. Với nền tảng về kỹ thuật dệt may, ông cống hiến để đổi mới các vật liệu vừa bền vừa thân thiện với môi trường."
+    },
+    "founder2": {
+      "name": "Jane Smith",
+      "role": "Đồng sáng lập & Nhà thiết kế",
+      "bio": "Jane là một nhà thiết kế sáng tạo với tình yêu thiên nhiên. Cô tin vào sức mạnh của thiết kế để truyền cảm hứng thay đổi và đã đóng một vai trò quan trọng trong việc phát triển dòng sản phẩm độc đáo của TaN kết hợp phong cách với tính bền vững."
+    },
+    "founder3": {
+      "name": "Emily Johnson",
+      "role": "Chuyên gia bền vững",
+      "bio": "Emily là một nhà vận động bền vững với nhiều năm kinh nghiệm trong bảo tồn môi trường. Cô đảm bảo rằng các hoạt động của TaN phù hợp với cam kết của chúng tôi trong việc bảo vệ hành tinh, từ việc tìm nguồn cung ứng vật liệu đến quy trình sản xuất."
+    }
+  },
+  "ContactUsPage": {
+    "title": "Liên hệ với chúng tôi",
+    "paragraph1": "Chúng tôi rất muốn nghe từ khách hàng của mình! Cho dù bạn có câu hỏi về sản phẩm của chúng tôi, cần hỗ trợ về đơn đặt hàng, hay chỉ muốn chia sẻ suy nghĩ của mình, chúng tôi luôn sẵn lòng giúp đỡ. Phản hồi của bạn là vô giá đối với chúng tôi khi chúng tôi cố gắng cải thiện và đổi mới.",
+    "paragraph2": "Vui lòng liên hệ qua email tại thinkaboutnature@gmail.com"
+  },
+  "QuestionsPage": {
+    "title": "Câu hỏi",
+    "paragraph1": "Có câu hỏi về sản phẩm hoặc chính sách của chúng tôi? Hãy xem phần Câu hỏi thường gặp của chúng tôi để tìm câu trả lời cho các câu hỏi phổ biến. Nếu bạn không tìm thấy những gì mình đang tìm kiếm, đừng ngần ngại liên hệ trực tiếp với chúng tôi.",
+    "paragraph2": "Chúng tôi sẵn lòng hỗ trợ bạn với bất kỳ mối quan tâm hoặc thắc mắc nào bạn có thể có."
+  },
+  "PrivacyPolicyPage": {
+    "title": "Chính sách bảo mật",
+    "paragraph1": "Tại TaN, chúng tôi rất coi trọng quyền riêng tư của bạn. Chính sách bảo mật này phác thảo cách chúng tôi thu thập, sử dụng và bảo vệ thông tin cá nhân của bạn. Chúng tôi cam kết đảm bảo rằng quyền riêng tư của bạn được bảo vệ và thông tin của bạn được sử dụng một cách có trách nhiệm.",
+    "paragraph2": "Bằng cách sử dụng trang web của chúng tôi, bạn đồng ý với việc thu thập và sử dụng thông tin của bạn theo chính sách này."
   }
 }
