@@ -4,6 +4,7 @@ import RandomShape3 from '@/components/icons/shapes/RandomShape3';
 import RandomShape4 from '@/components/icons/shapes/RandomShape4';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 export default function MaterialPage() {
@@ -26,6 +27,16 @@ export default function MaterialPage() {
           <div className="max-w-lg w-full grow-1">
             <p>{t('paragraph1')}</p>
           </div>
+        </div>
+        <div className="w-full max-w-[1440px] mx-auto my-4 relative aspect-video rounded-xl overflow-hidden border-6 border-logo-orange-border">
+          <Image
+            src={'/IMG_7197.jpg'}
+            alt={`hero-image-1`}
+            width={1600}
+            height={900}
+            className="w-full h-full object-cover"
+            priority
+          />
         </div>
         <div
           className={
