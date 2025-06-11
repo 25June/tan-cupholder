@@ -173,13 +173,13 @@ const ProductSlider = () => {
           </div>
         </main>
       </div>
-      <div className="absolute -top-1 w-screen">
+      <div className="absolute -top-1 w-full">
         <Image
           src={'/top-wave.svg'}
           width={160}
           height={90}
           alt="wave"
-          className="w-screen"
+          className="w-full"
         />
       </div>
     </div>

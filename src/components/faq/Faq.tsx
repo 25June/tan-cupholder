@@ -141,13 +141,13 @@ export const Faq = () => {
           </motion.div>
         </div>
       </div>
-      <div className="absolute -bottom-1 w-screen">
+      <div className="absolute -bottom-1 w-full">
         <Image
           src={'/bottom-wave.svg'}
           width={160}
           height={90}
           alt="wave"
-          className="w-screen"
+          className="w-full"
         />
       </div>
     </div>

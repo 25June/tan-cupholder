@@ -94,7 +94,7 @@ export function HeroSection({ setReady }: Props) {
         })}
       </div>
 
-      <div className="max-w-8xl w-screen h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
+      <div className="max-w-8xl w-full h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full h-full flex justify-start lg:justify-end pt-4 md:pt-16">
           <div className="w-5/5 lg:w-4/5">
             <motion.div
@@ -219,13 +219,13 @@ export function HeroSection({ setReady }: Props) {
           })}
         </div>
       </div>
-      <div className="absolute -bottom-1 w-screen">
+      <div className="absolute -bottom-1 w-full">
         <Image
           src={'/bottom-wave.svg'}
           width={160}
           height={90}
           alt="wave"
-          className="w-screen"
+          className="w-full"
           priority
         />
       </div>
