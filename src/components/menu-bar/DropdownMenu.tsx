@@ -1,12 +1,10 @@
 import Menu from '../icons/Menu';
 import { useTranslations } from 'next-intl';
-import { View } from '@/constants/common';
+import Link from 'next/link';
 
-interface DropdownMenuProps {
-  readonly navigateToView: (id: string) => void;
-}
+interface DropdownMenuProps {}
 
-export default function DropdownMenu({ navigateToView }: DropdownMenuProps) {
+export default function DropdownMenu({}: DropdownMenuProps) {
   const t = useTranslations('Menu');
   const menuItemClass =
     'font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer';
@@ -26,24 +24,24 @@ export default function DropdownMenu({ navigateToView }: DropdownMenuProps) {
           id="popover-1"
         >
           <li>
-            <button onClick={() => navigateToView(View.HERO)}>
+            <Link href={'/'}>
               <p className={menuItemClass}>{t('home')}</p>
-            </button>
+            </Link>
           </li>
           <li>
-            <button onClick={() => navigateToView(View.CATEGORY)}>
-              <p className={menuItemClass}>{t('categories')}</p>
-            </button>
+            <Link href={'/material'}>
+              <p className={menuItemClass}>{t('materials')}</p>
+            </Link>
           </li>
           <li>
-            <button onClick={() => navigateToView(View.PRODUCT)}>
+            <Link href={'/products'}>
               <p className={menuItemClass}>{t('collections')}</p>
-            </button>
+            </Link>
           </li>
           <li>
-            <button onClick={() => navigateToView(View.FAQ)}>
+            <Link href={'/question'}>
               <p className={menuItemClass}>{t('faq')}</p>
-            </button>
+            </Link>
           </li>
         </ul>
       </div>

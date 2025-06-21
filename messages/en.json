@@ -75,7 +75,10 @@
     "categories": "Categories",
     "collections": "Collections",
     "faq": "FAQ",
-    "appName": "Think About Nature"
+    "appName": "Think About Nature",
+    "whyTan": "Why TaN?",
+    "materials": "Materials",
+    "design": "Design"
   },
   "InspirationPage": {
     "title": "Inspiration",

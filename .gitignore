@@ -5,7 +5,7 @@
 # Logs
 logs
 *.log
-.env.development
+.env.development.local
 .env.production
 
 # OS
@@ -13,3 +13,4 @@ logs
 
 .next
 
+.vercel

@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { durationLeft, durationRight, menus, socialMedias } from './constant';

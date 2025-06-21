@@ -12,6 +12,7 @@ import { useQueryMedia } from '@/hooks/useQueryLayout';
 import { ScreenLayout } from '@/constants/common';
 import ArrowRightCircle from '@/components/icons/ArrowRightCircle';
 import ArrowLeftCircle from '@/components/icons/ArrowLeftCircle';
+// import { fetchProducts } from '@/app/[locale]/lib/data';
 
 const ProductSlider = () => {
   const t = useTranslations('HomePage.ProductSliderSection');
@@ -22,6 +23,16 @@ const ProductSlider = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const observerTarget = useRef(null);
   const productArrayRef = useRef(null);
+  // const products = fetchProducts();
+  // console.log('products', products);
+
+  // useEffect(() => {
+  //   const a = async () => {
+  //     const products = await fetchProducts();
+  //     console.log('products', products);
+  //   };
+  //   a();
+  // });
 
   useEffect(() => {
     if (currentLayout === ScreenLayout.Tablet) {
