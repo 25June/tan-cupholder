@@ -22,7 +22,7 @@ const bgHeroImageArr = [
 ];
 
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
-
+const Break = () => <br />;
 export function HeroSection() {
   const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
@@ -106,7 +106,7 @@ export function HeroSection() {
                 className={`${yuseiMagic.className} text-3xl md:text-5xl subpixel-antialiased font-semibold tracking-wider mb-3`}
               >
                 {t.rich('title', {
-                  br: () => <br />,
+                  br: Break,
                 })}
               </motion.h1>
               <motion.p
