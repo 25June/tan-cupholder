@@ -3,12 +3,9 @@ import RandomShape5 from '@/components/icons/shapes/RandomShape5';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
 import { getTranslations } from 'next-intl/server';
-import { fetchProducts } from '../lib/data';
 
 export default async function InspirationPage() {
   const t = await getTranslations('InspirationPage');
-  const abc = await fetchProducts();
-  console.log('InspirationPage products:', abc);
   return (
     <div>
       <StaticMenuBar />

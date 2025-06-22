@@ -1,14 +1,13 @@
-'use client';
-
 import RandomShape3 from '@/components/icons/shapes/RandomShape3';
 import RandomShape4 from '@/components/icons/shapes/RandomShape4';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function MaterialPage() {
-  const t = useTranslations('MaterialPage');
+export default async function MaterialPage() {
+  const t = await getTranslations('MaterialPage');
+
   return (
     <div>
       <StaticMenuBar />

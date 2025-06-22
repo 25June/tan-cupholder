@@ -1,7 +1,9 @@
+'use client';
+
 import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -21,11 +23,7 @@ const bgHeroImageArr = [
 
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 
-interface Props {
-  readonly setReady: Dispatch<SetStateAction<boolean>>;
-}
-
-export function HeroSection({ setReady }: Props) {
+export function HeroSection() {
   const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
   const [translateX, setTranslateX] = useState<string[]>([]);
@@ -77,23 +75,6 @@ export function HeroSection({ setReady }: Props) {
 
   return (
     <div className="relative">
-      <div className="hidden">
-        {imgOrders.map((img, index) => {
-          return (
-            <Image
-              key={index}
-              src={heroImageArr[index]}
-              alt={`hero-image-${index}`}
-              width={800}
-              height={800}
-              className="w-full h-full object-cover transition-transform duration-300 hidden"
-              onLoad={() => setReady(false)}
-              priority
-            />
-          );
-        })}
-      </div>
-
       <div className="max-w-8xl w-full h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full h-full flex justify-start lg:justify-end pt-4 md:pt-16">
           <div className="w-5/5 lg:w-4/5">

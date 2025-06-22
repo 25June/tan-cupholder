@@ -1,13 +1,11 @@
-'use client';
-
 import RandomShape2 from '@/components/icons/shapes/RandomShape2';
 import RandomShape4 from '@/components/icons/shapes/RandomShape4';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function DesignPage() {
-  const t = useTranslations('DesignPage');
+export default async function DesignPage() {
+  const t = await getTranslations('DesignPage');
   return (
     <div>
       <StaticMenuBar />

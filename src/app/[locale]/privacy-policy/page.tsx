@@ -1,13 +1,11 @@
-'use client';
-
 import RandomShape3 from '@/components/icons/shapes/RandomShape3';
 import RandomShape4 from '@/components/icons/shapes/RandomShape4';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function PrivacyPolicyPage() {
-  const t = useTranslations('PrivacyPolicyPage');
+export default async function PrivacyPolicyPage() {
+  const t = await getTranslations('PrivacyPolicyPage');
   return (
     <div>
       <StaticMenuBar />

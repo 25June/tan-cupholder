@@ -1,14 +1,12 @@
-'use client';
-
 import AvatarShape1 from '@/components/icons/shapes/AvatarShape1';
 import AvatarShape2 from '@/components/icons/shapes/AvatarShape2';
 import AvatarShape3 from '@/components/icons/shapes/AvatarShape3';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function AboutUsPage() {
-  const t = useTranslations('AboutUsPage');
+export default async function AboutUsPage() {
+  const t = await getTranslations('AboutUsPage');
   const founders = [
     {
       name: 'John Doe',

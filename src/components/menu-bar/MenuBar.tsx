@@ -97,13 +97,13 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
             className="hidden md:block"
           >
             <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-              ({t('faq')})
+              {t('faq')}
             </p>
           </button>
           <div className="block md:hidden">
             <TranslateDropdown id={'3'} />
           </div>
-          <DropdownMenu navigateToView={scrollToView} />
+          <DropdownMenu />
         </div>
       </div>
     </div>
