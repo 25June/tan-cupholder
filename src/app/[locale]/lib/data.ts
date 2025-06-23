@@ -184,18 +184,39 @@ export async function fetchCustomers() {
   }
 }
 
-export async function fetchProducts() {
+export async function fetchProducts(searchParams?: {
+  readonly query?: string;
+  readonly page?: string;
+}) {
   try {
     const products = await sql<any[]>`
       SELECT *
       FROM products
       ORDER BY name ASC
+      LIMIT 10
+      OFFSET ${
+        searchParams?.page ? (Number(searchParams.page || 1) - 1) * 10 : 0
+      }
     `;
 
     return products;
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all customers.');
+  }
+}
+
+export async function fetchTotalProducts() {
+  try {
+    const data = await sql<{ count: string }[]>`
+      SELECT COUNT(*) AS count
+      FROM products
+    `;
+
+    return Number(data[0].count);
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch total number of products.');
   }
 }
 

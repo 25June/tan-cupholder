@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

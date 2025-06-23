@@ -1,36 +1,50 @@
-import { useState } from 'react';
-import { Product, GetProductsResponse } from '@/models/product';
-import { getProducts, getProduct } from '@/api/product';
+'use client';
 
-export const useProducts = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [limit] = useState<number>(8);
-  const [page, setPage] = useState<number>(0);
+import { useEffect, useState } from 'react';
+import { Product } from '@/models/product';
+import { getProduct } from '@/api/product';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+
+export const useProducts = (
+  page: number,
+  totalCount?: number,
+  products?: any[]
+) => {
   const [isEnd, setIsEnd] = useState<boolean>(false);
-  const [keyword, setKeyword] = useState<string>('');
-  const [total, setTotal] = useState<number>(0);
+  const [productList, setProductList] = useState<Product[]>(products || []);
+  const [pageIndex, setPageIndex] = useState<number>(1);
+  const param = useSearchParams();
+  const { replace } = useRouter();
+  const pathname = usePathname();
+  console.log(pageIndex, totalCount, productList);
 
-  const handleGetProducts = (keywords?: string) => {
-    setIsLoading(true);
-    const response = getProducts(page, limit, keyword, total, keywords);
+  useEffect(() => {
+    if (pageIndex !== page) {
+      setProductList((prev) => prev.concat(products || []));
+      setPageIndex(page);
+    }
+  }, [page]);
 
-    return response
-      .then((data: GetProductsResponse) => {
-        setTotal(data.total);
-        setPage(data.page);
-        setIsEnd(data.isEnd);
-        setKeyword(data.keywords || '');
-        if (typeof keywords === 'string') {
-          setProducts(data.data);
-        } else {
-          setProducts((prev) => [...prev, ...data.data]);
-        }
-      })
-      .finally(() => setIsLoading(false));
+  const handleSearch = (search: string, isNextPage: boolean) => {
+    const params = new URLSearchParams(param);
+    if (search) {
+      params.set('search', search);
+    } else {
+      params.delete('search');
+    }
+    if (isNextPage) {
+      params.set('page', (pageIndex + 1).toString());
+    }
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  return { products, isLoading, onGetProducts: handleGetProducts, isEnd };
+  useEffect(() => {
+    if (totalCount && totalCount / 10 <= pageIndex) {
+      setIsEnd(true);
+    }
+  }, [totalCount, pageIndex]);
+
+  return { onGetProducts: handleSearch, isEnd, productList };
 };
 
 export const useProduct = () => {
