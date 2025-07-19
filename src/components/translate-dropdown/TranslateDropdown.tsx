@@ -1,7 +1,7 @@
 import { useTransition } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import TranslateIcon from '../icons/Translate';
+import { GlobeAltIcon } from '@heroicons/react/24/outline';
 import Spinner from '../spinner/Spinner';
 
 export default function TranslateDropdown({ id }: { id: string }) {
@@ -22,7 +22,7 @@ export default function TranslateDropdown({ id }: { id: string }) {
         popoverTarget={id}
         style={{ anchorName: '--anchor-2' } as React.CSSProperties}
       >
-        {isPending ? <Spinner /> : <TranslateIcon />}
+        {isPending ? <Spinner /> : <GlobeAltIcon />}
       </button>
       <div className="dropdown dropdown-end">
         <ul popover="auto" id={id} className="dropdown menu bg-white w-24 z-1">

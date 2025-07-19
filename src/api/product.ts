@@ -24,7 +24,7 @@ export const getProducts = async (
           total: filteredProducts.length,
           isEnd: false,
           page: 1,
-          keywords: keywords,
+          keywords: keywords
         });
       } else if (keyword) {
         if ((nextPage - 1) * limit > total) {
@@ -33,7 +33,7 @@ export const getProducts = async (
             total: total,
             isEnd: true,
             page: page,
-            keywords: keywords,
+            keywords: keywords
           });
           return;
         }
@@ -48,7 +48,7 @@ export const getProducts = async (
           total: filteredProducts.length,
           isEnd: false,
           page: nextPage,
-          keywords: keywords,
+          keywords: keywords
         });
       } else {
         if ((nextPage - 1) * limit > total) {
@@ -57,7 +57,7 @@ export const getProducts = async (
             total: total,
             isEnd: true,
             page: page,
-            keywords: keywords,
+            keywords: keywords
           });
           return;
         }
@@ -70,7 +70,7 @@ export const getProducts = async (
           total: mockProducts.length,
           isEnd: false,
           page: nextPage,
-          keywords: '',
+          keywords: ''
         });
       }
     }, 1000);

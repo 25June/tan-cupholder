@@ -23,7 +23,7 @@ export const useProducts = (
       setProductList((prev) => prev.concat(products || []));
       setPageIndex(page);
     }
-  }, [page]);
+  }, [page, pageIndex]);
 
   const handleSearch = (search: string, isNextPage: boolean) => {
     const params = new URLSearchParams(param);

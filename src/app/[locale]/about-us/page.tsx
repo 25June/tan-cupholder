@@ -12,20 +12,20 @@ export default async function AboutUsPage() {
       name: 'John Doe',
       role: 'Founder & CEO',
       bio: 'John is a passionate environmentalist and entrepreneur who founded TaN to create sustainable products that make a difference. With a background in textile engineering, he is dedicated to innovating materials that are both durable and eco-friendly.',
-      avatar: <AvatarShape1 />,
+      avatar: <AvatarShape1 />
     },
     {
       name: 'Jane Smith',
       role: 'Co-Founder & Designer',
       bio: "Jane is a creative designer with a love for nature. She believes in the power of design to inspire change and has played a key role in developing TaN's unique product line that combines style with sustainability.",
-      avatar: <AvatarShape2 />,
+      avatar: <AvatarShape2 />
     },
     {
       name: 'Emily Johnson',
       role: 'Sustainability Expert',
       bio: "Emily is a sustainability advocate with years of experience in environmental conservation. She ensures that TaN's practices align with our commitment to protecting the planet, from sourcing materials to production processes.",
-      avatar: <AvatarShape3 />,
-    },
+      avatar: <AvatarShape3 />
+    }
   ];
   return (
     <div>

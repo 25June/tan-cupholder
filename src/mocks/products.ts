@@ -5,7 +5,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '2',
@@ -13,7 +13,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7281.jpg',
+    image: '/IMG_7281.jpg'
   },
   {
     id: '3',
@@ -21,7 +21,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7341.jpg',
+    image: '/IMG_7341.jpg'
   },
   {
     id: '4',
@@ -29,7 +29,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '5',
@@ -37,7 +37,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/yellow.jpg',
+    image: '/yellow.jpg'
   },
   {
     id: '6',
@@ -45,7 +45,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/peach.jpg',
+    image: '/peach.jpg'
   },
   {
     id: '7',
@@ -53,7 +53,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/coffee.jpg',
+    image: 'https://pub-485637738840450490e408cee2acb72c.r2.dev/coffee.jpg'
   },
   {
     id: '8',
@@ -61,7 +61,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/matcha.jpg',
+    image: '/matcha.jpg'
   },
   {
     id: '9',
@@ -69,7 +69,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/blackbean.jpg',
+    image: `https://pub-485637738840450490e408cee2acb72c.r2.dev/blackbean.jpg`
   },
   {
     id: '10',
@@ -77,7 +77,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/ocean.JPG',
+    image: '/ocean.JPG'
   },
   {
     id: '11',
@@ -85,7 +85,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '12',
@@ -93,7 +93,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '13',
@@ -101,7 +101,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '14',
@@ -109,7 +109,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '15',
@@ -117,7 +117,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '16',
@@ -125,7 +125,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '17',
@@ -133,7 +133,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '18',
@@ -141,7 +141,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '19',
@@ -149,7 +149,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '20',
@@ -157,7 +157,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '21',
@@ -165,7 +165,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '22',
@@ -173,7 +173,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '23',
@@ -181,7 +181,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '24',
@@ -189,7 +189,7 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
+    image: '/IMG_7210.jpg'
   },
   {
     id: '25',
@@ -197,6 +197,6 @@ export const mockProducts = [
     price: 89900,
     sale: 20,
     type: 'Type 1',
-    image: '/IMG_7210.jpg',
-  },
+    image: '/IMG_7210.jpg'
+  }
 ];

@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 const exampleImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
   "bg-[url('/IMG_7197.jpg')]",
-  "bg-[url('/IMG_7278.jpg')]",
+  "bg-[url('/IMG_7278.jpg')]"
 ];
 
 export const CategorySection = () => {

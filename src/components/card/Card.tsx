@@ -4,11 +4,13 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   numberWithCommas,
-  calculatePercent,
+  calculatePercent
 } from '@/shared/utils/formatNumber';
 import { Product } from '@/models/product';
-import ArrowLongRight from '@/components/icons/ArrowLongRight';
-import ArrowRightCircleSolid from '@/components/icons/ArrowRightCircleSolid';
+import {
+  ArrowRightCircleIcon,
+  ArrowLongRightIcon
+} from '@heroicons/react/24/outline';
 import { formatPrice } from '@/shared/utils/formatPrice';
 
 interface CardProps {
@@ -27,8 +29,8 @@ export default function Card({ item }: CardProps) {
         scale: {
           type: 'spring',
           visualDuration: 0.25,
-          bounce: 0.25,
-        },
+          bounce: 0.25
+        }
       }}
       className="relative justify-self-center shadow-md hover:shadow-lg transition-shadow duration-300 rounded-xl w-auto min-w-72"
     >
@@ -53,7 +55,7 @@ export default function Card({ item }: CardProps) {
           <span className="text-slate-400 line-through decoration-slate-400">
             {numberWithCommas(item.price)} vnd
           </span>
-          <ArrowLongRight className="size-4" />
+          <ArrowLongRightIcon className="size-4" />
           <span className="text-logo-orange font-extrabold">
             {formatPrice(calculatePercent(item.price, item.sale), '')}
           </span>
@@ -64,7 +66,7 @@ export default function Card({ item }: CardProps) {
             className="btn btn-primary btn-sm text-right"
           >
             View
-            <ArrowRightCircleSolid className="size-4" />
+            <ArrowRightCircleIcon className="size-4" />
           </button>
         </div>
       </div>

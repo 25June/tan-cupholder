@@ -2,7 +2,7 @@ import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
   pages: {
-    signIn: '/[locale]/admin/sign-in',
+    signIn: '/[locale]/admin/sign-in'
   },
   providers: [
     // added later in auth.ts since it requires bcrypt which is only compatible with Node.js
@@ -19,6 +19,6 @@ export const authConfig = {
         return Response.redirect(new URL('/[locale]/admin/dashboard', nextUrl));
       }
       return true;
-    },
-  },
-} satisfies NextAuthConfig;
+    }
+  }
+} as NextAuthConfig;

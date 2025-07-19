@@ -1,4 +1,4 @@
-import Menu from '../icons/Menu';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
@@ -15,7 +15,7 @@ export default function DropdownMenu({}: DropdownMenuProps) {
         popoverTarget="popover-1"
         style={{ anchorName: '--anchor-1' } as React.CSSProperties}
       >
-        <Menu />
+        <Bars3Icon />
       </button>
       <div className="dropdown dropdown-end">
         <ul

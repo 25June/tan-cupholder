@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
-    "check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css}\"",
+    "check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css}\"",
     "prepare": "husky"
   },
   "dependencies": {
@@ -23,13 +23,13 @@
     "next-auth": "^5.0.0-beta.29",
     "next-intl": "^4.1.0",
     "postgres": "^3.4.7",
-    "prettier": "^2.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.1.4",
     "zod": "^3.25.67"
   },
   "devDependencies": {
+    "prettier": "^2.5.1",
     "@eslint/eslintrc": "^3",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
@@ -38,9 +38,12 @@
     "daisyui": "^5.0.28",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
-    "husky": "^9.1.7",
+    "husky": "9.1.7",
     "postcss": "^8.5.3",
     "typescript": "^5",
     "wrangler": "^4.21.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss}": "prettier --write"
   }
 }

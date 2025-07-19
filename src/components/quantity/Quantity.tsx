@@ -1,5 +1,4 @@
-import MinusCircle from '@/components/icons/MinusCircle';
-import PlusCircle from '@/components/icons/PlusCircle';
+import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 export default function Quantity() {
@@ -12,14 +11,14 @@ export default function Quantity() {
           className="btn btn-primary btn-sm btn-soft"
           onClick={() => setQuantity(quantity - 1)}
         >
-          <MinusCircle className="size-6" />
+          <MinusCircleIcon className="size-6" />
         </button>
         <span className="text-md font-bold mx-4">{quantity}</span>
         <button
           className="btn btn-primary btn-sm btn-soft"
           onClick={() => setQuantity(quantity + 1)}
         >
-          <PlusCircle className="size-6" />
+          <PlusCircleIcon className="size-6" />
         </button>
       </div>
     </div>

@@ -5,7 +5,7 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  Revenue,
+  Revenue
 } from './definitions';
 import { formatCurrency } from './utils';
 
@@ -41,7 +41,7 @@ export async function fetchLatestInvoices() {
 
     const latestInvoices = data.map((invoice) => ({
       ...invoice,
-      amount: formatCurrency(invoice.amount),
+      amount: formatCurrency(invoice.amount)
     }));
     return latestInvoices;
   } catch (error) {
@@ -65,7 +65,7 @@ export async function fetchCardData() {
     const data = await Promise.all([
       invoiceCountPromise,
       customerCountPromise,
-      invoiceStatusPromise,
+      invoiceStatusPromise
     ]);
 
     const numberOfInvoices = Number(data[0][0].count ?? '0');
@@ -77,7 +77,7 @@ export async function fetchCardData() {
       numberOfCustomers,
       numberOfInvoices,
       totalPaidInvoices,
-      totalPendingInvoices,
+      totalPendingInvoices
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -157,7 +157,7 @@ export async function fetchInvoiceById(id: string) {
     const invoice = data.map((invoice) => ({
       ...invoice,
       // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
+      amount: invoice.amount / 100
     }));
 
     return invoice[0];
@@ -243,7 +243,7 @@ export async function fetchFilteredCustomers(query: string) {
     const customers = data.map((customer) => ({
       ...customer,
       total_pending: formatCurrency(customer.total_pending),
-      total_paid: formatCurrency(customer.total_paid),
+      total_paid: formatCurrency(customer.total_paid)
     }));
 
     return customers;

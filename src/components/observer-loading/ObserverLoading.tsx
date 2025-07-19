@@ -15,7 +15,7 @@ interface Props {
 export default function ObserverLoading({
   isEnd,
   onGetProducts,
-  searchParams,
+  searchParams
 }: Props) {
   const observerTarget = useRef(null);
   useEffect(() => {

@@ -11,13 +11,13 @@ export const metadata: Metadata = {
   applicationName: 'TaN',
   authors: {
     url: 'https://www.linkedin.com/in/phu-nguyen-5a1b35133/',
-    name: 'Think About Nature Team',
+    name: 'Think About Nature Team'
   },
   openGraph: {
     title: 'TaN',
     description: 'Think About Nature',
     url: 'https://thinkaboutnature.com',
-    siteName: 'TaN',
+    siteName: 'TaN'
   },
   creator: 'Think About Nature Team',
   keywords: [
@@ -67,13 +67,13 @@ export const metadata: Metadata = {
     'sustainable lifestyle',
     'eco-friendly home',
     'holder',
-    'keeper',
-  ],
+    'keeper'
+  ]
 };
 
 export default async function RootLayout({
   children,
-  params,
+  params
 }: Readonly<{
   children: React.ReactNode;
   params: Promise<{ locale: string }>;

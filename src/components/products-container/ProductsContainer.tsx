@@ -20,7 +20,7 @@ interface Props {
 export default function ProductsContainer({
   searchParams,
   totalCount,
-  products,
+  products
 }: Props) {
   const { onGetProducts, isEnd, productList } = useProducts(
     Number(searchParams?.page) || 1,

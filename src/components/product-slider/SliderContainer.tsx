@@ -4,8 +4,10 @@ import { useEffect, useState, useRef } from 'react';
 import { chunkArray } from '@/shared/utils/chunkArray';
 import { useQueryMedia } from '@/hooks/useQueryLayout';
 import { ScreenLayout } from '@/constants/common';
-import ArrowRightCircle from '@/components/icons/ArrowRightCircle';
-import ArrowLeftCircle from '@/components/icons/ArrowLeftCircle';
+import {
+  ArrowRightCircleIcon,
+  ArrowLeftCircleIcon
+} from '@heroicons/react/24/outline';
 
 interface Props {
   readonly products: any[];
@@ -60,7 +62,7 @@ export default function SliderContainer({ products }: Props) {
       const scrollAmount = container.scrollWidth / chunkNumber;
       container.scrollBy({
         left: step * scrollAmount,
-        behavior: 'smooth',
+        behavior: 'smooth'
       });
     }
   };
@@ -97,7 +99,7 @@ export default function SliderContainer({ products }: Props) {
             {!isFirstChunk && (
               <div className="absolute -left-2 md:left-0 h-full flex items-center">
                 <button onClick={() => onScroll(-1)}>
-                  <ArrowLeftCircle className="size-6 stroke-logo-orange-border" />
+                  <ArrowLeftCircleIcon className="size-6 stroke-logo-orange-border" />
                 </button>
               </div>
             )}
@@ -107,7 +109,7 @@ export default function SliderContainer({ products }: Props) {
             {!isLastChunk && (
               <div className="absolute -right-2 md:right-0 h-full flex items-center">
                 <button onClick={() => onScroll(1)}>
-                  <ArrowRightCircle className="size-6 stroke-logo-orange-border" />
+                  <ArrowRightCircleIcon className="size-6 stroke-logo-orange-border" />
                 </button>
               </div>
             )}

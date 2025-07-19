@@ -12,7 +12,7 @@ export default async function Page(props: Props) {
   const searchParams = await props.searchParams;
   const [products, totalCount] = await Promise.all([
     fetchProducts(searchParams),
-    fetchTotalProducts(),
+    fetchTotalProducts()
   ]);
   console.log(searchParams, products, totalCount);
   // Replace with actual data fetching logic
