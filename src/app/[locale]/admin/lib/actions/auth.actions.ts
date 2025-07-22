@@ -1,17 +1,14 @@
 'use server';
 
-import { AuthError } from 'next-auth';
 import { signIn } from '@/auth';
-import { redirect } from 'next/navigation';
-// ...
+import { AuthError } from 'next-auth';
 
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData
 ) {
   try {
-    const data = await signIn('credentials', formData);
-    console.log({ data });
+    await signIn('credentials', formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

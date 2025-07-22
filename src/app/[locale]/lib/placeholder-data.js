@@ -52,9 +52,11 @@ export const mockProducts = [
   {
     id: '1',
     name: 'Product 1',
+    description: 'Description 1',
     price: 89900,
     sale: 20,
     type: 'Type 1',
+    stock: 10,
     image: '/IMG_7210.jpg'
   },
   {

@@ -65,6 +65,17 @@ export type CustomersTableType = {
   total_paid: number;
 };
 
+export type ProductsTableType = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  price: number;
+  type: number;
+  sale: number;
+  stock: number;
+};
+
 export type FormattedCustomersTable = {
   id: string;
   name: string;
@@ -73,6 +84,17 @@ export type FormattedCustomersTable = {
   total_invoices: number;
   total_pending: string;
   total_paid: string;
+};
+
+export type FormattedProductsTable = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  price: number;
+  type: number;
+  sale: number;
+  stock: number;
 };
 
 export type CustomerField = {

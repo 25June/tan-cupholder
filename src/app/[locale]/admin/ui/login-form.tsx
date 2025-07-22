@@ -9,8 +9,9 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/[locale]/admin/ui/button';
 import { useActionState } from 'react';
-import { authenticate } from '@/app/[locale]/admin/lib/actions';
+import { authenticate } from '@/app/[locale]/admin/lib/actions/auth.actions';
 import { useSearchParams } from 'next/navigation';
+import Spinner from '@/components/spinner/Spinner';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -69,7 +70,12 @@ export default function LoginForm() {
         </div>
         <input type="hidden" name="redirectTo" value={callbackUrl} />
         <Button className="mt-4 w-full" aria-disabled={isPending}>
-          Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          Log in{' '}
+          {isPending ? (
+            <Spinner />
+          ) : (
+            <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          )}
         </Button>
         <div
           className="flex h-8 items-end space-x-1"

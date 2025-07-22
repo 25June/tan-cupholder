@@ -7,6 +7,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 class S3Service {
   private s3Client: S3Client;
+  public IMAGE_URL = 'https://pub-485637738840450490e408cee2acb72c.r2.dev/';
   private bucketName: string =
     process.env.CLOUDFLARE_R2_BUCKET || 'tan-storage';
   constructor() {
@@ -25,6 +26,10 @@ class S3Service {
       }
     });
     console.log({ bucketName: this.bucketName });
+  }
+
+  getImageUrl(key: string) {
+    return `${this.IMAGE_URL}${key}`;
   }
   // Example: Get an object
   async getS3Object(key: string) {
@@ -49,31 +54,51 @@ class S3Service {
     console.log(`Object ${key} uploaded successfully to ${this.bucketName}`);
   }
 
-  async getSignedUrl(name: string) {
+  async getSignedUrl(name: string, type: string) {
     const url = await getSignedUrl(
       this.s3Client,
-      new GetObjectCommand({ Bucket: this.bucketName, Key: name }),
+      new PutObjectCommand({
+        Bucket: this.bucketName,
+        Key: name,
+        ContentType: type
+      }),
       { expiresIn: 3600 }
     );
     return url;
   }
 
-  async uploadFile(file: File, presignedUrl: string) {
-    const uploadResponse = await fetch(presignedUrl, {
-      method: 'PUT',
-      body: file, // The actual file object
-      headers: {
-        'Content-Type': file.type // Crucial: Must match the ContentType used when generating the URL
-      }
+  async uploadFile(
+    file: File,
+    presignedUrl: string,
+    onProgress: (percent: number) => void
+  ) {
+    const xhr = new XMLHttpRequest();
+
+    return new Promise((resolve, reject) => {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          console.log(event.loaded, event.total);
+          const percentComplete = (event.loaded / event.total) * 100;
+          onProgress(percentComplete);
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          resolve(xhr.response);
+        } else {
+          reject(new Error(`Upload failed with status: ${xhr.status}`));
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error('Upload failed'));
+      };
+
+      xhr.open('PUT', presignedUrl);
+      xhr.setRequestHeader('Content-Type', file.type);
+      xhr.send(file);
     });
-    if (uploadResponse.ok) {
-      console.log('File uploaded successfully!');
-    } else {
-      const uploadErrorText = await uploadResponse.text();
-      throw new Error(
-        `S3 upload failed: ${uploadResponse.status} - ${uploadErrorText}`
-      );
-    }
   }
 }
 

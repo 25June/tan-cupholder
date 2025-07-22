@@ -8,15 +8,15 @@ export default function SideNav() {
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
-        className="mb-2 flex h-20 items-center justify-center rounded-md bg-logo-orange-border p-4 md:h-40"
+        className="mb-2 flex h-20 md:h-40 items-center justify-center rounded-md bg-logo-orange-border p-4 "
         href="/"
       >
         <Image
           src="/logo.png"
           alt="TAN cupholder logo"
-          width={150}
-          height={150}
-          className={`rounded-full`}
+          width={200}
+          height={200}
+          className={`rounded-full w-16 h-16 md:w-32 md:h-32`}
         />
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
@@ -28,7 +28,7 @@ export default function SideNav() {
             await signOut({ redirectTo: '/' });
           }}
         >
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
+          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-logo-orange-border md:flex-none md:justify-start md:p-2 md:px-3">
             <PowerIcon className="w-6" />
             <div className="hidden md:block">Sign Out</div>
           </button>

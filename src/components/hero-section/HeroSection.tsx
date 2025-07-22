@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import s3Service from '@/app/[locale]/lib/bucket';
 
 const heroImageArr = [
   '/IMG_8677.jpg',
@@ -74,17 +73,6 @@ export function HeroSection() {
     }
   }, [startTransitions]);
 
-  const [file, setFile] = useState<File | null>(null);
-  const onUpload = () => {
-    console.log('onUpload', file);
-    if (!file) {
-      console.error('No file selected');
-      return;
-    }
-    const arrayBuffer = new Uint8Array(file.size);
-    s3Service.putS3Object(`${file.name}`, arrayBuffer);
-  };
-
   return (
     <div className="relative">
       <div className="max-w-8xl w-full h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
@@ -144,26 +132,6 @@ export function HeroSection() {
                 className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
               >
                 {t('button')}
-              </motion.button>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) =>
-                  event.target.files ? setFile(event.target.files[0]) : null
-                }
-              />
-              <motion.button
-                onClick={onUpload}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.4,
-                  scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
-                }}
-                type="button"
-                className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
-              >
-                upload
               </motion.button>
               <motion.p
                 initial={{ opacity: 0, scale: 0 }}

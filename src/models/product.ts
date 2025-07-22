@@ -5,6 +5,8 @@ export interface Product {
   sale: number;
   type: string;
   image: string;
+  stock: number;
+  description: string;
 }
 
 export interface GetProductsResponse {
