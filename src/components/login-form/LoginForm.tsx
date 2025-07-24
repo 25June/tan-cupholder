@@ -1,15 +1,15 @@
 'use client';
 
-import { lusitana } from '@/app/[locale]/admin/ui/fonts';
+import { lusitana } from '@/app/admin/ui/fonts';
 import {
   AtSymbolIcon,
   KeyIcon,
   ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { Button } from '@/app/[locale]/admin/ui/button';
+import { Button } from '@/app/admin/ui/button';
 import { useActionState } from 'react';
-import { authenticate } from '@/app/[locale]/admin/lib/actions/auth.actions';
+import { authenticate } from '@/app/admin/lib/actions/auth.actions';
 import { useSearchParams } from 'next/navigation';
 
 export default function LoginForm() {

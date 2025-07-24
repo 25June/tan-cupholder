@@ -1,7 +1,14 @@
-import createMiddleware from 'next-intl/middleware';
-import { routing } from './i18n/routing';
+import NextAuth from 'next-auth';
+import { authConfig } from './auth.config';
+import { NextRequest } from 'next/server';
 
-export default createMiddleware(routing);
+const authMiddleware = NextAuth(authConfig).auth;
+export default async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.includes('admin/')) {
+    return (authMiddleware as any)(request);
+  }
+  return true;
+}
 
 export const config = {
   // Match all pathnames except for

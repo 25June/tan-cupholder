@@ -1,18 +1,19 @@
 import { useTransition } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
 import Spinner from '../spinner/Spinner';
+import { setUserLocale } from '@/services/locale';
+import { Locale } from '@/i18n/config';
 
 export default function TranslateDropdown({ id }: { id: string }) {
   const router = useRouter();
 
-  const pathname = usePathname();
-
   const [isPending, startTransition] = useTransition();
   const onSelectChange = (value: string) => {
     startTransition(() => {
-      router.replace(`/${value}${pathname.substring(3)}`);
+      setUserLocale(value as Locale);
+      router.refresh();
     });
   };
   return (
