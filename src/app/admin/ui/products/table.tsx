@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { FormattedProductsTable } from '@/app/admin/lib/definitions';
-import { DeleteProduct, UpdateProduct } from './buttons';
+import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
 import s3Service from '@/app/lib/bucket';
 
 export default function ProductsTable({
@@ -85,8 +85,8 @@ export default function ProductsTable({
 
                 <tbody className="divide-y divide-gray-200 text-gray-900">
                   {products?.map((product) => (
-                    <tr key={product.id} className="group">
-                      <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
+                    <tr key={product.id} className="group bg-white">
+                      <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
                           <Image
                             src={
@@ -103,23 +103,24 @@ export default function ProductsTable({
                         </div>
                       </td>
 
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {product.price}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {product.type}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {product.sale}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {product.stock}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm text-ellipsis overflow-hidden max-w-16">
+                      <td className="whitespace-nowrap px-4 py-5 text-sm text-ellipsis overflow-hidden max-w-16">
                         {product.description}
                       </td>
-                      <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
+                      <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
+                          <UpdateImage id={product.id} />
                           <UpdateProduct id={product.id} />
                           <DeleteProduct id={product.id} />
                         </div>

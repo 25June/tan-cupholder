@@ -1,11 +1,11 @@
-import Form from '@/app/admin/ui/products/update-form';
 import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
 import { fetchProductById } from '@/app/admin/lib/data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import UpdateImageForm from '@/app/admin/ui/products/update-image-form';
 
 export const metadata: Metadata = {
-  title: 'Edit Product'
+  title: 'Edit Product Images'
 };
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -23,13 +23,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         breadcrumbs={[
           { label: 'Products', href: '/admin/dashboard/products' },
           {
-            label: 'Edit Product',
-            href: `/admin/dashboard/products/${id}/edit`,
+            label: 'Edit Product Images',
+            href: `/admin/dashboard/products/${id}/edit-image`,
             active: true
           }
         ]}
       />
-      <Form product={product} images={images} />
+      <UpdateImageForm product={product} />
     </main>
   );
 }

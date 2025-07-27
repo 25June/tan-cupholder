@@ -1,7 +1,8 @@
 import {
   S3Client,
   GetObjectCommand,
-  PutObjectCommand
+  PutObjectCommand,
+  DeleteObjectCommand
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -99,6 +100,19 @@ class S3Service {
       xhr.setRequestHeader('Content-Type', file.type);
       xhr.send(file);
     });
+  }
+
+  async deleteFile(key: string) {
+    const command = new DeleteObjectCommand({
+      Bucket: this.bucketName,
+      Key: key
+    });
+    await this.s3Client.send(command);
+    console.log(`Object ${key} deleted successfully from ${this.bucketName}`);
+    return {
+      message: `Object ${key} deleted successfully from ${this.bucketName}`,
+      success: true
+    };
   }
 }
 

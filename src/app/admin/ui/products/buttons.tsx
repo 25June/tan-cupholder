@@ -1,4 +1,9 @@
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+  PencilIcon,
+  PhotoIcon,
+  PlusIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteProduct } from '@/app/admin/lib/actions/products.actions';
 
@@ -21,6 +26,17 @@ export function UpdateProduct({ id }: { id: string }) {
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
+    </Link>
+  );
+}
+
+export function UpdateImage({ id }: { id: string }) {
+  return (
+    <Link
+      href={`/admin/dashboard/products/${id}/edit-image`}
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <PhotoIcon className="w-5" />
     </Link>
   );
 }

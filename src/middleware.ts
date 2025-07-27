@@ -1,13 +1,13 @@
 import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const authMiddleware = NextAuth(authConfig).auth;
 export default async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.includes('admin/')) {
     return (authMiddleware as any)(request);
   }
-  return true;
+  return NextResponse.next();
 }
 
 export const config = {
