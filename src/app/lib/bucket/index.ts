@@ -1,38 +1,30 @@
+'use server';
+
 import {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
-  DeleteObjectCommand
+  DeleteObjectCommand,
+  ListObjectsV2Command,
+  ListObjectsV2CommandOutput,
+  DeleteObjectsCommand
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 class S3Service {
   private s3Client: S3Client;
-  public IMAGE_URL = 'https://pub-485637738840450490e408cee2acb72c.r2.dev/';
-  private bucketName: string =
-    process.env.CLOUDFLARE_R2_BUCKET || 'tan-storage';
+  private bucketName: string = process.env.CLOUDFLARE_R2_BUCKET || '';
   constructor() {
     this.s3Client = new S3Client({
-      region: process.env.CLOUDFLARE_R2_REGION || 'apac',
-      endpoint:
-        process.env.CLOUDFLARE_R2_ENDPOINT ||
-        `https://82a53163de4aac5437c3b17ce9baf6f5.r2.cloudflarestorage.com`,
+      region: process.env.CLOUDFLARE_R2_REGION || '',
+      endpoint: process.env.CLOUDFLARE_R2_ENDPOINT || '',
       credentials: {
-        accessKeyId:
-          process.env.CLOUDFLARE_R2_ACCESS_KEY_ID ||
-          'ac58a8723eea844d3b6ed409a7091588',
-        secretAccessKey:
-          process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ||
-          'd1cb52674a5776ead196d9696e41a776fffc4a9bc96130d20228658cb8d3376f'
+        accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY || ''
       }
     });
-    console.log({ bucketName: this.bucketName });
   }
 
-  getImageUrl(key: string) {
-    return `${this.IMAGE_URL}${key}`;
-  }
-  // Example: Get an object
   async getS3Object(key: string) {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
@@ -42,7 +34,6 @@ class S3Service {
     return response.Body; // The object's content
   }
 
-  // Example: Put an object
   async putS3Object(key: string, body: Uint8Array) {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
@@ -55,12 +46,12 @@ class S3Service {
     console.log(`Object ${key} uploaded successfully to ${this.bucketName}`);
   }
 
-  async getSignedUrl(name: string, type: string) {
+  async generateSignedUrl(productId: string, name: string, type: string) {
     const url = await getSignedUrl(
       this.s3Client,
       new PutObjectCommand({
         Bucket: this.bucketName,
-        Key: name,
+        Key: `${productId}/${name}`,
         ContentType: type
       }),
       { expiresIn: 3600 }
@@ -68,53 +59,53 @@ class S3Service {
     return url;
   }
 
-  async uploadFile(
-    file: File,
-    presignedUrl: string,
-    onProgress: (percent: number) => void
-  ) {
-    const xhr = new XMLHttpRequest();
-
-    return new Promise((resolve, reject) => {
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          console.log(event.loaded, event.total);
-          const percentComplete = (event.loaded / event.total) * 100;
-          onProgress(percentComplete);
-        }
-      };
-
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          resolve(xhr.response);
-        } else {
-          reject(new Error(`Upload failed with status: ${xhr.status}`));
-        }
-      };
-
-      xhr.onerror = () => {
-        reject(new Error('Upload failed'));
-      };
-
-      xhr.open('PUT', presignedUrl);
-      xhr.setRequestHeader('Content-Type', file.type);
-      xhr.send(file);
-    });
-  }
-
-  async deleteFile(key: string) {
+  async deleteFile(productId: string, name: string) {
     const command = new DeleteObjectCommand({
       Bucket: this.bucketName,
-      Key: key
+      Key: `${productId}/${name}`
     });
     await this.s3Client.send(command);
-    console.log(`Object ${key} deleted successfully from ${this.bucketName}`);
+    console.log(
+      `Object ${productId}/${name} deleted successfully from ${this.bucketName}`
+    );
     return {
-      message: `Object ${key} deleted successfully from ${this.bucketName}`,
+      message: `Object ${productId}/${name} deleted successfully from ${this.bucketName}`,
       success: true
     };
   }
+
+  async listFiles(folderPrefix: string) {
+    const command = new ListObjectsV2Command({
+      Bucket: this.bucketName,
+      Prefix: folderPrefix
+    });
+    const response = await this.s3Client.send(command);
+    return response.Contents;
+  }
+
+  async deleteFiles(contents: ListObjectsV2CommandOutput['Contents'] = []) {
+    const deleteParams = {
+      Bucket: this.bucketName,
+      Delete: {
+        Objects: contents.map((file) => ({
+          Key: file.Key
+        }))
+      }
+    };
+    try {
+      await this.s3Client.send(new DeleteObjectsCommand(deleteParams));
+    } catch (error) {
+      console.error('Error deleting files:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
 }
 
-const s3Service = new S3Service();
-export default s3Service;
+const s3 = new S3Service();
+export const deleteFile = s3.deleteFile.bind(s3);
+export const generateSignedUrl = s3.generateSignedUrl.bind(s3);
+export const listFiles = s3.listFiles.bind(s3);
+export const deleteFiles = s3.deleteFiles.bind(s3);

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { createProduct, State } from '@/app/admin/lib/actions/products.actions';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
-import s3Service from '@/app/lib/bucket';
+import { uploadMedia } from '@/shared/utils/uploadMedia';
 import { useRouter } from 'next/navigation';
 
 const initialState: State = { message: null, errors: {} };
@@ -21,7 +21,7 @@ export default function CreateProductForm() {
       console.error('No file selected');
       return;
     }
-    return s3Service.uploadFile(image, presignedUrl, (progress: number) =>
+    return uploadMedia(image, presignedUrl, (progress: number) =>
       setProgress(progress)
     );
   };
@@ -203,12 +203,12 @@ export default function CreateProductForm() {
               {/* image preview */}
               {image ? (
                 <div
-                  className={`w-full h-full bg-gray-200 rounded-md max-h-48`}
+                  className={`w-full h-full bg-gray-200 rounded-md max-h-48 p-2`}
                 >
                   <img
                     src={URL.createObjectURL(image)}
                     alt="Product Image"
-                    className="object-contain"
+                    className="object-contain w-full h-full"
                   />
                   {progress > 0 && (
                     <progress

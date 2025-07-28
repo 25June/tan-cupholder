@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteProduct } from '@/app/admin/lib/actions/products.actions';
+import { removeImage } from '../../lib/actions/images.actions';
 
 export function CreateProduct() {
   return (
@@ -46,9 +47,30 @@ export function DeleteProduct({ id }: { id: string }) {
 
   return (
     <form action={deleteProductWithId}>
-      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+      <button
+        type="submit"
+        className="rounded-md border border-red-400 p-2 bg-gray-100"
+      >
         <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5" />
+        <TrashIcon className="w-5 text-red-500" />
+      </button>
+    </form>
+  );
+}
+
+export function DeleteImage({ id }: { id: string }) {
+  return (
+    <form
+      action={() => {
+        removeImage(id);
+      }}
+    >
+      <button
+        type="submit"
+        className="rounded-md border border-red-400 p-2 bg-gray-100"
+      >
+        <span className="sr-only">Delete</span>
+        <TrashIcon className="w-5 text-red-500" />
       </button>
     </form>
   );

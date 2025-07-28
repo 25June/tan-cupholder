@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { updateProduct, State } from '@/app/admin/lib/actions/products.actions';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
-import s3Service from '@/app/lib/bucket';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { Product } from '@/models/product';
 import Link from 'next/link';
 import { Image as ImageType } from '@/models/image';
@@ -19,7 +19,6 @@ export default function UpdateProductForm({
   product: Product;
   images: ImageType[];
 }) {
-  console.log(images);
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -180,7 +179,7 @@ export default function UpdateProductForm({
                   className={`w-full h-full bg-gray-200 rounded-md max-h-48 p-2`}
                 >
                   <img
-                    src={s3Service.getImageUrl(product.image)}
+                    src={getImageUrl(product.id, product.image)}
                     alt="Product Image"
                     className="object-contain w-full h-full"
                   />
@@ -202,7 +201,7 @@ export default function UpdateProductForm({
                   className={`w-full h-full bg-gray-200 rounded-md max-h-56 relative p-2`}
                 >
                   <Image
-                    src={s3Service.getImageUrl(image.name)}
+                    src={getImageUrl(product.id, image.name)}
                     alt={image.name}
                     className="object-contain w-full h-full"
                     width={200}

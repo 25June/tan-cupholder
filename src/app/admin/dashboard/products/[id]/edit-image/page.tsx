@@ -29,7 +29,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           }
         ]}
       />
-      <UpdateImageForm product={product} />
+      <UpdateImageForm product={product} images={images} />
     </main>
   );
 }

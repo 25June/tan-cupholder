@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import s3Service from '@/app/lib/bucket';
+import { uploadMedia } from '@/shared/utils/uploadMedia';
 
 interface Props {
   image: File;
@@ -19,7 +19,7 @@ export default function FileUpload({ image, presignedUrl }: Props) {
       console.error('No presigned url');
       return;
     }
-    return s3Service.uploadFile(image, presignedUrl, (progress: number) =>
+    return uploadMedia(image, presignedUrl, (progress: number) =>
       setProgress(progress)
     );
   }, []);

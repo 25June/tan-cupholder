@@ -1,13 +1,19 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { FormattedProductsTable } from '@/app/admin/lib/definitions';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
-import s3Service from '@/app/lib/bucket';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 export default function ProductsTable({
   products
 }: {
   products: FormattedProductsTable[];
 }) {
+  const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
+
   return (
     <div className="w-full">
       <div className="mt-6 flow-root">
@@ -27,7 +33,7 @@ export default function ProductsTable({
                             <Image
                               src={
                                 product.image
-                                  ? `${s3Service.getImageUrl(product.image)}`
+                                  ? `${getImageUrl(product.id, product.image)}`
                                   : '/cup.png'
                               }
                               className="rounded-full w-16 h-16 object-cover"
@@ -91,7 +97,7 @@ export default function ProductsTable({
                           <Image
                             src={
                               product.image
-                                ? `${s3Service.getImageUrl(product.image)}`
+                                ? `${getImageUrl(product.id, product.image)}`
                                 : '/cup.png'
                             }
                             className="rounded-full w-16 h-16 object-cover"
@@ -122,7 +128,22 @@ export default function ProductsTable({
                         <div className="flex justify-end gap-3">
                           <UpdateImage id={product.id} />
                           <UpdateProduct id={product.id} />
-                          <DeleteProduct id={product.id} />
+                          {doubleClick[product.id] ? (
+                            <DeleteProduct id={product.id} />
+                          ) : (
+                            <button
+                              onClick={() =>
+                                setDoubleClick((prev) => ({
+                                  ...prev,
+                                  [product.id]: true
+                                }))
+                              }
+                              className="rounded-md border p-2 hover:bg-gray-100"
+                            >
+                              <span className="sr-only">Delete</span>
+                              <TrashIcon className="w-5" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -3,34 +3,43 @@
 import { useState } from 'react';
 import { createImage, State } from '../../lib/actions/images.actions';
 import { Product } from '@/models/product';
-import { PhotoIcon } from '@heroicons/react/24/outline';
+import { PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
 import FileUpload from '@/components/file-upload/FileUpload';
-import s3Service from '@/app/lib/bucket';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
 import Image from 'next/image';
+import { Image as ImageType } from '@/models/image';
+import { DeleteImage } from './buttons';
 
 const initialState: State = { message: null, errors: {} };
 
-export default function UpdateImageForm({ product }: { product: Product }) {
-  const [images, setImages] = useState<File[]>([]);
+export default function UpdateImageForm({
+  product,
+  images
+}: {
+  product: Product;
+  images: ImageType[];
+}) {
+  const [uploadImages, setUploadImages] = useState<File[]>([]);
   const [presignedUrlObject, setPresignedUrlObject] = useState<
     Record<string, string>
   >({});
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMain, setIsMain] = useState<Record<string, boolean>>({});
+  const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
 
   const onSelectImages = (files: FileList) => {
-    setImages(Array.from(files));
+    setUploadImages(Array.from(files));
   };
 
   const handleFormSubmit = async (formData: FormData) => {
-    if (!images.length) {
+    if (!uploadImages.length) {
       console.error('No file selected');
       return Promise.reject(new Error('No file selected'));
     }
 
     setIsLoading(true);
-    const promises = images.map((image) => {
+    const promises = uploadImages.map((image) => {
       const newFormData = new FormData();
       newFormData.append('name', image.name);
       newFormData.append('type', image.type);
@@ -59,7 +68,7 @@ export default function UpdateImageForm({ product }: { product: Product }) {
       <div className="flex gap-2">
         <div className="w-full bg-gray-200 rounded-md max-w-24 max-h-24">
           <Image
-            src={s3Service.getImageUrl(product.image)}
+            src={getImageUrl(product.id, product.image)}
             alt={product.name}
             className="w-full h-full object-contain rounded-md"
             width={100}
@@ -72,6 +81,43 @@ export default function UpdateImageForm({ product }: { product: Product }) {
             {product.description}
           </h2>
         </div>
+      </div>
+      <p className="text-sm font-bold mb-2 mt-6">
+        Current Images ({images.length})
+      </p>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
+        {(images || []).map((image) => (
+          <div
+            key={image.id}
+            className={`w-full h-full bg-gray-200 rounded-md max-h-56 relative p-2`}
+          >
+            <Image
+              src={getImageUrl(product.id, image.name)}
+              alt={image.name}
+              className="object-contain w-full h-full"
+              width={200}
+              height={200}
+            />
+            <div className="absolute top-2 right-2">
+              {doubleClick[image.id] ? (
+                <DeleteImage id={image.id} />
+              ) : (
+                <button
+                  onClick={() =>
+                    setDoubleClick((prev) => ({
+                      ...prev,
+                      [image.id]: true
+                    }))
+                  }
+                  className="rounded-md border p-2 hover:bg-gray-100"
+                >
+                  <span className="sr-only">Delete</span>
+                  <TrashIcon className="w-5" />
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
       <form action={handleFormSubmit}>
         <div className="text-sm text-muted-foreground mt-6">
@@ -101,17 +147,17 @@ export default function UpdateImageForm({ product }: { product: Product }) {
 
           <div className="mt-4 mb-4 w-full h-full rounded-md min-h-24">
             {/* image preview */}
-            {images.length ? (
+            {uploadImages.length ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full h-full">
-                {images.map((image) => (
+                {uploadImages.map((uploadImage) => (
                   <div
-                    key={image.name}
+                    key={uploadImage.name}
                     className="w-full h-full flex justify-center items-center"
                   >
                     <FileUpload
-                      key={image.name}
-                      image={image}
-                      presignedUrl={presignedUrlObject[image.name] || ''}
+                      key={uploadImage.name}
+                      image={uploadImage}
+                      presignedUrl={presignedUrlObject[uploadImage.name] || ''}
                     />
                   </div>
                 ))}

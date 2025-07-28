@@ -1,8 +1,14 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import postgres from 'postgres';
-import s3Service from '@/app/lib/bucket';
+import {
+  deleteFile,
+  deleteFiles,
+  generateSignedUrl,
+  listFiles
+} from '@/app/lib/bucket';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -23,8 +29,16 @@ const UpdateImage = FormSchema.omit({
   type: true
 });
 
+const DeleteImage = FormSchema.omit({
+  isMain: true,
+  type: true,
+  name: true,
+  productId: true
+});
+
 export type State = {
   errors?: {
+    id?: string[];
     productId?: string[];
     name?: string[];
     type?: string[];
@@ -51,7 +65,7 @@ export async function createImage(prevState: State, formData: FormData) {
 
   let presignedUrl = '';
   try {
-    presignedUrl = await s3Service.getSignedUrl(name, type);
+    presignedUrl = await generateSignedUrl(productId, name, type);
   } catch (error) {
     console.error('S3 Error:', error);
   }
@@ -71,26 +85,48 @@ export async function createImage(prevState: State, formData: FormData) {
   };
 }
 
-export async function removeImage(prevState: State, formData: FormData) {
-  const validatedFields = UpdateImage.safeParse({
-    id: formData.get('id')
-  });
-
-  if (!validatedFields.success) {
+export async function removeImage(id: string) {
+  if (!id) {
     return {
       errors: { id: ['Id is required'] }
     };
   }
 
-  const { id } = validatedFields.data;
+  const image = await sql`SELECT * FROM images WHERE id = ${id}`;
+
+  if (!image) {
+    return {
+      errors: { id: ['Image not found'] }
+    };
+  }
 
   try {
     await sql`DELETE FROM images WHERE id = ${id}`;
+    await deleteFile(image[0].product_id, image[0].name);
   } catch (error) {
     console.error('Database Error:', error);
   }
 
+  revalidatePath(`/admin/dashboard/products/${image[0].product_id}/edit-image`);
   return {
     message: 'Image removed successfully'
+  };
+}
+
+export async function batchRemoveImages(folderPrefix: string) {
+  const listResponse = await listFiles(folderPrefix);
+  if (!listResponse) {
+    return {
+      errors: { folderPrefix: ['Folder prefix not found'] }
+    };
+  }
+  const deleteResponse = await deleteFiles(listResponse);
+  if (!deleteResponse?.success) {
+    return {
+      errors: { folderPrefix: ['Failed to delete files'] }
+    };
+  }
+  return {
+    message: 'Images removed successfully'
   };
 }

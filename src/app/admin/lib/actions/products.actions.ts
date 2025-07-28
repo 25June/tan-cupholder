@@ -4,7 +4,8 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import s3Service from '@/app/lib/bucket';
+import { generateSignedUrl } from '@/app/lib/bucket';
+import { batchRemoveImages } from './images.actions';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -76,18 +77,22 @@ export async function createProduct(prevState: State, formData: FormData) {
     imageType = ''
   } = validatedFields.data;
   const date = new Date().toISOString().split('T')[0];
-  let presignedUrl = '';
-  try {
-    presignedUrl = await s3Service.getSignedUrl(image, imageType);
-  } catch (error) {
-    console.error('S3 Error:', error);
-  }
 
+  let id = '';
   try {
-    await sql`INSERT INTO products (name, image, price, type, sale, stock, createdAt, updatedAt, description) 
-    VALUES (${name}, ${image}, ${price}, ${type}, ${sale}, ${stock}, ${date}, ${date}, ${description})`;
+    const result =
+      await sql`INSERT INTO products (name, image, price, type, sale, stock, createdAt, updatedAt, description) 
+    VALUES (${name}, ${image}, ${price}, ${type}, ${sale}, ${stock}, ${date}, ${date}, ${description}) RETURNING id`;
+    id = result[0].id;
   } catch (error) {
     console.error('Database Error:', error);
+  }
+
+  let presignedUrl = '';
+  try {
+    presignedUrl = await generateSignedUrl(id, image, imageType);
+  } catch (error) {
+    console.error('S3 Error:', error);
   }
 
   return {
@@ -134,6 +139,13 @@ export async function updateProduct(prevState: State, formData: FormData) {
 }
 
 export async function deleteProduct(id: string) {
-  await sql`DELETE FROM products WHERE id = ${id}`;
+  try {
+    await sql`DELETE FROM images WHERE product_id = ${id}`;
+    await sql`DELETE FROM products WHERE id = ${id}`;
+    await batchRemoveImages(id);
+  } catch (error) {
+    console.error('Database Error:', error);
+  }
+
   revalidatePath('/admin/dashboard/products');
 }
