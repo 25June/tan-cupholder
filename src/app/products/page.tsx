@@ -1,5 +1,8 @@
 import ProductsContainer from '@/components/products-container/ProductsContainer';
-import { fetchProducts, fetchTotalProducts } from '@/app/lib/data';
+import {
+  fetchProducts,
+  fetchTotalProducts
+} from '@/app/admin/lib/actions/products.actions';
 
 interface Props {
   searchParams?: {

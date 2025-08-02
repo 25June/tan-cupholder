@@ -5,12 +5,9 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  Revenue,
-  ProductsTableType
+  Revenue
 } from './definitions';
 import { formatCurrency } from './utils';
-import { Product } from '@/models/product';
-import { Image } from '@/models/image';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -187,18 +184,6 @@ export async function fetchCustomers() {
   }
 }
 
-export async function fetchProducts() {
-  try {
-    const products = await sql<ProductsTableType[]>`
-      SELECT * FROM products
-    `;
-    return products;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch all products.');
-  }
-}
-
 export async function fetchFilteredCustomers(query: string) {
   try {
     const data = await sql<CustomersTableType[]>`
@@ -229,22 +214,5 @@ export async function fetchFilteredCustomers(query: string) {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
-  }
-}
-
-export async function fetchProductById(id: string) {
-  try {
-    const product = await sql<Product[]>`
-      SELECT * FROM products WHERE id = ${id}
-    `;
-
-    const images = await sql<Image[]>`
-      SELECT * FROM images WHERE product_id = ${id}
-    `;
-
-    return { product: product[0], images: images || [] };
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch product.');
   }
 }

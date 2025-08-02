@@ -1,4 +1,5 @@
 import {
+  CheckCircleIcon,
   PencilIcon,
   PhotoIcon,
   PlusIcon,
@@ -7,6 +8,7 @@ import {
 import Link from 'next/link';
 import { deleteProduct } from '@/app/admin/lib/actions/products.actions';
 import { removeImage } from '../../lib/actions/images.actions';
+import Spinner from '@/components/spinner/Spinner';
 
 export function CreateProduct() {
   return (
@@ -58,20 +60,54 @@ export function DeleteProduct({ id }: { id: string }) {
   );
 }
 
-export function DeleteImage({ id }: { id: string }) {
+export function DeleteImage({
+  onClick,
+  loading
+}: {
+  onClick: () => void;
+  loading: boolean;
+}) {
   return (
-    <form
-      action={() => {
-        removeImage(id);
-      }}
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-md border border-red-400 hover:bg-red-400 hover:text-white transition-all duration-300 ${
+        loading ? 'opacity-50 cursor-not-allowed' : ''
+      }`}
     >
-      <button
-        type="submit"
-        className="rounded-md border border-red-400 p-2 bg-gray-100"
-      >
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5 text-red-500" />
-      </button>
-    </form>
+      {loading ? (
+        <div className="p-2">
+          <Spinner />
+        </div>
+      ) : (
+        <TrashIcon className="w-10 text-red-500 p-2 hover:text-white transition-all duration-300" />
+      )}
+    </button>
+  );
+}
+
+export function ActiveButton({
+  onClick,
+  loading
+}: {
+  onClick: () => void;
+  loading: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-md border border-green-500 hover:bg-green-500 hover:text-white  transition-all duration-300 ${
+        loading ? 'opacity-50 cursor-not-allowed' : ''
+      }`}
+    >
+      {loading ? (
+        <div className="p-2">
+          <Spinner />
+        </div>
+      ) : (
+        <CheckCircleIcon className="w-10 text-green-500 p-2 hover:text-white transition-all duration-300" />
+      )}
+    </button>
   );
 }

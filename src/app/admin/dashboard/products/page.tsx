@@ -1,4 +1,4 @@
-import { fetchProducts } from '@/app/admin/lib/data';
+import { fetchProducts } from '@/app/admin/lib/actions/products.actions';
 import { Metadata } from 'next';
 import ProductsTable from '../../ui/products/table';
 import { lusitana } from '@/app/admin/ui/fonts';
@@ -6,6 +6,7 @@ import Search from '../../ui/search';
 import { CreateProduct } from '../../ui/products/buttons';
 import { Suspense } from 'react';
 import Pagination from '../../ui/invoices/pagination';
+import { getProductTypes } from '@/app/admin/lib/actions/productTypes.actions';
 
 export const metadata: Metadata = {
   title: 'Products'
@@ -22,6 +23,12 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
 
   const products = await fetchProducts();
+  const productTypes = await getProductTypes();
+  const formattedProducts = productTypes.reduce((acc, cur) => {
+    acc[cur.id] = cur.name;
+    return acc;
+  }, {} as Record<string, string>);
+
   return (
     <main>
       <div className="flex w-full items-center justify-between mb-8">
@@ -34,7 +41,7 @@ export default async function Page(props: {
         <CreateProduct />
       </div>
       <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
-        <ProductsTable products={products} />
+        <ProductsTable products={products} productTypes={formattedProducts} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={1} />

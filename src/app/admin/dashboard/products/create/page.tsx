@@ -1,12 +1,15 @@
 import Form from '@/app/admin/ui/products/create-form';
 import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
 import { Metadata } from 'next';
+import { getProductTypes } from '@/app/admin/lib/actions/productTypes.actions';
 
 export const metadata: Metadata = {
   title: 'Create Invoice'
 };
 
 export default async function Page() {
+  const productTypes = await getProductTypes();
+
   return (
     <main>
       <Breadcrumbs
@@ -19,7 +22,7 @@ export default async function Page() {
           }
         ]}
       />
-      <Form />
+      <Form productTypes={productTypes} />
     </main>
   );
 }

@@ -10,16 +10,18 @@ import Quantity from '@/components/quantity/Quantity';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { calculatePercent } from '@/shared/utils/formatNumber';
 import Footer from '@/components/footer/Footer';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
 
 export default function ProductPage() {
   const { id } = useParams();
-  const { product, isLoading, onGetProduct } = useProduct();
+  const { product, isLoading, onGetProduct, images } = useProduct();
 
   useEffect(() => {
     if (typeof id === 'string') {
       onGetProduct(id);
     }
   }, [id]);
+  const mainImage = images.find((img) => img.isMain);
 
   return (
     <div className="min-h-screen">
@@ -30,29 +32,31 @@ export default function ProductPage() {
         {product && (
           <div className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row">
             <div className="flex flex-1 gap-4 flex-col-reverse md:flex-row">
-              <div className="flex-1 hidden md:flex flex-row md:flex-col gap-2">
-                {Array.from({ length: 3 }).map((_, index) => (
+              <div className="shrink-0 max-h-[600px] overflow-auto hidden md:flex flex-row md:flex-col gap-2">
+                {images.map((img, index) => (
                   <div
                     key={index}
-                    className="min-w-12 md:min-w-24 rounded-md overflow-hidden cursor-pointer transition-transform hover:scale-105"
+                    className="w-12 h-12 rounded-md cursor-pointer transition-transform hover:scale-105"
                   >
                     <Image
-                      src={product.image}
-                      alt={product.name}
+                      src={getImageUrl(product.id, img.name)}
+                      alt={img.name}
                       width={600}
                       height={600}
                     />
                   </div>
                 ))}
               </div>
-              <div>
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  width={600}
-                  height={600}
-                  className="rounded-md"
-                />
+              <div className="w-full h-full">
+                {mainImage && (
+                  <Image
+                    src={getImageUrl(product.id, mainImage.name)}
+                    alt={mainImage.name}
+                    width={600}
+                    height={600}
+                    className="rounded-md"
+                  />
+                )}
               </div>
             </div>
             <div className="flex-1 mt-4 flex flex-col gap-4 justify-between">
@@ -69,11 +73,7 @@ export default function ProductPage() {
                     {formatPrice(product.price, '')}
                   </h5>
                 </div>
-                <div className="mb-4">
-                  In ullamco labore mollit et exercitation fugiat exercitation
-                  minim ex sint ullamco exercitation amet officia mollit. Qui
-                  cillum pariatur in con
-                </div>
+                <div className="mb-4">{product.description}</div>
               </div>
               <div>
                 <Quantity />

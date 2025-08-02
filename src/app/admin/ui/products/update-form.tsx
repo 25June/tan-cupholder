@@ -9,19 +9,22 @@ import { Product } from '@/models/product';
 import Link from 'next/link';
 import { Image as ImageType } from '@/models/image';
 import Image from 'next/image';
+import { ProductType } from '@/models/productType';
 
 const initialState: State = { message: null, errors: {} };
 
 export default function UpdateProductForm({
   product,
-  images
+  images,
+  productTypes
 }: {
   product: Product;
   images: ImageType[];
+  productTypes: ProductType[];
 }) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const mainImage = images.find((image) => image.isMain);
   const handleFormSubmit = async (formData: FormData) => {
     formData.set('id', product.id);
 
@@ -91,13 +94,22 @@ export default function UpdateProductForm({
 
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Type</legend>
-              <input
-                type="text"
+              <select
+                id="type"
                 name="type"
-                className="input w-full"
-                placeholder="Product Type"
+                className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 defaultValue={product.type}
-              />
+                aria-describedby="type-error"
+              >
+                <option value="" disabled>
+                  Select type
+                </option>
+                {productTypes.map((productType) => (
+                  <option key={productType.id} value={productType.id}>
+                    {productType.name}
+                  </option>
+                ))}
+              </select>
               <div id="type-error" aria-live="polite" aria-atomic="true">
                 {state.errors?.type &&
                   state.errors.type.map((error: string) => (
@@ -174,12 +186,12 @@ export default function UpdateProductForm({
           <div>
             <p className="text-sm font-bold mb-2">Main Image</p>
             <div className="w-full h-full rounded-md max-h-48 mb-4">
-              {product.image ? (
+              {mainImage ? (
                 <div
                   className={`w-full h-full bg-gray-200 rounded-md max-h-48 p-2`}
                 >
                   <img
-                    src={getImageUrl(product.id, product.image)}
+                    src={getImageUrl(product.id, mainImage.name)}
                     alt="Product Image"
                     className="object-contain w-full h-full"
                   />
@@ -195,20 +207,23 @@ export default function UpdateProductForm({
               Other Images ({images.length})
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
-              {(images || []).map((image) => (
-                <div
-                  key={image.id}
-                  className={`w-full h-full bg-gray-200 rounded-md max-h-56 relative p-2`}
-                >
-                  <Image
-                    src={getImageUrl(product.id, image.name)}
-                    alt={image.name}
-                    className="object-contain w-full h-full"
-                    width={200}
-                    height={200}
-                  />
-                </div>
-              ))}
+              {(images || []).map(
+                (image) =>
+                  !image.isMain && (
+                    <div
+                      key={image.id}
+                      className={`w-full h-full bg-gray-200 rounded-md max-h-56 relative p-2`}
+                    >
+                      <Image
+                        src={getImageUrl(product.id, image.name)}
+                        alt={image.name}
+                        className="object-contain w-full h-full"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                  )
+              )}
             </div>
           </div>
         </div>

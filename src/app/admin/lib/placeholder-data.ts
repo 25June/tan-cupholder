@@ -144,4 +144,91 @@ const revenue = [
   { month: 'Dec', revenue: 4800 }
 ];
 
-export { users, customers, invoices, revenue };
+const productTypes = [
+  {
+    name: 'APRON BAG',
+    short_name: 'APRON BAG'
+  },
+  {
+    name: '1 quai COTTON',
+    short_name: 'BB'
+  },
+  {
+    name: '1 quai CANVAS blank',
+    short_name: 'BC'
+  },
+  {
+    name: '1 quai CANVAS PRINT',
+    short_name: 'BP'
+  },
+  {
+    name: 'Túi bình',
+    short_name: 'CB'
+  },
+  {
+    name: 'Quai CANVAS',
+    short_name: 'CV'
+  },
+  {
+    name: 'Quai vải COTTON',
+    short_name: 'FB'
+  },
+  {
+    name: 'GROCERY BAG',
+    short_name: 'GC'
+  },
+  {
+    name: 'Hình chung',
+    short_name: 'Hình chung'
+  },
+  {
+    name: 'MILKBOX',
+    short_name: 'MB'
+  },
+  {
+    name: 'MILITARY COLLECTION',
+    short_name: 'MILITARY COLLECTION'
+  },
+  {
+    name: 'Túi 2 quai',
+    short_name: 'NL'
+  },
+  {
+    name: 'Pinkoi',
+    short_name: 'Pinkoi'
+  },
+  {
+    name: 'Quai xách POMPOM',
+    short_name: 'PP'
+  },
+  {
+    name: 'RECTANGLE BAG',
+    short_name: 'RS'
+  },
+  {
+    name: 'MINI TRAPEZOID BAG',
+    short_name: 'SZ'
+  },
+  {
+    name: 'Túi 3 màu',
+    short_name: 'TB'
+  },
+  {
+    name: '1 quai THỔ CẨM',
+    short_name: 'TC'
+  },
+  {
+    name: 'TYPO TOTE BAG',
+    short_name: 'TO'
+  },
+  {
+    name: 'TRAPEZOID BAG',
+    short_name: 'TZ'
+  },
+  {
+    name: 'WHITE BACKGROUND',
+    short_name: 'WHITE BACKGROUND'
+  }
+];
+
+export { users, customers, invoices, revenue, productTypes };

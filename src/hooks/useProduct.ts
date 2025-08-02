@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { Product } from '@/models/product';
-import { getProduct } from '@/api/product';
+import { Image } from '@/models/image';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { fetchProductById } from '@/app/admin/lib/actions/products.actions';
 
 export const useProducts = (
   page: number,
@@ -49,20 +50,22 @@ export const useProducts = (
 
 export const useProduct = () => {
   const [product, setProduct] = useState<Product | null>(null);
+  const [images, setImages] = useState<Image[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGetProduct = (id: string) => {
     setIsLoading(true);
-    const response = getProduct(id);
+    const response = fetchProductById(id);
 
     return response
-      .then((data: Product | null) => {
+      .then((data: { product: Product; images: Image[] } | null) => {
         if (data) {
-          setProduct(data);
+          setProduct(data.product);
+          setImages(data.images);
         }
       })
       .finally(() => setIsLoading(false));
   };
 
-  return { product, isLoading, onGetProduct: handleGetProduct };
+  return { product, images, isLoading, onGetProduct: handleGetProduct };
 };

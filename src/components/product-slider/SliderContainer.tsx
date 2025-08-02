@@ -8,9 +8,10 @@ import {
   ArrowRightCircleIcon,
   ArrowLeftCircleIcon
 } from '@heroicons/react/24/outline';
+import { ProductResponse } from '@/models/product';
 
 interface Props {
-  readonly products: any[];
+  readonly products: ProductResponse[];
 }
 
 export default function SliderContainer({ products }: Props) {

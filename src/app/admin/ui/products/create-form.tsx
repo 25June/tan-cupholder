@@ -4,40 +4,75 @@ import { useState } from 'react';
 import { createProduct, State } from '@/app/admin/lib/actions/products.actions';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
-import { uploadMedia } from '@/shared/utils/uploadMedia';
 import { useRouter } from 'next/navigation';
+import FileUpload from '@/components/file-upload/FileUpload';
+import { createImage } from '../../lib/actions/images.actions';
+import { ProductType } from '@/models/productType';
 
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateProductForm() {
+export default function CreateProductForm({
+  productTypes
+}: {
+  productTypes: ProductType[];
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0);
-  const [image, setImage] = useState<File | null>(null);
   const router = useRouter();
-  const onUpload = async (presignedUrl: string) => {
-    console.log('onUpload', image);
-    if (!image) {
-      console.error('No file selected');
-      return;
-    }
-    return uploadMedia(image, presignedUrl, (progress: number) =>
-      setProgress(progress)
-    );
-  };
-  const handleFormSubmit = async (formData: FormData) => {
-    if (!image) {
-      console.error('No file selected');
-      return;
-    }
+  const [uploadImages, setUploadImages] = useState<File[]>([]);
+  const [presignedUrlObject, setPresignedUrlObject] = useState<
+    Record<string, string>
+  >({});
 
+  const [isMain, setIsMain] = useState<Record<string, boolean>>({});
+
+  const onUpload = async (productId: string) => {
+    if (!uploadImages.length) {
+      return Promise.resolve();
+    }
     setIsLoading(true);
-    formData.set('image', image.name);
-    formData.set('imageType', image.type);
-    console.log(formData);
-    return createProduct(initialState, formData)
+    const newUploadImage: Record<string, boolean> = {};
+    const promises = uploadImages.map((image, index) => {
+      const newFormData = new FormData();
+      newFormData.append('name', image.name);
+      newFormData.append('type', image.type);
+      newFormData.append('productId', productId);
+      newUploadImage[image.name] = false;
+      if (index === 0) {
+        newFormData.append('isMain', 'true');
+      } else {
+        newFormData.append('isMain', 'false');
+      }
+      return createImage(initialState, newFormData)
+        .then((res) => {
+          setPresignedUrlObject((prev) => ({
+            ...prev,
+            [image.name]: res?.['presignedUrl'] || ''
+          }));
+        })
+        .catch((error) => {
+          setState({
+            message: error.message,
+            errors: error.errors
+          });
+        });
+    });
+    return Promise.all(promises).finally(() => setIsLoading(false));
+  };
+
+  const handleFormSubmit = async (formData: FormData) => {
+    setIsLoading(true);
+    const newFormData = new FormData();
+    newFormData.append('name', formData.get('name') as string);
+    newFormData.append('price', formData.get('price') as string);
+    newFormData.append('type', formData.get('type') as string);
+    newFormData.append('sale', formData.get('sale') as string);
+    newFormData.append('stock', formData.get('stock') as string);
+    newFormData.append('description', formData.get('description') as string);
+    return createProduct(initialState, newFormData)
       .then((res) => {
-        onUpload(res?.['presignedUrl'] || '')
+        const productId = res?.['id'] || '';
+        onUpload(productId)
           .then(() => {
             setTimeout(() => {
               router.push('/admin/dashboard/products');
@@ -54,6 +89,10 @@ export default function CreateProductForm() {
         });
         setIsLoading(false);
       });
+  };
+
+  const onSelectImages = (files: FileList) => {
+    setUploadImages(Array.from(files));
   };
 
   return (
@@ -86,6 +125,7 @@ export default function CreateProductForm() {
                 name="price"
                 className="input w-full"
                 placeholder="Product Price"
+                defaultValue={100000}
               />
               <div id="price-error" aria-live="polite" aria-atomic="true">
                 {state.errors?.price &&
@@ -99,12 +139,21 @@ export default function CreateProductForm() {
 
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Type</legend>
-              <input
-                type="text"
+              <select
+                id="type"
                 name="type"
-                className="input w-full"
-                placeholder="Product Type"
-              />
+                className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="type-error"
+              >
+                <option value="" disabled>
+                  Select a type
+                </option>
+                {productTypes.map((productType) => (
+                  <option key={productType.id} value={productType.id}>
+                    {productType.name}
+                  </option>
+                ))}
+              </select>
               <div id="type-error" aria-live="polite" aria-atomic="true">
                 {state.errors?.type &&
                   state.errors.type.map((error: string) => (
@@ -124,6 +173,7 @@ export default function CreateProductForm() {
                   name="sale"
                   className="w-full"
                   placeholder="Sale Percentage"
+                  defaultValue={10}
                 />
               </label>
 
@@ -147,6 +197,7 @@ export default function CreateProductForm() {
                 name="stock"
                 className="input w-full"
                 placeholder="Stock Amount"
+                defaultValue={100}
               />
               <div id="stock-error" aria-live="polite" aria-atomic="true">
                 {state.errors?.stock &&
@@ -164,6 +215,9 @@ export default function CreateProductForm() {
                 name="description"
                 className="textarea h-24 w-full"
                 placeholder="Product Description"
+                defaultValue={
+                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.'
+                }
               ></textarea>
               <div id="description-error" aria-live="polite" aria-atomic="true">
                 {state.errors?.description &&
@@ -175,51 +229,46 @@ export default function CreateProductForm() {
               </div>
             </fieldset>
           </div>
+
           <div className="text-sm text-muted-foreground">
             <fieldset className="fieldset">
-              <legend className="fieldset-legend">Main Image</legend>
+              <legend className="fieldset-legend">Images</legend>
               <input
+                multiple
                 type="file"
                 name="image"
                 className="file-input w-full"
                 placeholder="Product Image"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (event.target.files?.[0]) {
-                    setImage(event.target.files[0]);
+                  if (event.target.files) {
+                    onSelectImages(event.target.files);
                   }
                 }}
               />
-              <div id="image-error" aria-live="polite" aria-atomic="true">
-                {state.errors?.image &&
-                  state.errors.image.map((error: string) => (
-                    <p className=" text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ))}
-              </div>
             </fieldset>
 
-            <div className="mt-4 w-full h-full rounded-md max-h-48">
+            <div className="mt-4 mb-4 w-full h-full rounded-md min-h-24">
               {/* image preview */}
-              {image ? (
-                <div
-                  className={`w-full h-full bg-gray-200 rounded-md max-h-48 p-2`}
-                >
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt="Product Image"
-                    className="object-contain w-full h-full"
-                  />
-                  {progress > 0 && (
-                    <progress
-                      className="progress progress-primary w-full transition-all duration-100"
-                      value={progress}
-                      max="100"
-                    ></progress>
-                  )}
+              {uploadImages.length ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
+                  {uploadImages.map((uploadImage) => (
+                    <div
+                      key={uploadImage.name}
+                      className="w-full h-full flex justify-center items-center"
+                    >
+                      <FileUpload
+                        key={uploadImage.name}
+                        image={uploadImage}
+                        presignedUrl={
+                          presignedUrlObject[uploadImage.name] || ''
+                        }
+                        setImageUploadCompleted={() => console.log('done')}
+                      />
+                    </div>
+                  ))}
                 </div>
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-md max-h-48">
+                <div className="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-md max-h-48 max-w-48 p-4">
                   <PhotoIcon className="w-10 h-10 text-gray-500" />
                   <p className="text-sm text-gray-500">No image selected</p>
                 </div>
@@ -229,7 +278,11 @@ export default function CreateProductForm() {
         </div>
 
         <div className="flex justify-end gap-2">
-          <button type="button" className="btn btn-ghost max-w-40 w-full">
+          <button
+            type="button"
+            onClick={() => router.push('/admin/dashboard/products')}
+            className="btn btn-ghost max-w-40 w-full"
+          >
             Cancel
           </button>
 

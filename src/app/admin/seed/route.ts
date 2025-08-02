@@ -1,6 +1,12 @@
 import bcrypt from 'bcrypt';
 import postgres from 'postgres';
-import { invoices, customers, revenue, users } from '../lib/placeholder-data';
+import {
+  invoices,
+  customers,
+  revenue,
+  users,
+  productTypes
+} from '../lib/placeholder-data';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -169,9 +175,57 @@ async function seedProductImages() {
   // );
 }
 
+async function seedAddFeatureProducts() {
+  await sql`
+    ALTER TABLE products
+    ADD COLUMN IF NOT EXISTS priority INTEGER NOT NULL DEFAULT 0;
+  `;
+}
+
+// async function seedProductTypes() {
+//   // Generate some pastel colors
+//   const pastelColors = [
+//     '#FFB3BA', // Pastel Pink
+//     '#BAFFC9', // Pastel Green
+//     '#BAE1FF', // Pastel Blue
+//     '#FFFFBA', // Pastel Yellow
+//     '#FFE4B5', // Pastel Orange
+//     '#E0BBE4', // Pastel Purple
+//     '#957DAD', // Pastel Lavender
+//     '#FEC8D8', // Light Pink
+//     '#D4F0F0', // Light Cyan
+//     '#FFDFD3' // Peach
+//   ];
+//   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await sql`
+//     CREATE TABLE IF NOT EXISTS product_types (
+//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+//       name VARCHAR(255) NOT NULL,
+//       short_name VARCHAR(255) NOT NULL,
+//       color VARCHAR(255) NOT NULL,
+//       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+//     );
+//   `;
+//   const date = new Date().toISOString().split('T')[0];
+
+//   return Promise.all(
+//     productTypes.map(
+//       (type, index) =>
+//         sql`
+//         INSERT INTO product_types (name, short_name, color, created_at, updated_at)
+//         VALUES (${type.name}, ${type.short_name}, ${
+//           pastelColors[index % pastelColors.length]
+//         }, ${date}, ${date})
+//         ON CONFLICT (id) DO NOTHING;
+//       `
+//     )
+//   );
+// }
+
 export async function GET() {
   try {
-    const result = await sql.begin(seedProductImages);
+    const result = await sql.begin(seedAddFeatureProducts);
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

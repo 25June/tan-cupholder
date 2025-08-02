@@ -1,5 +1,5 @@
 import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
-import { fetchProductById } from '@/app/admin/lib/data';
+import { fetchProductById } from '@/app/admin/lib/actions/products.actions';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import UpdateImageForm from '@/app/admin/ui/products/update-image-form';

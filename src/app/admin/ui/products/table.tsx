@@ -2,18 +2,19 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { FormattedProductsTable } from '@/app/admin/lib/definitions';
+import { ProductResponse } from '@/models/product';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
 export default function ProductsTable({
-  products
+  products,
+  productTypes
 }: {
-  products: FormattedProductsTable[];
+  products: ProductResponse[];
+  productTypes: Record<string, string>;
 }) {
   const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
-
   return (
     <div className="w-full">
       <div className="mt-6 flow-root">
@@ -32,8 +33,11 @@ export default function ProductsTable({
                           <div className="flex items-center gap-3">
                             <Image
                               src={
-                                product.image
-                                  ? `${getImageUrl(product.id, product.image)}`
+                                product.product_image.name
+                                  ? `${getImageUrl(
+                                      product.id,
+                                      product.product_image.name
+                                    )}`
                                   : '/cup.png'
                               }
                               className="rounded-full w-16 h-16 object-cover"
@@ -53,7 +57,9 @@ export default function ProductsTable({
                       </div>
                       <div className="flex w-1/2 flex-col">
                         <p className="text-xs">Type</p>
-                        <p className="font-medium">{product.type}</p>
+                        <p className="font-medium">
+                          {productTypes[product.type] || 'No type found'}
+                        </p>
                       </div>
                     </div>
                     <div className="pt-4 text-sm">
@@ -96,8 +102,11 @@ export default function ProductsTable({
                         <div className="flex items-center gap-3">
                           <Image
                             src={
-                              product.image
-                                ? `${getImageUrl(product.id, product.image)}`
+                              product.product_image.name
+                                ? `${getImageUrl(
+                                    product.id,
+                                    product.product_image.name
+                                  )}`
                                 : '/cup.png'
                             }
                             className="rounded-full w-16 h-16 object-cover"
@@ -113,7 +122,7 @@ export default function ProductsTable({
                         {product.price}
                       </td>
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {product.type}
+                        {productTypes[product.type] || 'No type found'}
                       </td>
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {product.sale}

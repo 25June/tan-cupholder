@@ -1,15 +1,25 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
 import { uploadMedia } from '@/shared/utils/uploadMedia';
 
 interface Props {
   image: File;
   presignedUrl: string;
+  setImageUploadCompleted: Dispatch<SetStateAction<Record<string, boolean>>>;
 }
-export default function FileUpload({ image, presignedUrl }: Props) {
+export default function FileUpload({
+  image,
+  presignedUrl,
+  setImageUploadCompleted
+}: Props) {
   const [progress, setProgress] = useState<number>(0);
 
   const onUpload = useCallback((presignedUrl: string, image: File) => {
-    console.log('onUpload', image);
     if (!image) {
       console.error('No file selected');
       return;
@@ -29,6 +39,12 @@ export default function FileUpload({ image, presignedUrl }: Props) {
       onUpload(presignedUrl, image);
     }
   }, [image, presignedUrl, onUpload]);
+
+  useEffect(() => {
+    if (progress === 100) {
+      setImageUploadCompleted((prev) => ({ ...prev, [image.name]: true }));
+    }
+  }, [progress]);
 
   return (
     <div
