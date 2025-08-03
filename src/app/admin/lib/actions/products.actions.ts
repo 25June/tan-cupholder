@@ -179,6 +179,9 @@ export async function fetchProducts(searchParams?: {
         ) as product_image
       FROM products p
       LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
+      WHERE p.name ILIKE ${
+        searchParams?.query ? `%${searchParams.query}%` : '%'
+      }
       ORDER BY p.name ASC
       LIMIT 10 
       OFFSET ${searchParams?.page ? Number(searchParams.page) * 10 - 10 : 0}

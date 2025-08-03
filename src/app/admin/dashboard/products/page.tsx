@@ -25,7 +25,7 @@ export default async function Page(props: {
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
 
-  const products = await fetchProducts();
+  const products = await fetchProducts({ query, page: currentPage.toString() });
   const totalProducts = await fetchTotalProducts();
   const productTypes = await getProductTypes();
   const formattedProducts = productTypes.reduce((acc, cur) => {

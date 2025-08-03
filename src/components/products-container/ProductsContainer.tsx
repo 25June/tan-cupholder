@@ -8,25 +8,8 @@ import SearchProducts from '@/components/search-products/SearchProducts';
 import { useProducts } from '@/hooks/useProduct';
 import Card from '@/components/card/Card';
 
-interface Props {
-  readonly searchParams?: {
-    readonly query?: string;
-    readonly page?: string;
-  };
-  readonly totalCount?: number;
-  readonly products?: any[];
-}
-
-export default function ProductsContainer({
-  searchParams,
-  totalCount,
-  products
-}: Props) {
-  const { onGetProducts, isEnd, productList } = useProducts(
-    Number(searchParams?.page) || 1,
-    totalCount,
-    products
-  );
+export default function ProductsContainer() {
+  const { onGetProducts, isEnd, productList, searchParams } = useProducts();
 
   return (
     <div>

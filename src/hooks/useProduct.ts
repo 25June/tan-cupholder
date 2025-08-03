@@ -1,37 +1,42 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Product } from '@/models/product';
+import { Product, ProductResponse } from '@/models/product';
 import { Image } from '@/models/image';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { fetchProductById } from '@/app/admin/lib/actions/products.actions';
+import { publicFetchProducts } from '@/app/lib/public-products.actions';
 
-export const useProducts = (
-  page: number,
-  totalCount?: number,
-  products?: any[]
-) => {
+export const useProducts = () => {
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [isEnd, setIsEnd] = useState<boolean>(false);
-  const [productList, setProductList] = useState<Product[]>(products || []);
+  const [productList, setProductList] = useState<ProductResponse[]>([]);
   const [pageIndex, setPageIndex] = useState<number>(1);
-  const param = useSearchParams();
+  const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
-  console.log(pageIndex, totalCount, productList);
 
   useEffect(() => {
-    if (pageIndex !== page) {
-      setProductList((prev) => prev.concat(products || []));
-      setPageIndex(page);
-    }
-  }, [page, pageIndex]);
+    const fetchData = async () => {
+      const { products, totalCount } = await publicFetchProducts({
+        query: searchParams.get('query') || undefined,
+        page: pageIndex.toString()
+      });
+      setProductList(products);
+      setTotalCount(totalCount);
+    };
+    fetchData();
+  }, [pageIndex, searchParams]);
 
   const handleSearch = (search: string, isNextPage: boolean) => {
-    const params = new URLSearchParams(param);
+    const params = new URLSearchParams(searchParams);
     if (search) {
-      params.set('search', search);
+      params.set('query', search);
+      params.set('page', '1');
+      setProductList([]);
     } else {
-      params.delete('search');
+      params.delete('query');
+      params.delete('page');
     }
     if (isNextPage) {
       params.set('page', (pageIndex + 1).toString());
@@ -45,7 +50,15 @@ export const useProducts = (
     }
   }, [totalCount, pageIndex]);
 
-  return { onGetProducts: handleSearch, isEnd, productList };
+  return {
+    onGetProducts: handleSearch,
+    isEnd,
+    productList,
+    searchParams: {
+      page: pageIndex.toString(),
+      query: searchParams.get('query')
+    }
+  };
 };
 
 export const useProduct = () => {
