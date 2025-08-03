@@ -27,7 +27,6 @@ export default function UpdateProductForm({
   const mainImage = images.find((image) => image.isMain);
   const handleFormSubmit = async (formData: FormData) => {
     formData.set('id', product.id);
-
     setIsLoading(true);
     return updateProduct(initialState, formData)
       .then((res: any) => {

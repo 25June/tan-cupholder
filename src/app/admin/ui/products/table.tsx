@@ -30,7 +30,7 @@ export default function ProductsTable({
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
                         <div className="mb-2 flex items-center">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 shrink-0">
                             <Image
                               src={
                                 product.product_image.name
@@ -109,7 +109,7 @@ export default function ProductsTable({
                                   )}`
                                 : '/cup.png'
                             }
-                            className="rounded-full w-16 h-16 object-cover"
+                            className="rounded-full w-16 h-16 object-cover shrink-0"
                             alt={`${product.name}'s profile picture`}
                             width={128}
                             height={128}

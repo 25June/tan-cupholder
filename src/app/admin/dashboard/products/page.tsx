@@ -1,4 +1,7 @@
-import { fetchProducts } from '@/app/admin/lib/actions/products.actions';
+import {
+  fetchProducts,
+  fetchTotalProducts
+} from '@/app/admin/lib/actions/products.actions';
 import { Metadata } from 'next';
 import ProductsTable from '../../ui/products/table';
 import { lusitana } from '@/app/admin/ui/fonts';
@@ -23,6 +26,7 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
 
   const products = await fetchProducts();
+  const totalProducts = await fetchTotalProducts();
   const productTypes = await getProductTypes();
   const formattedProducts = productTypes.reduce((acc, cur) => {
     acc[cur.id] = cur.name;
@@ -44,7 +48,7 @@ export default async function Page(props: {
         <ProductsTable products={products} productTypes={formattedProducts} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={1} />
+        <Pagination totalPages={Math.ceil(totalProducts / 10)} />
       </div>
     </main>
   );
