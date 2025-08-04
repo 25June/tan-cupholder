@@ -20,15 +20,15 @@ export default function Footer() {
             offscreen: {
               transition: {
                 staggerChildren: 1,
-                delayChildren: 1,
-              },
+                delayChildren: 1
+              }
             },
             visible: {
               transition: {
                 staggerChildren: 0.2,
-                staggerDirection: 1,
-              },
-            },
+                staggerDirection: 1
+              }
+            }
           }}
         >
           <motion.img
@@ -82,15 +82,15 @@ export default function Footer() {
                 offscreen: {
                   transition: {
                     staggerChildren: 1,
-                    delayChildren: 1,
-                  },
+                    delayChildren: 1
+                  }
                 },
                 visible: {
                   transition: {
                     staggerChildren: 0.5,
-                    staggerDirection: 1,
-                  },
-                },
+                    staggerDirection: 1
+                  }
+                }
               }}
             >
               {socialMedias.map((socialMedia, index) => (
@@ -105,16 +105,16 @@ export default function Footer() {
                   variants={{
                     offscreen: {
                       opacity: 0,
-                      scale: 0,
+                      scale: 0
                     },
                     visible: {
                       opacity: 1,
                       scale: 1,
                       transition: {
                         duration: 0.5,
-                        ease: [0, 0.71, 0.2, 1.01],
-                      },
-                    },
+                        ease: [0, 0.71, 0.2, 1.01]
+                      }
+                    }
                   }}
                   className="bg-white rounded-full w-[48px] h-[48px] flex items-center justify-center"
                 >
@@ -130,7 +130,7 @@ export default function Footer() {
           >
             <p>
               {t('copyright', {
-                year: new Date().getFullYear(),
+                year: new Date().getFullYear()
               })}
             </p>
             <span>{t('allRightsReserved')}</span>
@@ -144,15 +144,15 @@ export default function Footer() {
             offscreen: {
               transition: {
                 staggerChildren: 1,
-                delayChildren: 1,
-              },
+                delayChildren: 1
+              }
             },
             visible: {
               transition: {
                 staggerChildren: 0.3,
-                staggerDirection: 1,
-              },
-            },
+                staggerDirection: 1
+              }
+            }
           }}
           className="flex flex-col sm:gap-3 gap-10 md:pt-0 sm:pt-[32px] pt-10"
         >
@@ -171,15 +171,15 @@ export default function Footer() {
               offscreen: {
                 transition: {
                   staggerChildren: 1,
-                  delayChildren: 1,
-                },
+                  delayChildren: 1
+                }
               },
               visible: {
                 transition: {
                   staggerChildren: 0.2,
-                  staggerDirection: 1,
-                },
-              },
+                  staggerDirection: 1
+                }
+              }
             }}
             className="grid md:grid-cols-3 sm:grid-cols-1 grid-cols-2 gap-4 md:self-start sm:self-end"
           >
@@ -212,16 +212,16 @@ export default function Footer() {
                     variants={{
                       offscreen: {
                         opacity: 0,
-                        scale: 0,
+                        scale: 0
                       },
                       visible: {
                         opacity: 1,
                         scale: 1,
                         transition: {
                           duration: 0.5,
-                          ease: [0, 0.71, 0.2, 1.01],
-                        },
-                      },
+                          ease: [0, 0.71, 0.2, 1.01]
+                        }
+                      }
                     }}
                     className="text-[16px] w-fit leading-[24px] opacity-70 hover:opacity-100"
                     key={item.name}
@@ -238,7 +238,7 @@ export default function Footer() {
             >
               <p>
                 {t('copyright', {
-                  year: new Date().getFullYear(),
+                  year: new Date().getFullYear()
                 })}
               </p>
               <span>{t('allRightsReserved')}</span>
@@ -251,7 +251,7 @@ export default function Footer() {
           >
             <p>
               {t('copyright', {
-                year: new Date().getFullYear(),
+                year: new Date().getFullYear()
               })}
             </p>
             <span>{t('allRightsReserved')}</span>

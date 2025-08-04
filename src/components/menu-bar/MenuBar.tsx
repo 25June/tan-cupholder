@@ -35,7 +35,7 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
               zIndex: 1,
               borderBottomRightRadius: '5px',
               borderTopRightRadius: '5px',
-              backgroundColor: '#f57722',
+              backgroundColor: '#f57722'
             }}
           />
           <div className="absolute hidden md:block right-4 top-3">

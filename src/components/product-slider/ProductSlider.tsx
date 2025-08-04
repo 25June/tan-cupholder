@@ -3,9 +3,10 @@ import * as motion from 'motion/react-client';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 import SliderContainer from './SliderContainer';
+import { ProductResponse } from '@/models/product';
 
 interface Props {
-  readonly products: any[];
+  readonly products: ProductResponse[];
 }
 
 export default function ProductSlider({ products }: Props) {

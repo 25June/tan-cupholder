@@ -13,32 +13,32 @@ export const Faq = () => {
       id: '1',
       title: t('question1.title'),
       answer: t('question1.answer'),
-      opened: false,
+      opened: false
     },
     {
       id: '2',
       title: t('question2.title'),
       answer: t('question2.answer'),
-      opened: false,
+      opened: false
     },
     {
       id: '3',
       title: t('question3.title'),
       answer: t('question3.answer'),
-      opened: false,
+      opened: false
     },
     {
       id: '4',
       title: t('question4.title'),
       answer: t('question4.answer'),
-      opened: false,
+      opened: false
     },
     {
       id: '5',
       title: t('question5.title'),
       answer: t('question5.answer'),
-      opened: false,
-    },
+      opened: false
+    }
   ];
   const [data, setData] = useState<any[]>(mockData);
   const onClick = (id: string) => {
@@ -74,15 +74,15 @@ export const Faq = () => {
               offscreen: {
                 transition: {
                   staggerChildren: 0.05,
-                  delayChildren: 0.1,
-                },
+                  delayChildren: 0.1
+                }
               },
               visible: {
                 transition: {
                   staggerChildren: 0.1,
-                  staggerDirection: 0.15,
-                },
-              },
+                  staggerDirection: 0.15
+                }
+              }
             }}
             className="mt-8 space-y-4 transition-all duration-300"
           >
@@ -93,16 +93,16 @@ export const Faq = () => {
                   variants={{
                     offscreen: {
                       opacity: 0.75,
-                      scale: 0.75,
+                      scale: 0.75
                     },
                     visible: {
                       opacity: 1,
                       scale: 1,
                       transition: {
                         duration: 0.25,
-                        ease: [0, 0.71, 0.2, 1.01],
-                      },
-                    },
+                        ease: [0, 0.71, 0.2, 1.01]
+                      }
+                    }
                   }}
                   key={item.id}
                   className="relative transition-all duration-300 cursor-pointer"

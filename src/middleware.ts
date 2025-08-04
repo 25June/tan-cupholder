@@ -1,11 +1,18 @@
-import createMiddleware from 'next-intl/middleware';
-import { routing } from './i18n/routing';
+import NextAuth from 'next-auth';
+import { authConfig } from './auth.config';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default createMiddleware(routing);
+const authMiddleware = NextAuth(authConfig).auth;
+export default async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.includes('admin/')) {
+    return (authMiddleware as any)(request);
+  }
+  return NextResponse.next();
+}
 
 export const config = {
   // Match all pathnames except for
   // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
   // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
+  matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)'
 };

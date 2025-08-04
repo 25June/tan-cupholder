@@ -22,31 +22,36 @@ const StaticMenuBar = () => {
               priority
             />
           </Link>
-          <Link href={'/'} className="blocl md:hidden">
-            <p className="font-black font-extrabold tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-              {t('appName')}
-            </p>
+          <Link
+            href={'/'}
+            className="block md:hidden my-auto font-black font-extrabold tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
+          >
+            {t('appName')}
           </Link>
         </div>
-        <Link href={'/'} className="hidden md:block">
-          <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            {t('home')}
-          </p>
+        <Link
+          href={'/'}
+          className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
+        >
+          {t('home')}
         </Link>
-        <Link href={'/material'} className="hidden md:block">
-          <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            {t('materials')}
-          </p>
+        <Link
+          href={'/material'}
+          className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
+        >
+          {t('materials')}
         </Link>
-        <Link href={'/products'} className="hidden md:block">
-          <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            {t('collections')}
-          </p>
+        <Link
+          href={'/products'}
+          className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
+        >
+          {t('collections')}
         </Link>
-        <Link href={'/question'} className="hidden md:block">
-          <p className="font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer">
-            {t('faq')}
-          </p>
+        <Link
+          href={'/question'}
+          className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
+        >
+          {t('faq')}
         </Link>
         <DropdownMenu />
       </div>
