@@ -1,7 +1,7 @@
-import { fetchProducts } from '@/app/admin/lib/actions/products.actions';
 import Homepage from '@/components/home/Homepage';
+import { publicFetchProducts } from './lib/public-products.actions';
 
 export default async function Home() {
-  const products = await fetchProducts();
+  const { products } = await publicFetchProducts({});
   return <Homepage products={products} />;
 }

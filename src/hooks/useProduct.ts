@@ -21,6 +21,7 @@ export const useProducts = () => {
       query: search,
       page: page.toString()
     });
+    console.log('products', products);
     setProductList((prev) => [...prev, ...products]);
     setTotalCount(totalCount);
     setIsLoading(false);
@@ -34,7 +35,6 @@ export const useProducts = () => {
   };
 
   const handleGetNextPage = () => {
-    console.log('handleGetNextPage', page);
     if (isLoading) return;
     setPage(page + 1);
     fetchData(query, page + 1);

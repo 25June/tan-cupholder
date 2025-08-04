@@ -6,7 +6,7 @@ import DropdownMenu from '@/components/menu-bar/DropdownMenu';
 const StaticMenuBar = () => {
   const t = useTranslations('Menu');
   return (
-    <div className="max-w-screen w-full mx-auto relative border-b-1 border-gray-200">
+    <div className="max-w-screen w-full mx-auto relative border-b-1 border-gray-200 z-10">
       <div className="max-w-8xl bg-white mx-auto flex justify-between md:justify-evenly p-2 md:p-4">
         <div className="relative grow md:grow-0 flex gap-2 justify-start">
           <Link

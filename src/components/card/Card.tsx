@@ -55,7 +55,7 @@ export default function Card({ item }: CardProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-slate-400 line-through decoration-slate-400">
-            {numberWithCommas(item.price)} vnd
+            {numberWithCommas(item.price)} VND
           </span>
           <ArrowLongRightIcon className="size-4" />
           <span className="text-logo-orange font-extrabold">

@@ -10,9 +10,10 @@ import Footer from '@/components/footer/Footer';
 import { View } from '@/constants/common';
 import ProductSlider from '@/components/product-slider/ProductSlider';
 import Preload from '../preload/Preload';
+import { ProductResponse } from '@/models/product';
 
 interface Props {
-  readonly products: any[];
+  readonly products: ProductResponse[];
 }
 
 export default function Homepage({ products }: Props) {
