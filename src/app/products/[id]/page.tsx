@@ -13,6 +13,7 @@ import Footer from '@/components/footer/Footer';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { Image as ImageType } from '@/models/image';
 import DynamicShape from '@/components/icons/shapes/DynamicShape';
+import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -37,6 +38,19 @@ export default function ProductPage() {
       <StaticMenuBar />
 
       <div className="relative h-full flex flex-col justify-between mt-8 md:mt-24 p-4">
+        <div className="w-full max-w-7xl mx-auto">
+          <Breadcrumbs
+            breadcrumbs={[
+              { label: 'Home', href: '/' },
+              { label: 'Products', href: '/products' },
+              {
+                label: product?.name || '',
+                href: `/products/${id}`,
+                active: true
+              }
+            ]}
+          />
+        </div>
         {isLoading && <ProductDetailSkeleton />}
         {product && (
           <div className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row">
@@ -107,9 +121,6 @@ export default function ProductPage() {
       </div>
       <div className="mt-8 md:mt-24">
         <div className="max-w-4xl mx-auto space-y-12 px-6">
-          {product && (
-            <DynamicShape imageUrl={getImageUrl(product.id, images[0].name)} />
-          )}
           <p className="text-lg text-gray-700 leading-relaxed first-letter:text-4xl first-letter:font-serif first-letter:mr-2 first-letter:float-left first-letter:text-primary">
             Our premium cup holder is designed with both style and functionality
             in mind. Crafted from high-quality materials, this elegant solution
@@ -117,6 +128,27 @@ export default function ProductPage() {
             construction ensures stability for cups and mugs of various sizes,
             while the sleek design complements any interior décor.
           </p>
+          <div className="flex flex-row gap-4 justify-center w-full h-full">
+            {product && (
+              <>
+                <div className="max-w-24 m-0 w-full h-full">
+                  <DynamicShape
+                    imageUrl={getImageUrl(product.id, images[0].name)}
+                  />
+                </div>
+                <div className="max-w-24 m-0 w-full h-full">
+                  <DynamicShape
+                    imageUrl={getImageUrl(product.id, images[1].name)}
+                  />
+                </div>
+                <div className="max-w-24 m-0 w-full h-full">
+                  <DynamicShape
+                    imageUrl={getImageUrl(product.id, images[2].name)}
+                  />
+                </div>
+              </>
+            )}
+          </div>
 
           <p className="text-lg text-gray-700 leading-relaxed border-l-4 border-primary pl-6 italic">
             The innovative design features a non-slip base and protective

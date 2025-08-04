@@ -49,7 +49,7 @@ export default function Card({ item }: CardProps) {
         />
       </div>
       <div className="relative text-left p-4">
-        <div className="flex justify-between items-center">
+        <div className="mb-2">
           <h4 className="text-lg font-semibold">{item.name}</h4>
           <p className="text-sm font-light text-slate-500">{item.type}</p>
         </div>

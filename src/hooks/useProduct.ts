@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { Product, ProductResponse } from '@/models/product';
 import { Image } from '@/models/image';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { fetchProductById } from '@/app/admin/lib/actions/products.actions';
 import { publicFetchProducts } from '@/app/lib/public-products.actions';
 
@@ -11,53 +10,50 @@ export const useProducts = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [productList, setProductList] = useState<ProductResponse[]>([]);
-  const [pageIndex, setPageIndex] = useState<number>(1);
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const pathname = usePathname();
+  const [page, setPage] = useState<number>(0);
+  const [query, setQuery] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { products, totalCount } = await publicFetchProducts({
-        query: searchParams.get('query') || undefined,
-        page: pageIndex.toString()
-      });
-      setProductList(products);
-      setTotalCount(totalCount);
-    };
-    fetchData();
-  }, [pageIndex, searchParams]);
+  const fetchData = async (search: string, page: number) => {
+    if (isLoading) return;
+    setIsLoading(true);
+    const { products, totalCount } = await publicFetchProducts({
+      query: search,
+      page: page.toString()
+    });
+    setProductList((prev) => [...prev, ...products]);
+    setTotalCount(totalCount);
+    setIsLoading(false);
+  };
 
-  const handleSearch = (search: string, isNextPage: boolean) => {
-    const params = new URLSearchParams(searchParams);
-    if (search) {
-      params.set('query', search);
-      params.set('page', '1');
-      setProductList([]);
-    } else {
-      params.delete('query');
-      params.delete('page');
-    }
-    if (isNextPage) {
-      params.set('page', (pageIndex + 1).toString());
-    }
-    replace(`${pathname}?${params.toString()}`, { scroll: false });
+  const handleSearch = (search: string) => {
+    setQuery(search);
+    setPage(1);
+    setProductList([]);
+    fetchData(search, 1);
+  };
+
+  const handleGetNextPage = () => {
+    console.log('handleGetNextPage', page);
+    if (isLoading) return;
+    setPage(page + 1);
+    fetchData(query, page + 1);
   };
 
   useEffect(() => {
-    if (totalCount && totalCount / 10 <= pageIndex) {
+    if (totalCount && totalCount / 10 <= page) {
       setIsEnd(true);
+    } else {
+      setIsEnd(false);
     }
-  }, [totalCount, pageIndex]);
+  }, [totalCount, page]);
 
   return {
-    onGetProducts: handleSearch,
+    onSearch: handleSearch,
+    onGetNextPage: handleGetNextPage,
     isEnd,
     productList,
-    searchParams: {
-      page: pageIndex.toString(),
-      query: searchParams.get('query')
-    }
+    isLoading
   };
 };
 

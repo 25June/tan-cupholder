@@ -1,11 +1,11 @@
-import { uuid } from 'zod/v4';
 import { SHAPE_PATH } from '@/styles/shapePath';
 
 export default function DynamicShape({ imageUrl }: { imageUrl: string }) {
-  const abc = uuid();
-  const id = Date.now();
+  const randomIndex = Math.floor(Math.random() * SHAPE_PATH.length);
+
+  const id = Date.now() + randomIndex;
   // Define the path data for the blob shape
-  const blobPathData = SHAPE_PATH[0];
+  const blobPathData = SHAPE_PATH[randomIndex];
   // Define the desired scale factor (e.g., 0.8 for 80%)
   const scaleFactor = 1;
   // Calculate new dimensions and position to keep the image centered

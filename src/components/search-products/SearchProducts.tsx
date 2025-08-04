@@ -3,11 +3,11 @@
 import { debounce } from '@/shared/utils/debounce';
 
 interface Props {
-  readonly onGetProducts: (search: string, isNextPage: boolean) => void;
+  readonly onSearch: (search: string) => void;
 }
-export default function SearchProducts({ onGetProducts }: Props) {
+export default function SearchProducts({ onSearch }: Props) {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onGetProducts(e.target.value || '', false);
+    onSearch(e.target.value || '');
   };
   return (
     <label className="input input-md input-primary w-full">

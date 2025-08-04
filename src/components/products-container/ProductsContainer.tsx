@@ -9,7 +9,8 @@ import { useProducts } from '@/hooks/useProduct';
 import Card from '@/components/card/Card';
 
 export default function ProductsContainer() {
-  const { onGetProducts, isEnd, productList, searchParams } = useProducts();
+  const { onSearch, isEnd, productList, isLoading, onGetNextPage } =
+    useProducts();
 
   return (
     <div>
@@ -32,7 +33,7 @@ export default function ProductsContainer() {
             </h3>
           </div>
           <div className="mb-4 w-full md:w-64">
-            <SearchProducts onGetProducts={onGetProducts} />
+            <SearchProducts onSearch={onSearch} />
           </div>
         </div>
 
@@ -42,8 +43,8 @@ export default function ProductsContainer() {
           })}
         </div>
         <ObserverLoading
-          onGetProducts={onGetProducts}
-          searchParams={searchParams}
+          onGetNextPage={onGetNextPage}
+          isLoading={isLoading}
           isEnd={isEnd}
         />
       </div>
