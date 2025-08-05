@@ -1,10 +1,9 @@
 'use client';
 
 import {
-  UserGroupIcon,
   HomeIcon,
-  DocumentDuplicateIcon,
-  PuzzlePieceIcon
+  PuzzlePieceIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -19,15 +18,15 @@ const links = [
   //   href: '/admin/dashboard/invoices',
   //   icon: DocumentDuplicateIcon
   // },
-  // {
-  //   name: 'Customers',
-  //   href: '/admin/dashboard/customers',
-  //   icon: UserGroupIcon
-  // },
+  {
+    name: 'Product Types',
+    href: '/admin/dashboard/product-types',
+    icon: PuzzlePieceIcon
+  },
   {
     name: 'Products',
     href: '/admin/dashboard/products',
-    icon: PuzzlePieceIcon
+    icon: ShoppingBagIcon
   }
 ];
 

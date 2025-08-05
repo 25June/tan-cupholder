@@ -1,8 +1,8 @@
 export type ProductType = {
   id: string;
   name: string;
-  shortName: string;
+  short_name: string;
   color?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
 };
