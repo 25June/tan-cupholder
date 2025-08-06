@@ -9,7 +9,7 @@ import Search from '../../ui/search';
 import { CreateProduct } from '../../ui/products/buttons';
 import { Suspense } from 'react';
 import Pagination from '../../ui/invoices/pagination';
-import { getProductTypes } from '@/app/admin/lib/actions/productTypes.actions';
+import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
 
 export const metadata: Metadata = {
   title: 'Products'
@@ -27,7 +27,10 @@ export default async function Page(props: {
 
   const products = await fetchProducts({ query, page: currentPage.toString() });
   const totalProducts = await fetchTotalProducts();
-  const productTypes = await getProductTypes();
+  const productTypes = await getProductTypes({
+    query: '',
+    page: '1'
+  });
   const formattedProducts = productTypes.reduce((acc, cur) => {
     acc[cur.id] = cur.name;
     return acc;

@@ -1,8 +1,12 @@
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
-export default function Quantity() {
-  const [quantity, setQuantity] = useState<number>(1);
+interface Props {
+  quantity: number;
+  setQuantity: (quantity: number) => void;
+}
+
+export default function Quantity({ quantity, setQuantity }: Props) {
   return (
     <div>
       <p className="text-md font-bold mb-2">Quantity</p>

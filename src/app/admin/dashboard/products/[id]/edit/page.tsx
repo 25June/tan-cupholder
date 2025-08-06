@@ -3,7 +3,7 @@ import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
 import { fetchProductById } from '@/app/admin/lib/actions/products.actions';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { getProductTypes } from '@/app/admin/lib/actions/productTypes.actions';
+import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
 
 export const metadata: Metadata = {
   title: 'Edit Product'
@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
-  const productTypes = await getProductTypes();
+  const productTypes = await getProductTypes({
+    query: '',
+    page: '0'
+  });
   const { product, images } = await fetchProductById(id);
 
   if (!product) {

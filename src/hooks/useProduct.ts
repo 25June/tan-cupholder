@@ -5,6 +5,7 @@ import { Product, ProductResponse } from '@/models/product';
 import { Image } from '@/models/image';
 import { fetchProductById } from '@/app/admin/lib/actions/products.actions';
 import { publicFetchProducts } from '@/app/lib/public-products.actions';
+import { ProductType } from '@/models/productType';
 
 export const useProducts = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -60,6 +61,7 @@ export const useProducts = () => {
 export const useProduct = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [images, setImages] = useState<Image[]>([]);
+  const [productType, setProductType] = useState<ProductType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGetProduct = (id: string) => {
@@ -67,14 +69,29 @@ export const useProduct = () => {
     const response = fetchProductById(id);
 
     return response
-      .then((data: { product: Product; images: Image[] } | null) => {
-        if (data) {
-          setProduct(data.product);
-          setImages(data.images);
+      .then(
+        (
+          data: {
+            product: Product;
+            images: Image[];
+            productType: ProductType;
+          } | null
+        ) => {
+          if (data) {
+            setProduct(data.product);
+            setImages(data.images);
+            setProductType(data.productType);
+          }
         }
-      })
+      )
       .finally(() => setIsLoading(false));
   };
 
-  return { product, images, isLoading, onGetProduct: handleGetProduct };
+  return {
+    product,
+    images,
+    isLoading,
+    onGetProduct: handleGetProduct,
+    productType
+  };
 };

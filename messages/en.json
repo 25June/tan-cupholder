@@ -131,5 +131,30 @@
     "title": "Privacy Policy",
     "paragraph1": "At TaN, we take your privacy seriously. This Privacy Policy outlines how we collect, use, and protect your personal information. We are committed to ensuring that your privacy is protected and that your information is used responsibly.",
     "paragraph2": "By using our website, you consent to the collection and use of your information in accordance with this policy."
+  },
+  "PaymentPage": {
+    "checkoutTitle": "Checkout",
+    "checkoutSubtitle": "Complete your purchase",
+    "productDetails": "Product Details",
+    "quantity": "Quantity",
+    "price": "Price",
+    "priceSummary": "Price Summary",
+    "unitPrice": "Unit Price:",
+    "total": "Total:",
+    "customerInfo": "Customer Information",
+    "fullName": "Full Name *",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email Address *",
+    "emailPlaceholder": "Enter your email address",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "address": "Address",
+    "addressPlaceholder": "Enter your address",
+    "createOrder": "Create Order - {price}",
+    "creatingOrder": "Creating Order...",
+    "productNotFound": "Product not found",
+    "productNotFoundDesc": "The product you're looking for doesn't exist.",
+    "orderSuccess": "Order created successfully! Order ID: {orderId}",
+    "orderFailed": "Failed to create order. Please try again."
   }
 }

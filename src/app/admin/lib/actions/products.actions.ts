@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { batchRemoveImages } from './images.actions';
 import { Product, ProductResponse } from '@/models/product';
 import { Image } from '@/models/image';
+import { ProductType } from '@/models/productType';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -150,7 +151,15 @@ export async function fetchProductById(id: string) {
       WHERE product_id = ${id}
     `;
 
-    return { product: product[0], images: images || [] };
+    const productType = await sql<ProductType[]>`
+      SELECT * FROM product_types WHERE id = ${product[0].type}
+    `;
+
+    return {
+      product: product[0],
+      images: images || [],
+      productType: productType[0]
+    };
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch product.');

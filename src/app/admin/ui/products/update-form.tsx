@@ -189,10 +189,12 @@ export default function UpdateProductForm({
                 <div
                   className={`w-full h-full bg-gray-200 rounded-md max-h-48 p-2`}
                 >
-                  <img
+                  <Image
                     src={getImageUrl(product.id, mainImage.name)}
                     alt="Product Image"
                     className="object-contain w-full h-full"
+                    width={200}
+                    height={200}
                   />
                 </div>
               ) : (

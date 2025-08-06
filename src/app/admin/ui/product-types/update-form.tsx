@@ -20,6 +20,7 @@ export default function UpdateProductTypeForm({
 
   const handleFormSubmit = async (formData: FormData) => {
     formData.set('id', productType.id);
+    formData.set('description', formData.get('description') as string);
     setIsLoading(true);
     return updateProductType(initialState, formData)
       .then((res: any) => {
@@ -76,6 +77,25 @@ export default function UpdateProductTypeForm({
             <div id="shortName-error" aria-live="polite" aria-atomic="true">
               {state.errors?.shortName &&
                 state.errors.shortName.map((error: string) => (
+                  <p className="text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </fieldset>
+        </div>
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          <fieldset className="fieldset w-full">
+            <legend className="fieldset-legend">Description</legend>
+            <textarea
+              name="description"
+              className="textarea h-24 w-full"
+              placeholder="Product Type Description"
+              defaultValue={productType.description || ''}
+            />
+            <div id="description-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.description &&
+                state.errors.description.map((error: string) => (
                   <p className="text-sm text-red-500" key={error}>
                     {error}
                   </p>

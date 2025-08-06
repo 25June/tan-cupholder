@@ -3,7 +3,8 @@
 import {
   HomeIcon,
   PuzzlePieceIcon,
-  ShoppingBagIcon
+  ShoppingBagIcon,
+  UsersIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -27,6 +28,11 @@ const links = [
     name: 'Products',
     href: '/admin/dashboard/products',
     icon: ShoppingBagIcon
+  },
+  {
+    name: 'Customers',
+    href: '/admin/dashboard/customers',
+    icon: UsersIcon
   }
 ];
 

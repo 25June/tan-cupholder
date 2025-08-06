@@ -1,8 +1,17 @@
 import { SHAPE_PATH } from '@/styles/shapePath';
+import { getImageProps } from 'next/image';
 
 export default function DynamicShape({ imageUrl }: { imageUrl: string }) {
   const randomIndex = Math.floor(Math.random() * SHAPE_PATH.length);
-
+  const {
+    props: { src }
+  } = getImageProps({
+    alt: imageUrl,
+    width: 100,
+    height: 100,
+    quality: 100,
+    src: imageUrl
+  });
   const id = Date.now() + randomIndex;
   // Define the path data for the blob shape
   const blobPathData = SHAPE_PATH[randomIndex];
@@ -50,9 +59,9 @@ export default function DynamicShape({ imageUrl }: { imageUrl: string }) {
         - preserveAspectRatio: Ensures the image covers the clipped area without distortion.
         - The image is only rendered if imageUrl is available.
       */}
-      {imageUrl && (
+      {src && (
         <image
-          href={imageUrl}
+          href={`${src}`}
           x={newX}
           y={newY} // Updated x and y to center the scaled image
           width={newWidth}

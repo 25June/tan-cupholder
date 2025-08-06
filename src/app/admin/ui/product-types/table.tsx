@@ -41,6 +41,12 @@ export default function ProductTypesTable({
                         <p className="text-xs">Short Name</p>
                         <p className="font-medium">{productType.short_name}</p>
                       </div>
+                      <div className="flex w-1/2 flex-col">
+                        <p className="text-xs">Description</p>
+                        <p className="font-medium truncate">
+                          {productType.description || 'No description'}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -53,6 +59,9 @@ export default function ProductTypesTable({
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
                       Short Name
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                      Description
                     </th>
                     <th scope="col" className="relative py-3 pl-6 pr-3">
                       <span className="sr-only">Edit</span>
@@ -71,6 +80,11 @@ export default function ProductTypesTable({
 
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {productType.short_name}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-5 text-sm max-w-xs">
+                        <div className="truncate">
+                          {productType.description || 'No description'}
+                        </div>
                       </td>
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
