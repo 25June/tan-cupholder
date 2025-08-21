@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { createOrder, OrderState } from '@/app/lib/create-order.actions';
+import { createOrder, OrderState } from '@/app/lib/public-order.actions';
 import { getProductById } from '@/app/lib/product.actions';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { formatPrice } from '@/shared/utils/formatPrice';
@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Spinner from '@/components/spinner/Spinner';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
+import PageLoader from '@/components/page-loader/PageLoader';
 
 const initialState: OrderState = { message: null, errors: {} };
 
@@ -59,7 +60,7 @@ export default function PaymentPage() {
       const result = await createOrder(initialState, formData);
       if (result.orderId) {
         // Redirect to success page or show success message
-        alert(`Order created successfully! Order ID: ${result.orderId}`);
+        router.push(`/order-status/${result.orderId}`);
         // You can redirect to a success page here
         // window.location.href = `/order-success/${result.orderId}`;
       } else if (result.message) {
@@ -79,12 +80,7 @@ export default function PaymentPage() {
   };
 
   if (isLoading) {
-    // Skeleton
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Spinner />
-      </div>
-    );
+    return <PageLoader />;
   }
 
   if (!product) {

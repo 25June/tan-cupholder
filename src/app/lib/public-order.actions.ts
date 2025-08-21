@@ -130,3 +130,38 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
     return { message: 'Database Error: Failed to Create Order.' };
   }
 }
+
+export async function getOrderById(orderId: string) {
+  // -- We need GROUP BY here because:
+  // -- 1. We're using json_agg() which is an aggregate function to combine multiple order_products rows into a JSON array
+  // -- 2. Without GROUP BY, the aggregate function would try to combine ALL rows into a single result
+  // -- 3. GROUP BY orders.id ensures we get one row per order, with all its order_products aggregated into an array
+
+  const orders = await sql`
+    SELECT orders.*, json_agg(order_products) as order_products 
+    FROM orders
+    LEFT JOIN order_products ON orders.id = order_products.order_id
+    WHERE orders.id = ${orderId}
+    GROUP BY orders.id
+  `;
+  const order = orders[0];
+  if (!order) {
+    return { message: 'Order not found' };
+  }
+  const productIds = order.order_products.map(
+    (orderProduct: any) => orderProduct.product_id
+  );
+  const products = await sql`
+    SELECT products.*, pt.name as type_name, json_build_object(
+      'id', images.id,
+      'name', images.name
+    ) as image
+    FROM products
+    LEFT JOIN product_types pt ON products.type = pt.id
+    LEFT JOIN images ON products.id = images.product_id AND images.is_main = TRUE
+    WHERE products.id IN (${productIds})
+    ORDER BY products.priority DESC
+  `;
+
+  return { order, products };
+}

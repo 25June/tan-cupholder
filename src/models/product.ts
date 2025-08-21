@@ -14,6 +14,15 @@ export interface Product {
   priority?: number;
 }
 
+export interface OrderProductDetails extends Product {
+  type_name: string;
+  image: {
+    id: string;
+    name: string;
+  };
+  quantity: number;
+}
+
 export interface GetProductsResponse {
   data: ProductResponse[];
   total: number;
