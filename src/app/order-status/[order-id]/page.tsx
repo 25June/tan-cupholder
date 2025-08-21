@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useGetOrderProgress } from '@/hooks/useGetOrderProgress';
 import PageLoader from '@/components/page-loader/PageLoader';
@@ -16,10 +16,14 @@ import { formatPrice } from '@/shared/utils/formatPrice';
 import { OrderProductDetails } from '@/models/product';
 import { OrderProduct } from '@/models/order';
 import { useGetOtherProducts } from '@/hooks/useGetOrderProducts';
+import Spinner from '@/components/spinner/Spinner';
+import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
+import Link from 'next/link';
 
 export default function OrderStatusPage() {
   // const t = useTranslations('OrderStatusPage');
   const params = useParams();
+  const router = useRouter();
   const orderId = params['order-id'] as string;
   const {
     order,
@@ -53,12 +57,13 @@ export default function OrderStatusPage() {
   console.log(order?.order_products);
   return (
     <div className="w-full h-full relative">
+      <StaticMenuBar />
       <div>
         <div
           className={`w-screen absolute h-48 md:h-96 bg-center bg-cover bg-no-repeat bg-[url('/IMG_7197.jpg')] brightness-50`}
         ></div>
       </div>
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 relative z-1 pt-20 pb-20 px-4">
+      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 relative z-1 pt-16 pb-16 px-4">
         <div className="col-span-1 md:col-span-2 border border-gray-200 rounded-lg p-4 bg-white">
           <h1 className="text-2xl font-bold">Thank You For Your Order!</h1>
           <div className="mt-4 flex flex-wrap gap-2 justify-between">
@@ -122,7 +127,7 @@ export default function OrderStatusPage() {
                       className="flex-shrink-0 relative border border-gray-300 rounded-lg overflow-hidden"
                       key={product.id}
                     >
-                      <div className="w-60">
+                      <div className="h-full max-h-64">
                         <Image
                           src={
                             productDetails?.image
@@ -133,9 +138,9 @@ export default function OrderStatusPage() {
                               : '/cup.png'
                           }
                           alt={productDetails.name}
-                          width={500}
+                          width={250}
                           height={500}
-                          className="object-cover h-full"
+                          className="object-cover h-64 w-48"
                         />
                       </div>
                       <div className="flex-1 min-w-0 absolute bottom-0 left-0 h-16 w-full p-2 bg-gradient-to-b from-transparent to-white to-40% flex justify-between items-end">
@@ -163,7 +168,8 @@ export default function OrderStatusPage() {
         <div className="col-span-1 border border-gray-200 rounded-lg p-4 bg-white">
           <div className="space-y-6">
             <h2 className="text-lg font-bold">Other Products</h2>
-            <div className="flex flex-col gap-4 max-h-[550px] overflow-y-auto light-mask">
+            {otherProductsLoading && <Spinner />}
+            <div className="flex flex-col gap-4 max-h-[250px] md:max-h-[550px] overflow-y-auto light-mask py-2">
               {otherProducts.map((product) => (
                 <div
                   key={product.id}
@@ -187,13 +193,24 @@ export default function OrderStatusPage() {
                       <p className="text-gray-500 text-sm">
                         {formatPrice(product.price)}
                       </p>
-                      <button className="btn btn-primary btn-soft btn-xs">
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="btn btn-primary btn-soft btn-xs"
+                      >
                         View
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="flex justify-center mt-4">
+              <Link
+                href="/products"
+                className="btn btn-primary btn-wide btn-soft btn-sm"
+              >
+                View All
+              </Link>
             </div>
           </div>
         </div>
