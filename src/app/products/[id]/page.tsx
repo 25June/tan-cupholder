@@ -2,7 +2,7 @@
 
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import ProductDetailSkeleton from '@/components/skeleton/ProductDetail.skeleton';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useProduct } from '@/hooks/useProduct';
 import { useParams, useRouter } from 'next/navigation';
@@ -38,6 +38,12 @@ export default function ProductPage() {
   useEffect(() => {
     setSelectedImage(mainImage || null);
   }, [mainImage]);
+
+  const randomArr = useMemo(() => {
+    return !isLoading && product
+      ? getRandomImageArr(3, images, product.id)
+      : [];
+  }, [isLoading, product, images]);
 
   return (
     <div className="min-h-screen">
@@ -142,24 +148,15 @@ export default function ProductPage() {
             while the sleek design complements any interior décor.`}
           </p>
           <div className="flex flex-row gap-4 justify-center w-full h-full">
-            {product && (
-              <>
-                {getRandomImageArr(3, images.length).map((item) => (
-                  <div
-                    key={item.imageIndex}
-                    className="max-w-24 m-0 w-full h-full"
-                  >
-                    <DynamicShape
-                      imageUrl={getImageUrl(
-                        product.id,
-                        images[item.imageIndex].name
-                      )}
-                      // shapeIndex={}
-                    />
-                  </div>
-                ))}
-              </>
-            )}
+            {randomArr.map(({ mediaUrl, shapeIndex }) => {
+              return (
+                <DynamicShape
+                  key={shapeIndex}
+                  imageUrl={mediaUrl}
+                  shapeIndex={shapeIndex}
+                />
+              );
+            })}
           </div>
 
           <p className="text-lg text-gray-700 leading-relaxed border-l-4 border-primary pl-6 italic">

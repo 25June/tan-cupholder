@@ -5,11 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useGetOrderProgress } from '@/hooks/useGetOrderProgress';
 import PageLoader from '@/components/page-loader/PageLoader';
-import {
-  ORDER_STATUS_ICONS,
-  ORDER_STATUSES,
-  OrderStatus
-} from '@/constants/common';
+import { ORDER_STATUSES } from '@/constants/common';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import Image from 'next/image';
 import { formatPrice } from '@/shared/utils/formatPrice';
@@ -19,6 +15,7 @@ import { useGetOtherProducts } from '@/hooks/useGetOrderProducts';
 import Spinner from '@/components/spinner/Spinner';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Link from 'next/link';
+import Footer from '@/components/footer/Footer';
 
 export default function OrderStatusPage() {
   // const t = useTranslations('OrderStatusPage');
@@ -54,7 +51,7 @@ export default function OrderStatusPage() {
   const activeStatus = ORDER_STATUSES.find(
     (status) => status.id === order.status
   );
-  console.log(order?.order_products);
+
   return (
     <div className="w-full h-full relative">
       <StaticMenuBar />
@@ -65,7 +62,9 @@ export default function OrderStatusPage() {
       </div>
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 relative z-1 pt-16 pb-16 px-4">
         <div className="col-span-1 md:col-span-2 border border-gray-200 rounded-lg p-4 bg-white">
-          <h1 className="text-2xl font-bold">Thank You For Your Order!</h1>
+          <h1 className="text-2xl font-bold tracking-wide">
+            Thank You For Your Order!
+          </h1>
           <div className="mt-4 flex flex-wrap gap-2 justify-between">
             <p className="text-gray-500 shrink-0">
               Order #{order?.id.slice(order?.id.length - 5)}
@@ -140,10 +139,10 @@ export default function OrderStatusPage() {
                           alt={productDetails.name}
                           width={250}
                           height={500}
-                          className="object-cover h-64 w-48"
+                          className="object-cover h-64 w-48 scale-110 hover:scale-100 transition-all duration-300"
                         />
                       </div>
-                      <div className="flex-1 min-w-0 absolute bottom-0 left-0 h-16 w-full p-2 bg-gradient-to-b from-transparent to-white to-40% flex justify-between items-end">
+                      <div className="flex-1 min-w-0 absolute bottom-0 left-0 h-32 w-full p-2 bg-gradient-to-b from-transparent to-white to-45% flex justify-between items-end">
                         <div>
                           <p className="text-xs text-gray-500">
                             {productDetails.type_name}
@@ -175,18 +174,18 @@ export default function OrderStatusPage() {
                   key={product.id}
                   className="flex items-center gap-2 w-full border border-gray-200 rounded-lg p-2"
                 >
-                  <div className="h-full max-h-20 rounded-lg overflow-hidden">
+                  <div className="h-20 w-16 rounded-lg overflow-hidden shrink-0">
                     <Image
                       src={getImageUrl(product.id, product.product_image.name)}
                       alt={product.name}
-                      width={100}
-                      height={200}
+                      width={300}
+                      height={400}
                       className="object-cover h-20 w-16"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1 grow">
-                    <p className="text-gray-500 text-sm truncate font-bold mb-1">
+                    <p className="text-gray-500 text-sm font-bold mb-1">
                       {product.name}
                     </p>
                     <div className="flex justify-between items-center gap-2 w-full">
@@ -215,6 +214,7 @@ export default function OrderStatusPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

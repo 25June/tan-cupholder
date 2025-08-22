@@ -1,8 +1,13 @@
 import { SHAPE_PATH } from '@/styles/shapePath';
 import { getImageProps } from 'next/image';
 
-export default function DynamicShape({ imageUrl }: { imageUrl: string }) {
-  const randomIndex = Math.floor(Math.random() * SHAPE_PATH.length);
+export default function DynamicShape({
+  imageUrl,
+  shapeIndex
+}: {
+  imageUrl: string;
+  shapeIndex: number;
+}) {
   const {
     props: { src }
   } = getImageProps({
@@ -12,9 +17,9 @@ export default function DynamicShape({ imageUrl }: { imageUrl: string }) {
     quality: 100,
     src: imageUrl
   });
-  const id = Date.now() + randomIndex;
+  const id = Date.now() + shapeIndex;
   // Define the path data for the blob shape
-  const blobPathData = SHAPE_PATH[randomIndex];
+  const blobPathData = SHAPE_PATH[shapeIndex];
   // Define the desired scale factor (e.g., 0.8 for 80%)
   const scaleFactor = 1;
   // Calculate new dimensions and position to keep the image centered

@@ -38,8 +38,8 @@ export enum OrderStatus {
 
 export const ORDER_STATUSES = [
   {
-    id: OrderStatus.PACKAGING,
-    name: 'Packaging'
+    id: OrderStatus.PROCESSING,
+    name: 'Processing'
   },
   {
     id: OrderStatus.DELIVERING,

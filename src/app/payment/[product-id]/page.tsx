@@ -7,7 +7,6 @@ import { getProductById } from '@/app/lib/product.actions';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import Image from 'next/image';
-import Spinner from '@/components/spinner/Spinner';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import PageLoader from '@/components/page-loader/PageLoader';
@@ -168,7 +167,7 @@ export default function PaymentPage() {
                           {t('quantity')}: {quantity}
                         </span>
                         <span className="text-sm text-gray-500">
-                          {t('price')}: {formatPrice(discountedPrice)}
+                          {t('price')}: {formatPrice(discountedPrice, 'VND')}
                         </span>
                       </div>
                     </div>
@@ -184,7 +183,7 @@ export default function PaymentPage() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">{t('unitPrice')}</span>
                       <span className="font-medium">
-                        {formatPrice(discountedPrice)}
+                        {formatPrice(discountedPrice, 'VND')}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -197,7 +196,7 @@ export default function PaymentPage() {
                           {t('total')}
                         </span>
                         <span className="text-lg font-bold text-gray-900">
-                          {formatPrice(totalPrice)}
+                          {formatPrice(totalPrice, 'VND')}
                         </span>
                       </div>
                     </div>

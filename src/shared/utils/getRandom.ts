@@ -1,20 +1,23 @@
+import { Image } from '@/models/image';
 import { SHAPE_PATH } from '@/styles/shapePath';
+import { getImageUrl } from './getImageUrl';
 
 export function getRandomImageArr(
   demandArrLength: number,
-  imageLength: number
+  images: Image[],
+  productId: string
 ) {
   const usedValues = new Set();
 
   return Array.from({ length: demandArrLength }, () => {
     let imageIndex, shapeIndex;
     do {
-      imageIndex = Math.floor(Math.random() * imageLength);
+      imageIndex = Math.floor(Math.random() * images.length);
       shapeIndex = Math.floor(Math.random() * SHAPE_PATH.length);
-    } while (usedValues.has(`${imageIndex}-${shapeIndex}`));
-    usedValues.add(`${imageIndex}-${shapeIndex}`); // Store combined index to ensure unique pairs
+    } while (usedValues.has(shapeIndex));
+    usedValues.add(shapeIndex); // Store combined index to ensure unique pairs
     return {
-      imageIndex,
+      mediaUrl: getImageUrl(productId, images[imageIndex].name),
       shapeIndex
     };
   });
