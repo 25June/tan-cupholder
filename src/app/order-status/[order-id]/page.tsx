@@ -1,7 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useGetOrderProgress } from '@/hooks/useGetOrderProgress';
 import PageLoader from '@/components/page-loader/PageLoader';
@@ -9,7 +8,6 @@ import { ORDER_STATUSES } from '@/constants/common';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import Image from 'next/image';
 import { formatPrice } from '@/shared/utils/formatPrice';
-import { OrderProductDetails } from '@/models/product';
 import { OrderProduct } from '@/models/order';
 import { useGetOtherProducts } from '@/hooks/useGetOrderProducts';
 import Spinner from '@/components/spinner/Spinner';
@@ -20,7 +18,6 @@ import Footer from '@/components/footer/Footer';
 export default function OrderStatusPage() {
   // const t = useTranslations('OrderStatusPage');
   const params = useParams();
-  const router = useRouter();
   const orderId = params['order-id'] as string;
   const {
     order,
@@ -48,7 +45,7 @@ export default function OrderStatusPage() {
     return <div>Order not found</div>;
   }
 
-  const activeStatus = ORDER_STATUSES.find(
+  const activeStatusIndex = ORDER_STATUSES.findIndex(
     (status) => status.id === order.status
   );
 
@@ -104,14 +101,14 @@ export default function OrderStatusPage() {
           <div className="mt-4">
             <p>Your Order is being processed</p>
             <ul className="steps w-full">
-              {ORDER_STATUSES.map((status) => (
+              {ORDER_STATUSES.map((status, index) => (
                 <li
                   key={status.id}
                   className={`step ${
-                    order.status === status.id ? 'step-primary' : ''
+                    activeStatusIndex >= index ? 'step-primary' : ''
                   }`}
                 >
-                  {activeStatus ? status.name : ''}
+                  {activeStatusIndex >= index ? status.name : ''}
                 </li>
               ))}
             </ul>
@@ -168,7 +165,7 @@ export default function OrderStatusPage() {
           <div className="space-y-6">
             <h2 className="text-lg font-bold">Other Products</h2>
             {otherProductsLoading && <Spinner />}
-            <div className="flex flex-col gap-4 max-h-[250px] md:max-h-[550px] overflow-y-auto light-mask py-2">
+            <div className="flex flex-col gap-4 max-h-[250px] md:max-h-[450px] overflow-y-auto light-mask py-2">
               {otherProducts.map((product) => (
                 <div
                   key={product.id}

@@ -92,7 +92,7 @@ export async function fetchTotalProductTypes() {
 
 export async function getProductTypeById(id: string) {
   try {
-    const productType = await sql`
+    const productType = await sql<ProductType[]>`
       SELECT * FROM product_types 
       WHERE id = ${id}
     `;
