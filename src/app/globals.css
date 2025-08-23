@@ -122,3 +122,13 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.light-mask {
+  mask: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0),
+    rgb(0, 0, 0) 5%,
+    rgb(0, 0, 0) 95%,
+    rgba(0, 0, 0, 0)
+  );
+}

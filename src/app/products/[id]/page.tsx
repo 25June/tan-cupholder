@@ -2,10 +2,10 @@
 
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import ProductDetailSkeleton from '@/components/skeleton/ProductDetail.skeleton';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useProduct } from '@/hooks/useProduct';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Quantity from '@/components/quantity/Quantity';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { calculatePercent } from '@/shared/utils/formatNumber';
@@ -14,10 +14,16 @@ import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { Image as ImageType } from '@/models/image';
 import DynamicShape from '@/components/icons/shapes/DynamicShape';
 import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
+import { getRandomImageArr } from '@/shared/utils/getRandom';
 
 export default function ProductPage() {
   const { id } = useParams();
-  const { product, isLoading, onGetProduct, images } = useProduct();
+  const router = useRouter();
+  const { product, isLoading, onGetProduct, images, productType } =
+    useProduct();
+
+  const [quantity, setQuantity] = useState<number>(1);
+
   const mainImage = images.find((img) => img.isMain);
   const [selectedImage, setSelectedImage] = useState<ImageType | null>(
     mainImage || null
@@ -32,6 +38,12 @@ export default function ProductPage() {
   useEffect(() => {
     setSelectedImage(mainImage || null);
   }, [mainImage]);
+
+  const randomArr = useMemo(() => {
+    return !isLoading && product
+      ? getRandomImageArr(3, images, product.id)
+      : [];
+  }, [isLoading, product, images]);
 
   return (
     <div className="min-h-screen">
@@ -64,14 +76,15 @@ export default function ProductPage() {
                     <div
                       className={`w-full h-full bg-gray-100 rounded-md max-h-56 relative p-2`}
                     >
-                      <Image
-                        onClick={() => setSelectedImage(img)}
-                        src={getImageUrl(product.id, img.name)}
-                        alt={img.name}
-                        width={600}
-                        height={600}
-                        className="object-contain w-full h-full"
-                      />
+                      <button onClick={() => setSelectedImage(img)}>
+                        <Image
+                          src={getImageUrl(product.id, img.name)}
+                          alt={img.name}
+                          width={600}
+                          height={600}
+                          className="object-contain w-full h-full"
+                        />
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -105,12 +118,17 @@ export default function ProductPage() {
                 <div className="mb-4">{product.description}</div>
               </div>
               <div>
-                <Quantity />
+                <Quantity setQuantity={setQuantity} quantity={quantity} />
                 <div className="flex gap-4 mt-4">
                   <button className="btn btn-primary btn-md btn-outline flex-1">
                     Add to Cart
                   </button>
-                  <button className="btn btn-primary btn-md flex-1">
+                  <button
+                    className="btn btn-primary btn-md flex-1"
+                    onClick={() => {
+                      router.push(`/payment/${id}?quantity=${quantity}`);
+                    }}
+                  >
                     Buy Now
                   </button>
                 </div>
@@ -122,41 +140,33 @@ export default function ProductPage() {
       <div className="mt-8 md:mt-24">
         <div className="max-w-4xl mx-auto space-y-12 px-6">
           <p className="text-lg text-gray-700 leading-relaxed first-letter:text-4xl first-letter:font-serif first-letter:mr-2 first-letter:float-left first-letter:text-primary">
-            Our premium cup holder is designed with both style and functionality
+            {product?.description ||
+              `Our premium cup holder is designed with both style and functionality
             in mind. Crafted from high-quality materials, this elegant solution
             keeps your beverages secure and within easy reach. The sturdy
             construction ensures stability for cups and mugs of various sizes,
-            while the sleek design complements any interior décor.
+            while the sleek design complements any interior décor.`}
           </p>
           <div className="flex flex-row gap-4 justify-center w-full h-full">
-            {product && (
-              <>
-                <div className="max-w-24 m-0 w-full h-full">
-                  <DynamicShape
-                    imageUrl={getImageUrl(product.id, images[0].name)}
-                  />
-                </div>
-                <div className="max-w-24 m-0 w-full h-full">
-                  <DynamicShape
-                    imageUrl={getImageUrl(product.id, images[1].name)}
-                  />
-                </div>
-                <div className="max-w-24 m-0 w-full h-full">
-                  <DynamicShape
-                    imageUrl={getImageUrl(product.id, images[2].name)}
-                  />
-                </div>
-              </>
-            )}
+            {randomArr.map(({ mediaUrl, shapeIndex }) => {
+              return (
+                <DynamicShape
+                  key={shapeIndex}
+                  imageUrl={mediaUrl}
+                  shapeIndex={shapeIndex}
+                />
+              );
+            })}
           </div>
 
           <p className="text-lg text-gray-700 leading-relaxed border-l-4 border-primary pl-6 italic">
-            The innovative design features a non-slip base and protective
+            {productType?.description ||
+              `The innovative design features a non-slip base and protective
             padding to prevent scratches on your furniture. Whether you're
             working at your desk, relaxing on your couch, or entertaining
             guests, this cup holder provides the perfect balance of convenience
             and protection. The carefully considered dimensions allow for easy
-            storage when not in use, making it an ideal accessory for any space.
+            storage when not in use, making it an ideal accessory for any space.`}
           </p>
 
           <p className="text-lg text-gray-700 leading-relaxed bg-gray-50 p-6 rounded-lg shadow-sm">

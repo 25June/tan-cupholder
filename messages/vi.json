@@ -131,5 +131,30 @@
     "title": "Chính sách bảo mật",
     "paragraph1": "Tại TaN, chúng tôi rất coi trọng quyền riêng tư của bạn. Chính sách bảo mật này phác thảo cách chúng tôi thu thập, sử dụng và bảo vệ thông tin cá nhân của bạn. Chúng tôi cam kết đảm bảo rằng quyền riêng tư của bạn được bảo vệ và thông tin của bạn được sử dụng một cách có trách nhiệm.",
     "paragraph2": "Bằng cách sử dụng trang web của chúng tôi, bạn đồng ý với việc thu thập và sử dụng thông tin của bạn theo chính sách này."
+  },
+  "PaymentPage": {
+    "checkoutTitle": "Thanh toán",
+    "checkoutSubtitle": "Hoàn tất đơn hàng của bạn",
+    "productDetails": "Chi tiết sản phẩm",
+    "quantity": "Số lượng",
+    "price": "Giá",
+    "priceSummary": "Tóm tắt giá",
+    "unitPrice": "Đơn giá:",
+    "total": "Tổng cộng:",
+    "customerInfo": "Thông tin khách hàng",
+    "fullName": "Họ và tên *",
+    "fullNamePlaceholder": "Nhập họ và tên của bạn",
+    "email": "Địa chỉ Email *",
+    "emailPlaceholder": "Nhập địa chỉ email của bạn",
+    "phone": "Số điện thoại",
+    "phonePlaceholder": "Nhập số điện thoại của bạn",
+    "address": "Địa chỉ",
+    "addressPlaceholder": "Nhập địa chỉ của bạn",
+    "createOrder": "Tạo đơn hàng - {price}",
+    "creatingOrder": "Đang tạo đơn hàng...",
+    "productNotFound": "Không tìm thấy sản phẩm",
+    "productNotFoundDesc": "Sản phẩm bạn tìm kiếm không tồn tại.",
+    "orderSuccess": "Tạo đơn hàng thành công! Mã đơn hàng: {orderId}",
+    "orderFailed": "Tạo đơn hàng thất bại. Vui lòng thử lại."
   }
 }

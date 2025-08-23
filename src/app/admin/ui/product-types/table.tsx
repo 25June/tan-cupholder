@@ -1,15 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
-import { Customer } from '@/models/customer';
-import { DeleteCustomer, UpdateCustomer } from './buttons';
+import { ProductType } from '@/models/productType';
+import {
+  DeleteProductType,
+  UpdateProductType
+} from '@/app/admin/ui/product-types/buttons';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
-export default function CustomersTable({
-  customers
+export default function ProductTypesTable({
+  productTypes
 }: {
-  customers: Customer[];
+  productTypes: ProductType[];
 }) {
   const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
 
@@ -20,43 +22,31 @@ export default function CustomersTable({
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
               <div className="md:hidden">
-                {customers?.map((customer) => (
+                {productTypes?.map((productType) => (
                   <div
-                    key={customer.id}
+                    key={productType.id}
                     className="mb-2 w-full rounded-md bg-white p-4"
                   >
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
                         <div className="mb-2 flex items-center">
                           <div className="flex items-center gap-3">
-                            <Image
-                              src={customer.image_url || '/cup.png'}
-                              className="rounded-full w-16 h-16 object-cover"
-                              alt={`${customer.name}'s profile picture`}
-                              width={64}
-                              height={64}
-                            />
-                            <p className="font-medium">{customer.name}</p>
+                            <p className="font-medium">{productType.name}</p>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="flex w-full items-center justify-between border-b py-5">
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Email</p>
-                        <p className="font-medium">{customer.email}</p>
+                        <p className="text-xs">Short Name</p>
+                        <p className="font-medium">{productType.short_name}</p>
                       </div>
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Phone</p>
-                        <p className="font-medium">
-                          {customer.phone_number || 'N/A'}
+                        <p className="text-xs">Description</p>
+                        <p className="font-medium truncate">
+                          {productType.description || 'No description'}
                         </p>
                       </div>
-                    </div>
-                    <div className="pt-4 text-sm">
-                      <p>
-                        Verified: {customer.is_email_verified ? 'Yes' : 'No'}
-                      </p>
                     </div>
                   </div>
                 ))}
@@ -68,19 +58,10 @@ export default function CustomersTable({
                       Name
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Email
+                      Short Name
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Phone
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Address
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Verified
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Created
+                      Description
                     </th>
                     <th scope="col" className="relative py-3 pl-6 pr-3">
                       <span className="sr-only">Edit</span>
@@ -89,49 +70,33 @@ export default function CustomersTable({
                 </thead>
 
                 <tbody className="divide-y divide-gray-200 text-gray-900">
-                  {customers?.map((customer) => (
-                    <tr key={customer.id} className="group bg-white">
+                  {productTypes?.map((productType) => (
+                    <tr key={productType.id} className="group bg-white">
                       <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
-                          <Image
-                            src={customer.image_url || '/cup.png'}
-                            className="rounded-full w-16 h-16 object-cover shrink-0"
-                            alt={`${customer.name}'s profile picture`}
-                            width={64}
-                            height={64}
-                          />
-                          <p className="font-medium">{customer.name}</p>
+                          <p className="font-medium">{productType.name}</p>
                         </div>
                       </td>
 
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {customer.email}
+                        {productType.short_name}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {customer.phone_number || 'N/A'}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm text-ellipsis overflow-hidden max-w-32">
-                        {customer.address || 'N/A'}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {customer.is_email_verified ? 'Yes' : 'No'}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {customer.created_at
-                          ? new Date(customer.created_at).toLocaleDateString()
-                          : 'N/A'}
+                      <td className="whitespace-nowrap px-4 py-5 text-sm max-w-xs">
+                        <div className="truncate">
+                          {productType.description || 'No description'}
+                        </div>
                       </td>
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
-                          <UpdateCustomer id={customer.id} />
-                          {doubleClick[customer.id] ? (
-                            <DeleteCustomer id={customer.id} />
+                          <UpdateProductType id={productType.id} />
+                          {doubleClick[productType.id] ? (
+                            <DeleteProductType id={productType.id} />
                           ) : (
                             <button
                               onClick={() =>
                                 setDoubleClick((prev) => ({
                                   ...prev,
-                                  [customer.id]: true
+                                  [productType.id]: true
                                 }))
                               }
                               className="rounded-md border p-2 hover:bg-gray-100"

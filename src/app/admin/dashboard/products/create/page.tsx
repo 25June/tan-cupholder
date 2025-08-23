@@ -1,14 +1,17 @@
 import Form from '@/app/admin/ui/products/create-form';
 import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
 import { Metadata } from 'next';
-import { getProductTypes } from '@/app/admin/lib/actions/productTypes.actions';
+import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
 
 export const metadata: Metadata = {
   title: 'Create Invoice'
 };
 
 export default async function Page() {
-  const productTypes = await getProductTypes();
+  const productTypes = await getProductTypes({
+    query: '',
+    page: '0'
+  });
 
   return (
     <main>

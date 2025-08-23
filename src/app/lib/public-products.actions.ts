@@ -45,3 +45,28 @@ export async function publicFetchProducts(searchParams?: {
     throw new Error('Failed to fetch all customers.');
   }
 }
+
+export async function publicFetchOtherProducts() {
+  const products = await sql`
+    SELECT 
+      p.id,
+      p.name,
+      p.description,
+      p.price,
+      p.sale,
+      pt.name as type,
+      p.stock,
+      json_build_object(
+        'id', product_image.id,
+        'name', product_image.name,
+        'type', product_image.type,
+        'is_main', product_image.is_main
+      ) as product_image
+    FROM products p
+    LEFT JOIN product_types pt ON p.type = pt.id
+    LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
+    LIMIT 10 
+    OFFSET 0
+  `;
+  return products;
+}

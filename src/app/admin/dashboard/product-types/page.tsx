@@ -1,18 +1,17 @@
 import {
-  fetchProducts,
-  fetchTotalProducts
-} from '@/app/admin/lib/actions/products.actions';
+  getProductTypes,
+  fetchTotalProductTypes
+} from '@/app/admin/lib/actions/product-types.actions';
 import { Metadata } from 'next';
-import ProductsTable from '../../ui/products/table';
+import ProductTypesTable from '../../ui/product-types/table';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '../../ui/search';
-import { CreateProduct } from '../../ui/products/buttons';
+import { CreateProductType } from '@/app/admin/ui/product-types/buttons';
 import { Suspense } from 'react';
 import Pagination from '../../ui/invoices/pagination';
-import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
 
 export const metadata: Metadata = {
-  title: 'Products'
+  title: 'Product Types'
 };
 
 export default async function Page(props: {
@@ -25,33 +24,28 @@ export default async function Page(props: {
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
 
-  const products = await fetchProducts({ query, page: currentPage.toString() });
-  const totalProducts = await fetchTotalProducts();
   const productTypes = await getProductTypes({
-    query: '',
-    page: '1'
+    query,
+    page: currentPage.toString()
   });
-  const formattedProducts = productTypes.reduce((acc, cur) => {
-    acc[cur.id] = cur.name;
-    return acc;
-  }, {} as Record<string, string>);
+  const totalProductTypes = await fetchTotalProductTypes();
 
   return (
     <main>
       <div className="flex w-full items-center justify-between mb-8">
         <h1 className={`${lusitana.className}  text-xl md:text-2xl`}>
-          Products
+          Product Types
         </h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search products..." />
-        <CreateProduct />
+        <Search placeholder="Search product types..." />
+        <CreateProductType />
       </div>
       <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
-        <ProductsTable products={products} productTypes={formattedProducts} />
+        <ProductTypesTable productTypes={productTypes} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={Math.ceil(totalProducts / 10)} />
+        <Pagination totalPages={Math.ceil(totalProductTypes / 10)} />
       </div>
     </main>
   );

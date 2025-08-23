@@ -12,6 +12,7 @@ const ProductTypeSchema = z.object({
   id: z.string().min(1, { message: 'Id is required' }),
   name: z.string().min(1, { message: 'Name is required' }),
   shortName: z.string().min(1, { message: 'Short name is required' }),
+  description: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string()
 });
@@ -31,16 +32,45 @@ export type State = {
   errors?: {
     name?: string[];
     shortName?: string[];
+    description?: string[];
   };
   message?: string | null;
 };
 
-export async function getProductTypes() {
+export async function getProductTypes({
+  query,
+  page
+}: {
+  query: string;
+  page: string;
+}) {
   try {
-    const productTypes = await sql<ProductType[]>`
-      SELECT * FROM product_types
-      ORDER BY created_at DESC
-    `;
+    let productTypes;
+    if (page === '0') {
+      productTypes = await sql<ProductType[]>`
+        SELECT * FROM product_types
+        ORDER BY created_at DESC
+      `;
+      return productTypes;
+    }
+
+    const ITEMS_PER_PAGE = 10;
+    const offset = (Number(page) - 1) * ITEMS_PER_PAGE;
+
+    if (query) {
+      productTypes = await sql<ProductType[]>`
+        SELECT * FROM product_types
+        WHERE name ILIKE ${`%${query}%`} OR short_name ILIKE ${`%${query}%`}
+        ORDER BY created_at DESC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+    } else {
+      productTypes = await sql<ProductType[]>`
+        SELECT * FROM product_types
+        ORDER BY created_at DESC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+    }
     return productTypes;
   } catch (error) {
     console.error('Database Error:', error);
@@ -48,9 +78,21 @@ export async function getProductTypes() {
   }
 }
 
+export async function fetchTotalProductTypes() {
+  try {
+    const count = await sql`
+      SELECT COUNT(*) FROM product_types
+    `;
+    return Number(count[0].count);
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total product types.');
+  }
+}
+
 export async function getProductTypeById(id: string) {
   try {
-    const productType = await sql`
+    const productType = await sql<ProductType[]>`
       SELECT * FROM product_types 
       WHERE id = ${id}
     `;
@@ -64,7 +106,8 @@ export async function getProductTypeById(id: string) {
 export async function createProductType(prevState: State, formData: FormData) {
   const validatedFields = CreateProductType.safeParse({
     name: formData.get('name'),
-    shortName: formData.get('shortName')
+    shortName: formData.get('shortName'),
+    description: formData.get('description')
   });
 
   if (!validatedFields.success) {
@@ -74,13 +117,13 @@ export async function createProductType(prevState: State, formData: FormData) {
     };
   }
 
-  const { name, shortName } = validatedFields.data;
+  const { name, shortName, description } = validatedFields.data;
   const date = new Date().toISOString();
 
   try {
     await sql`
-      INSERT INTO product_types (name, short_name, created_at, updated_at)
-      VALUES (${name}, ${shortName}, ${date}, ${date})
+      INSERT INTO product_types (name, short_name, description, created_at, updated_at)
+      VALUES (${name}, ${shortName}, ${description || null}, ${date}, ${date})
     `;
   } catch (error) {
     return { message: 'Database Error: Failed to Create Product Type.' };
@@ -94,7 +137,8 @@ export async function updateProductType(prevState: State, formData: FormData) {
   const validatedFields = UpdateProductType.safeParse({
     id: formData.get('id'),
     name: formData.get('name'),
-    shortName: formData.get('shortName')
+    shortName: formData.get('shortName'),
+    description: formData.get('description')
   });
 
   if (!validatedFields.success) {
@@ -104,13 +148,15 @@ export async function updateProductType(prevState: State, formData: FormData) {
     };
   }
 
-  const { id, name, shortName } = validatedFields.data;
+  const { id, name, shortName, description } = validatedFields.data;
   const date = new Date().toISOString();
 
   try {
     await sql`
       UPDATE product_types
-      SET name = ${name}, short_name = ${shortName}, updated_at = ${date}
+      SET name = ${name}, short_name = ${shortName}, description = ${
+      description || null
+    }, updated_at = ${date}
       WHERE id = ${id}
     `;
   } catch (error) {
