@@ -90,7 +90,7 @@ export async function publicFetchProductByIds(ids: string[]) {
     FROM products p
     LEFT JOIN product_types pt ON p.type = pt.id
     LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
-    WHERE p.id IN (${ids})
+    WHERE p.id = ANY(${ids})
   `;
   return products;
 }

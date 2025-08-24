@@ -3,7 +3,7 @@ import { getCartFromStorage } from '@/shared/utils/storage';
 import { useEffect, useState } from 'react';
 import { publicFetchProductByIds } from '@/app/lib/public-products.actions';
 
-type ProductWithQuantity = ProductResponse & { quantity: number };
+export type ProductWithQuantity = ProductResponse & { quantity: number };
 
 export const useGetProductsFromCart = () => {
   const [products, setProducts] = useState<Record<string, ProductWithQuantity>>(
@@ -49,5 +49,17 @@ export const useGetProductsFromCart = () => {
     }
   }, []);
 
-  return { products, loading };
+  const handleUpdateQuantity = (productId: string, quantity: number) => {
+    setProducts((prev) => {
+      return {
+        ...prev,
+        [productId]: {
+          ...prev[productId],
+          quantity
+        }
+      };
+    });
+  };
+
+  return { products, loading, onUpdateQuantity: handleUpdateQuantity };
 };

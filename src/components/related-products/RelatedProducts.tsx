@@ -18,7 +18,9 @@ export default function RelatedProducts() {
         Related Products
       </h2>
       {loading && <Spinner />}
-      <SliderContainer products={products} />
+      <div>
+        <SliderContainer products={products} />
+      </div>
     </section>
   );
 }

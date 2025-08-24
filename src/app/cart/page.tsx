@@ -1,8 +1,10 @@
 'use client';
 
-import { ProductResponse } from '@/models/product';
-import { useState } from 'react';
-import { useGetProductsFromCart } from '@/hooks/useGetProductsFromcart';
+import { useEffect, useState, memo } from 'react';
+import {
+  useGetProductsFromCart,
+  ProductWithQuantity
+} from '@/hooks/useGetProductsFromCart';
 import Footer from '@/components/footer/Footer';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
@@ -13,54 +15,78 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/components/spinner/Spinner';
 import Link from 'next/link';
 
-const ProductCard = ({ product }: { product: ProductResponse }) => {
-  const [quantity, setQuantity] = useState<number>(1);
+const ProductCard = memo(
+  ({
+    product,
+    onUpdateQuantity
+  }: {
+    product: ProductWithQuantity;
+    onUpdateQuantity: (productId: string, quantity: number) => void;
+  }) => {
+    const [quantity, setQuantity] = useState<number>(1);
 
-  return (
-    <div className="border border-gray-200 rounded-lg p-4 flex items-start justify-between gap-2">
-      <div className="flex items-center gap-2 grow">
-        <div className="h-32 w-24 rounded-lg overflow-hidden shrink-0">
-          <Image
-            src={getImageUrl(product.id, product.product_image.name)}
-            alt={product.name}
-            width={300}
-            height={400}
-            className="object-cover h-32 w-24"
-          />
-        </div>
-        <div className="flex flex-col gap-2 justify-between">
-          <div>
-            <p className="text-gray-500 text-sm font-bold mb-1">
-              {product.name}
-            </p>
-            <p className="text-gray-500 text-sm mb-2">
-              {formatPrice(product.price, 'VND')}
-            </p>
+    useEffect(() => {
+      const id = setTimeout(() => {
+        onUpdateQuantity(product.id, quantity);
+      }, 1000);
+      return () => clearTimeout(id);
+    }, [quantity]);
+
+    return (
+      <div className="border border-gray-200 rounded-lg p-4 flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2 grow">
+          <div className="h-32 w-24 rounded-lg overflow-hidden shrink-0">
+            <Image
+              src={getImageUrl(product.id, product.product_image.name)}
+              alt={product.name}
+              width={300}
+              height={400}
+              className="object-cover h-32 w-24"
+            />
           </div>
+          <div className="flex flex-col gap-2 justify-between">
+            <div>
+              <p className="text-gray-500 text-sm font-bold mb-1">
+                {product.name}
+              </p>
+              <p className="text-gray-500 text-sm mb-2">
+                {formatPrice(product.price, 'VND')}
+              </p>
+            </div>
 
-          <Quantity setQuantity={setQuantity} quantity={quantity} size="sm" />
+            <Quantity setQuantity={setQuantity} quantity={quantity} size="sm" />
+          </div>
+        </div>
+        <div className="shrink-0">
+          <button
+            onClick={() => {
+              console.log('delete');
+            }}
+            className="rounded-md border hover:bg-red-500 hover:text-white text-red-500 p-2 transition-all duration-300"
+          >
+            <TrashIcon className="w-5 h-5" />
+          </button>
         </div>
       </div>
-      <div className="shrink-0">
-        <button
-          onClick={() => {
-            console.log('delete');
-          }}
-          className="rounded-md border hover:bg-red-500 hover:text-white text-red-500 p-2 transition-all duration-300"
-        >
-          <TrashIcon className="w-5 h-5" />
-        </button>
-      </div>
-    </div>
-  );
-};
+    );
+  },
+  (prevProps, nextProps) => {
+    return prevProps.product.quantity === nextProps.product.quantity;
+  }
+);
 
 export default function CartPage() {
-  const { products, loading } = useGetProductsFromCart();
-  const total = Object.values(products).reduce(
-    (acc, product) => acc + product.price * product.quantity,
-    0
+  const { products, loading, onUpdateQuantity } = useGetProductsFromCart();
+  const { totalAmount, totalQuantity } = Object.values(products).reduce(
+    (acc, product) => {
+      return {
+        totalAmount: acc.totalAmount + product.price * product.quantity,
+        totalQuantity: acc.totalQuantity + product.quantity
+      };
+    },
+    { totalAmount: 0, totalQuantity: 0 }
   );
+
   return (
     <div className="flex flex-col min-h-screen">
       <StaticMenuBar triggerCartCount={1} />
@@ -74,7 +100,11 @@ export default function CartPage() {
             <div className="text-center text-xl ">No products in cart</div>
           )}
           {Object.keys(products).map((productId) => (
-            <ProductCard key={productId} product={products[productId]} />
+            <ProductCard
+              key={productId}
+              product={products[productId]}
+              onUpdateQuantity={onUpdateQuantity}
+            />
           ))}
         </section>
         <section className="max-w-full md:max-w-[300px] w-full">
@@ -94,10 +124,16 @@ export default function CartPage() {
                 </p>
               </div>
             ))}
-            <div className="my-4">
-              <span className="text-sm font-bold ">Total:</span>
-              <span className="text-lg font-bold float-end">
-                {formatPrice(total, 'VND')}
+            <div className="mt-4 flex justify-between">
+              <span className="text-sm font-bold ">Total amount:</span>
+              <span className="text-lg font-bold text-right">
+                {totalQuantity}
+              </span>
+            </div>
+            <div className="mb-4 flex justify-between">
+              <span className="text-sm font-bold ">Total price:</span>
+              <span className="text-lg font-bold text-right">
+                {formatPrice(totalAmount, 'VND')}
               </span>
             </div>
 
