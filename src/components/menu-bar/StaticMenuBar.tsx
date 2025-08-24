@@ -2,12 +2,26 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
+import { useEffect, useState } from 'react';
+import CartIcon from '../cart-icon/CartIcon';
+import { getCartCountFromStorage } from '@/shared/utils/storage';
 
-const StaticMenuBar = () => {
+interface Props {
+  triggerCartCount?: number;
+}
+
+const StaticMenuBar = ({ triggerCartCount }: Props) => {
   const t = useTranslations('Menu');
+  const [cartCount, setCartCount] = useState<number>(0);
+  useEffect(() => {
+    if (triggerCartCount) {
+      const count = getCartCountFromStorage();
+      setCartCount(count);
+    }
+  }, [triggerCartCount]);
   return (
-    <div className="max-w-screen w-full mx-auto relative border-b-1 border-gray-200 z-10">
-      <div className="max-w-8xl bg-white mx-auto flex justify-between md:justify-evenly p-2 md:p-4">
+    <header className="max-w-screen w-full mx-auto relative border-b-1 border-gray-200 z-10">
+      <section className="max-w-8xl bg-white mx-auto flex justify-between md:justify-evenly p-2 md:p-4">
         <div className="relative grow md:grow-0 flex gap-2 justify-start">
           <Link
             href={'/'}
@@ -53,9 +67,15 @@ const StaticMenuBar = () => {
         >
           {t('faq')}
         </Link>
+        <Link
+          href={'/cart'}
+          className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
+        >
+          <CartIcon cartCount={cartCount} />
+        </Link>
         <DropdownMenu />
-      </div>
-    </div>
+      </section>
+    </header>
   );
 };
 

@@ -15,6 +15,12 @@ import { Image as ImageType } from '@/models/image';
 import DynamicShape from '@/components/icons/shapes/DynamicShape';
 import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
 import { getRandomImageArr } from '@/shared/utils/getRandom';
+import {
+  getCartFromStorage,
+  saveProductToCart,
+  saveViewedProductToStorage
+} from '@/shared/utils/storage';
+import RelatedProducts from '@/components/related-products/RelatedProducts';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -22,7 +28,9 @@ export default function ProductPage() {
   const { product, isLoading, onGetProduct, images, productType } =
     useProduct();
 
+  const [triggerCartCount, setTriggerCartCount] = useState<number>(Date.now());
   const [quantity, setQuantity] = useState<number>(1);
+  const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
 
   const mainImage = images.find((img) => img.isMain);
   const [selectedImage, setSelectedImage] = useState<ImageType | null>(
@@ -31,7 +39,13 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (typeof id === 'string') {
-      onGetProduct(id);
+      onGetProduct(id).then(() => {
+        saveViewedProductToStorage(id);
+      });
+      const cart = getCartFromStorage();
+      setIsAddedToCart(
+        cart.some((item: { productId: string }) => item.productId === id)
+      );
     }
   }, [id]);
 
@@ -45,11 +59,17 @@ export default function ProductPage() {
       : [];
   }, [isLoading, product, images]);
 
+  const handleAddToCart = (productId: string) => {
+    saveProductToCart(productId, quantity);
+    setTriggerCartCount(triggerCartCount + 1);
+    setIsAddedToCart(true);
+  };
+
   return (
     <div className="min-h-screen">
-      <StaticMenuBar />
+      <StaticMenuBar triggerCartCount={triggerCartCount} />
 
-      <div className="relative h-full flex flex-col justify-between mt-8 md:mt-24 p-4">
+      <main className="relative h-full flex flex-col justify-between mt-8 md:mt-24 p-4">
         <div className="w-full max-w-7xl mx-auto">
           <Breadcrumbs
             breadcrumbs={[
@@ -120,8 +140,12 @@ export default function ProductPage() {
               <div>
                 <Quantity setQuantity={setQuantity} quantity={quantity} />
                 <div className="flex gap-4 mt-4">
-                  <button className="btn btn-primary btn-md btn-outline flex-1">
-                    Add to Cart
+                  <button
+                    className="btn btn-primary btn-md btn-outline flex-1"
+                    onClick={() => handleAddToCart(product.id)}
+                    disabled={isAddedToCart}
+                  >
+                    {isAddedToCart ? 'Added to Cart' : 'Add to Cart'}
                   </button>
                   <button
                     className="btn btn-primary btn-md flex-1"
@@ -136,13 +160,14 @@ export default function ProductPage() {
             </div>
           </div>
         )}
-      </div>
-      <div className="mt-8 md:mt-24">
-        <div className="max-w-4xl mx-auto space-y-12 px-6">
+      </main>
+      <article className="mt-8 md:mt-24">
+        <section className="max-w-4xl mx-auto space-y-12 px-6 mb-16">
           <p className="text-lg text-gray-700 leading-relaxed first-letter:text-4xl first-letter:font-serif first-letter:mr-2 first-letter:float-left first-letter:text-primary">
             {product?.description ||
               `Our premium cup holder is designed with both style and functionality
-            in mind. Crafted from high-quality materials, this elegant solution
+            in mind. Cra
+            fted from high-quality materials, this elegant solution
             keeps your beverages secure and within easy reach. The sturdy
             construction ensures stability for cups and mugs of various sizes,
             while the sleek design complements any interior décor.`}
@@ -177,8 +202,9 @@ export default function ProductPage() {
             and function with our thoughtfully designed cup holder that makes
             beverage management a breeze.
           </p>
-        </div>
-      </div>
+        </section>
+        <RelatedProducts />
+      </article>
       <div className="mt-8 md:mt-24">
         <Footer />
       </div>

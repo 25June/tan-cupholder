@@ -6,13 +6,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-
-const heroImageArr = [
-  '/IMG_8677.jpg',
-  '/IMG_7197.jpg',
-  '/IMG_7278.jpg',
-  '/IMG_8884.JPG'
-];
+import CartIcon from '@/components/cart-icon/CartIcon';
 
 const bgHeroImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
@@ -120,19 +114,25 @@ export function HeroSection() {
               >
                 {t('subtitle')}
               </motion.p>
-              <motion.button
-                onClick={() => router.push('/products')}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.4,
-                  scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
-                }}
-                type="button"
-                className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
-              >
-                {t('button')}
-              </motion.button>
+              <div className="flex gap-2 items-center">
+                <motion.button
+                  onClick={() => router.push('/products')}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    duration: 0.4,
+                    scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+                  }}
+                  type="button"
+                  className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
+                >
+                  {t('button')}
+                </motion.button>
+                <motion.button className="btn btn-sm btn-circle border-0 bg-white text-logo-orange hover:text-white hover:bg-logo-orange transition-all duration-300">
+                  <CartIcon cartCount={0} />
+                </motion.button>
+              </div>
+
               <motion.p
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
