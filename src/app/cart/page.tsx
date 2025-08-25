@@ -138,7 +138,7 @@ export default function CartPage() {
             </div>
 
             <Link
-              href="/checkout"
+              href="/payment"
               className="btn btn-primary btn-lg w-full text-white"
             >
               Checkout

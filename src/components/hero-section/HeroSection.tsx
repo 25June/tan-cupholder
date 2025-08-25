@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import CartIcon from '@/components/cart-icon/CartIcon';
+import { getCartCountFromStorage } from '@/shared/utils/storage';
+import Link from 'next/link';
 
 const bgHeroImageArr = [
   "bg-[url('/IMG_8677.jpg')]",
@@ -27,6 +29,7 @@ export function HeroSection() {
   const [contrast, setContrast] = useState<string[]>([]);
   const [imgOrders, setImgOrders] = useState<string[]>(bgHeroImageArr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
+  const [cartCount, setCartCount] = useState<number>(0);
 
   useEffect(() => {
     setContrast(['contrast-100', 'contrast-75', 'contrast-50', 'contrast-0']);
@@ -66,6 +69,11 @@ export function HeroSection() {
       return () => clearTimeout(timer);
     }
   }, [startTransitions]);
+
+  useEffect(() => {
+    const count = getCartCountFromStorage();
+    setCartCount(count);
+  }, []);
 
   return (
     <div className="relative">
@@ -128,9 +136,9 @@ export function HeroSection() {
                 >
                   {t('button')}
                 </motion.button>
-                <motion.button className="btn btn-sm btn-circle border-0 bg-white text-logo-orange hover:text-white hover:bg-logo-orange transition-all duration-300">
-                  <CartIcon cartCount={0} />
-                </motion.button>
+                <Link href={'/cart'}>
+                  <CartIcon cartCount={cartCount} />
+                </Link>
               </div>
 
               <motion.p

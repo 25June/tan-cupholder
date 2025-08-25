@@ -1,5 +1,8 @@
 import { ProductResponse } from '@/models/product';
-import { getCartFromStorage } from '@/shared/utils/storage';
+import {
+  getCartFromStorage,
+  updateProductQuantityInCart
+} from '@/shared/utils/storage';
 import { useEffect, useState } from 'react';
 import { publicFetchProductByIds } from '@/app/lib/public-products.actions';
 
@@ -59,6 +62,7 @@ export const useGetProductsFromCart = () => {
         }
       };
     });
+    updateProductQuantityInCart(productId, quantity);
   };
 
   return { products, loading, onUpdateQuantity: handleUpdateQuantity };

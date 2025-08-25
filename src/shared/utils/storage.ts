@@ -31,6 +31,20 @@ export const saveProductToCart = (productId: string, quantity: number) => {
   setStorage(LocalStorageKey.CART, cart);
 };
 
+export const updateProductQuantityInCart = (
+  productId: string,
+  quantity: number
+) => {
+  const cart = getCartFromStorage();
+  const index = cart.findIndex(
+    (item: { productId: string }) => item.productId === productId
+  );
+  if (index !== -1) {
+    cart[index].quantity = quantity;
+    setStorage(LocalStorageKey.CART, cart);
+  }
+};
+
 export const getCartFromStorage = () => {
   const cart = getStorage(LocalStorageKey.CART) || [];
   return cart;

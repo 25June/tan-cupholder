@@ -114,7 +114,7 @@ export default function OrderStatusPage() {
             </ul>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 mt-4">
-            <div className="flex items-center justify-center space-x-4 w-full">
+            <div className="flex items-center justify-start space-x-4 w-full overflow-x-auto scrollbar-hide">
               {order.order_products?.map(
                 (product: OrderProduct['order_products'][number]) => {
                   const productDetails = orderProducts[product.product_id];

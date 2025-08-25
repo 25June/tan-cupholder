@@ -6,37 +6,31 @@ import postgres from 'postgres';
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 const OrderSchema = z.object({
-  productId: z.string().min(1, { message: 'Product ID is required' }),
-  quantity: z.number().min(1, { message: 'Quantity must be at least 1' }),
+  products: z.string(),
   customerName: z.string().min(1, { message: 'Name is required' }),
   customerEmail: z.string().email({ message: 'Invalid email address' }),
   customerPhone: z.string().optional(),
-  customerAddress: z.string().optional(),
-  totalPrice: z.number().min(0, { message: 'Total price must be positive' })
+  customerAddress: z.string().optional()
 });
 
 export type OrderState = {
   errors?: {
-    productId?: string[];
-    quantity?: string[];
+    products?: string[];
     customerName?: string[];
     customerEmail?: string[];
     customerPhone?: string[];
     customerAddress?: string[];
-    totalPrice?: string[];
   };
   message?: string | null;
 };
 
 export async function createOrder(prevState: OrderState, formData: FormData) {
   const validatedFields = OrderSchema.safeParse({
-    productId: formData.get('productId'),
-    quantity: Number(formData.get('quantity')),
+    products: formData.get('products'),
     customerName: formData.get('customerName'),
     customerEmail: formData.get('customerEmail'),
     customerPhone: formData.get('customerPhone'),
-    customerAddress: formData.get('customerAddress'),
-    totalPrice: Number(formData.get('totalPrice'))
+    customerAddress: formData.get('customerAddress')
   });
 
   if (!validatedFields.success) {
@@ -47,13 +41,11 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
   }
 
   const {
-    productId,
-    quantity,
+    products,
     customerName,
     customerEmail,
     customerPhone,
-    customerAddress,
-    totalPrice
+    customerAddress
   } = validatedFields.data;
 
   const date = new Date().toISOString();
@@ -87,6 +79,36 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
       customerId = newCustomer[0].id;
     }
 
+    const decodedProducts = JSON.parse(products as string);
+    const { productIds, quantities } = decodedProducts.reduce(
+      (
+        acc: { productIds: string[]; quantities: Record<string, number> },
+        cur: { productId: string; quantity: number }
+      ) => {
+        return {
+          productIds: acc.productIds.concat(cur.productId),
+          quantities: {
+            ...acc.quantities,
+            [cur.productId]: cur.quantity
+          }
+        };
+      },
+      { productIds: [], quantities: {} as Record<string, number> }
+    );
+
+    const getProducts = await sql`
+      SELECT * FROM products WHERE id = ANY(${productIds})
+    `;
+    const { totalQuantity, totalPrice } = getProducts.reduce(
+      (acc, product) => {
+        return {
+          totalQuantity: acc.totalQuantity + quantities[product.id],
+          totalPrice: acc.totalPrice + product.price * quantities[product.id]
+        };
+      },
+      { totalQuantity: 0, totalPrice: 0 }
+    );
+
     // Create order with the correct schema
     const order = await sql`
       INSERT INTO orders (
@@ -105,7 +127,7 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
       VALUES (
         ${customerId}, 
         0, 
-        ${quantity}, 
+        ${totalQuantity}, 
         ${totalPrice}, 
         'online', 
         'pending', 
@@ -118,12 +140,16 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
       RETURNING id
     `;
 
-    // Create order_products entry
-    await sql`
+    const promises = decodedProducts.map(
+      (product: { productId: string; quantity: number }) => {
+        // Create order_products entry
+        return sql`
       INSERT INTO order_products (order_id, product_id, quantity, created_at, updated_at)
-      VALUES (${order[0].id}, ${productId}, ${quantity}, ${date}, ${date})
+      VALUES (${order[0].id}, ${product.productId}, ${product.quantity}, ${date}, ${date})
     `;
-
+      }
+    );
+    await Promise.all(promises);
     return { orderId: order[0].id };
   } catch (error) {
     console.error('Database Error:', error);
@@ -159,7 +185,7 @@ export async function getOrderById(orderId: string) {
     FROM products
     LEFT JOIN product_types pt ON products.type = pt.id
     LEFT JOIN images ON products.id = images.product_id AND images.is_main = TRUE
-    WHERE products.id IN (${productIds})
+    WHERE products.id = ANY(${productIds})
     ORDER BY products.priority DESC
   `;
 
