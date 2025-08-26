@@ -54,3 +54,11 @@ export const getCartCountFromStorage = () => {
   const cart = getCartFromStorage();
   return cart.length;
 };
+
+export const clearCartFromStorage = (productIds: string[]) => {
+  const cart = getCartFromStorage();
+  const newCart = cart.filter(
+    (item: { productId: string }) => !productIds.includes(item.productId)
+  );
+  setStorage(LocalStorageKey.CART, newCart);
+};

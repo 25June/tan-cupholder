@@ -14,6 +14,7 @@ import {
   useGetProductsFromCart
 } from '@/hooks/useGetProductsFromCart';
 import { priceSummary } from '@/shared/utils/priceSummary';
+import { clearCartFromStorage } from '@/shared/utils/storage';
 
 const initialState: OrderState = { message: null, errors: {} };
 
@@ -40,6 +41,7 @@ export default function PaymentPage() {
     try {
       const result = await createOrder(initialState, formData);
       if (result.orderId) {
+        clearCartFromStorage(Object.keys(products));
         router.push(`/order-status/${result.orderId}`);
       } else if (result.message) {
         setState({
