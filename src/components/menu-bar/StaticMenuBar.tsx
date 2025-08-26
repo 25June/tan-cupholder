@@ -1,9 +1,11 @@
+'use client';
+
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
 import { useEffect, useState } from 'react';
-import CartIcon from '../cart-icon/CartIcon';
+import CartIcon from '@/components/cart-icon/CartIcon';
 import { getCartCountFromStorage } from '@/shared/utils/storage';
 
 interface Props {
