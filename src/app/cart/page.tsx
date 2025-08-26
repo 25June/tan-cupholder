@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import {
   useGetProductsFromCart,
   ProductWithQuantity
@@ -86,7 +86,9 @@ export default function CartPage() {
     },
     { totalAmount: 0, totalQuantity: 0 }
   );
-
+  const productIds = useMemo(() => {
+    return Object.keys(products);
+  }, [products]);
   return (
     <div className="flex flex-col min-h-screen">
       <StaticMenuBar triggerCartCount={1} />
@@ -96,10 +98,18 @@ export default function CartPage() {
             Cart
           </h1>
           {loading && <Spinner />}
-          {!loading && Object.keys(products).length === 0 && (
-            <div className="text-center text-xl ">No products in cart</div>
+          {!loading && productIds.length === 0 && (
+            <div className="text-center text-xl ">
+              <p className="mb-4">No products in cart</p>
+              <Link
+                href="/products"
+                className="btn btn-primary btn-lg w-full text-white"
+              >
+                Let's shopping
+              </Link>
+            </div>
           )}
-          {Object.keys(products).map((productId) => (
+          {productIds.map((productId) => (
             <ProductCard
               key={productId}
               product={products[productId]}
