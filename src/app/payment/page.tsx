@@ -12,7 +12,7 @@ import PageLoader from '@/components/page-loader/PageLoader';
 import {
   ProductWithQuantity,
   useGetProductsFromCart
-} from '@/hooks/useGetProductsFromCart';
+} from '@/hooks/useGetProductsFromcart';
 import { priceSummary } from '@/shared/utils/priceSummary';
 import { clearCartFromStorage } from '@/shared/utils/storage';
 

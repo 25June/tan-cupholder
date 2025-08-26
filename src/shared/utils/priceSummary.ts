@@ -1,4 +1,4 @@
-import { ProductWithQuantity } from '@/hooks/useGetProductsFromCart';
+import { ProductWithQuantity } from '@/hooks/useGetProductsFromcart';
 
 export const priceSummary = (products: ProductWithQuantity[]) => {
   return products.reduce(

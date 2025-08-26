@@ -4,7 +4,7 @@ import { useEffect, useState, memo, useMemo } from 'react';
 import {
   useGetProductsFromCart,
   ProductWithQuantity
-} from '@/hooks/useGetProductsFromCart';
+} from '@/hooks/useGetProductsFromcart';
 import Footer from '@/components/footer/Footer';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
