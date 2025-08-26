@@ -46,8 +46,8 @@ export async function publicFetchProducts(searchParams?: {
   }
 }
 
-export async function publicFetchOtherProducts() {
-  const products = await sql`
+export async function publicFetchOtherProducts(): Promise<ProductResponse[]> {
+  const products = await sql<ProductResponse[]>`
     SELECT 
       p.id,
       p.name,
@@ -67,6 +67,30 @@ export async function publicFetchOtherProducts() {
     LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
     LIMIT 10 
     OFFSET 0
+  `;
+  return products;
+}
+
+export async function publicFetchProductByIds(ids: string[]) {
+  const products = await sql<ProductResponse[]>`
+    SELECT 
+      p.id,
+      p.name,
+      p.description,
+      p.price,
+      p.sale,
+      pt.name as type,
+      p.stock,
+      json_build_object(
+        'id', product_image.id,
+        'name', product_image.name,
+        'type', product_image.type,
+        'is_main', product_image.is_main
+      ) as product_image
+    FROM products p
+    LEFT JOIN product_types pt ON p.type = pt.id
+    LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
+    WHERE p.id = ANY(${ids})
   `;
   return products;
 }

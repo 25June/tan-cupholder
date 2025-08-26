@@ -12,8 +12,8 @@ export default function DropdownMenu({}: DropdownMenuProps) {
     <div className="block md:hidden">
       <button
         className="btn btn-sm btn-circle bg-transparent border-0"
-        popoverTarget="popover-1"
-        style={{ anchorName: '--anchor-1' } as React.CSSProperties}
+        popoverTarget="popover-menu"
+        style={{ anchorName: '--anchor-menu' } as React.CSSProperties}
       >
         <Bars3Icon />
       </button>
@@ -21,7 +21,7 @@ export default function DropdownMenu({}: DropdownMenuProps) {
         <ul
           className="dropdown menu bg-white rounded-box w-36"
           popover="auto"
-          id="popover-1"
+          id="popover-menu"
         >
           <li>
             <Link href={'/'}>

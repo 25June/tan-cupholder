@@ -5,7 +5,7 @@ import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 export default function QuestionPage() {
   return (
     <div>
-      <StaticMenuBar />
+      <StaticMenuBar triggerCartCount={1} />
       <Faq />
       <Footer />
     </div>

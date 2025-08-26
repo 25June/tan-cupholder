@@ -9,7 +9,7 @@ import { getImageUrl } from '@/shared/utils/getImageUrl';
 import Image from 'next/image';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { OrderProduct } from '@/models/order';
-import { useGetOtherProducts } from '@/hooks/useGetOrderProducts';
+import { useGetOtherProducts } from '@/hooks/useGetOtherProducts';
 import Spinner from '@/components/spinner/Spinner';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Link from 'next/link';
@@ -51,14 +51,14 @@ export default function OrderStatusPage() {
 
   return (
     <div className="w-full h-full relative">
-      <StaticMenuBar />
+      <StaticMenuBar triggerCartCount={1} />
       <div>
         <div
           className={`w-screen absolute h-48 md:h-96 bg-center bg-cover bg-no-repeat bg-[url('/IMG_7197.jpg')] brightness-50`}
         ></div>
       </div>
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 relative z-1 pt-16 pb-16 px-4">
-        <div className="col-span-1 md:col-span-2 border border-gray-200 rounded-lg p-4 bg-white">
+      <main className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 relative z-1 pt-16 pb-16 px-4">
+        <section className="col-span-1 md:col-span-2 border border-gray-200 rounded-lg p-4 bg-white">
           <h1 className="text-2xl font-bold tracking-wide">
             Thank You For Your Order!
           </h1>
@@ -114,7 +114,7 @@ export default function OrderStatusPage() {
             </ul>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 mt-4">
-            <div className="flex items-center justify-center space-x-4 w-full">
+            <div className="flex items-center justify-start space-x-4 w-full overflow-x-auto scrollbar-hide">
               {order.order_products?.map(
                 (product: OrderProduct['order_products'][number]) => {
                   const productDetails = orderProducts[product.product_id];
@@ -160,8 +160,8 @@ export default function OrderStatusPage() {
               )}
             </div>
           </div>
-        </div>
-        <div className="col-span-1 border border-gray-200 rounded-lg p-4 bg-white">
+        </section>
+        <article className="col-span-1 border border-gray-200 rounded-lg p-4 bg-white">
           <div className="space-y-6">
             <h2 className="text-lg font-bold">Other Products</h2>
             {otherProductsLoading && <Spinner />}
@@ -209,8 +209,8 @@ export default function OrderStatusPage() {
               </Link>
             </div>
           </div>
-        </div>
-      </div>
+        </article>
+      </main>
       <Footer />
     </div>
   );

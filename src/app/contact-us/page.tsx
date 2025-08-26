@@ -8,7 +8,7 @@ export default async function AboutUsPage() {
   const t = await getTranslations('ContactUsPage');
   return (
     <div>
-      <StaticMenuBar />
+      <StaticMenuBar triggerCartCount={1} />
       <div className="max-w-7xl p-4 mx-auto">
         <h1 className="text-3xl font-bold mb-4 text-center mt-12 uppercase">
           {t('title')}

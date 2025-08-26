@@ -14,7 +14,7 @@ export default function ProductsContainer() {
 
   return (
     <div>
-      <StaticMenuBar />
+      <StaticMenuBar triggerCartCount={1} />
       <div>
         <div
           className={`w-screen h-48 md:h-96 bg-center bg-cover bg-no-repeat bg-[url('/IMG_7197.jpg')]`}
