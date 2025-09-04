@@ -1,11 +1,61 @@
 import { EmailData } from '@/models/email';
 
+const getLayoutTemplate = (mainContent: string) => `
+  <!-- Main Table Container -->
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center" style="padding: 20px 0;">
+        <!-- Content Table -->
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff;">
+          <!-- Header Section -->
+          <tr>
+            <td align="center" style="padding: 40px 20px; background-color: #ec8c4c;">
+              <img src="/_next/image?url=%2Flogo.png&w=640&q=75" alt="Logo" width="200" style="max-width: 100%; height: auto;">
+            </td>
+          </tr>
+          
+          <!-- Content Section -->
+          <tr>
+            <td style="padding: 40px 20px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f4;>
+                <tr>
+                  <td>
+                    ${mainContent}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Footer Section -->
+          <tr>
+            <td style="padding: 20px; background-color: #ec8c4c;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  <td align="center" style="color: #f4f4f4; font-family: Arial, sans-serif; font-size: 12px;">
+                    <p style="margin: 0;">© 2024 Tan Cup Holder. All rights reserved.</p>
+                    <p style="margin: 10px 0 0 0;">
+                      Tan Cup Holder, 123 Resiliant St, Eco City, EC 12345
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+`;
+
 export const EMAIL_TEMPLATES = {
   'order-confirmation': {
-    subject: 'Order Confirmation - Tan Cup Holder',
-    html: (data: EmailData) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #333;">Order Confirmation</h1>
+    subject: (orderId: string) =>
+      `Order Confirmation - Tan Cup Holder - ${orderId}`,
+    html: (data: EmailData) =>
+      getLayoutTemplate(
+        `
+      <h1 style="color: #333;">Order Confirmation</h1>
         <p>Dear ${data.customerName || 'Customer'},</p>
         <p>Thank you for your order! Your order has been successfully placed.</p>
         <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -18,14 +68,15 @@ export const EMAIL_TEMPLATES = {
         </div>
         <p>We will process your order and ship it to you as soon as possible.</p>
         <p>Best regards,<br>Tan Cup Holder Team</p>
-      </div>
-    `
+        `
+      )
   },
   welcome: {
     subject: 'Welcome to Tan Cup Holder',
-    html: (data: EmailData) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #333;">Welcome to Tan Cup Holder!</h1>
+    html: (data: EmailData) =>
+      getLayoutTemplate(
+        `
+      <h1 style="color: #333;">Welcome to Tan Cup Holder!</h1>
         <p>Dear ${data.customerName || 'Customer'},</p>
         <p>Welcome to our community! We're excited to have you on board.</p>
         <p>Here's what you can expect from us:</p>
@@ -36,14 +87,15 @@ export const EMAIL_TEMPLATES = {
         </ul>
         <p>If you have any questions, feel free to reach out to us.</p>
         <p>Best regards,<br>Tan Cup Holder Team</p>
-      </div>
-    `
+        `
+      )
   },
   'password-reset': {
     subject: 'Password Reset Request - Tan Cup Holder',
-    html: (data: EmailData) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #333;">Password Reset Request</h1>
+    html: (data: EmailData) =>
+      getLayoutTemplate(
+        `
+      <h1 style="color: #333;">Password Reset Request</h1>
         <p>Dear ${data.customerName || 'Customer'},</p>
         <p>We received a request to reset your password. Click the link below to reset it:</p>
         <div style="text-align: center; margin: 30px 0;">
@@ -55,21 +107,20 @@ export const EMAIL_TEMPLATES = {
         <p>If you didn't request this, please ignore this email.</p>
         <p>This link will expire in 24 hours.</p>
         <p>Best regards,<br>Tan Cup Holder Team</p>
-      </div>
-    `
+        `
+      )
   },
   custom: {
     subject: 'Message from Tan Cup Holder',
-    html: (data: EmailData) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #333;">${
-          data.title || 'Message from Tan Cup Holder'
-        }</h1>
+    html: (data: EmailData) =>
+      getLayoutTemplate(`
+      <h1 style="color: #333;">${
+        data.title || 'Message from Tan Cup Holder'
+      }</h1>
         <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
           ${data.content || 'No content provided'}
         </div>
         <p>Best regards,<br>Tan Cup Holder Team</p>
-      </div>
-    `
+    `)
   }
 };

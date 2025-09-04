@@ -97,7 +97,7 @@ export const sendEmail = async (
     const info = await transporter.sendMail({
       from: process.env.SMTP_EMAIL,
       to: to,
-      subject: template.subject,
+      subject: template.subject(data.orderId),
       html: template.html(data)
     });
     console.log('email sent');

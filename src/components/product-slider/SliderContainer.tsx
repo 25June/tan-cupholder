@@ -34,7 +34,7 @@ export default function SliderContainer({ products }: Props) {
       setChunkNumber(1);
       setDisplayedProducts(chunkArray(products.slice(0, 8), 1));
     }
-  }, [currentLayout]);
+  }, [currentLayout, products]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
