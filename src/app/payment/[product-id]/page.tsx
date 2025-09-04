@@ -51,7 +51,10 @@ export default function PaymentPage() {
 
   const handleFormSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
-    formData.set('productId', productId);
+    formData.set(
+      'products',
+      JSON.stringify([{ productId: productId, quantity: quantity }])
+    );
     formData.set('quantity', quantity.toString());
     formData.set('totalPrice', calculateTotalPrice().toString());
 
