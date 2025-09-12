@@ -6,11 +6,11 @@ const getLayoutTemplate = (mainContent: string) => `
     <tr>
       <td align="center" style="padding: 20px 0;">
         <!-- Content Table -->
-        <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden;">
           <!-- Header Section -->
           <tr>
-            <td align="center" style="padding: 40px 20px; background-color: #ec8c4c;">
-              <img src="/_next/image?url=%2Flogo.png&w=640&q=75" alt="Logo" width="200" style="max-width: 100%; height: auto;">
+            <td align="center" style="padding:8px 20px; background-color: #ec8c4c;">
+              <img src="https://pub-485637738840450490e408cee2acb72c.r2.dev/logo-roundshape.png" alt="Logo" width="100" style="max-width: 100%; height: auto;">
             </td>
           </tr>
           
@@ -29,17 +29,11 @@ const getLayoutTemplate = (mainContent: string) => `
           
           <!-- Footer Section -->
           <tr>
-            <td style="padding: 20px; background-color: #ec8c4c;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-                <tr>
-                  <td align="center" style="color: #f4f4f4; font-family: Arial, sans-serif; font-size: 12px;">
-                    <p style="margin: 0;">© 2024 Tan Cup Holder. All rights reserved.</p>
-                    <p style="margin: 10px 0 0 0;">
-                      Tan Cup Holder, 123 Resiliant St, Eco City, EC 12345
-                    </p>
-                  </td>
-                </tr>
-              </table>
+            <td align="center" style="padding: 20px; background-color: #ec8c4c; color: #f4f4f4;">
+              <p style="margin: 0; font-size: 12px;">© 2025 Tan Cup Holder. All rights reserved.</p>
+              <p style="margin: 10px 0 0 0; font-size: 12px;">
+                Tan Cup Holder, 123 Resiliant St, Eco City, EC 12345
+              </p>
             </td>
           </tr>
         </table>
@@ -65,6 +59,11 @@ export const EMAIL_TEMPLATES = {
           <p><strong>Order Date:</strong> ${
             data.orderDate || new Date().toLocaleDateString()
           }</p>
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL}/order-status/${
+          data.orderId
+        }" style="background-color: #ec8c4c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+            View Order
+          </a>
         </div>
         <p>We will process your order and ship it to you as soon as possible.</p>
         <p>Best regards,<br>Tan Cup Holder Team</p>
