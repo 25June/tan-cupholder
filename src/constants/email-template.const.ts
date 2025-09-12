@@ -17,7 +17,7 @@ const getLayoutTemplate = (mainContent: string) => `
           <!-- Content Section -->
           <tr>
             <td style="padding: 40px 20px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f4;>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                   <td>
                     ${mainContent}
