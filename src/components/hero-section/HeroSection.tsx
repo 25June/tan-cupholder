@@ -203,8 +203,8 @@ export function HeroSection() {
                 <Image
                   src={img}
                   alt={img}
-                  sizes="800px"
-                  layout="fill"
+                  width={800}
+                  height={800}
                   className={`w-full h-full object-cover object-center transition-all duration-300 ${zoomIn}`}
                 />
               </div>

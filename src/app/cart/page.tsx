@@ -99,11 +99,12 @@ export default function CartPage() {
           </h1>
           {loading && <Spinner />}
           {!loading && productIds.length === 0 && (
-            <div className="text-center text-xl ">
+            <div className="text-center text-xl max-w-sm mx-auto">
               <p className="mb-4">No products in cart</p>
               <Link
                 href="/products"
                 className="btn btn-primary btn-lg w-full text-white"
+                prefetch={true}
               >
                 Let's shopping
               </Link>
@@ -149,7 +150,16 @@ export default function CartPage() {
 
             <Link
               href="/payment"
-              className="btn btn-primary btn-lg w-full text-white"
+              className={`btn btn-primary btn-lg w-full text-white ${
+                totalQuantity === 0 ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              scroll={false}
+              onClick={(e) => {
+                if (totalQuantity === 0) {
+                  e.preventDefault();
+                }
+              }}
+              prefetch={true}
             >
               Checkout
             </Link>
