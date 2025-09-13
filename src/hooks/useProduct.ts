@@ -11,7 +11,7 @@ export const useProducts = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [productList, setProductList] = useState<ProductResponse[]>([]);
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -42,7 +42,7 @@ export const useProducts = () => {
   };
 
   useEffect(() => {
-    if (totalCount && totalCount / 10 <= page) {
+    if (totalCount === 0 || (totalCount && totalCount / 10 <= page)) {
       setIsEnd(true);
     } else {
       setIsEnd(false);
