@@ -59,9 +59,9 @@ export const EMAIL_TEMPLATES = {
           <p><strong>Order Date:</strong> ${
             data.orderDate || new Date().toLocaleDateString()
           }</p>
-          <a href="${process.env.NEXT_PUBLIC_SITE_URL}/order-status/${
-          data.orderId
-        }" style="background-color: #ec8c4c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+          <a href="${
+            data.url
+          }" style="background-color: #ec8c4c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
             View Order
           </a>
         </div>

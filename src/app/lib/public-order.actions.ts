@@ -156,7 +156,8 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
       orderId: order[0].id,
       totalAmount: totalPrice,
       orderDate: date,
-      orderProducts: decodedProducts
+      orderProducts: decodedProducts,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/order-status/${order[0].id}`
     });
     return { orderId: order[0].id };
   } catch (error) {
