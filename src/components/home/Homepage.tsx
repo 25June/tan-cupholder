@@ -21,12 +21,12 @@ export default function Homepage({ products }: Props) {
   const { scrollYProgress } = useScroll({ container: divRef });
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-hidden">
       <Preload />
       <MenuBar scrollYProgress={scrollYProgress} />
       <div
         ref={divRef}
-        className="h-screen flex flex-col overflow-y-scroll text-logo-text snap-y snap-proximity scroll-smooth"
+        className="h-screen flex flex-col text-logo-text snap-y snap-proximity overflow-y-scroll scroll-smooth"
       >
         <div className="snap-center" id={View.HERO}>
           <HeroSection />

@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import postgres from 'postgres';
+import { sendEmail } from '@/app/admin/lib/actions/email.actions';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -150,6 +151,14 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
       }
     );
     await Promise.all(promises);
+    await sendEmail(customerEmail, 'order-confirmation', {
+      customerName: customerName,
+      orderId: order[0].id,
+      totalAmount: totalPrice,
+      orderDate: date,
+      orderProducts: decodedProducts,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/order-status/${order[0].id}`
+    });
     return { orderId: order[0].id };
   } catch (error) {
     console.error('Database Error:', error);

@@ -10,11 +10,11 @@ import CartIcon from '@/components/cart-icon/CartIcon';
 import { getCartCountFromStorage } from '@/shared/utils/storage';
 import Link from 'next/link';
 
-const bgHeroImageArr = [
-  "bg-[url('/IMG_8677.jpg')]",
-  "bg-[url('/IMG_7197.jpg')]",
-  "bg-[url('/IMG_7278.jpg')]",
-  "bg-[url('/IMG_8884.JPG')]"
+const imageArr = [
+  '/IMG_8677.jpg',
+  '/IMG_7197.jpg',
+  '/IMG_7278.jpg',
+  '/IMG_8884.JPG'
 ];
 
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
@@ -27,7 +27,7 @@ export function HeroSection() {
   const [translateY, setTranslateY] = useState<string[]>([]);
   const [zIndex] = useState<string[]>(['z-30', 'z-20', 'z-10', 'z-0']);
   const [contrast, setContrast] = useState<string[]>([]);
-  const [imgOrders, setImgOrders] = useState<string[]>(bgHeroImageArr);
+  const [imgOrders, setImgOrders] = useState<string[]>(imageArr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
   const [cartCount, setCartCount] = useState<number>(0);
 
@@ -200,9 +200,13 @@ export function HeroSection() {
                 key={img}
                 className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
               >
-                <div
-                  className={`w-full h-full max-w-md max-h-128 overflow-hidden rounded-xl aspect-square bg-center bg-cover bg-no-repeat transition-all duration-300 ${img} ${zoomIn} `}
-                ></div>
+                <Image
+                  src={img}
+                  alt={img}
+                  width={800}
+                  height={800}
+                  className={`w-full h-full object-cover object-center transition-all duration-300 ${zoomIn}`}
+                />
               </div>
             );
           })}
