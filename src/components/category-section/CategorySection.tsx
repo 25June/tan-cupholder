@@ -3,12 +3,14 @@
 import * as motion from 'motion/react-client';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import EditableText from '../editable-text/EditableText';
 
 export const CategorySection = () => {
   const t = useTranslations('HomePage.CategorySection');
   return (
     <div className="relative max-w-screen md:max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-full md:min-h-screen p-4 md:p-8 pb-20 gap-16 ">
       <main className="w-[90vw] md:w-full flex flex-col md:flex-row gap-8 row-start-2 justify-stretch justify-items-stretch items-stretch">
+        <EditableText textKey="categorySection" />
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

@@ -132,3 +132,19 @@ input[type='number']::-webkit-outer-spin-button {
     rgba(0, 0, 0, 0)
   );
 }
+
+.editable-text-bg {
+  background: linear-gradient(
+      90deg,
+      rgba(255, 237, 0, 0.2) 0%,
+      rgba(255, 2, 2, 0.2) 11%,
+      rgba(0, 255, 147, 0.2) 21%,
+      rgba(255, 237, 0, 0.2) 31%,
+      rgba(255, 2, 2, 0.2) 41%,
+      rgba(0, 255, 147, 0.2) 51%,
+      rgba(255, 237, 0, 0.2) 61%,
+      rgba(255, 2, 2, 0.2) 71%,
+      rgba(0, 255, 147, 0.2) 81%
+    ),
+    rgba(255, 237, 0, 0.2) 91%;
+}

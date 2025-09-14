@@ -231,9 +231,22 @@ async function seedFeatureImage() {
   )`;
 }
 
+async function seedContent() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS content (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      key VARCHAR(255) NOT NULL UNIQUE,
+      value TEXT NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      created_by VARCHAR(255) NOT NULL,
+      updated_by VARCHAR(255) NOT NULL
+    )`;
+}
+
 export async function GET() {
   try {
-    const result = await sql.begin(seedFeatureImage);
+    const result = await sql.begin(seedContent);
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

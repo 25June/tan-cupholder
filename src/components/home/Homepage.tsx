@@ -11,7 +11,7 @@ import { View } from '@/constants/common';
 import ProductSlider from '@/components/product-slider/ProductSlider';
 import Preload from '../preload/Preload';
 import { ProductResponse } from '@/models/product';
-
+import { ModesProvider } from '@/contexts/EditMode.context';
 interface Props {
   readonly products: ProductResponse[];
 }
@@ -23,27 +23,29 @@ export default function Homepage({ products }: Props) {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <Preload />
-      <MenuBar scrollYProgress={scrollYProgress} />
-      <div
-        ref={divRef}
-        className="h-screen flex flex-col text-logo-text snap-y snap-proximity overflow-y-scroll scroll-smooth"
-      >
-        <div className="snap-center" id={View.HERO}>
-          <HeroSection />
+      <ModesProvider>
+        <MenuBar scrollYProgress={scrollYProgress} />
+        <div
+          ref={divRef}
+          className="h-screen flex flex-col text-logo-text snap-y snap-proximity overflow-y-scroll scroll-smooth"
+        >
+          <div className="snap-center" id={View.HERO}>
+            <HeroSection />
+          </div>
+          <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
+            <CategorySection />
+          </div>
+          <div className="snap-center" id={View.PRODUCT}>
+            <ProductSlider products={products} />
+          </div>
+          <div id={View.FAQ}>
+            <Faq />
+          </div>
+          <div>
+            <Footer />
+          </div>
         </div>
-        <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
-          <CategorySection />
-        </div>
-        <div className="snap-center" id={View.PRODUCT}>
-          <ProductSlider products={products} />
-        </div>
-        <div id={View.FAQ}>
-          <Faq />
-        </div>
-        <div>
-          <Footer />
-        </div>
-      </div>
+      </ModesProvider>
     </div>
   );
 }
