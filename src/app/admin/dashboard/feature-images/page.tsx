@@ -17,7 +17,7 @@ export default function Page() {
     <main>
       <div className="flex w-full items-center justify-between mb-8">
         <h1 className={`${lusitana.className}  text-xl md:text-2xl`}>
-          Feature Images - {totalCount} Images
+          Feature Images - {totalCount} images
         </h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
