@@ -63,10 +63,10 @@
   }
 }
 
-.bg-from-white-to-transparent-180deg {
+.bg-from-white-to-transparent-0deg {
   background-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 48.29%,
+    0deg,
+    rgba(255, 255, 255, 0) 10.29%,
     rgba(249, 249, 249, 0.95) 71.06%
   );
 }

@@ -11,12 +11,12 @@ import {
 } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { getAllContent } from '@/app/lib/public-content.actions';
+import { useLocale } from 'next-intl';
 
 export interface ModesContextProps {
   isEditorMode?: boolean;
   exitEditorMode: () => void;
   language: string;
-  changeLanguage: (value: string) => void;
   getText: (textKey: string) => Record<string, string>;
   texts: Record<string, string>;
 }
@@ -25,14 +25,13 @@ const ModesContext = createContext<ModesContextProps>({
   isEditorMode: false,
   exitEditorMode: () => {},
   language: 'vn',
-  changeLanguage: () => {},
   getText: () => ({}),
   texts: {}
 });
 
 export const ModesProvider = ({ children }: PropsWithChildren) => {
   const [isEditorMode, setEditorMode] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string>('vn');
+  const language = useLocale();
   // Check if user is signed in to enable editor mode hotkeys
   const [isSignedIn, setIsSignedIn] = useState<boolean>(true);
   const [texts, setTexts] = useState<Record<string, string>>({});
@@ -69,17 +68,18 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
   );
 
   const exitEditorMode = useCallback(() => setEditorMode(false), []);
-  const changeLanguage = useCallback((value: string) => setLanguage(value), []);
-  const getText = useCallback((textKey: string) => {
-    return texts[textKey] ? JSON.parse(texts[textKey]) : { vn: '', en: '' };
-  }, []);
+  const getText = useCallback(
+    (textKey: string) => {
+      return texts[textKey] ? JSON.parse(texts[textKey]) : { vn: '', en: '' };
+    },
+    [texts]
+  );
 
   const contextValues = useMemo(
     () => ({
       isEditorMode,
       exitEditorMode,
       language,
-      changeLanguage,
       getText,
       texts
     }),

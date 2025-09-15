@@ -57,7 +57,7 @@ async function addContent(payload: Content) {
   const { key, value, created_by } = validatedFields.data;
   const date = new Date().toISOString();
 
-  await sql`INSERT INTO content (key, value, created_at, updated_at, created_by) VALUES (${key}, ${value}, ${date}, ${date}, ${created_by})`;
+  await sql`INSERT INTO content (key, value, created_at, updated_at, created_by, updated_by) VALUES (${key}, ${value}, ${date}, ${date}, ${created_by}, ${created_by})`;
 
   return {
     message: 'Content added successfully'

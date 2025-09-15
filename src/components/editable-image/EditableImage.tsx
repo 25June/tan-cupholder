@@ -5,33 +5,27 @@ import { useModesContext } from '@/contexts/EditMode.context';
 import Popper from '@/components/popper/Popper';
 import { MouseEvent, useRef, useState } from 'react';
 import Image, { ImageProps } from 'next/image';
-
-type TextProps = Record<string, string>;
-
 interface Props extends ImageProps {
   imageKey: string;
 }
 
-interface FormValuesInterface {
-  imageUrl: string;
-}
-
 export default function EditableImage({ imageKey, ...props }: Props) {
   const { isEditorMode, getText } = useModesContext();
-  const imageUrl = getText(imageKey)?.['vn'] || '';
+  const imageUrl = getText(imageKey)?.['vn'] || '/cup.png';
+
   if (!isEditorMode) {
-    return <Image {...props} />;
+    return <Image {...props} src={imageUrl} />;
   }
 
-  return <EditText imageUrl={imageUrl} textKey={imageKey} />;
+  return <EditImage imageUrl={imageUrl} textKey={imageKey} {...props} />;
 }
 
-interface EditTextProps {
+interface EditImageProps extends ImageProps {
   imageUrl: string;
   textKey: string;
 }
 
-function EditText({ imageUrl, textKey }: EditTextProps) {
+function EditImage({ imageUrl, textKey, ...props }: EditImageProps) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const anchorRef = useRef(null);
 
@@ -47,9 +41,9 @@ function EditText({ imageUrl, textKey }: EditTextProps) {
     e.nativeEvent.stopImmediatePropagation();
   };
 
-  const onSubmit = (values: FormValuesInterface) => {
+  const onSubmit = (values: FormData) => {
     console.log(values);
-    const value = JSON.stringify({ vn: values.imageUrl });
+    const value = JSON.stringify({ vn: values.get('imageUrl') });
     updateContent({ key: textKey, value, updated_by: 'admin' })
       .then(() => {
         console.log('update success');
@@ -62,16 +56,20 @@ function EditText({ imageUrl, textKey }: EditTextProps) {
 
   return (
     <>
-      <span
-        className={`editable-text-bg cursor-pointer hover:bg-[#72bcd4]`}
+      <div
+        className={`editable-text-bg cursor-pointer hover:bg-[#72bcd4] w-full h-full`}
         onClick={handleClick}
         ref={anchorRef}
       >
-        {imageUrl}
-      </span>
+        <Image
+          {...props}
+          src={imageUrl}
+          className={`${props.className} opacity-50`}
+        />
+      </div>
       <Popper open={isOpen} anchorEl={anchorRef.current} onClose={handleClose}>
         <div onClick={handleClickPopper} className="p-4">
-          <form onSubmit={(e) => onSubmit(e as any)} className="space-y-4">
+          <form action={onSubmit} className="space-y-4">
             <input
               type="text"
               name="imageUrl"

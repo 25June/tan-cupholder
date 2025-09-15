@@ -13,11 +13,6 @@ interface EditableTextProps {
   render?: (renderProps: TextProps) => React.ReactNode;
 }
 
-interface FormValuesInterface {
-  vn: string;
-  en: string;
-}
-
 export default function EditableText({
   textKey,
   defaultText = { vn: '', en: '' }
@@ -53,9 +48,11 @@ function EditText({ text, textKey }: EditTextProps) {
     e.nativeEvent.stopImmediatePropagation();
   };
 
-  const onSubmit = (values: FormValuesInterface) => {
-    console.log(values);
-    const value = JSON.stringify({ vn: values.vn, en: values.en });
+  const onSubmit = (values: FormData) => {
+    const value = JSON.stringify({
+      vn: values.get('vn'),
+      en: values.get('en')
+    });
     updateContent({ key: textKey, value, updated_by: 'admin' })
       .then(() => {
         console.log('update success');
@@ -81,7 +78,7 @@ function EditText({ text, textKey }: EditTextProps) {
       </span>
       <Popper open={isOpen} anchorEl={anchorRef.current} onClose={handleClose}>
         <div onClick={handleClickPopper} className="p-4">
-          <form onSubmit={(e) => onSubmit(e as any)} className="space-y-4">
+          <form action={onSubmit} className="space-y-4">
             <input
               type="text"
               name="vn"
