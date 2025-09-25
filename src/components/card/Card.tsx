@@ -21,6 +21,7 @@ interface CardProps {
 
 export default function Card({ item }: CardProps) {
   const router = useRouter();
+  router.prefetch(`/products/${item.id}`);
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}

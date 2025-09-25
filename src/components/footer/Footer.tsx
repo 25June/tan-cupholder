@@ -4,7 +4,9 @@ import { useTranslations } from 'next-intl';
 import { durationLeft, durationRight, menus, socialMedias } from './constant';
 import { yuseiMagic } from '@/styles/fonts';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
+const MotionLink = motion(Link);
 export default function Footer() {
   const t = useTranslations('HomePage.FooterSection');
   const route = useRouter();
@@ -197,14 +199,9 @@ export default function Footer() {
                 className="flex flex-col sm:gap-3 gap-5"
               >
                 {menu.map((item) => (
-                  <motion.a
-                    target="_self"
+                  <MotionLink
+                    prefetch={true}
                     viewport={{ once: true }}
-                    onClick={() =>
-                      item.href.includes('https')
-                        ? window.open(item.href, '_blank')
-                        : route.push(item.href)
-                    }
                     href={item.href}
                     whileHover={{ x: 3 }}
                     whileTap={{ x: 3 }}
@@ -227,7 +224,7 @@ export default function Footer() {
                     key={item.name}
                   >
                     {item.name}
-                  </motion.a>
+                  </MotionLink>
                 ))}
               </motion.div>
             ))}

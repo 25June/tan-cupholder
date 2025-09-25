@@ -5,8 +5,9 @@ import { useModesContext } from '@/contexts/EditMode.context';
 import Popper from '@/components/popper/Popper';
 import { MouseEvent, useRef, useState } from 'react';
 import Image, { ImageProps } from 'next/image';
+import { editableKey } from '@/constants/editableKey';
 interface Props extends ImageProps {
-  imageKey: string;
+  imageKey: editableKey;
 }
 
 export default function EditableImage({ imageKey, ...props }: Props) {
@@ -46,11 +47,11 @@ function EditImage({ imageUrl, textKey, ...props }: EditImageProps) {
     const value = JSON.stringify({ vn: values.get('imageUrl') });
     updateContent({ key: textKey, value, updated_by: 'admin' })
       .then(() => {
-        console.log('update success');
         setOpen(false);
       })
       .catch((error: any) => {
         console.log(error);
+        setOpen(false);
       });
   };
 

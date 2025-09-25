@@ -26,7 +26,12 @@ export default function TranslateDropdown({ id }: { id: string }) {
         {isPending ? <Spinner /> : <GlobeAltIcon />}
       </button>
       <div className="dropdown dropdown-end">
-        <ul popover="auto" id={id} className="dropdown menu bg-white w-24 z-1">
+        <ul
+          popover="auto"
+          id={id}
+          style={{ positionAnchor: '--anchor-2' } as React.CSSProperties}
+          className="dropdown menu bg-white w-24 z-1"
+        >
           <li>
             <button onClick={() => onSelectChange('vi')}>
               <Image

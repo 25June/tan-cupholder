@@ -22,24 +22,25 @@ export default function DropdownMenu({}: DropdownMenuProps) {
           className="dropdown menu bg-white rounded-box w-36"
           popover="auto"
           id="popover-menu"
+          style={{ positionAnchor: '--anchor-menu' } as React.CSSProperties}
         >
           <li>
-            <Link href={'/'}>
+            <Link href={'/'} prefetch={true}>
               <p className={menuItemClass}>{t('home')}</p>
             </Link>
           </li>
           <li>
-            <Link href={'/material'}>
+            <Link href={'/material'} prefetch={true}>
               <p className={menuItemClass}>{t('materials')}</p>
             </Link>
           </li>
           <li>
-            <Link href={'/products'}>
+            <Link href={'/products'} prefetch={true}>
               <p className={menuItemClass}>{t('collections')}</p>
             </Link>
           </li>
           <li>
-            <Link href={'/question'}>
+            <Link href={'/question'} prefetch={true}>
               <p className={menuItemClass}>{t('faq')}</p>
             </Link>
           </li>

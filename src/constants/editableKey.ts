@@ -1,0 +1,17 @@
+export enum editableKey {
+  CATEGORY_IMAGE_1 = 'categorySection1Image',
+  CATEGORY_TITLE_1 = 'categorySection1Title',
+  CATEGORY_DESCRIPTION_1 = 'categorySection1Description',
+  CATEGORY_PRICE_1 = 'categorySection1Price',
+  CATEGORY_BUTTON_1 = 'categorySection1Button',
+  CATEGORY_IMAGE_2 = 'categorySection2Image',
+  CATEGORY_TITLE_2 = 'categorySection2Title',
+  CATEGORY_DESCRIPTION_2 = 'categorySection2Description',
+  CATEGORY_PRICE_2 = 'categorySection2Price',
+  CATEGORY_BUTTON_2 = 'categorySection2Button',
+  CATEGORY_IMAGE_3 = 'categorySection3Image',
+  CATEGORY_TITLE_3 = 'categorySection3Title',
+  CATEGORY_DESCRIPTION_3 = 'categorySection3Description',
+  CATEGORY_PRICE_3 = 'categorySection3Price',
+  CATEGORY_BUTTON_3 = 'categorySection3Button'
+}

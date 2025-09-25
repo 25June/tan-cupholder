@@ -22,6 +22,7 @@ const Break = () => <br />;
 export function HeroSection() {
   const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
+
   const [translateX, setTranslateX] = useState<string[]>([]);
   const [opacity, setOpacity] = useState<string[]>([]);
   const [translateY, setTranslateY] = useState<string[]>([]);
@@ -136,7 +137,7 @@ export function HeroSection() {
                 >
                   {t('button')}
                 </motion.button>
-                <Link href={'/cart'}>
+                <Link href={'/cart'} prefetch={true}>
                   <CartIcon cartCount={cartCount} />
                 </Link>
               </div>

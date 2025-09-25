@@ -4,15 +4,29 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { FeatureImage } from '@/models/featureImage';
-import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import {
+  ClipboardDocumentCheckIcon,
+  ClipboardDocumentIcon
+} from '@heroicons/react/24/outline';
 
 export default function ImageList({ images }: { images: FeatureImage[] }) {
   const [selectedImages, setSelectedImages] = useState<Record<string, boolean>>(
     {}
   );
 
-  const copyImageUrl = (image: FeatureImage) => {
+  const copyImageUrl = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    image: FeatureImage
+  ) => {
     navigator.clipboard.writeText(getImageUrl('feature-images', image.name));
+    console.log(`copy-${image.id}`);
+    setTimeout(() => {
+      console.log('execute');
+      const input = document.getElementById(`copy-${image.id}`);
+      if (input) {
+        (input as HTMLInputElement).checked = false;
+      }
+    }, 2000);
   };
   return (
     <div className="columns-3 gap-4">
@@ -32,11 +46,23 @@ export default function ImageList({ images }: { images: FeatureImage[] }) {
             height={500}
             className="w-full h-full"
           />
-          <div className="absolute bottom-0 right-0 p-2">
+          <div className="absolute bottom-0 right-0 p-2 flex gap-2 width-full justify-between">
+            <button onClick={(e) => copyImageUrl(e, image)}>
+              <label className="swap swap-rotate">
+                {/* this hidden checkbox controls the state */}
+                <input id={`copy-${image.id}`} type="checkbox" />
+
+                {/* Copy icon */}
+                <ClipboardDocumentIcon className="swap-off w-6 h-6 text-white" />
+
+                {/* Copied icon */}
+                <ClipboardDocumentCheckIcon className="swap-on w-6 h-6 text-green-500" />
+              </label>
+            </button>
             <input
               type="checkbox"
               checked={!!selectedImages[image.id]}
-              onClick={() =>
+              onChange={() =>
                 setSelectedImages((prev) => ({
                   ...prev,
                   [image.id]: prev[image.id] ? false : true
@@ -44,9 +70,6 @@ export default function ImageList({ images }: { images: FeatureImage[] }) {
               }
               className={`checkbox border-white bg-transparent checked:border-orange-500 checked:bg-white checked:text-orange-500`}
             />
-            <button onClick={() => copyImageUrl(image)}>
-              <DocumentDuplicateIcon className="w-4 h-4" />
-            </button>
           </div>
         </div>
       ))}
