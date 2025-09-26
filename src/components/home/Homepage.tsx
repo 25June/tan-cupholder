@@ -4,7 +4,7 @@ import { useScroll } from 'motion/react';
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
 import { CategorySection } from '@/components/category-section/CategorySection';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Faq } from '@/components/faq/Faq';
 import Footer from '@/components/footer/Footer';
 import { View } from '@/constants/common';
@@ -18,11 +18,12 @@ interface Props {
 
 export default function Homepage({ products }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { scrollYProgress } = useScroll({ container: divRef });
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <Preload />
+      <Preload isLoaded={isLoaded} />
       <ModesProvider>
         <MenuBar scrollYProgress={scrollYProgress} />
         <div
@@ -30,7 +31,7 @@ export default function Homepage({ products }: Props) {
           className="h-screen flex flex-col text-logo-text snap-y snap-proximity overflow-y-scroll scroll-smooth"
         >
           <div className="snap-center" id={View.HERO}>
-            <HeroSection />
+            <HeroSection onLoad={() => setIsLoaded(true)} />
           </div>
           <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
             <CategorySection />

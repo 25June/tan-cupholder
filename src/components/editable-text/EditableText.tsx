@@ -15,12 +15,13 @@ interface EditableTextProps {
 
 export default function EditableText({
   textKey,
-  defaultText = { vn: '', en: '' }
+  defaultText = { vi: '', en: '' }
 }: EditableTextProps) {
   const { isEditorMode, language, getText } = useModesContext();
+  console.log({ language });
   const text = getText(textKey);
   if (!isEditorMode) {
-    return <>{language === 'vn' ? text.vn : text.en}</>;
+    return language === 'vi' ? text.vn : text.en;
   }
 
   return <EditText text={text} textKey={textKey} />;
@@ -67,14 +68,14 @@ function EditText({ text, textKey }: EditTextProps) {
     <>
       <span
         className={`editable-text-bg cursor-pointer hover:bg-[#72bcd4] ${
-          (language === 'vn' ? text.vn?.length : text.en?.length) <= 0
+          (language === 'vi' ? text.vn?.length : text.en?.length) <= 0
             ? 'inline-block w-[50px] h-[16px]'
             : ''
         }`}
         onClick={handleClick}
         ref={anchorRef}
       >
-        {language === 'vn' ? text.vn : text.en}
+        {language === 'vi' ? text.vn : text.en}
       </span>
       <Popper open={isOpen} anchorEl={anchorRef.current} onClose={handleClose}>
         <div onClick={handleClickPopper} className="p-4">

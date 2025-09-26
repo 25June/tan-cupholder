@@ -35,7 +35,7 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
   // Check if user is signed in to enable editor mode hotkeys
   const [isSignedIn, setIsSignedIn] = useState<boolean>(true);
   const [texts, setTexts] = useState<Record<string, string>>({});
-
+  console.log({ texts });
   useEffect(() => {
     // const checkAuth = async () => {
     //   try {

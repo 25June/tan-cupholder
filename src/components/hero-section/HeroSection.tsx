@@ -10,19 +10,23 @@ import CartIcon from '@/components/cart-icon/CartIcon';
 import { getCartCountFromStorage } from '@/shared/utils/storage';
 import Link from 'next/link';
 import Slider from './Slider';
+import { useModesContext } from '@/contexts/EditMode.context';
+import EditableSlider from './EditableSlider';
+import { editableKey } from '@/constants/editableKey';
 
 const imageArr = [
-  '/IMG_8677.jpg',
-  '/IMG_7197.jpg',
-  '/IMG_7278.jpg',
-  '/IMG_8884.JPG'
+  editableKey.HERO_SECTION_IMAGE_1,
+  editableKey.HERO_SECTION_IMAGE_2,
+  editableKey.HERO_SECTION_IMAGE_3,
+  editableKey.HERO_SECTION_IMAGE_4
 ];
 
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 const Break = () => <br />;
-export function HeroSection() {
+export function HeroSection({ onLoad }: { onLoad: () => void }) {
   const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
+  const { isEditorMode } = useModesContext();
 
   const [cartCount, setCartCount] = useState<number>(0);
 
@@ -132,7 +136,11 @@ export function HeroSection() {
           </div>
         </div>
         <div className="relative w-full h-full hidden md:flex justify-center pt-28">
-          <Slider imageArr={imageArr} />
+          {isEditorMode ? (
+            <EditableSlider imageArr={imageArr} />
+          ) : (
+            <Slider imageArr={imageArr} onLoad={onLoad} />
+          )}
         </div>
       </div>
       <div className="absolute -bottom-1 w-full">

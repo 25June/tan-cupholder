@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FileUpload from '@/components/file-upload/FileUpload';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import {
@@ -20,6 +20,10 @@ export default function CreateFeatureImageForm() {
   const [presignedUrlObject, setPresignedUrlObject] = useState<
     Record<string, string>
   >({});
+  const [imageUploadCompleted, setImageUploadCompleted] = useState<
+    Record<string, boolean>
+  >({});
+  const [inputKey, setInputKey] = useState<number>(0);
 
   const onUpload = async () => {
     if (!uploadImages.length) {
@@ -51,6 +55,19 @@ export default function CreateFeatureImageForm() {
     setUploadImages(Array.from(files));
   };
 
+  useEffect(() => {
+    if (
+      Object.values(imageUploadCompleted).length &&
+      Object.values(imageUploadCompleted).every((value) => value === true)
+    ) {
+      console.log('imageUploadCompleted');
+      setUploadImages([]);
+      setImageUploadCompleted({});
+      setPresignedUrlObject({});
+      setInputKey((prev) => prev + 1);
+    }
+  }, [imageUploadCompleted]);
+
   return (
     <form action={onUpload}>
       <div className="form-control w-full max-w-full">
@@ -58,6 +75,7 @@ export default function CreateFeatureImageForm() {
           <fieldset className="fieldset">
             <legend className="fieldset-legend">Images</legend>
             <input
+              key={inputKey}
               multiple
               type="file"
               name="image"
@@ -91,7 +109,7 @@ export default function CreateFeatureImageForm() {
                       key={uploadImage.name}
                       image={uploadImage}
                       presignedUrl={presignedUrlObject[uploadImage.name] || ''}
-                      setImageUploadCompleted={() => console.log('done')}
+                      setImageUploadCompleted={setImageUploadCompleted}
                     />
                   </div>
                 ))}

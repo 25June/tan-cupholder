@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import EditableImage from '../editable-image/EditableImage';
+import { editableKey } from '@/constants/editableKey';
 
 const Z_INDEX = ['z-30', 'z-20', 'z-10', 'z-0'];
 const CONTRAST = ['contrast-100', 'contrast-75', 'contrast-50', 'contrast-0'];
@@ -17,14 +19,21 @@ const TRANSLATE_Y = [
 ];
 const OPACITY = ['opacity-100', 'opacity-70', 'opacity-50', 'opacity-0'];
 
-export default function Slider({ imageArr }: { imageArr: string[] }) {
+export default function Slider({
+  imageArr,
+  onLoad
+}: {
+  imageArr: editableKey[];
+  onLoad: () => void;
+}) {
   const [contrast, setContrast] = useState<string[]>(CONTRAST);
-  const [imgOrders, setImgOrders] = useState<string[]>(imageArr);
+  const [imgOrders, setImgOrders] = useState<editableKey[]>(imageArr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
   const [translateX, setTranslateX] = useState<string[]>([]);
   const [opacity, setOpacity] = useState<string[]>([]);
   const [translateY, setTranslateY] = useState<string[]>([]);
   const [zIndex] = useState<string[]>(Z_INDEX);
+  const [isLoaded, setIsLoaded] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -54,6 +63,15 @@ export default function Slider({ imageArr }: { imageArr: string[] }) {
     setTranslateY(TRANSLATE_Y);
     setOpacity(OPACITY);
   }, []);
+
+  useEffect(() => {
+    if (
+      Object.values(isLoaded).length &&
+      Object.values(isLoaded).every((value) => value === true)
+    ) {
+      onLoad();
+    }
+  }, [isLoaded]);
   return (
     <>
       {imgOrders.map((img, index) => {
@@ -80,11 +98,13 @@ export default function Slider({ imageArr }: { imageArr: string[] }) {
             key={img}
             className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
           >
-            <Image
-              src={img}
+            <EditableImage
+              imageKey={img}
+              src={''}
               alt={img}
               width={800}
               height={800}
+              onLoad={() => setIsLoaded((prev) => ({ ...prev, [img]: true }))}
               className={`w-full h-full object-cover object-center transition-all duration-300 ${zoomIn}`}
             />
           </div>

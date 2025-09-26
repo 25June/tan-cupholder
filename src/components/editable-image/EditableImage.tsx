@@ -12,7 +12,11 @@ interface Props extends ImageProps {
 
 export default function EditableImage({ imageKey, ...props }: Props) {
   const { isEditorMode, getText } = useModesContext();
-  const imageUrl = getText(imageKey)?.['vn'] || '/cup.png';
+  const imageUrl = getText(imageKey)?.['vn'];
+
+  if (!imageUrl) {
+    return null;
+  }
 
   if (!isEditorMode) {
     return <Image {...props} src={imageUrl} />;
