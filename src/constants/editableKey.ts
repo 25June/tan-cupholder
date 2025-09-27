@@ -17,5 +17,7 @@ export enum editableKey {
   HERO_SECTION_IMAGE_1 = 'heroSectionImage1',
   HERO_SECTION_IMAGE_2 = 'heroSectionImage2',
   HERO_SECTION_IMAGE_3 = 'heroSectionImage3',
-  HERO_SECTION_IMAGE_4 = 'heroSectionImage4'
+  HERO_SECTION_IMAGE_4 = 'heroSectionImage4',
+  INSPIRATION_IMAGE_1 = 'inspirationImage1',
+  INSPIRATION_IMAGE_2 = 'inspirationImage2'
 }

@@ -11,7 +11,7 @@ export const useProducts = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [productList, setProductList] = useState<ProductResponse[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -22,6 +22,9 @@ export const useProducts = () => {
       query: search,
       page: page.toString()
     });
+    if (products.length === 0) {
+      setIsEnd(true);
+    }
     console.log('products', products);
     setProductList((prev) => [...prev, ...products]);
     setTotalCount(totalCount);
@@ -37,17 +40,19 @@ export const useProducts = () => {
 
   const handleGetNextPage = () => {
     if (isLoading) return;
-    setPage(page + 1);
+    setPage((prev) => prev + 1);
     fetchData(query, page + 1);
   };
 
   useEffect(() => {
-    if (totalCount === 0 || (totalCount && totalCount / 10 <= page)) {
+    if (isLoading) return;
+    if (totalCount && totalCount / 10 <= page) {
       setIsEnd(true);
     } else {
       setIsEnd(false);
     }
-  }, [totalCount, page]);
+  }, [totalCount, page, isLoading]);
+  console.log('totalCount', totalCount, page, isEnd);
 
   return {
     onSearch: handleSearch,

@@ -10,38 +10,47 @@ export const useImageFeature = () => {
   const [query, setQuery] = useState<string>('');
   const [totalCount, setTotalCount] = useState<number>(0);
 
-  const handleFetchFeatureImages = async (query: string, page: number) => {
+  const handleFetchFeatureImages = async (query: string, newPage: number) => {
     if (loading) return;
     setLoading(true);
     const { images, totalCount } = await fetchFeatureImages({
       query,
-      page: page
+      page: newPage
     });
+    if (images.length === 0) {
+      setIsEnd(true);
+    }
     setImages((prev) => [...prev, ...images]);
     setTotalCount(totalCount);
     setLoading(false);
   };
   const handleGetNextPage = () => {
     if (loading) return;
-    setPage(page + 1);
+    setPage((prev) => prev + 1);
     handleFetchFeatureImages(query, page + 1);
   };
 
   const handleSearch = (query: string) => {
     setQuery(query);
-    setPage(1);
+    setPage(0);
     setImages([]);
-    handleFetchFeatureImages(query, 1);
+    handleFetchFeatureImages(query, 0);
+  };
+
+  const handleDelete = (ids: string[]) => {
+    setImages((prev) => prev.filter((image) => !ids.includes(image.id)));
+    setTotalCount((prev) => prev - ids.length);
   };
 
   useEffect(() => {
     if (loading) return;
-    if (totalCount === 0 || (totalCount && totalCount / 10 <= page)) {
+    if (totalCount && totalCount / 10 <= page) {
       setIsEnd(true);
     } else {
       setIsEnd(false);
     }
   }, [totalCount, page, loading]);
+  console.log('totalCount', totalCount, page, isEnd);
 
   return {
     images,
@@ -52,6 +61,7 @@ export const useImageFeature = () => {
     totalCount,
     onFetchFeatureImages: handleFetchFeatureImages,
     onGetNextPage: handleGetNextPage,
-    onSearch: handleSearch
+    onSearch: handleSearch,
+    onDelete: handleDelete
   };
 };

@@ -12,7 +12,7 @@ interface Props extends ImageProps {
 
 export default function EditableImage({ imageKey, ...props }: Props) {
   const { isEditorMode, getText } = useModesContext();
-  const imageUrl = getText(imageKey)?.['vn'];
+  const imageUrl = getText(imageKey)?.['vi'];
 
   if (!imageUrl) {
     return null;
@@ -48,7 +48,7 @@ function EditImage({ imageUrl, textKey, ...props }: EditImageProps) {
 
   const onSubmit = (values: FormData) => {
     console.log(values);
-    const value = JSON.stringify({ vn: values.get('imageUrl') });
+    const value = JSON.stringify({ vi: values.get('imageUrl') });
     updateContent({ key: textKey, value, updated_by: 'admin' })
       .then(() => {
         setOpen(false);

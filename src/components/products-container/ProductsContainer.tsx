@@ -7,6 +7,7 @@ import ObserverLoading from '@/components/observer-loading/ObserverLoading';
 import SearchProducts from '@/components/search-products/SearchProducts';
 import { useProducts } from '@/hooks/useProduct';
 import Card from '@/components/card/Card';
+import Image from 'next/image';
 
 export default function ProductsContainer() {
   const { onSearch, isEnd, productList, isLoading, onGetNextPage } =
@@ -16,9 +17,17 @@ export default function ProductsContainer() {
     <div>
       <StaticMenuBar triggerCartCount={1} />
       <div>
-        <div
-          className={`w-screen h-48 md:h-96 bg-center bg-cover bg-no-repeat bg-[url('/IMG_7197.jpg')]`}
-        ></div>
+        <div className={`w-screen h-48 md:h-96`}>
+          <Image
+            src={
+              'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7414.jpg'
+            }
+            alt={`hero-image-1`}
+            width={1600}
+            height={900}
+            className="w-screen h-48 md:h-96 object-cover"
+          />
+        </div>
       </div>
       <div className="relative h-full max-w-8xl mx-auto p-4 pb-20 gap-16 md:p-20 ">
         <div className="flex justify-between items-start md:items-end flex-col md:flex-row">

@@ -21,7 +21,7 @@ export default function EditableText({
   console.log({ language });
   const text = getText(textKey);
   if (!isEditorMode) {
-    return language === 'vi' ? text.vn : text.en;
+    return language === 'vi' ? text.vi : text.en;
   }
 
   return <EditText text={text} textKey={textKey} />;
@@ -51,7 +51,7 @@ function EditText({ text, textKey }: EditTextProps) {
 
   const onSubmit = (values: FormData) => {
     const value = JSON.stringify({
-      vn: values.get('vn'),
+      vi: values.get('vi'),
       en: values.get('en')
     });
     updateContent({ key: textKey, value, updated_by: 'admin' })
@@ -68,24 +68,24 @@ function EditText({ text, textKey }: EditTextProps) {
     <>
       <span
         className={`editable-text-bg cursor-pointer hover:bg-[#72bcd4] ${
-          (language === 'vi' ? text.vn?.length : text.en?.length) <= 0
+          (language === 'vi' ? text.vi?.length : text.en?.length) <= 0
             ? 'inline-block w-[50px] h-[16px]'
             : ''
         }`}
         onClick={handleClick}
         ref={anchorRef}
       >
-        {language === 'vi' ? text.vn : text.en}
+        {language === 'vi' ? text.vi : text.en}
       </span>
       <Popper open={isOpen} anchorEl={anchorRef.current} onClose={handleClose}>
         <div onClick={handleClickPopper} className="p-4">
           <form action={onSubmit} className="space-y-4">
             <input
               type="text"
-              name="vn"
+              name="vi"
               className="input w-full"
               placeholder="Vietnamese"
-              defaultValue={text.vn}
+              defaultValue={text.vi}
             />
             <input
               type="text"

@@ -77,24 +77,31 @@ export async function createFeatureImage(formData: FormData) {
   };
 }
 
-export async function deleteFeatureImage(id: string) {
-  if (!id) {
+export async function deleteFeatureImages(ids: string[]) {
+  if (!ids) {
     return {
       errors: { id: ['Id is required'] }
     };
   }
 
-  const featureImage = await sql`SELECT * FROM feature_images WHERE id = ${id}`;
+  const featureImages =
+    await sql`SELECT * FROM feature_images WHERE id = ANY(${ids})`;
 
-  if (!featureImage) {
+  if (!featureImages.length) {
     return {
       errors: { id: ['Feature image not found'] }
     };
   }
 
   try {
-    await sql`DELETE FROM feature_images WHERE id = ${id}`;
-    await deleteFile(featureImage[0].name, featureImage[0].type);
+    await Promise.all(
+      ids.map((id) => sql`DELETE FROM feature_images WHERE id = ${id}`)
+    );
+
+    const removeImagePromises = featureImages.map((image) =>
+      deleteFile(image.name, image.type)
+    );
+    await Promise.all(removeImagePromises);
   } catch (error) {
     console.error('Database Error:', error);
   }

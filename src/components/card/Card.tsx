@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import Link from 'next/link';
 
 interface CardProps {
   readonly item: ProductResponse;
@@ -21,7 +22,6 @@ interface CardProps {
 
 export default function Card({ item }: CardProps) {
   const router = useRouter();
-  router.prefetch(`/products/${item.id}`);
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
@@ -64,13 +64,14 @@ export default function Card({ item }: CardProps) {
           </span>
         </div>
         <div className="w-full text-right mt-4">
-          <button
-            onClick={() => router.push(`/products/${item.id}`)}
+          <Link
+            href={`/products/${item.id}`}
+            prefetch={true}
             className="btn btn-primary btn-sm text-right"
           >
             View
             <ArrowRightCircleIcon className="size-4" />
-          </button>
+          </Link>
         </div>
       </div>
     </motion.div>

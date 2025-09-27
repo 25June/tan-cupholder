@@ -24,7 +24,7 @@ export interface ModesContextProps {
 const ModesContext = createContext<ModesContextProps>({
   isEditorMode: false,
   exitEditorMode: () => {},
-  language: 'vn',
+  language: 'vi',
   getText: () => ({}),
   texts: {}
 });
@@ -70,7 +70,7 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
   const exitEditorMode = useCallback(() => setEditorMode(false), []);
   const getText = useCallback(
     (textKey: string) => {
-      return texts[textKey] ? JSON.parse(texts[textKey]) : { vn: '', en: '' };
+      return texts[textKey] ? JSON.parse(texts[textKey]) : { vi: '', en: '' };
     },
     [texts]
   );

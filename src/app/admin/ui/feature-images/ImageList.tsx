@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { FeatureImage } from '@/models/featureImage';
@@ -8,12 +7,19 @@ import {
   ClipboardDocumentCheckIcon,
   ClipboardDocumentIcon
 } from '@heroicons/react/24/outline';
+import { Dispatch, SetStateAction } from 'react';
 
-export default function ImageList({ images }: { images: FeatureImage[] }) {
-  const [selectedImages, setSelectedImages] = useState<Record<string, boolean>>(
-    {}
-  );
-
+export default function ImageList({
+  images,
+  selectedImages,
+  setSelectedImages
+}: {
+  images: FeatureImage[];
+  selectedImages: Record<string, FeatureImage | undefined>;
+  setSelectedImages: Dispatch<
+    SetStateAction<Record<string, FeatureImage | undefined>>
+  >;
+}) {
   const copyImageUrl = (
     e: React.MouseEvent<HTMLButtonElement>,
     image: FeatureImage
@@ -65,7 +71,7 @@ export default function ImageList({ images }: { images: FeatureImage[] }) {
               onChange={() =>
                 setSelectedImages((prev) => ({
                   ...prev,
-                  [image.id]: prev[image.id] ? false : true
+                  [image.id]: prev[image.id] ? undefined : image
                 }))
               }
               className={`checkbox border-white bg-transparent checked:border-orange-500 checked:bg-white checked:text-orange-500`}
