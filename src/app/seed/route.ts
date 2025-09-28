@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import postgres from 'postgres';
 import { invoices, customers, revenue, users } from '../lib/placeholder-data';
+import { Content } from '@/models/content';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -146,7 +147,7 @@ async function seedProducts() {
 
 export async function GET() {
   try {
-    const result = await sql.begin(seedProducts);
+    // const result = await sql.begin();
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

@@ -164,15 +164,6 @@ async function seedProductImages() {
       FOREIGN KEY (product_id) REFERENCES products(id)
     );
   `;
-  // const insertedImages = await Promise.all(
-  //   images.map(
-  //     (image) => sql`
-  //       INSERT INTO images (product_id, url, createdAt, updatedAt)
-  //       VALUES (${image.product_id}, ${image.url}, ${image.createdAt}, ${image.updatedAt})
-  //       ON CONFLICT (id) DO NOTHING;
-  //     `
-  //   )
-  // );
 }
 
 async function seedAddFeatureProducts() {
@@ -231,9 +222,31 @@ async function seedOrders() {
   `;
 }
 
+async function seedFeatureImage() {
+  await sql`CREATE TABLE IF NOT EXISTS feature_images (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`;
+}
+
+async function seedContent() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS content (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      key VARCHAR(255) NOT NULL UNIQUE,
+      value TEXT NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      created_by VARCHAR(255) NOT NULL,
+      updated_by VARCHAR(255) NOT NULL
+    )`;
+}
+
 export async function GET() {
   try {
-    const result = await sql.begin(seedOrders);
+    const result = await sql.begin(seedContent);
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

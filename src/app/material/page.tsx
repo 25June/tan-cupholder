@@ -29,7 +29,9 @@ export default async function MaterialPage() {
         </div>
         <div className="w-full max-w-[1440px] mx-auto my-4 relative aspect-video rounded-xl overflow-hidden border-6 border-logo-orange-border">
           <Image
-            src={'/IMG_7197.jpg'}
+            src={
+              'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7414.jpg'
+            }
             alt={`hero-image-1`}
             width={1600}
             height={900}
