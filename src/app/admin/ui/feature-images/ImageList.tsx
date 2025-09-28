@@ -25,9 +25,7 @@ export default function ImageList({
     image: FeatureImage
   ) => {
     navigator.clipboard.writeText(getImageUrl('feature-images', image.name));
-    console.log(`copy-${image.id}`);
     setTimeout(() => {
-      console.log('execute');
       const input = document.getElementById(`copy-${image.id}`);
       if (input) {
         (input as HTMLInputElement).checked = false;
