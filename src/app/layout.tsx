@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
+import { SessionProvider } from 'next-auth/react';
 import { geistMono, geistSans, comingSoon, yuseiMagic } from '@/styles/fonts';
 import './globals.css';
 import { getLocale } from 'next-intl/server';
@@ -77,16 +78,16 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }>) {
-  // Ensure that the incoming `locale` is valid
   const locale = await getLocale();
-  console.log('locale', locale);
 
   return (
     <html lang={locale} className="scroll-smooth">
       <body
         className={`${comingSoon.variable} ${yuseiMagic.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <SessionProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );

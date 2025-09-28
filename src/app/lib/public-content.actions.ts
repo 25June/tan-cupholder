@@ -4,6 +4,8 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { Content } from '@/models/content';
 import { cookies } from 'next/headers';
+import { validateAuth } from '@/shared/utils/auth.utils';
+import { NextResponse } from 'next/server';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -65,7 +67,11 @@ async function addContent(payload: Content) {
 }
 
 export async function updateContent(payload: Content) {
-  verifyToken();
+  const authResult = await validateAuth();
+  if (!authResult.isValid) {
+    console.log('Authentication failed', authResult.error);
+    return NextResponse.json({ error: authResult.error }, { status: 401 });
+  }
 
   const existingContent =
     await sql`SELECT * FROM content WHERE key = ${payload.key}`;

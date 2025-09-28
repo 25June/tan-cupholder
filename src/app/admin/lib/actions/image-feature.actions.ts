@@ -32,7 +32,6 @@ export async function fetchFeatureImages({
   query: string;
   page: number;
 }) {
-  console.log('page', page);
   const images = await sql<FeatureImage[]>`
   SELECT id, name, type, created_at
   FROM feature_images 

@@ -12,6 +12,7 @@ import {
 import { useHotkeys } from 'react-hotkeys-hook';
 import { getAllContent } from '@/app/lib/public-content.actions';
 import { useLocale } from 'next-intl';
+import { useSession } from '@/hooks/useSession';
 
 export interface ModesContextProps {
   isEditorMode?: boolean;
@@ -32,22 +33,10 @@ const ModesContext = createContext<ModesContextProps>({
 export const ModesProvider = ({ children }: PropsWithChildren) => {
   const [isEditorMode, setEditorMode] = useState<boolean>(false);
   const language = useLocale();
-  // Check if user is signed in to enable editor mode hotkeys
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(true);
+  const { user } = useSession();
   const [texts, setTexts] = useState<Record<string, string>>({});
-  console.log({ texts });
-  useEffect(() => {
-    // const checkAuth = async () => {
-    //   try {
-    //     const token = document.cookie.includes('authjs.session-token');
-    //     console.log({ token });
-    //     setIsSignedIn(!!token);
-    //   } catch (error) {
-    //     setIsSignedIn(false);
-    //   }
-    // };
 
-    // checkAuth();
+  useEffect(() => {
     getAllContent().then((content) => {
       setTexts(
         content.reduce((acc, curr) => {
@@ -64,7 +53,7 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
       console.log('Enable/Disable editor mode');
       setEditorMode((v) => !v);
     },
-    { enabled: isSignedIn }
+    { enabled: !!user?.email }
   );
 
   const exitEditorMode = useCallback(() => setEditorMode(false), []);
