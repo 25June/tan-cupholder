@@ -1,5 +1,15 @@
+import { getImageProps } from 'next/image';
+
 export default function AvatarShape2() {
-  const imageUrl = '/shapes/avatar-2.jpg'; // Replace with your image URL
+  const {
+    props: { src: imageUrl }
+  } = getImageProps({
+    alt: 'avatar-2',
+    width: 300,
+    height: 300,
+    quality: 100,
+    src: 'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/avatar-2.jpg'
+  });
   // Define the path data for the blob shape
   const blobPathData =
     'M26.5,-24.3C34.7,-18.2,42.1,-9.1,41.8,-0.3C41.4,8.4,33.4,16.9,25.1,24.5C16.9,32.2,8.4,39.1,-0.9,40.1C-10.3,41,-20.6,35.9,-27.6,28.2C-34.5,20.6,-38.2,10.3,-36.8,1.5C-35.3,-7.3,-28.6,-14.6,-21.6,-20.7C-14.6,-26.8,-7.3,-31.7,0.9,-32.6C9.1,-33.5,18.2,-30.4,26.5,-24.3Z';

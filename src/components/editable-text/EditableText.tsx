@@ -18,7 +18,6 @@ export default function EditableText({
   defaultText = { vi: '', en: '' }
 }: EditableTextProps) {
   const { isEditorMode, language, getText } = useModesContext();
-  console.log({ language });
   const text = getText(textKey);
   if (!isEditorMode) {
     return language === 'vi' ? text.vi : text.en;
