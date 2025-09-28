@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Spinner from '@/components/spinner/Spinner';
 
 interface Props {
@@ -35,9 +35,9 @@ export default function ObserverLoading({
         observer.unobserve(observerTarget.current);
       }
     };
-  }, [isLoading]);
+  }, [isLoading, isEnd]);
   return (
-    <div ref={observerTarget} className="flex justify-center items-center">
+    <div ref={observerTarget} className="flex justify-center items-center h-10">
       {isLoading && <Spinner />}
     </div>
   );

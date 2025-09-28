@@ -4,7 +4,8 @@ import {
   HomeIcon,
   PuzzlePieceIcon,
   ShoppingBagIcon,
-  UsersIcon
+  UsersIcon,
+  PhotoIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -33,6 +34,11 @@ const links = [
     name: 'Customers',
     href: '/admin/dashboard/customers',
     icon: UsersIcon
+  },
+  {
+    name: 'Feature Images',
+    href: '/admin/dashboard/feature-images',
+    icon: PhotoIcon
   }
 ];
 

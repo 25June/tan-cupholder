@@ -22,7 +22,9 @@ export const useProducts = () => {
       query: search,
       page: page.toString()
     });
-    console.log('products', products);
+    if (products.length === 0) {
+      setIsEnd(true);
+    }
     setProductList((prev) => [...prev, ...products]);
     setTotalCount(totalCount);
     setIsLoading(false);
@@ -37,17 +39,18 @@ export const useProducts = () => {
 
   const handleGetNextPage = () => {
     if (isLoading) return;
-    setPage(page + 1);
+    setPage((prev) => prev + 1);
     fetchData(query, page + 1);
   };
 
   useEffect(() => {
+    if (isLoading) return;
     if (totalCount && totalCount / 10 <= page) {
       setIsEnd(true);
     } else {
       setIsEnd(false);
     }
-  }, [totalCount, page]);
+  }, [totalCount, page, isLoading]);
 
   return {
     onSearch: handleSearch,

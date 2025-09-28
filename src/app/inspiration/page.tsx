@@ -3,6 +3,8 @@ import RandomShape5 from '@/components/icons/shapes/RandomShape5';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
 import { getTranslations } from 'next-intl/server';
+import EditableImage from '@/components/editable-image/EditableImage';
+import { editableKey } from '@/constants/editableKey';
 
 export default async function InspirationPage() {
   const t = await getTranslations('InspirationPage');

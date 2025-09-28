@@ -27,6 +27,7 @@ const StaticMenuBar = ({ triggerCartCount }: Props) => {
         <div className="relative grow md:grow-0 flex gap-2 justify-start">
           <Link
             href={'/'}
+            prefetch={true}
             className="relative md:absolute w-8 md:w-12 h-8 md:h-12 -top-0 md:-top-[12px] -left-0 md:-left-[24px]"
           >
             <Image
@@ -40,6 +41,7 @@ const StaticMenuBar = ({ triggerCartCount }: Props) => {
           </Link>
           <Link
             href={'/'}
+            prefetch={true}
             className="block md:hidden my-auto font-black font-extrabold tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
           >
             {t('appName')}
@@ -47,17 +49,20 @@ const StaticMenuBar = ({ triggerCartCount }: Props) => {
         </div>
         <Link
           href={'/'}
+          prefetch={true}
           className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
         >
           {t('home')}
         </Link>
         <Link
+          prefetch={true}
           href={'/material'}
           className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
         >
           {t('materials')}
         </Link>
         <Link
+          prefetch={true}
           href={'/products'}
           className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
         >

@@ -53,9 +53,17 @@ export default function OrderStatusPage() {
     <div className="w-full h-full relative">
       <StaticMenuBar triggerCartCount={1} />
       <div>
-        <div
-          className={`w-screen absolute h-48 md:h-96 bg-center bg-cover bg-no-repeat bg-[url('/IMG_7197.jpg')] brightness-50`}
-        ></div>
+        <div className={`w-screen h-48 md:h-96`}>
+          <Image
+            src={
+              'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7414.jpg'
+            }
+            alt={`hero-image-1`}
+            width={1600}
+            height={900}
+            className="w-screen h-48 md:h-96 object-cover"
+          />
+        </div>
       </div>
       <main className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 relative z-1 pt-16 pb-16 px-4">
         <section className="col-span-1 md:col-span-2 border border-gray-200 rounded-lg p-4 bg-white">

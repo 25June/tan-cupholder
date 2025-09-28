@@ -1,14 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { useQueryMedia } from '@/hooks/useQueryLayout';
-import { ScreenLayout } from '@/constants/common';
 import { useState, useEffect } from 'react';
 
-export default function Preload() {
+export default function Preload({ isLoaded }: { isLoaded: boolean }) {
   const [removeLoading, setRemoveLoading] = useState<boolean>(false);
   const [loadingMedia, setLoadingMedia] = useState<boolean>(true);
-  const currentLayout = useQueryMedia();
 
   useEffect(() => {
     if (!loadingMedia) {
@@ -19,11 +16,13 @@ export default function Preload() {
       return () => clearTimeout(timer);
     }
   }, [loadingMedia]);
+
   useEffect(() => {
-    if (currentLayout === ScreenLayout.Mobile) {
+    if (isLoaded) {
       setLoadingMedia(false);
     }
-  }, [currentLayout]);
+  }, [isLoaded]);
+
   return (
     <>
       {!removeLoading && (

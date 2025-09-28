@@ -1,5 +1,15 @@
+import { getImageProps } from 'next/image';
+
 export default function RandomShape3() {
-  const imageUrl = '/shapes/IMG_7197_re-shape.png'; // Replace with your image URL
+  const {
+    props: { src: imageUrl }
+  } = getImageProps({
+    alt: 'IMG_7197_re-shape',
+    width: 300,
+    height: 300,
+    quality: 100,
+    src: 'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7197_re-shape.png'
+  });
   // Define the path data for the blob shape
   const blobPathData =
     'M17.5,-27.9C21.5,-24.8,22.5,-17.7,26.4,-11.4C30.3,-5,37.1,0.6,36.5,5.4C36,10.1,28.2,13.9,23,20C17.8,26.2,15.2,34.7,9.6,39.5C3.9,44.3,-4.9,45.4,-10.7,41.4C-16.5,37.4,-19.4,28.3,-21.5,21.2C-23.5,14.1,-24.8,8.9,-28,2.6C-31.1,-3.8,-36.1,-11.3,-35.7,-18.1C-35.4,-24.9,-29.6,-31,-22.8,-32.8C-15.9,-34.5,-8,-31.9,-0.6,-31C6.8,-30.2,13.6,-31,17.5,-27.9Z';
