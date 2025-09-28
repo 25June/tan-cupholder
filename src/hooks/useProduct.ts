@@ -25,7 +25,6 @@ export const useProducts = () => {
     if (products.length === 0) {
       setIsEnd(true);
     }
-    console.log('products', products);
     setProductList((prev) => [...prev, ...products]);
     setTotalCount(totalCount);
     setIsLoading(false);
@@ -52,7 +51,6 @@ export const useProducts = () => {
       setIsEnd(false);
     }
   }, [totalCount, page, isLoading]);
-  console.log('totalCount', totalCount, page, isEnd);
 
   return {
     onSearch: handleSearch,

@@ -70,7 +70,7 @@ export async function updateContent(payload: Content) {
   const authResult = await validateAuth();
   if (!authResult.isValid) {
     console.log('Authentication failed', authResult.error);
-    return NextResponse.json({ error: authResult.error }, { status: 401 });
+    return { error: authResult.error };
   }
 
   const existingContent =
