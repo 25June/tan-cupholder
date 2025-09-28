@@ -1,3 +1,3 @@
-import { auth, signIn, signOut, GET, POST } from '@/auth';
+import { GET, POST } from '@/auth';
 
-export { GET, POST, auth, signIn, signOut };
+export { GET, POST };

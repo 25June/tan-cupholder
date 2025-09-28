@@ -1,10 +1,8 @@
 import { auth } from '@/auth';
-import { NextRequest } from 'next/server';
 
 export interface AuthValidationResult {
   isValid: boolean;
   user?: {
-    id: string;
     email: string;
     name: string;
   };
@@ -51,7 +49,6 @@ export const validateAuth = async (
     return {
       isValid: true,
       user: {
-        id: session.user.id,
         email: session.user.email,
         name: session.user.name || 'Unknown'
       }
