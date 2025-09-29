@@ -1,6 +1,6 @@
 import { EmailData } from '@/models/email';
 
-const getLayoutTemplate = (mainContent: string) => `
+export const getLayoutTemplate = (mainContent: string) => `
   <!-- Main Table Container -->
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
     <tr>
@@ -72,8 +72,8 @@ export const EMAIL_TEMPLATES = {
   },
   welcome: {
     subject: 'Welcome to Tan Cup Holder',
-    html: (data: EmailData) =>
-      getLayoutTemplate(
+    html: (data: EmailData) => {
+      return getLayoutTemplate(
         `
       <h1 style="color: #333;">Welcome to Tan Cup Holder!</h1>
         <p>Dear ${data.customerName || 'Customer'},</p>
@@ -87,7 +87,8 @@ export const EMAIL_TEMPLATES = {
         <p>If you have any questions, feel free to reach out to us.</p>
         <p>Best regards,<br>Tan Cup Holder Team</p>
         `
-      )
+      );
+    }
   },
   'password-reset': {
     subject: 'Password Reset Request - Tan Cup Holder',

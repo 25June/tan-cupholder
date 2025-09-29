@@ -7,7 +7,6 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteProduct } from '@/app/admin/lib/actions/products.actions';
-import { removeImage } from '../../lib/actions/images.actions';
 import Spinner from '@/components/spinner/Spinner';
 
 export function CreateProduct() {

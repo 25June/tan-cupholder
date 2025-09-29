@@ -244,9 +244,24 @@ async function seedContent() {
     )`;
 }
 
+async function seedEmailTemplates() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS email_templates (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      name VARCHAR(255) NOT NULL UNIQUE,
+      subject VARCHAR(255) NOT NULL,
+      html_content TEXT NOT NULL,
+      description TEXT,
+      is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+}
+
 export async function GET() {
   try {
-    const result = await sql.begin(seedContent);
+    const result = await sql.begin(seedEmailTemplates);
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {
