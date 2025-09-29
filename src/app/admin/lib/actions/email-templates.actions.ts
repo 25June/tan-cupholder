@@ -64,7 +64,7 @@ export async function createEmailTemplate(
 
   const validatedFields = validationResult.data;
   let id = '';
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
   try {
     const result = await sql`
       INSERT INTO email_templates (name, subject, html_content, description, is_active, created_at, updated_at)
@@ -111,7 +111,7 @@ export async function updateEmailTemplate(
   }
 
   const validatedFields = validationResult.data;
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
   try {
     await sql`
       UPDATE email_templates 

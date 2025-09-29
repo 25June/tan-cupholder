@@ -123,7 +123,7 @@ async function seedProducts() {
       updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
   `;
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
   const mockProducts = [
     {
       id: '1',

@@ -64,7 +64,7 @@ export async function createFeatureImage(formData: FormData) {
     console.error('S3 Error:', error);
   }
 
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
   try {
     await sql`INSERT INTO feature_images (name, type, created_at) VALUES (${name}, ${type}, ${date})`;
   } catch (error) {
