@@ -54,7 +54,7 @@ export default function UpdateEmailTemplateForm({
         setIsLoading(false);
       });
   };
-  console.log(emailTemplate);
+
   return (
     <form action={handleFormSubmit}>
       <div className="form-control w-full max-w-full">

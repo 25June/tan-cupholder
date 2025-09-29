@@ -1,5 +1,7 @@
+'use client';
+
 import { EmailTemplateResponse } from '@/models/emailTemplate';
-import { UpdateEmailTemplate, DeleteEmailTemplate } from './buttons';
+import { More } from '@/app/admin/ui/email-templates/buttons';
 
 export default function EmailTemplatesTable({
   templates
@@ -17,23 +19,13 @@ export default function EmailTemplatesTable({
                   <div>
                     <div className="mb-2 flex items-center">
                       <p className="text-sm text-gray-500">{template.name}</p>
-                      <span
-                        className={`ml-2 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                          template.isActive
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
-                        }`}
-                      >
-                        {template.isActive ? 'Active' : 'Inactive'}
-                      </span>
                     </div>
                     <p className="text-sm text-gray-500">{template.subject}</p>
                   </div>
                 </div>
                 <div className="flex w-full items-end pt-4">
                   <div className="flex justify-end gap-2 w-full">
-                    <UpdateEmailTemplate id={template.id} />
-                    <DeleteEmailTemplate id={template.id} />
+                    <More id={template.id} />
                   </div>
                 </div>
               </div>
@@ -49,16 +41,7 @@ export default function EmailTemplatesTable({
                   Subject
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Status
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
                   Description
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Created
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Updated
                 </th>
                 <th scope="col" className="py-3 pl-6 pr-3">
                   <span className="sr-only">Actions</span>
@@ -80,31 +63,13 @@ export default function EmailTemplatesTable({
                     <p className="text-gray-500">{template.subject}</p>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    <span
-                      className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                        template.isActive
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {template.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
                     <p className="text-gray-500 max-w-xs truncate">
-                      {template.description || 'No description'}
+                      {template.description}
                     </p>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3 text-gray-500">
-                    {template.created_at}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3 text-gray-500">
-                    {template.updated_at}
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateEmailTemplate id={template.id} />
-                      <DeleteEmailTemplate id={template.id} />
+                      <More id={template.id} />
                     </div>
                   </td>
                 </tr>
