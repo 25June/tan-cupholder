@@ -24,8 +24,6 @@ export default function CreateProductForm({
     Record<string, string>
   >({});
 
-  const [isMain, setIsMain] = useState<Record<string, boolean>>({});
-
   const onUpload = async (productId: string) => {
     if (!uploadImages.length) {
       return Promise.resolve();

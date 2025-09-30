@@ -63,7 +63,7 @@ export async function createProduct(prevState: State, formData: FormData) {
   }
 
   const { name, description, price, type, sale, stock } = validatedFields.data;
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
 
   let id = '';
   try {
@@ -103,7 +103,7 @@ export async function updateProduct(prevState: State, formData: FormData) {
 
   const { name, description, price, type, sale, stock, id } =
     validatedFields.data;
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
   console.log({ name });
   try {
     await sql`
