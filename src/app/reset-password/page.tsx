@@ -3,17 +3,16 @@ import { notFound } from 'next/navigation';
 import { verifyUserId } from '@/app/admin/lib/actions/user-credential.actions';
 import ResetPasswordForm from '@/components/reset-password-form/ResetPasswordForm';
 import Image from 'next/image';
+import Spinner from '@/components/spinner/Spinner';
 
-interface ResetPasswordPageProps {
-  searchParams: {
+interface Props {
+  searchParams: Promise<{
     userId?: string;
-  };
+  }>;
 }
 
-export default async function ResetPasswordPage({
-  searchParams
-}: ResetPasswordPageProps) {
-  const { userId } = searchParams;
+export default async function ResetPasswordPage(props: Props) {
+  const { userId } = await props.searchParams;
 
   // Check if userId is provided
   if (!userId) {
@@ -42,7 +41,7 @@ export default async function ResetPasswordPage({
             />
           </div>
         </div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
           <ResetPasswordForm userId={userId} userEmail={userData.email} />
         </Suspense>
       </div>

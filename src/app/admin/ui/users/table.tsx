@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { UserInfo } from '@/models/user';
 import { DeleteUser, UpdateUser } from './buttons';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { UserRole } from '@/constants/user';
 
 export default function UsersTable({ users }: { users: UserInfo[] }) {
   const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
@@ -124,9 +125,9 @@ export default function UsersTable({ users }: { users: UserInfo[] }) {
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
                         <span
                           className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                            user.role === 'ADMIN'
+                            user.role === UserRole.Admin
                               ? 'bg-purple-100 text-purple-800'
-                              : user.role === 'SUPER_ADMIN'
+                              : user.role === UserRole.Staff
                               ? 'bg-red-100 text-red-800'
                               : 'bg-blue-100 text-blue-800'
                           }`}
