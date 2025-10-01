@@ -70,7 +70,7 @@ export async function createImage(prevState: State, formData: FormData) {
     console.error('S3 Error:', error);
   }
 
-  const date = new Date().toISOString().split('T')[0];
+  const date = new Date().toISOString();
 
   try {
     await sql`INSERT INTO images (name, type, product_id, is_main, created_at, updated_at) VALUES (${name}, ${type}, ${productId}, ${
