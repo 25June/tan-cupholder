@@ -1,12 +1,6 @@
 import bcrypt from 'bcrypt';
 import postgres from 'postgres';
-import {
-  invoices,
-  customers,
-  revenue,
-  users,
-  productTypes
-} from '../lib/placeholder-data';
+import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -244,6 +238,84 @@ async function seedContent() {
     )`;
 }
 
+async function seedUserRole() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS user_roles (
+      id INT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL
+    )`;
+
+  await sql`
+    INSERT INTO user_roles (id, name)
+    VALUES (1, 'ADMIN'), (2, 'STAFF')
+    ON CONFLICT (id) DO NOTHING;
+  `;
+}
+
+const firstUser = {
+  id: 'f30c4f5f-fbf8-4a61-8d1a-599f1af84f8a',
+  firstName: 'Phu',
+  lastName: 'Nguyen',
+  fullName: 'Phu Nguyen',
+  email: 'ngocphu2506@gmail.com',
+  password: 'Abc@12345',
+  avatarURL: '',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  role: '1',
+  status: 'ACTIVE',
+  emailVerified: true,
+  emailVerifiedAt: new Date().toISOString()
+};
+
+async function seedUser() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS user_info (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      first_name VARCHAR(255) NOT NULL,
+      last_name VARCHAR(255) NOT NULL,
+      full_name VARCHAR(255) NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      avatar_url VARCHAR(255),
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      role INT NOT NULL,
+      status VARCHAR(255) NOT NULL,
+      email_verified BOOLEAN NOT NULL DEFAULT FALSE,
+      email_verified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (role) REFERENCES user_roles(id)
+    )`;
+
+  const insertedUserInfo = await sql`
+    INSERT INTO user_info (id, first_name, last_name, full_name, email, avatar_url, created_at, updated_at, role, status, email_verified, email_verified_at)
+    VALUES (${firstUser.id}, ${firstUser.firstName}, ${firstUser.lastName}, ${firstUser.fullName}, ${firstUser.email}, ${firstUser.avatarURL}, ${firstUser.createdAt}, ${firstUser.updatedAt}, ${firstUser.role}, ${firstUser.status}, ${firstUser.emailVerified}, ${firstUser.emailVerifiedAt})
+    ON CONFLICT (id) DO NOTHING;
+  `;
+
+  return insertedUserInfo;
+}
+
+async function seedUserCredentials() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS user_credentials (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      user_id UUID NOT NULL REFERENCES user_info(id),
+      password TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      provider VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`;
+  const hashedPassword = await bcrypt.hash(firstUser.password, 10);
+  return sql`
+        INSERT INTO user_credentials (user_id, password, email, provider, created_at, updated_at)
+        VALUES (${firstUser.id}, ${hashedPassword}, ${
+    firstUser.email
+  }, ${'credentials'}, ${firstUser.createdAt}, ${firstUser.updatedAt})
+        ON CONFLICT (id) DO NOTHING;
+      `;
+}
+
 async function seedEmailTemplates() {
   await sql`
     CREATE TABLE IF NOT EXISTS email_templates (
@@ -261,7 +333,11 @@ async function seedEmailTemplates() {
 
 export async function GET() {
   try {
-    const result = await sql.begin(seedEmailTemplates);
+    // const userRole = await sql.begin(seedUserRole);
+
+    // const userInfo = await sql.begin(seedUser);
+    // const userCredentials = await sql.begin(seedUserCredentials);
+    // const result = await sql.begin(seedEmailTemplates);
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

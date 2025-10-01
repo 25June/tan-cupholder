@@ -2,9 +2,9 @@ import { EmailData } from '@/models/email';
 
 export const getLayoutTemplate = (mainContent: string) => `
   <!-- Main Table Container -->
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f4;">
     <tr>
-      <td align="center" style="padding: 20px 0;">
+      <td align="center" style="padding: 20px 0; background-color: #f4f4f4;">
         <!-- Content Table -->
         <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden;">
           <!-- Header Section -->
@@ -44,8 +44,8 @@ export const getLayoutTemplate = (mainContent: string) => `
 
 export const EMAIL_TEMPLATES = {
   'order-confirmation': {
-    subject: (orderId: string) =>
-      `Order Confirmation - Tan Cup Holder - ${orderId}`,
+    subject: (data: EmailData) =>
+      `Order Confirmation - Tan Cup Holder - ${data.orderId}`,
     html: (data: EmailData) =>
       getLayoutTemplate(
         `
@@ -71,9 +71,9 @@ export const EMAIL_TEMPLATES = {
       )
   },
   welcome: {
-    subject: 'Welcome to Tan Cup Holder',
-    html: (data: EmailData) => {
-      return getLayoutTemplate(
+    subject: () => 'Welcome to Tan Cup Holder',
+    html: (data: EmailData) =>
+      getLayoutTemplate(
         `
       <h1 style="color: #333;">Welcome to Tan Cup Holder!</h1>
         <p>Dear ${data.customerName || 'Customer'},</p>
@@ -87,11 +87,32 @@ export const EMAIL_TEMPLATES = {
         <p>If you have any questions, feel free to reach out to us.</p>
         <p>Best regards,<br>Tan Cup Holder Team</p>
         `
-      );
-    }
+      )
+  },
+  'account-created': {
+    subject: () => 'Account Created - Tan Cup Holder',
+    html: (data: EmailData) =>
+      getLayoutTemplate(
+        `
+      <h1 style="color: #333;">Account Created</h1>
+        <p style="font-size: 14px; font-weight: 600;">Dear ${
+          data.userName || ''
+        },</p>
+        <p>Your account has been created successfully. Click the link below to setup password:</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${data.resetLink || '#'}" 
+             style="background-color: #ec8c4c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+            Setup Password
+          </a>
+        </div>
+        <p style="font-size: 12px; font-weight: 400;">If you didn't request this, please ignore this email.</p>
+        <p style="font-size: 12px; font-weight: 400;">This link will expire in 24 hours.</p>
+        <p style="font-size: 12px; font-weight: 400;">Best regards,<br>Tan Cup Holder Team</p>
+        `
+      )
   },
   'password-reset': {
-    subject: 'Password Reset Request - Tan Cup Holder',
+    subject: () => 'Password Reset Request - Tan Cup Holder',
     html: (data: EmailData) =>
       getLayoutTemplate(
         `
@@ -100,7 +121,7 @@ export const EMAIL_TEMPLATES = {
         <p>We received a request to reset your password. Click the link below to reset it:</p>
         <div style="text-align: center; margin: 30px 0;">
           <a href="${data.resetLink || '#'}" 
-             style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+             style="background-color: #ec8c4c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
             Reset Password
           </a>
         </div>
@@ -111,7 +132,7 @@ export const EMAIL_TEMPLATES = {
       )
   },
   custom: {
-    subject: 'Message from Tan Cup Holder',
+    subject: () => 'Message from Tan Cup Holder',
     html: (data: EmailData) =>
       getLayoutTemplate(`
       <h1 style="color: #333;">${
