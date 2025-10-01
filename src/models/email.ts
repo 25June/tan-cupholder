@@ -5,7 +5,8 @@ export type EmailTemplate =
   | 'order-confirmation'
   | 'welcome'
   | 'password-reset'
-  | 'custom';
+  | 'custom'
+  | 'account-created';
 
 export interface EmailResult {
   success: boolean;

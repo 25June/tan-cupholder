@@ -52,7 +52,7 @@ const getSMTPConfig = (): SMTPConfig => {
  */
 export const sendEmail = async (
   emailAddress: string,
-  template: EmailTemplate,
+  templateName: EmailTemplate,
   data: EmailData
 ): Promise<EmailResult> => {
   console.log({ data });
@@ -85,7 +85,8 @@ export const sendEmail = async (
       }
     });
     console.log('transporter created');
-    const template = EMAIL_TEMPLATES['order-confirmation'];
+    const template =
+      EMAIL_TEMPLATES[templateName as keyof typeof EMAIL_TEMPLATES];
     if (!template) {
       return {
         success: false,
@@ -97,7 +98,7 @@ export const sendEmail = async (
     const info = await transporter.sendMail({
       from: process.env.SMTP_EMAIL,
       to: to,
-      subject: template.subject(data.orderId),
+      subject: template.subject(data),
       html: template.html(data)
     });
     console.log('email sent');

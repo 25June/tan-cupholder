@@ -1,8 +1,30 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import NavLinks from '@/app/admin/ui/dashboard/nav-links';
-import { PowerIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PowerIcon } from '@heroicons/react/24/outline';
 import { signOut } from '@/auth';
+import { auth } from '@/auth';
+import { Suspense } from 'react';
+import Spinner from '@/components/spinner/Spinner';
+
+export async function UserEmail() {
+  const session = await auth();
+  const user = session?.user;
+  return (
+    <div className="bg-gray-50 p-3 flex items-center justify-between">
+      <p className="text-sm text-gray-500">
+        Hi <span className="font-bold">{user?.email}</span>
+      </p>
+      <Link
+        href="/admin/dashboard/profile"
+        prefetch={true}
+        className="text-sm text-gray-500"
+      >
+        <PencilIcon className="w-4" />
+      </Link>
+    </div>
+  );
+}
 
 export default function SideNav() {
   return (
@@ -22,6 +44,9 @@ export default function SideNav() {
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
+        <Suspense fallback={<Spinner color="orange" />}>
+          <UserEmail />
+        </Suspense>
         <form
           action={async () => {
             'use server';
