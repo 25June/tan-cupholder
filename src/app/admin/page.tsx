@@ -1,8 +1,14 @@
+import { auth } from '@/auth';
 import LoginForm from '@/components/login-form/LoginForm';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth();
+  if (session?.expires && new Date(session?.expires) > new Date()) {
+    redirect('/admin/dashboard');
+  }
   return (
     <main className="flex items-center justify-center md:h-screen">
       <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
