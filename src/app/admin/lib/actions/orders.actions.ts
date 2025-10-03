@@ -4,6 +4,7 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { Order, OrderProduct } from '@/models/order';
+import { ProductCustom } from '@/models/product';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -30,10 +31,13 @@ export type OrderWithCustomer = Order & {
 };
 
 export type OrderDetail = OrderProduct & {
-  customer_name: string;
-  customer_email: string;
-  customer_phone?: string;
-  customer_address?: string;
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+    phone_number?: string;
+    address?: string;
+  };
   products: Array<{
     id: string;
     name: string;
@@ -127,14 +131,24 @@ export async function fetchTotalOrders(query?: string) {
 }
 
 // Fetch order detail by ID
-export async function fetchOrderById(orderId: string) {
+export async function fetchOrderById(orderId: string): Promise<
+  | {
+      order: OrderDetail;
+      products: ProductCustom[];
+    }
+  | {
+      message: string;
+    }
+> {
   try {
-    const orders = await sql`
-    SELECT orders.*, json_agg(order_products) as order_products 
+    const orders = await sql<OrderDetail[]>`
+    SELECT orders.*, json_agg(order_products) as order_products, 
+    json_build_object('id', c.id, 'name', c.name, 'email', c.email, 'phone_number', c.phone_number, 'address', c.address) as customer
     FROM orders
     LEFT JOIN order_products ON orders.id = order_products.order_id
+    LEFT JOIN customers c ON orders.customer_id = c.id
     WHERE orders.id = ${orderId}
-    GROUP BY orders.id
+    GROUP BY orders.id, c.id
   `;
     const order = orders[0];
     if (!order) {
@@ -143,8 +157,8 @@ export async function fetchOrderById(orderId: string) {
     const productIds = order.order_products.map(
       (orderProduct: any) => orderProduct.product_id
     );
-    const products = await sql`
-    SELECT products.*, pt.name as type_name, json_build_object(
+    const products = await sql<ProductCustom[]>`
+    SELECT products.id, products.name, pt.name as type_name, json_build_object(
       'id', images.id,
       'name', images.name
     ) as image

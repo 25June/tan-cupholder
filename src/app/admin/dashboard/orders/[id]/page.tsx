@@ -1,5 +1,4 @@
 import { fetchOrderById } from '@/app/admin/lib/actions/orders.actions';
-import { OrderStatus } from '@/constants/common';
 import { Metadata } from 'next';
 import { lusitana } from '@/app/admin/ui/fonts';
 import StatusForm from '@/app/admin/ui/orders/status-form';
@@ -11,6 +10,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { ProductCustom } from '@/models/product';
+import { OrderDetail } from '@/app/admin/lib/actions/orders.actions';
+import CopyButton from '@/components/copy-button/CopyButton';
 
 interface OrderDetailPageProps {
   params: Promise<{ id: string }>;
@@ -30,10 +33,21 @@ export default async function OrderDetailPage({
 }: OrderDetailPageProps) {
   const { id } = await params;
 
-  let order;
-  let products;
+  let order: OrderDetail;
+  let productObj: Record<string, ProductCustom>;
   try {
-    ({ order, products } = await fetchOrderById(id));
+    const data = await fetchOrderById(id);
+    if ('message' in data) {
+      notFound();
+    }
+    order = data.order;
+    productObj = data.products.reduce((acc, product) => {
+      return { ...acc, [product.id]: product };
+    }, {} as Record<string, ProductCustom>);
+
+    if (!order || !productObj) {
+      notFound();
+    }
   } catch (error) {
     notFound();
   }
@@ -54,9 +68,6 @@ export default async function OrderDetailPage({
       currency: 'USD'
     }).format(amount);
   };
-  if (!order) {
-    return <div>Order not found</div>;
-  }
 
   return (
     <main className="max-w-6xl mx-auto">
@@ -68,7 +79,6 @@ export default async function OrderDetailPage({
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-200"
           >
             <ArrowLeftIcon className="w-5 h-5" />
-            Back to Orders
           </Link>
           <h1 className={`${lusitana.className} text-xl md:text-2xl`}>
             Order #{id.slice(-8)}
@@ -99,21 +109,26 @@ export default async function OrderDetailPage({
                   <label className="block text-sm font-medium text-gray-700">
                     Name
                   </label>
-                  <p className="text-gray-900">{order.customer_name}</p>
+                  <p className="text-gray-900">{order.customer.name}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Email
                   </label>
-                  <p className="text-gray-900">{order.customer_email}</p>
+                  <p className="text-gray-900">{order.customer.email}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Phone
                   </label>
-                  <p className="text-gray-900">
-                    {order.customer_phone || 'N/A'}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-gray-900">
+                      {order.customer.phone_number || 'N/A'}
+                    </p>
+                    {order.customer.phone_number && (
+                      <CopyButton text={order.customer.phone_number || ''} />
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -124,12 +139,12 @@ export default async function OrderDetailPage({
                   </p>
                 </div>
               </div>
-              {order.customer_address && (
+              {order.customer.address && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Address
                   </label>
-                  <p className="text-gray-900">{order.customer_address}</p>
+                  <p className="text-gray-900">{order.customer.address}</p>
                 </div>
               )}
             </div>
@@ -268,7 +283,7 @@ export default async function OrderDetailPage({
             Products in this Order
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            {order.products?.length || 0} products ordered
+            {order.order_products.length || 0} products ordered
           </p>
         </div>
         <div className="overflow-x-auto">
@@ -293,59 +308,65 @@ export default async function OrderDetailPage({
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {order.products?.map((product: any, index: number) => (
-                <tr key={product.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden bg-gray-100">
-                        {product.image ? (
-                          <Image
-                            src={`/api/image/${product.image.name}`}
-                            alt={product.name}
-                            width={48}
-                            height={48}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="h-full w-full flex items-center justify-center bg-gray-200">
-                            <span className="text-gray-400 text-xs">
-                              No image
-                            </span>
-                          </div>
-                        )}
+              {order.order_products.map((product: any, index: number) => {
+                const productDetails = productObj[product.product_id];
+                return (
+                  <tr key={product.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden bg-gray-100">
+                          {productDetails.image ? (
+                            <Image
+                              src={getImageUrl(
+                                product.product_id,
+                                productDetails.image.name
+                              )}
+                              alt={product.product_id}
+                              width={48}
+                              height={48}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center bg-gray-200">
+                              <span className="text-gray-400 text-xs">
+                                No image
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            {product.name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            ID: {product.id.slice(-8)}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {product.name}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          ID: {product.id.slice(-8)}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-gray-900">
-                      {product.type_name || 'N/A'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-gray-900">
-                      {formatCurrency(product.price)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-gray-900">
-                      {product.quantity}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-medium text-gray-900">
-                      {formatCurrency(product.price * product.quantity)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-gray-900">
+                        {product.type_name || 'N/A'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-gray-900">
+                        {formatCurrency(product.price)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-gray-900">
+                        {product.quantity}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm font-medium text-gray-900">
+                        {formatCurrency(product.price * product.quantity)}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

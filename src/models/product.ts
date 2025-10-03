@@ -1,5 +1,4 @@
 import { ProductImage } from '@/app/admin/lib/definitions';
-import { Image } from './image';
 
 export interface Product {
   id: string;
@@ -12,6 +11,16 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
   priority?: number;
+}
+
+export interface ProductCustom {
+  id: string;
+  image: {
+    id: string;
+    name: string;
+  };
+  type_name: string;
+  name: string;
 }
 
 export interface OrderProductDetails extends Product {

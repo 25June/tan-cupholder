@@ -100,14 +100,18 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
     const getProducts = await sql`
       SELECT * FROM products WHERE id = ANY(${productIds})
     `;
-    const { totalQuantity, totalPrice } = getProducts.reduce(
+    const { totalQuantity, totalPrice, prices } = getProducts.reduce(
       (acc, product) => {
         return {
           totalQuantity: acc.totalQuantity + quantities[product.id],
-          totalPrice: acc.totalPrice + product.price * quantities[product.id]
+          totalPrice: acc.totalPrice + product.price * quantities[product.id],
+          prices: {
+            ...acc.prices,
+            [product.id]: product.price
+          }
         };
       },
-      { totalQuantity: 0, totalPrice: 0 }
+      { totalQuantity: 0, totalPrice: 0, prices: {} as Record<string, number> }
     );
 
     // Create order with the correct schema
@@ -145,8 +149,10 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
       (product: { productId: string; quantity: number }) => {
         // Create order_products entry
         return sql`
-      INSERT INTO order_products (order_id, product_id, quantity, created_at, updated_at)
-      VALUES (${order[0].id}, ${product.productId}, ${product.quantity}, ${date}, ${date})
+      INSERT INTO order_products (order_id, product_id, quantity, created_at, updated_at, price)
+      VALUES (${order[0].id}, ${product.productId}, ${
+          product.quantity
+        }, ${date}, ${date}, ${prices[product.productId]})
     `;
       }
     );
