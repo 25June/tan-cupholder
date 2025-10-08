@@ -9,6 +9,7 @@ export default function NotFound() {
       <p>Could not find the requested product.</p>
       <Link
         href="/admin/dashboard/products"
+        prefetch={true}
         className="mt-4 rounded-md bg-logo-orange-border px-4 py-2 text-sm text-white transition-colors hover:bg-logo-orange"
       >
         Go Back

@@ -199,6 +199,7 @@ export default function OrderStatusPage() {
                       </p>
                       <Link
                         href={`/products/${product.id}`}
+                        prefetch={true}
                         className="btn btn-primary btn-soft btn-xs"
                       >
                         View
@@ -211,6 +212,7 @@ export default function OrderStatusPage() {
             <div className="flex justify-center mt-4">
               <Link
                 href="/products"
+                prefetch={true}
                 className="btn btn-primary btn-wide btn-soft btn-sm"
               >
                 View All

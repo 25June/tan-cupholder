@@ -107,6 +107,7 @@ export default function UpdateProductTypeForm({
         <div className="flex justify-end gap-2">
           <Link
             href="/admin/dashboard/product-types"
+            prefetch={true}
             className="btn btn-ghost max-w-40 w-full"
           >
             Cancel

@@ -13,6 +13,7 @@ export function CreateEmailTemplate() {
   return (
     <Link
       href="/admin/dashboard/email-templates/create"
+      prefetch={true}
       className="flex h-10 items-center rounded-lg bg-logo-orange-border px-4 text-sm font-medium text-white transition-colors hover:bg-logo-orange-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-logo-orange-border"
     >
       <span className="hidden md:block">Create Template</span>{' '}
@@ -25,6 +26,7 @@ export function UpdateEmailTemplate({ id }: { id: string }) {
   return (
     <Link
       href={`/admin/dashboard/email-templates/${id}/edit`}
+      prefetch={true}
       className="rounded-md p-2  w-full flex items-center gap-2"
     >
       <PencilIcon className="w-5" />

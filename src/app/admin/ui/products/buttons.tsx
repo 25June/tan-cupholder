@@ -13,6 +13,7 @@ export function CreateProduct() {
   return (
     <Link
       href="/admin/dashboard/products/create"
+      prefetch={true}
       className="flex h-10 items-center rounded-lg bg-logo-orange-border px-4 text-sm font-medium text-white transition-colors hover:bg-logo-orange-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-logo-orange-border"
     >
       <span className="hidden md:block">Create Product</span>
@@ -25,6 +26,7 @@ export function UpdateProduct({ id }: { id: string }) {
   return (
     <Link
       href={`/admin/dashboard/products/${id}/edit`}
+      prefetch={true}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -36,6 +38,7 @@ export function UpdateImage({ id }: { id: string }) {
   return (
     <Link
       href={`/admin/dashboard/products/${id}/edit-image`}
+      prefetch={true}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PhotoIcon className="w-5" />

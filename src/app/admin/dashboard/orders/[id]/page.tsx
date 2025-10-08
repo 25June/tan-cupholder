@@ -76,6 +76,7 @@ export default async function OrderDetailPage({
         <div className="flex items-center gap-4">
           <Link
             href="/admin/dashboard/orders"
+            prefetch={true}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-200"
           >
             <ArrowLeftIcon className="w-5 h-5" />

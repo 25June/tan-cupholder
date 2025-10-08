@@ -76,6 +76,7 @@ export default function OrdersTable({
                     <div className="pt-4 text-sm">
                       <Link
                         href={`/admin/dashboard/orders/${order.id}`}
+                        prefetch={true}
                         className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium"
                       >
                         <EyeIcon className="w-4 h-4" />
@@ -180,6 +181,7 @@ export default function OrdersTable({
                         <div className="flex justify-end gap-3">
                           <Link
                             href={`/admin/dashboard/orders/${order.id}`}
+                            prefetch={true}
                             className="rounded-md bg-logo-orange-border px-3 py-2 text-sm font-medium text-white hover:bg-logo-orange-border/90 transition-colors duration-200"
                           >
                             <span className="flex items-center gap-1">
