@@ -12,7 +12,7 @@ export default function RelatedProducts() {
     onFetchOtherProducts();
   }, []);
   return (
-    <section className="mx-auto space-y-12 px-6">
+    <section className="mx-auto space-y-12 px-4">
       <h2 className="text-2xl font-bold mb-2 text-center text-logo-orange-border">
         Related Products
       </h2>
