@@ -12,7 +12,6 @@ import ProductSlider from '@/components/product-slider/ProductSlider';
 import Preload from '../preload/Preload';
 import { ProductResponse } from '@/models/product';
 import { ModesProvider } from '@/contexts/EditMode.context';
-import { useSession } from '@/hooks/useSession';
 interface Props {
   readonly products: ProductResponse[];
 }
@@ -21,7 +20,6 @@ export default function Homepage({ products }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { scrollYProgress } = useScroll({ container: divRef });
-  const { user } = useSession();
 
   return (
     <div className="relative min-h-screen overflow-hidden">

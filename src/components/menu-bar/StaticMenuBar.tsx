@@ -70,12 +70,14 @@ const StaticMenuBar = ({ triggerCartCount }: Props) => {
         </Link>
         <Link
           href={'/question'}
+          prefetch={true}
           className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
         >
           {t('faq')}
         </Link>
         <Link
           href={'/cart'}
+          prefetch={true}
           className="hidden md:block font-black tracking-wide hover:text-logo-orange transition-colors duration-300 cursor-pointer"
         >
           <CartIcon cartCount={cartCount} />

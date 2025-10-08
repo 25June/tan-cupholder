@@ -32,6 +32,7 @@ export default function SideNav() {
       <Link
         className="mb-2 flex h-20 md:h-40 items-center justify-center rounded-md bg-logo-orange-border p-4 "
         href="/"
+        prefetch={true}
       >
         <Image
           src="/logo.png"

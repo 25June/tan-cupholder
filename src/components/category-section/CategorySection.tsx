@@ -5,9 +5,12 @@ import { useTranslations } from 'next-intl';
 import EditableImage from '@/components/editable-image/EditableImage';
 import EditableText from '@/components/editable-text/EditableText';
 import { editableKey } from '@/constants/editableKey';
+import { useQueryMedia } from '@/hooks/useQueryLayout';
+import { ScreenLayout } from '@/constants/common';
 
 export const CategorySection = () => {
   const t = useTranslations('HomePage.CategorySection');
+  const currentLayout = useQueryMedia();
   return (
     <div className="relative max-w-screen md:max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-full md:min-h-screen p-4 md:p-8 pb-20 gap-16 ">
       <main className="w-[90vw] md:w-full flex flex-col md:flex-row gap-8 row-start-2 justify-stretch justify-items-stretch items-stretch">
@@ -50,9 +53,9 @@ export const CategorySection = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="relative flex bg-white border-4 border-white rounded-2xl min-w-2 md:min-w-96 w-full max-h-96 min-h-64 h-full overflow-hidden"
+            className="relative flex flex-col-reverse md:flex-row bg-white border-4 border-white rounded-2xl min-w-2 md:min-w-96 w-full max-h-96 min-h-64 h-full overflow-hidden"
           >
-            <div className="relative z-1 w-full h-full max-w-48 bg-[#f9f9f9] flex justify-end flex-col p-2">
+            <div className="relative z-1 w-full h-full max-w-full md:max-w-48 bg-[#f9f9f9] flex justify-end flex-col p-2">
               <h3>
                 <EditableText textKey={editableKey.CATEGORY_TITLE_2} />
               </h3>
@@ -68,7 +71,7 @@ export const CategorySection = () => {
                 </button>
               </div>
             </div>
-            <div className="relative w-full max-w-[calc(100%-108px)] h-full">
+            <div className="relative w-full max-w-full md:max-w-[calc(100%-108px)] h-full max-h-[calc(100%-108px)] md:max-h-full">
               <EditableImage
                 imageKey={editableKey.CATEGORY_IMAGE_2}
                 src={''}
@@ -77,16 +80,22 @@ export const CategorySection = () => {
                 height={640}
                 className="w-full h-full object-cover hover:scale-105 transition-all duration-300"
               />
-              <div className="absolute bottom-0 left-0 w-32 h-full bg-from-white-to-transparent-270deg"></div>
+              <div
+                className={`absolute bottom-0 left-0 w-full md:w-32 h-full ${
+                  currentLayout === ScreenLayout.Mobile
+                    ? 'bg-from-white-to-transparent-180deg'
+                    : 'bg-from-white-to-transparent-270deg'
+                }`}
+              ></div>
             </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="relative bg-white border-4 border-white rounded-2xl min-w-2 md:min-w-96 w-full max-h-96 min-h-64 h-full overflow-hidden flex"
+            className="relative bg-white border-4 border-white rounded-2xl min-w-2 md:min-w-96 w-full max-h-96 min-h-64 h-full overflow-hidden flex flex-col-reverse md:flex-row"
           >
-            <div className="relative z-1 w-full h-full max-w-48 bg-[#f9f9f9] flex justify-end flex-col p-2">
+            <div className="relative z-1 w-full h-full max-w-full md:max-w-48 bg-[#f9f9f9] flex justify-end flex-col p-2">
               <h3>
                 <EditableText textKey={editableKey.CATEGORY_TITLE_3} />
               </h3>
@@ -102,7 +111,7 @@ export const CategorySection = () => {
                 </button>
               </div>
             </div>
-            <div className="relative w-full max-w-[calc(100%-108px)] h-full">
+            <div className="relative w-full max-w-full md:max-w-[calc(100%-108px)] h-full">
               <EditableImage
                 imageKey={editableKey.CATEGORY_IMAGE_3}
                 src={''}
@@ -111,7 +120,13 @@ export const CategorySection = () => {
                 height={640}
                 className="w-full h-full object-cover hover:scale-105 transition-all duration-300"
               />
-              <div className="absolute bottom-0 left-0 w-32 h-full bg-from-white-to-transparent-270deg"></div>
+              <div
+                className={`absolute bottom-0 left-0 w-full md:w-32 h-full ${
+                  currentLayout === ScreenLayout.Mobile
+                    ? 'bg-from-white-to-transparent-180deg'
+                    : 'bg-from-white-to-transparent-270deg'
+                }`}
+              ></div>
             </div>
           </motion.div>
         </div>

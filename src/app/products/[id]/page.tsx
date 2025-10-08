@@ -21,6 +21,7 @@ import {
   saveViewedProductToStorage
 } from '@/shared/utils/storage';
 import RelatedProducts from '@/components/related-products/RelatedProducts';
+import Link from 'next/link';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -69,7 +70,7 @@ export default function ProductPage() {
     <div className="min-h-screen">
       <StaticMenuBar triggerCartCount={triggerCartCount} />
 
-      <main className="relative h-full flex flex-col justify-between mt-8 md:mt-24 p-4">
+      <main className="relative h-full flex flex-col justify-between mt-4 md:mt-24 p-4">
         <div className="w-full max-w-7xl mx-auto">
           <Breadcrumbs
             breadcrumbs={[
@@ -87,16 +88,19 @@ export default function ProductPage() {
         {product && (
           <div className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row">
             <div className="flex flex-1 gap-4 flex-col-reverse md:flex-row">
-              <div className="shrink-0 max-h-88 overflow-auto hidden md:flex flex-row md:flex-col gap-2">
+              <div className="shrink-0 md:h-full max-h-24 md:max-h-88 w-full md:max-w-24 overflow-auto flex flex-row md:flex-col gap-2">
                 {images.map((img, index) => (
                   <div
                     key={index}
-                    className="w-full max-w-24 h-full flex justify-center items-center rounded-md cursor-pointer transition-transform hover:scale-105"
+                    className="w-full max-w-full md:max-w-24 min-w-12 h-12 md:h-full flex justify-center items-center rounded-md cursor-pointer transition-transform hover:scale-105"
                   >
                     <div
-                      className={`w-full h-full bg-gray-100 rounded-md max-h-56 relative p-2`}
+                      className={`w-full md:h-full bg-gray-100 rounded-md max-h-full flex justify-center items-center md:max-h-56 relative p-1 md:p-2`}
                     >
-                      <button onClick={() => setSelectedImage(img)}>
+                      <button
+                        onClick={() => setSelectedImage(img)}
+                        className="h-10 md:h-full"
+                      >
                         <Image
                           src={getImageUrl(product.id, img.name)}
                           alt={img.name}
@@ -109,23 +113,25 @@ export default function ProductPage() {
                   </div>
                 ))}
               </div>
-              <div className="w-full h-full max-h-88 bg-gray-50 p-2 rounded-md">
+              <div className="w-full h-88 bg-gray-100 p-2 rounded-md">
                 {selectedImage && (
                   <Image
                     src={getImageUrl(product.id, selectedImage.name)}
                     alt={selectedImage.name}
                     width={600}
                     height={600}
-                    className="object-contain w-full h-full "
+                    className="object-contain w-full h-full"
                   />
                 )}
               </div>
             </div>
-            <div className="flex-1 mt-4 flex flex-col gap-4 justify-between">
+            <div className="flex-1 mt-2 md:mt-4 flex flex-col gap-4 justify-between">
               <div>
-                <h1 className="text-5xl font-bold mb-4">{product.name}</h1>
+                <h1 className="text-2xl md:text-5xl font-bold mb-4">
+                  {product.name}
+                </h1>
                 <div className="flex items-center gap-4 mb-6">
-                  <h3 className="text-3xl font-bold text-slate-400 ">
+                  <h3 className="text-xl md:text-3xl font-bold text-slate-400 ">
                     {formatPrice(
                       calculatePercent(product.price, product.sale),
                       ''
@@ -147,14 +153,13 @@ export default function ProductPage() {
                   >
                     {isAddedToCart ? 'Added to Cart' : 'Add to Cart'}
                   </button>
-                  <button
+                  <Link
                     className="btn btn-primary btn-md flex-1"
-                    onClick={() => {
-                      router.push(`/payment/${id}?quantity=${quantity}`);
-                    }}
+                    href={`/payment/${id}?quantity=${quantity}`}
+                    prefetch={true}
                   >
                     Buy Now
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
