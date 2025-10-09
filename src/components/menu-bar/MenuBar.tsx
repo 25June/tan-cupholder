@@ -18,6 +18,12 @@ export function MenuBar() {
       const clientHeight = element?.clientHeight || 0;
       const scrollTop = element?.scrollTop || 0;
       const scrollHeight = element?.scrollHeight || 0;
+      if (scrollTop === 0) {
+        document
+          .getElementById('scroll-indicator')
+          ?.style.setProperty('width', `${0}%`);
+        return;
+      }
       const result = Math.round(
         (scrollTop / (scrollHeight - clientHeight)) * 100
       );
