@@ -19,7 +19,7 @@ export default function TranslateDropdown({ id }: { id: string }) {
   return (
     <div>
       <button
-        className="btn btn-sm btn-circle bg-transparent border-0"
+        className="btn btn-sm btn-circle bg-transparent border-0 inline-block"
         popoverTarget={id}
         style={{ anchorName: '--anchor-2' } as React.CSSProperties}
       >

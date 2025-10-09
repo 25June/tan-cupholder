@@ -1,10 +1,9 @@
 'use client';
 
-import { useScroll } from 'motion/react';
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
 import { CategorySection } from '@/components/category-section/CategorySection';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Faq } from '@/components/faq/Faq';
 import Footer from '@/components/footer/Footer';
 import { View } from '@/constants/common';
@@ -17,19 +16,14 @@ interface Props {
 }
 
 export default function Homepage({ products }: Props) {
-  const divRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const { scrollYProgress } = useScroll({ container: divRef });
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen">
       <Preload isLoaded={isLoaded} />
       <ModesProvider>
-        <MenuBar scrollYProgress={scrollYProgress} />
-        <div
-          ref={divRef}
-          className="h-screen flex flex-col text-logo-text snap-y snap-proximity overflow-y-scroll scroll-smooth"
-        >
+        <MenuBar />
+        <div className="flex flex-col text-logo-text">
           <div className="snap-center" id={View.HERO}>
             <HeroSection onLoad={() => setIsLoaded(true)} />
           </div>

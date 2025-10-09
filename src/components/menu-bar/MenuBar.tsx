@@ -1,16 +1,36 @@
+'use client';
+
 import { View } from '@/constants/common';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { motion, MotionValue } from 'motion/react';
+import { motion } from 'motion/react';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
 import TranslateDropdown from '../translate-dropdown/TranslateDropdown';
+import { useEffect } from 'react';
+import { throttle } from '@/shared/utils/debounce';
 
-interface MenuBarProps {
-  readonly scrollYProgress: MotionValue<number>;
-}
-
-export function MenuBar({ scrollYProgress }: MenuBarProps) {
+export function MenuBar() {
   const t = useTranslations('Menu');
+
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const element = (e.target as Document).scrollingElement;
+      const clientHeight = element?.clientHeight || 0;
+      const scrollTop = element?.scrollTop || 0;
+      const scrollHeight = element?.scrollHeight || 0;
+      const result = Math.round(
+        (scrollTop / (scrollHeight - clientHeight)) * 100
+      );
+
+      document
+        .getElementById('scroll-indicator')
+        ?.style.setProperty('width', `${result}%`);
+    };
+    window.addEventListener('scroll', throttle(handleScroll, 50));
+    return () => {
+      window.removeEventListener('scroll', throttle(handleScroll, 50));
+    };
+  }, []);
 
   const scrollToView = (id: string) => {
     const element = document.getElementById(id);
@@ -19,13 +39,12 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
     }
   };
   return (
-    <div className="max-w-screen w-full mx-auto absolute top-2 md:top-5 z-50">
+    <div className="max-w-screen w-full mx-auto fixed top-2 md:top-5 z-50">
       <div className="max-w-[95vw] md:max-w-5xl rounded-3xl mx-auto bg-white overflow-hidden transition-shadow shadow-2xl">
         <div className="relative">
           <motion.div
             id="scroll-indicator"
             style={{
-              scaleX: scrollYProgress,
               position: 'absolute',
               top: 0,
               left: 0,
@@ -35,7 +54,8 @@ export function MenuBar({ scrollYProgress }: MenuBarProps) {
               zIndex: 1,
               borderBottomRightRadius: '5px',
               borderTopRightRadius: '5px',
-              backgroundColor: '#f57722'
+              backgroundColor: '#f57722',
+              transition: 'width 0.3s ease-in'
             }}
           />
           <div className="absolute hidden md:block right-4 top-3">
