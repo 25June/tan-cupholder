@@ -7,7 +7,6 @@ import { motion } from 'motion/react';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
 import TranslateDropdown from '../translate-dropdown/TranslateDropdown';
 import { useEffect } from 'react';
-import { throttle } from '@/shared/utils/debounce';
 
 export function MenuBar() {
   const t = useTranslations('Menu');
@@ -18,23 +17,20 @@ export function MenuBar() {
       const clientHeight = element?.clientHeight || 0;
       const scrollTop = element?.scrollTop || 0;
       const scrollHeight = element?.scrollHeight || 0;
-      if (scrollTop === 0) {
-        document
-          .getElementById('scroll-indicator')
-          ?.style.setProperty('width', `${0}%`);
-        return;
-      }
       const result = Math.round(
         (scrollTop / (scrollHeight - clientHeight)) * 100
       );
-
-      document
-        .getElementById('scroll-indicator')
-        ?.style.setProperty('width', `${result}%`);
+      const scrolleElement = document.getElementById('scroll-indicator');
+      if (scrolleElement) {
+        scrolleElement.style.setProperty(
+          'transform',
+          `translateX(-${100 - result}%)`
+        );
+      }
     };
-    window.addEventListener('scroll', throttle(handleScroll, 50));
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', throttle(handleScroll, 50));
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -51,6 +47,8 @@ export function MenuBar() {
           <motion.div
             id="scroll-indicator"
             style={{
+              width: '100%',
+              transform: 'translateX(-100%)',
               position: 'absolute',
               top: 0,
               left: 0,
@@ -61,7 +59,7 @@ export function MenuBar() {
               borderBottomRightRadius: '5px',
               borderTopRightRadius: '5px',
               backgroundColor: '#f57722',
-              transition: 'width 0.3s ease-in'
+              transition: 'transform 0.1s ease-in'
             }}
           />
           <div className="absolute hidden md:block right-4 top-3">
