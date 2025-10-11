@@ -49,9 +49,8 @@ export default function SideNav() {
           <UserEmail />
         </Suspense>
         <form
-          onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            ('use server');
+          action={async () => {
+            'use server';
             await signOut({ redirectTo: '/' });
           }}
         >
