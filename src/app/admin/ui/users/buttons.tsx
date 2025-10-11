@@ -28,12 +28,13 @@ export function UpdateUser({ id }: { id: string }) {
 }
 
 export function DeleteUser({ id }: { id: string }) {
-  const handleDeleteUser = async (formData: FormData) => {
+  const handleDeleteUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     await deleteUser(id);
   };
 
   return (
-    <form action={handleDeleteUser}>
+    <form onSubmit={handleDeleteUser}>
       <button
         type="submit"
         className="rounded-md border border-red-400 p-2 bg-gray-100"

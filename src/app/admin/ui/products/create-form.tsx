@@ -58,7 +58,9 @@ export default function CreateProductForm({
     return Promise.all(promises).finally(() => setIsLoading(false));
   };
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     setIsLoading(true);
     const newFormData = new FormData();
     newFormData.append('name', formData.get('name') as string);
@@ -94,7 +96,7 @@ export default function CreateProductForm({
   };
 
   return (
-    <form action={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <div className="form-control w-full max-w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex flex-col gap-4 w-full">

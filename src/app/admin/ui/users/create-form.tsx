@@ -13,7 +13,9 @@ export default function CreateUserForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     setIsLoading(true);
     const newData = formatUserData(formData);
     return createUser(initialState, newData)
@@ -39,7 +41,7 @@ export default function CreateUserForm() {
   };
 
   return (
-    <form action={handleFormSubmit} className="space-y-6">
+    <form onSubmit={handleFormSubmit} className="space-y-6">
       <div className="p-4 md:p-6">
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
           {/* First Name */}

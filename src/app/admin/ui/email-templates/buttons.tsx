@@ -36,10 +36,15 @@ export function UpdateEmailTemplate({ id }: { id: string }) {
 }
 
 export function DeleteEmailTemplate({ id }: { id: string }) {
-  const deleteEmailTemplateWithId = deleteEmailTemplate.bind(null, id);
+  const handleDeleteEmailTemplate = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    await deleteEmailTemplate(id);
+  };
 
   return (
-    <form action={deleteEmailTemplateWithId} className="w-full p-0">
+    <form onSubmit={handleDeleteEmailTemplate} className="w-full p-0">
       <button className="rounded-md p-2 w-full flex items-center gap-2">
         <TrashIcon className="w-5" />
         <span>Delete</span>

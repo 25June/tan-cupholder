@@ -74,7 +74,14 @@ function EditImage({ imageUrl, textKey, ...props }: EditImageProps) {
       </div>
       <Popper open={isOpen} anchorEl={anchorRef.current} onClose={handleClose}>
         <div onClick={handleClickPopper} className="p-4">
-          <form action={onSubmit} className="space-y-4">
+          <form
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              onSubmit(formData);
+            }}
+            className="space-y-4"
+          >
             <input
               type="text"
               name="imageUrl"

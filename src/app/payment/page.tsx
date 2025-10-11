@@ -195,7 +195,14 @@ export default function PaymentPage() {
                   {t('customerInfo')}
                 </h2>
 
-                <form action={handleFormSubmit} className="space-y-4">
+                <form
+                  onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    handleFormSubmit(formData);
+                  }}
+                  className="space-y-4"
+                >
                   <div>
                     <label
                       htmlFor="customerName"

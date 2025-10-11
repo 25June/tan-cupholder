@@ -69,7 +69,12 @@ export default function CreateFeatureImageForm() {
   }, [imageUploadCompleted]);
 
   return (
-    <form action={onUpload}>
+    <form
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        onUpload();
+      }}
+    >
       <div className="form-control w-full max-w-full">
         <div className="text-sm text-muted-foreground">
           <fieldset className="fieldset">

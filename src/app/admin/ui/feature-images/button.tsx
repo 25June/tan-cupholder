@@ -26,7 +26,10 @@ export function DeleteFeatureImage({
   images: Record<string, FeatureImage | undefined>;
   callback: () => void;
 }) {
-  const handleDeleteFeatureImage = async (formData: FormData) => {
+  const handleDeleteFeatureImage = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
     if (
       Object.values(images).filter((image) => image !== undefined).length === 0
     ) {
@@ -52,7 +55,7 @@ export function DeleteFeatureImage({
   );
 
   return (
-    <form action={handleDeleteFeatureImage}>
+    <form onSubmit={handleDeleteFeatureImage}>
       <button
         disabled={numberOfImages === 0}
         type="submit"

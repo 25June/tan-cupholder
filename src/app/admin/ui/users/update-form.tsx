@@ -14,7 +14,9 @@ export default function UpdateUserForm({ user }: { user: UserInfo }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     formData.set('id', user.id);
     setIsLoading(true);
     const newData = formatUserData(formData);
@@ -41,7 +43,7 @@ export default function UpdateUserForm({ user }: { user: UserInfo }) {
   };
 
   return (
-    <form action={handleFormSubmit} className="space-y-6">
+    <form onSubmit={handleFormSubmit} className="space-y-6">
       <div className="p-4 md:p-6">
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
           {/* First Name */}

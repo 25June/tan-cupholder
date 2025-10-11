@@ -19,7 +19,9 @@ export default function UpdateCustomerForm({
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     formData.set('id', customer.id);
     setIsLoading(true);
     return updateCustomer(initialState, formData)
@@ -43,7 +45,7 @@ export default function UpdateCustomerForm({
   };
 
   return (
-    <form action={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <div className="form-control w-full max-w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-2">
           <div className="flex flex-col gap-4 w-full">

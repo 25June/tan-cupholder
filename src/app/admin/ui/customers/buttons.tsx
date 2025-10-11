@@ -28,10 +28,13 @@ export function UpdateCustomer({ id }: { id: string }) {
 }
 
 export function DeleteCustomer({ id }: { id: string }) {
-  const deleteCustomerWithId = deleteCustomer.bind(null, id);
+  const handleDeleteCustomer = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await deleteCustomer(id);
+  };
 
   return (
-    <form action={deleteCustomerWithId}>
+    <form onSubmit={handleDeleteCustomer}>
       <button
         type="submit"
         className="rounded-md border border-red-400 p-2 bg-gray-100"

@@ -71,7 +71,9 @@ export default function StatusForm({
     }
   ];
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     startTransition(() => {
       dispatch(formData);
       setShowForm(false);
@@ -96,7 +98,7 @@ export default function StatusForm({
             Change Status
           </button>
         ) : (
-          <form action={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input type="hidden" name="orderId" value={orderId} />
 
             <div>

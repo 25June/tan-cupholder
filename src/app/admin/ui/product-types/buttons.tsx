@@ -28,10 +28,15 @@ export function UpdateProductType({ id }: { id: string }) {
 }
 
 export function DeleteProductType({ id }: { id: string }) {
-  const deleteProductTypeWithId = deleteProductType.bind(null, id);
+  const handleDeleteProductType = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    await deleteProductType(id);
+  };
 
   return (
-    <form action={deleteProductTypeWithId}>
+    <form onSubmit={handleDeleteProductType}>
       <button
         type="submit"
         className="rounded-md border border-red-400 p-2 bg-gray-100"

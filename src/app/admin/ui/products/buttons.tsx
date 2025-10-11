@@ -47,10 +47,13 @@ export function UpdateImage({ id }: { id: string }) {
 }
 
 export function DeleteProduct({ id }: { id: string }) {
-  const deleteProductWithId = deleteProduct.bind(null, id);
+  const handleDeleteProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await deleteProduct(id);
+  };
 
   return (
-    <form action={deleteProductWithId}>
+    <form onSubmit={handleDeleteProduct}>
       <button
         type="submit"
         className="rounded-md border border-red-400 p-2 bg-gray-100"

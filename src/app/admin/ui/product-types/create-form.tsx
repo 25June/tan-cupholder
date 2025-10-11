@@ -14,7 +14,9 @@ export default function CreateProductTypeForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     setIsLoading(true);
     const newFormData = new FormData();
     newFormData.append('name', formData.get('name') as string);
@@ -42,7 +44,7 @@ export default function CreateProductTypeForm() {
   };
 
   return (
-    <form action={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <div className="form-control w-full max-w-full">
         <div className="flex flex-col md:flex-row gap-4 w-full">
           <fieldset className="fieldset w-full">

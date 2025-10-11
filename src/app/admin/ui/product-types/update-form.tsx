@@ -18,7 +18,9 @@ export default function UpdateProductTypeForm({
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     formData.set('id', productType.id);
     formData.set('description', formData.get('description') as string);
     setIsLoading(true);
@@ -43,7 +45,7 @@ export default function UpdateProductTypeForm({
   };
 
   return (
-    <form action={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <div className="form-control w-full max-w-full">
         <div className="flex flex-col md:flex-row gap-4 w-full">
           <fieldset className="fieldset w-full">
