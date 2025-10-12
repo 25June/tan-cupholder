@@ -3,16 +3,29 @@
 import { LocalStorageKey } from '@/constants/storageKey.const';
 
 export const getStorage = (key: string) => {
-  const value = window.localStorage.getItem(key);
-  return value ? JSON.parse(value) : null;
+  if (typeof window !== 'undefined') {
+    const value = window.localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  } else {
+    console.log('window is undefined');
+    return null;
+  }
 };
 
 export const setStorage = (key: string, value: any) => {
-  window.localStorage.setItem(key, JSON.stringify(value));
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } else {
+    console.log('window is undefined');
+  }
 };
 
 export const removeStorage = (key: string) => {
-  window.localStorage.removeItem(key);
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem(key);
+  } else {
+    console.log('window is undefined');
+  }
 };
 
 export const saveViewedProductToStorage = (productId: string) => {
