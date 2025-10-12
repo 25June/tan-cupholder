@@ -5,7 +5,6 @@ export const formatImagePath = (
   width: number = 800,
   height: number = 800
 ) => {
-  console.log('imageUrl', imageUrl);
   const quality = width > height ? width : height;
   const token = process.env.NEXT_PUBLIC_PIX_BOOST_TOKEN;
   const endpoint = process.env.NEXT_PUBLIC_PIX_BOOST_ENDPOINT;
