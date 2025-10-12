@@ -3,16 +3,16 @@
 import { LocalStorageKey } from '@/constants/storageKey.const';
 
 export const getStorage = (key: string) => {
-  const value = localStorage.getItem(key);
+  const value = window.localStorage.getItem(key);
   return value ? JSON.parse(value) : null;
 };
 
 export const setStorage = (key: string, value: any) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  window.localStorage.setItem(key, JSON.stringify(value));
 };
 
 export const removeStorage = (key: string) => {
-  localStorage.removeItem(key);
+  window.localStorage.removeItem(key);
 };
 
 export const saveViewedProductToStorage = (productId: string) => {
