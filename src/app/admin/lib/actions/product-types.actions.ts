@@ -54,7 +54,7 @@ export async function getProductTypes({
       return productTypes;
     }
 
-    const ITEMS_PER_PAGE = 10;
+    const ITEMS_PER_PAGE = 50;
     const offset = (Number(page) - 1) * ITEMS_PER_PAGE;
 
     if (query) {
