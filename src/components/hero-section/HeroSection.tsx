@@ -23,7 +23,7 @@ const imageArr = [
 
 const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 const Break = () => <br />;
-export function HeroSection({ onLoad }: { onLoad: () => void }) {
+export function HeroSection() {
   const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
   const { isEditorMode } = useModesContext();
@@ -139,7 +139,7 @@ export function HeroSection({ onLoad }: { onLoad: () => void }) {
           {isEditorMode ? (
             <EditableSlider imageArr={imageArr} />
           ) : (
-            <Slider imageArr={imageArr} onLoad={onLoad} />
+            <Slider imageArr={imageArr} />
           )}
         </div>
       </div>

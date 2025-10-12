@@ -13,6 +13,10 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { getAllContent } from '@/app/lib/public-content.actions';
 import { useLocale } from 'next-intl';
 import { useSession } from '@/hooks/useSession';
+import {
+  getContentFromStorage,
+  setContentToStorage
+} from '@/shared/utils/storage';
 
 export interface ModesContextProps {
   isEditorMode?: boolean;
@@ -20,6 +24,7 @@ export interface ModesContextProps {
   language: string;
   getText: (textKey: string) => Record<string, string>;
   texts: Record<string, string>;
+  isLoading: boolean;
 }
 
 const ModesContext = createContext<ModesContextProps>({
@@ -27,7 +32,8 @@ const ModesContext = createContext<ModesContextProps>({
   exitEditorMode: () => {},
   language: 'vi',
   getText: () => ({}),
-  texts: {}
+  texts: {},
+  isLoading: false
 });
 
 export const ModesProvider = ({ children }: PropsWithChildren) => {
@@ -35,16 +41,27 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
   const language = useLocale();
   const { user } = useSession();
   const [texts, setTexts] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoaded] = useState<boolean>(true);
 
   useEffect(() => {
-    getAllContent().then((content) => {
-      setTexts(
-        content.reduce((acc, curr) => {
+    const content = getContentFromStorage();
+    if (content) {
+      setTexts(content);
+      setIsLoaded(false);
+      return;
+    }
+    getAllContent()
+      .then((content) => {
+        const texts = content.reduce((acc, curr) => {
           acc[curr.key] = curr.value;
           return acc;
-        }, {} as Record<string, string>)
-      );
-    });
+        }, {} as Record<string, string>);
+        setTexts(texts);
+        setContentToStorage(texts);
+      })
+      .finally(() => {
+        setIsLoaded(false);
+      });
   }, []);
 
   useHotkeys(
@@ -70,9 +87,10 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
       exitEditorMode,
       language,
       getText,
-      texts
+      texts,
+      isLoading
     }),
-    [isEditorMode, language, texts] // eslint-disable-line react-hooks/exhaustive-deps
+    [isEditorMode, language, texts, isLoading] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (

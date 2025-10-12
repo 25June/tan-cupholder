@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import { geistMono, geistSans, comingSoon, yuseiMagic } from '@/styles/fonts';
 import './globals.css';
 import { getLocale } from 'next-intl/server';
+import { ModesProvider } from '@/contexts/EditMode.context';
 
 export const metadata: Metadata = {
   title: 'TaN',
@@ -86,7 +87,9 @@ export default async function RootLayout({
         className={`${comingSoon.variable} ${yuseiMagic.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          <NextIntlClientProvider>
+            <ModesProvider>{children}</ModesProvider>
+          </NextIntlClientProvider>
         </SessionProvider>
       </body>
     </html>

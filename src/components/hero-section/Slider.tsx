@@ -19,13 +19,7 @@ const TRANSLATE_Y = [
 ];
 const OPACITY = ['opacity-100', 'opacity-70', 'opacity-50', 'opacity-0'];
 
-export default function Slider({
-  imageArr,
-  onLoad
-}: {
-  imageArr: editableKey[];
-  onLoad: () => void;
-}) {
+export default function Slider({ imageArr }: { imageArr: editableKey[] }) {
   const [contrast, setContrast] = useState<string[]>(CONTRAST);
   const [imgOrders, setImgOrders] = useState<editableKey[]>(imageArr);
   const [startTransitions, setStartTransitions] = useState<boolean>(false);
@@ -64,14 +58,6 @@ export default function Slider({
     setOpacity(OPACITY);
   }, []);
 
-  useEffect(() => {
-    if (
-      Object.values(isLoaded).length &&
-      Object.values(isLoaded).every((value) => value === true)
-    ) {
-      onLoad();
-    }
-  }, [isLoaded]);
   return (
     <>
       {imgOrders.map((img, index) => {
@@ -104,7 +90,6 @@ export default function Slider({
               alt={img}
               width={800}
               height={800}
-              onLoad={() => setIsLoaded((prev) => ({ ...prev, [img]: true }))}
               className={`w-full h-full object-cover object-center transition-all duration-300 ${zoomIn}`}
             />
           </div>

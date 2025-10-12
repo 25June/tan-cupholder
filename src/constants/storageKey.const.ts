@@ -1,4 +1,5 @@
 export enum LocalStorageKey {
   CART = 'cart',
-  VIEWED_PRODUCTS = 'viewedProducts'
+  VIEWED_PRODUCTS = 'viewedProducts',
+  CONTENT = 'content'
 }

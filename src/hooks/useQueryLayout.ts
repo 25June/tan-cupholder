@@ -11,7 +11,7 @@ const breakpoints: Record<ScreenLayout, (size: number) => boolean> = {
 
 export const useQueryMedia = () => {
   const [currentLayout, setCurrentLayout] = useState<ScreenLayout>(
-    ScreenLayout.Mobile
+    ScreenLayout.Desktop
   );
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useQueryMedia } from '@/hooks/useQueryLayout';
 import { ScreenLayout } from '@/constants/common';
 
-export default function Preload({ isLoaded }: { isLoaded: boolean }) {
+export default function Preload({ isLoading }: { isLoading: boolean }) {
   const [removeLoading, setRemoveLoading] = useState<boolean>(false);
   const [loadingMedia, setLoadingMedia] = useState<boolean>(true);
   const currentLayout = useQueryMedia();
@@ -13,17 +13,17 @@ export default function Preload({ isLoaded }: { isLoaded: boolean }) {
     if (!loadingMedia) {
       const timer = setTimeout(() => {
         setRemoveLoading(true);
-      }, 3000); // Simulate loading time
+      }, 300); // Simulate loading time
 
       return () => clearTimeout(timer);
     }
   }, [loadingMedia]);
 
   useEffect(() => {
-    if (isLoaded || currentLayout === ScreenLayout.Mobile) {
+    if (!isLoading || currentLayout === ScreenLayout.Mobile) {
       setLoadingMedia(false);
     }
-  }, [isLoaded, currentLayout]);
+  }, [isLoading, currentLayout]);
 
   return (
     <>

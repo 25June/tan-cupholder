@@ -10,37 +10,35 @@ import { View } from '@/constants/common';
 import ProductSlider from '@/components/product-slider/ProductSlider';
 import Preload from '../preload/Preload';
 import { ProductResponse } from '@/models/product';
-import { ModesProvider } from '@/contexts/EditMode.context';
+import { useModesContext } from '@/contexts/EditMode.context';
 interface Props {
   readonly products: ProductResponse[];
 }
 
 export default function Homepage({ products }: Props) {
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
+  const { isLoading } = useModesContext();
   return (
     <div className="relative min-h-screen">
-      <Preload isLoaded={isLoaded} />
-      <ModesProvider>
-        <MenuBar />
-        <div className="flex flex-col text-logo-text">
-          <div className="snap-center" id={View.HERO}>
-            <HeroSection onLoad={() => setIsLoaded(true)} />
-          </div>
-          <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
-            <CategorySection />
-          </div>
-          <div className="snap-center" id={View.PRODUCT}>
-            <ProductSlider products={products} />
-          </div>
-          <div id={View.FAQ}>
-            <Faq />
-          </div>
-          <div>
-            <Footer />
-          </div>
+      <Preload isLoading={isLoading} />
+
+      <MenuBar />
+      <div className="flex flex-col text-logo-text">
+        <div className="snap-center" id={View.HERO}>
+          <HeroSection />
         </div>
-      </ModesProvider>
+        <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
+          <CategorySection />
+        </div>
+        <div className="snap-center" id={View.PRODUCT}>
+          <ProductSlider products={products} />
+        </div>
+        <div id={View.FAQ}>
+          <Faq />
+        </div>
+        <div>
+          <Footer />
+        </div>
+      </div>
     </div>
   );
 }

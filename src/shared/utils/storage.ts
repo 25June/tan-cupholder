@@ -5,7 +5,7 @@ export const getStorage = (key: string) => {
   return value ? JSON.parse(value) : null;
 };
 
-export const setStorage = (key: string, value: string) => {
+export const setStorage = (key: string, value: any) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
@@ -61,4 +61,13 @@ export const clearCartFromStorage = (productIds: string[]) => {
     (item: { productId: string }) => !productIds.includes(item.productId)
   );
   setStorage(LocalStorageKey.CART, newCart);
+};
+
+export const getContentFromStorage = () => {
+  const content = getStorage(LocalStorageKey.CONTENT) || null;
+  return content;
+};
+
+export const setContentToStorage = (content: Record<string, string>) => {
+  setStorage(LocalStorageKey.CONTENT, content);
 };
