@@ -17,6 +17,8 @@ import {
   getContentFromStorage,
   setContentToStorage
 } from '@/shared/utils/storage';
+import { setCookie, getCookie } from '@/shared/utils/cookies.utils';
+import { CookieKey } from '@/constants/storageKey.const';
 
 export interface ModesContextProps {
   isEditorMode?: boolean;
@@ -45,7 +47,8 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const content = getContentFromStorage();
-    if (content) {
+    const cacheContent = getCookie(CookieKey.CACHE_CONTENT);
+    if (content && cacheContent) {
       setTexts(content);
       setIsLoaded(false);
       return;
@@ -58,6 +61,7 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
         }, {} as Record<string, string>);
         setTexts(texts);
         setContentToStorage(texts);
+        setCookie(CookieKey.CACHE_CONTENT, 'true');
       })
       .finally(() => {
         setIsLoaded(false);

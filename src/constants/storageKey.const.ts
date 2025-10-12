@@ -3,3 +3,7 @@ export enum LocalStorageKey {
   VIEWED_PRODUCTS = 'viewedProducts',
   CONTENT = 'content'
 }
+
+export enum CookieKey {
+  CACHE_CONTENT = 'cacheContent'
+}
