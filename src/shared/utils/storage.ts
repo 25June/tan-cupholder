@@ -1,3 +1,5 @@
+'use client';
+
 import { LocalStorageKey } from '@/constants/storageKey.const';
 
 export const getStorage = (key: string) => {
