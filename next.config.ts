@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
         hostname: 'pub-485637738840450490e408cee2acb72c.r2.dev',
         port: '',
         pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'pixboost.com',
+        port: '',
+        pathname: '/api/2/img/**'
       }
     ]
   },

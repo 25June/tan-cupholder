@@ -1,4 +1,7 @@
+'use client';
+
 import { getImageProps } from 'next/image';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 
 export default function AvatarShape1() {
   const {
@@ -8,7 +11,11 @@ export default function AvatarShape1() {
     width: 300,
     height: 300,
     quality: 100,
-    src: 'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/avatar-1.jpg'
+    src: `${formatImagePath(
+      'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/avatar-1.jpg',
+      600,
+      600
+    )}`
   });
   // Define the path data for the blob shape
   const blobPathData =

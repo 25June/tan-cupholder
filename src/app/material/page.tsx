@@ -2,8 +2,8 @@ import RandomShape3 from '@/components/icons/shapes/RandomShape3';
 import RandomShape4 from '@/components/icons/shapes/RandomShape4';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Footer from '@/components/footer/Footer';
-import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
+import CDNImage from '@/components/cdn-image/CDNImage';
 
 export default async function MaterialPage() {
   const t = await getTranslations('MaterialPage');
@@ -28,7 +28,7 @@ export default async function MaterialPage() {
           </div>
         </div>
         <div className="w-full max-w-[1440px] mx-auto my-4 relative aspect-video rounded-xl overflow-hidden border-6 border-logo-orange-border">
-          <Image
+          <CDNImage
             src={
               'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7414.jpg'
             }

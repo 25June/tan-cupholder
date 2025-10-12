@@ -14,6 +14,7 @@ import Spinner from '@/components/spinner/Spinner';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Link from 'next/link';
 import Footer from '@/components/footer/Footer';
+import CDNImage from '@/components/cdn-image/CDNImage';
 
 export default function OrderStatusPage() {
   // const t = useTranslations('OrderStatusPage');
@@ -54,7 +55,7 @@ export default function OrderStatusPage() {
       <StaticMenuBar triggerCartCount={1} />
       <div>
         <div className={`w-screen h-48 md:h-96`}>
-          <Image
+          <CDNImage
             src={
               'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7414.jpg'
             }

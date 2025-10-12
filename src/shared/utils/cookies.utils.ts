@@ -1,3 +1,5 @@
+'use client';
+
 export const setCookie = (name: string, value: string, lifespan?: number) => {
   let expires = '';
   const date = new Date();

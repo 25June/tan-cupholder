@@ -6,6 +6,8 @@ import Popper from '@/components/popper/Popper';
 import { MouseEvent, useRef, useState } from 'react';
 import Image, { ImageProps } from 'next/image';
 import { editableKey } from '@/constants/editableKey';
+import CDNImage from '@/components/cdn-image/CDNImage';
+
 interface Props extends ImageProps {
   imageKey: editableKey;
 }
@@ -18,7 +20,7 @@ export default function EditableImage({ imageKey, ...props }: Props) {
   }
 
   if (!isEditorMode) {
-    return <Image {...props} src={imageUrl} />;
+    return <CDNImage {...props} src={imageUrl} />;
   }
 
   return <EditImage imageUrl={imageUrl} textKey={imageKey} {...props} />;

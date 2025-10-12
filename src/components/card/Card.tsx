@@ -2,7 +2,8 @@
 
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import CDNImage from '@/components/cdn-image/CDNImage';
+
 import {
   numberWithCommas,
   calculatePercent
@@ -21,7 +22,6 @@ interface CardProps {
 }
 
 export default function Card({ item }: CardProps) {
-  const router = useRouter();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
@@ -41,10 +41,10 @@ export default function Card({ item }: CardProps) {
         <div className="z-10 absolute text-xs top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2 tracking-wider font-black">
           {item.sale}%
         </div>
-        <Image
+        <CDNImage
           src={getImageUrl(item.id, item.product_image.name)}
-          width={300}
-          height={300}
+          width={500}
+          height={500}
           alt={item.product_image.name}
           className="h-72 w-72 object-cover hover:scale-110 transform-none transition-all duration-300"
         />

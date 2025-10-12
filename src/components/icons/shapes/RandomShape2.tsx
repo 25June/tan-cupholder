@@ -1,4 +1,6 @@
+'use client';
 import { getImageProps } from 'next/image';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 
 export default function RandomShape2() {
   const {
@@ -8,7 +10,11 @@ export default function RandomShape2() {
     width: 300,
     height: 300,
     quality: 100,
-    src: 'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7197_re-shape.png'
+    src: `${formatImagePath(
+      'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7197_re-shape.png',
+      600,
+      600
+    )}`
   });
   // Define the path data for the blob shape
   const blobPathData =

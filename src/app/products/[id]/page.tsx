@@ -22,6 +22,7 @@ import {
 } from '@/shared/utils/storage';
 import RelatedProducts from '@/components/related-products/RelatedProducts';
 import Link from 'next/link';
+import CDNImage from '@/components/cdn-image/CDNImage';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -101,11 +102,11 @@ export default function ProductPage() {
                         onClick={() => setSelectedImage(img)}
                         className="h-10 md:h-full"
                       >
-                        <Image
+                        <CDNImage
                           src={getImageUrl(product.id, img.name)}
                           alt={img.name}
-                          width={600}
-                          height={600}
+                          width={700}
+                          height={700}
                           className="object-contain w-full h-full"
                         />
                       </button>
@@ -115,11 +116,11 @@ export default function ProductPage() {
               </div>
               <div className="w-full h-88 bg-gray-100 p-2 rounded-md">
                 {selectedImage && (
-                  <Image
+                  <CDNImage
                     src={getImageUrl(product.id, selectedImage.name)}
                     alt={selectedImage.name}
-                    width={600}
-                    height={600}
+                    width={700}
+                    height={700}
                     className="object-contain w-full h-full"
                   />
                 )}

@@ -7,7 +7,7 @@ import ObserverLoading from '@/components/observer-loading/ObserverLoading';
 import SearchProducts from '@/components/search-products/SearchProducts';
 import { useProducts } from '@/hooks/useProduct';
 import Card from '@/components/card/Card';
-import Image from 'next/image';
+import CDNImage from '../cdn-image/CDNImage';
 
 export default function ProductsContainer() {
   const { onSearch, isEnd, productList, isLoading, onGetNextPage } =
@@ -18,7 +18,7 @@ export default function ProductsContainer() {
       <StaticMenuBar triggerCartCount={1} />
       <div>
         <div className={`w-screen h-48 md:h-96`}>
-          <Image
+          <CDNImage
             src={
               'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_7414.jpg'
             }
