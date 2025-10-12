@@ -1,30 +1,35 @@
 'use client';
 
+import {
+  getCookie,
+  removeCookie,
+  setCookie
+} from '@/shared/utils/cookies.utils';
 import { LocalStorageKey } from '@/constants/storageKey.const';
 
 export const getStorage = (key: string) => {
-  if (typeof window !== 'undefined') {
+  try {
     const value = window.localStorage.getItem(key);
     return value ? JSON.parse(value) : null;
-  } else {
-    console.log('window is undefined');
-    return null;
+  } catch (error) {
+    const value = getCookie(key);
+    return value ? JSON.parse(value) : null;
   }
 };
 
 export const setStorage = (key: string, value: any) => {
-  if (typeof window !== 'undefined') {
+  try {
     window.localStorage.setItem(key, JSON.stringify(value));
-  } else {
-    console.log('window is undefined');
+  } catch (error) {
+    setCookie(key, JSON.stringify(value));
   }
 };
 
 export const removeStorage = (key: string) => {
-  if (typeof window !== 'undefined') {
+  try {
     window.localStorage.removeItem(key);
-  } else {
-    console.log('window is undefined');
+  } catch (error) {
+    removeCookie(key);
   }
 };
 
