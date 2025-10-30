@@ -23,21 +23,21 @@ export default function Homepage({ products }: Props) {
 
       <MenuBar />
       <div className="flex flex-col text-logo-text">
-        <div className="snap-center" id={View.HERO}>
+        <section id={View.HERO}>
           <HeroSection />
-        </div>
-        <div className="snap-center bg-logo-orange-border" id={View.CATEGORY}>
+        </section>
+        <section className="bg-logo-orange-border" id={View.CATEGORY}>
           <CategorySection />
-        </div>
-        <div className="snap-center" id={View.PRODUCT}>
+        </section>
+        <section id={View.PRODUCT}>
           <ProductSlider products={products} />
-        </div>
-        <div id={View.FAQ}>
+        </section>
+        <section id={View.FAQ}>
           <Faq />
-        </div>
-        <div>
+        </section>
+        <section>
           <Footer />
-        </div>
+        </section>
       </div>
     </div>
   );

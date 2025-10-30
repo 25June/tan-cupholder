@@ -23,7 +23,7 @@ export default function TranslateDropdown({ id }: { id: string }) {
         popoverTarget={id}
         style={{ anchorName: '--anchor-2' } as React.CSSProperties}
       >
-        {isPending ? <Spinner /> : <GlobeAltIcon />}
+        {isPending ? <Spinner /> : <GlobeAltIcon className="text-gray-700" />}
       </button>
       <div className="dropdown dropdown-end">
         <ul
