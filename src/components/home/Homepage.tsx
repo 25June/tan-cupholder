@@ -3,7 +3,6 @@
 import { MenuBar } from '@/components/menu-bar/MenuBar';
 import { HeroSection } from '@/components/hero-section/HeroSection';
 import { CategorySection } from '@/components/category-section/CategorySection';
-import { useState } from 'react';
 import { Faq } from '@/components/faq/Faq';
 import Footer from '@/components/footer/Footer';
 import { View } from '@/constants/common';
