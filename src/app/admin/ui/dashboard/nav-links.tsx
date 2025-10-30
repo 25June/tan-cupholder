@@ -29,6 +29,11 @@ const links = [
     icon: PuzzlePieceIcon
   },
   {
+    name: 'Product Tags',
+    href: '/admin/dashboard/product-tags',
+    icon: PuzzlePieceIcon
+  },
+  {
     name: 'Products',
     href: '/admin/dashboard/products',
     icon: ShoppingBagIcon

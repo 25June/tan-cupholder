@@ -11,6 +11,7 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
   priority?: number;
+  tagIds?: string[]; // tag ids mapping for many-to-many relationship
 }
 
 export interface ProductCustom {

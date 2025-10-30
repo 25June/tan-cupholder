@@ -225,6 +225,64 @@ async function seedFeatureImage() {
   )`;
 }
 
+async function seedProductTags() {
+  await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await sql`
+    CREATE TABLE IF NOT EXISTS product_tags (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      short_name VARCHAR(50) NOT NULL UNIQUE,
+      description TEXT,
+      color VARCHAR(16),
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS product_tag_mappings (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      product_id UUID NOT NULL REFERENCES products(id),
+      tag_id UUID NOT NULL REFERENCES product_tags(id),
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(product_id, tag_id)
+    );
+  `;
+
+  const date = new Date().toISOString();
+  const baseTags = [
+    {
+      name: 'New',
+      short_name: 'NEW',
+      description: 'New arrival',
+      color: '#22c55e'
+    },
+    {
+      name: 'Hot',
+      short_name: 'HOT',
+      description: 'Trending product',
+      color: '#ef4444'
+    },
+    {
+      name: 'Sale',
+      short_name: 'SALE',
+      description: 'On sale',
+      color: '#f59e0b'
+    }
+  ];
+
+  await Promise.all(
+    baseTags.map(
+      (t) =>
+        sql`
+        INSERT INTO product_tags (name, short_name, description, color, created_at, updated_at)
+        VALUES (${t.name}, ${t.short_name}, ${t.description}, ${t.color}, ${date}, ${date})
+        ON CONFLICT (short_name) DO NOTHING;
+      `
+    )
+  );
+}
+
 async function seedContent() {
   await sql`
     CREATE TABLE IF NOT EXISTS content (
@@ -337,7 +395,7 @@ export async function GET() {
 
     // const userInfo = await sql.begin(seedUser);
     // const userCredentials = await sql.begin(seedUserCredentials);
-    // const result = await sql.begin(seedEmailTemplates);
+    // const result = await sql.begin(seedProductTags);
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {
