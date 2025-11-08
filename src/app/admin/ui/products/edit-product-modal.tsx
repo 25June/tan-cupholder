@@ -16,6 +16,9 @@ import { ProductType } from '@/models/productType';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
+import { useGenerateProductDescription } from '@/hooks/useGenerateProductDescription';
+import { BoltIcon } from '@heroicons/react/24/outline';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 
 const initialState: State = { message: null, errors: {} };
 
@@ -34,6 +37,8 @@ export default function EditProductModal({
   );
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const prevOpenRef = useRef<boolean>(false);
+
+  const { generateDescription, loading } = useGenerateProductDescription();
 
   useEffect(() => {
     const modal = document.getElementById(
@@ -273,7 +278,21 @@ export default function EditProductModal({
                 </fieldset>
 
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Description</legend>
+                  <div className="flex justify-between items-center">
+                    <legend className="fieldset-legend">Description</legend>
+                    <button
+                      type="button"
+                      className="btn btn-ghost btn-sm btn-circle"
+                      disabled={loading}
+                    >
+                      {loading && (
+                        <span className="loading loading-spinner"></span>
+                      )}
+                      {!loading && (
+                        <BoltIcon className="w-6 h-6 text-logo-orange" />
+                      )}
+                    </button>
+                  </div>{' '}
                   <textarea
                     name="description"
                     className="textarea h-24 w-full"

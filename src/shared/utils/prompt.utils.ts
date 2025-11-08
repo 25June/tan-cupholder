@@ -2,33 +2,29 @@
 
 import OpenAI from 'openai';
 
-export const generateDescription = async (imageUrl: string | File) => {
+export const convertFileToBase64 = async (file: File) => {
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  const base64Image = buffer.toString('base64');
+  return `data:${file.type};base64,${base64Image}`;
+};
+
+export const generateDescription = async (base64Image: string) => {
   try {
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-      baseURL: process.env.OPENAI_BASE_URL
+      apiKey: process.env.NEXT_PUBLIC_OPEN_AI_KEY,
+      baseURL: process.env.NEXT_PUBLIC_OPEN_AI_DOMAIN
     });
-    let imageUrlString = imageUrl;
-    if (imageUrl instanceof File) {
-      // convert file to base64
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        imageUrlString = `data:image/jpeg;base64,${
-          event.target?.result as string
-        }`;
-      };
-      reader.readAsDataURL(imageUrl);
-      console.log(imageUrlString);
-    }
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
+      stream: false,
       messages: [
         {
           role: 'user',
           content: [
             {
               type: 'text',
-              text: `Analyze this product image and return a JSON string matching this type:
+              text: `The image you are given is a cup holder image. Ignore the background, focus on the object and analyze this product image and return a JSON string matching this type:
                       {
                         generalDescription: string; // 2-4 sentences about the style, the purpose of the product, fashion, ...
                         color: string[]; // color of the product
@@ -40,7 +36,7 @@ export const generateDescription = async (imageUrl: string | File) => {
             {
               type: 'image_url',
               image_url: {
-                url: `data:image/jpeg;base64,${imageUrlString}`
+                url: base64Image
               }
             }
           ]
@@ -48,7 +44,7 @@ export const generateDescription = async (imageUrl: string | File) => {
       ],
       temperature: 0.5
     });
-    return JSON.parse(response.choices[0].message.content || '{}');
+    return response;
   } catch (error) {
     console.error('Error generating description:', error);
     return null;

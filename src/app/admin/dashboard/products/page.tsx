@@ -62,7 +62,7 @@ export default function Page() {
   return (
     <main>
       <div className="flex w-full items-center justify-between mb-8">
-        <h1 className={`${lusitana.className}  text-xl md:text-2xl`}>
+        <h1 className={`${lusitana.className} text-xl md:text-2xl`}>
           Products
         </h1>
       </div>

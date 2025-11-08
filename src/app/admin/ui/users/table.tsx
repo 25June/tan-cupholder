@@ -1,15 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { UserInfo } from '@/models/user';
 import { DeleteUser, UpdateUser } from './buttons';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { UserRole } from '@/constants/user';
 
 export default function UsersTable({ users }: { users: UserInfo[] }) {
-  const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
-
   return (
     <div className="w-full">
       <div className="mt-6 flow-root">
@@ -165,22 +161,7 @@ export default function UsersTable({ users }: { users: UserInfo[] }) {
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
                           <UpdateUser id={user.id} />
-                          {doubleClick[user.id] ? (
-                            <DeleteUser id={user.id} />
-                          ) : (
-                            <button
-                              onClick={() =>
-                                setDoubleClick((prev) => ({
-                                  ...prev,
-                                  [user.id]: true
-                                }))
-                              }
-                              className="rounded-md border p-2 hover:bg-gray-100"
-                            >
-                              <span className="sr-only">Delete</span>
-                              <TrashIcon className="w-5" />
-                            </button>
-                          )}
+                          <DeleteUser id={user.id} />
                         </div>
                       </td>
                     </tr>

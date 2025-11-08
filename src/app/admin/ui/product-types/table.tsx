@@ -1,20 +1,16 @@
 'use client';
 
-import { useState } from 'react';
 import { ProductType } from '@/models/productType';
 import {
   DeleteProductType,
   UpdateProductType
 } from '@/app/admin/ui/product-types/buttons';
-import { TrashIcon } from '@heroicons/react/24/outline';
 
 export default function ProductTypesTable({
   productTypes
 }: {
   productTypes: ProductType[];
 }) {
-  const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
-
   return (
     <div className="w-full">
       <div className="mt-6 flow-root">
@@ -89,22 +85,7 @@ export default function ProductTypesTable({
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
                           <UpdateProductType id={productType.id} />
-                          {doubleClick[productType.id] ? (
-                            <DeleteProductType id={productType.id} />
-                          ) : (
-                            <button
-                              onClick={() =>
-                                setDoubleClick((prev) => ({
-                                  ...prev,
-                                  [productType.id]: true
-                                }))
-                              }
-                              className="rounded-md border p-2 hover:bg-gray-100"
-                            >
-                              <span className="sr-only">Delete</span>
-                              <TrashIcon className="w-5" />
-                            </button>
-                          )}
+                          <DeleteProductType id={productType.id} />
                         </div>
                       </td>
                     </tr>

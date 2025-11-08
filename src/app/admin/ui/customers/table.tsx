@@ -1,18 +1,14 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { Customer } from '@/models/customer';
 import { DeleteCustomer, UpdateCustomer } from './buttons';
-import { TrashIcon } from '@heroicons/react/24/outline';
 
 export default function CustomersTable({
   customers
 }: {
   customers: Customer[];
 }) {
-  const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
-
   return (
     <div className="w-full">
       <div className="mt-6 flow-root">
@@ -124,22 +120,7 @@ export default function CustomersTable({
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
                           <UpdateCustomer id={customer.id} />
-                          {doubleClick[customer.id] ? (
-                            <DeleteCustomer id={customer.id} />
-                          ) : (
-                            <button
-                              onClick={() =>
-                                setDoubleClick((prev) => ({
-                                  ...prev,
-                                  [customer.id]: true
-                                }))
-                              }
-                              className="rounded-md border p-2 hover:bg-gray-100"
-                            >
-                              <span className="sr-only">Delete</span>
-                              <TrashIcon className="w-5" />
-                            </button>
-                          )}
+                          <DeleteCustomer id={customer.id} />
                         </div>
                       </td>
                     </tr>

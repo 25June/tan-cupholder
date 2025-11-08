@@ -120,24 +120,45 @@ export default function CreateProductForm({
               </div>
             </fieldset>
 
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">Price</legend>
-              <input
-                type="number"
-                name="price"
-                className="input w-full"
-                placeholder="Product Price"
-                defaultValue={100000}
-              />
-              <div id="price-error" aria-live="polite" aria-atomic="true">
-                {state.errors?.price &&
-                  state.errors.price.map((error: string) => (
-                    <p className="text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ))}
-              </div>
-            </fieldset>
+            <div className="flex gap-4 w-full">
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Price</legend>
+                <input
+                  type="number"
+                  name="price"
+                  className="input w-full"
+                  placeholder="Product Price"
+                  defaultValue={100000}
+                />
+                <div id="price-error" aria-live="polite" aria-atomic="true">
+                  {state.errors?.price &&
+                    state.errors.price.map((error: string) => (
+                      <p className="text-sm text-red-500" key={error}>
+                        {error}
+                      </p>
+                    ))}
+                </div>
+              </fieldset>
+
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Stock</legend>
+                <input
+                  type="number"
+                  name="stock"
+                  className="input w-full"
+                  placeholder="Stock Amount"
+                  defaultValue={100}
+                />
+                <div id="stock-error" aria-live="polite" aria-atomic="true">
+                  {state.errors?.stock &&
+                    state.errors.stock.map((error: string) => (
+                      <p className=" text-sm text-red-500" key={error}>
+                        {error}
+                      </p>
+                    ))}
+                </div>
+              </fieldset>
+            </div>
 
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Type</legend>
@@ -193,37 +214,7 @@ export default function CreateProductForm({
             </fieldset>
 
             <fieldset className="fieldset">
-              <legend className="fieldset-legend">Stock</legend>
-              <input
-                type="number"
-                name="stock"
-                className="input w-full"
-                placeholder="Stock Amount"
-                defaultValue={100}
-              />
-              <div id="stock-error" aria-live="polite" aria-atomic="true">
-                {state.errors?.stock &&
-                  state.errors.stock.map((error: string) => (
-                    <p className=" text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ))}
-              </div>
-            </fieldset>
-
-            <fieldset className="fieldset">
-              <div className="flex justify-between items-center">
-                <legend className="fieldset-legend">Description</legend>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm btn-circle"
-                  onClick={() => generateDescription(uploadImages[0] as File)}
-                  disabled={loading}
-                >
-                  {loading && <span className="loading loading-spinner"></span>}
-                  {!loading && <BoltIcon className="w-6 h-6" />}
-                </button>
-              </div>
+              <div className="flex justify-between items-center"></div>
               <textarea
                 name="description"
                 className="textarea h-24 w-full"
