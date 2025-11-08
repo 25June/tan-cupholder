@@ -3,7 +3,6 @@
 import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { batchRemoveImages } from './images.actions';
 import { Product, ProductResponse } from '@/models/product';
 import { Image } from '@/models/image';
@@ -73,14 +72,17 @@ export async function createProduct(prevState: State, formData: FormData) {
     id = result[0].id;
   } catch (error) {
     console.error('Database Error:', error);
+    return {
+      message: 'Database Error: Failed to Create Product.',
+      errors: {}
+    };
   }
 
+  revalidatePath('/admin/dashboard/products');
   return {
-    id
+    id,
+    message: 'Product created successfully.'
   };
-
-  // revalidatePath('/admin/dashboard/products');
-  // redirect('/admin/dashboard/products');
 }
 
 export async function updateProduct(prevState: State, formData: FormData) {
@@ -111,11 +113,11 @@ export async function updateProduct(prevState: State, formData: FormData) {
     SET name = ${name}, description = ${description},  price = ${price}, type = ${type}, sale = ${sale}, stock = ${stock}, updated_at = ${date} 
     WHERE id = ${id}`;
   } catch (error) {
-    return { message: 'Database Error: Failed to Update Invoice.' };
+    return { message: 'Database Error: Failed to Update Product.' };
   }
 
   revalidatePath('/admin/dashboard/products');
-  redirect('/admin/dashboard/products');
+  return { message: 'Product updated successfully.' };
 }
 
 export async function deleteProduct(id: string) {

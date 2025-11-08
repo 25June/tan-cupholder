@@ -1,55 +1,72 @@
 'use client';
 
-import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import {
   PencilIcon,
   TrashIcon,
   EllipsisVerticalIcon
 } from '@heroicons/react/24/outline';
-import { deleteEmailTemplate } from '@/app/admin/lib/actions/email-templates.actions';
+import { onOpenModal } from '@/shared/utils/modal.utils';
+import { MODAL_ID } from '@/constants/modal.const';
 
 export function CreateEmailTemplate() {
+  const handleClick = () => {
+    onOpenModal(MODAL_ID.ADD_EMAIL_TEMPLATE);
+  };
+
   return (
-    <Link
-      href="/admin/dashboard/email-templates/create"
-      prefetch={true}
+    <button
+      onClick={handleClick}
       className="flex h-10 items-center rounded-lg bg-logo-orange-border px-4 text-sm font-medium text-white transition-colors hover:bg-logo-orange-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-logo-orange-border"
     >
       <span className="hidden md:block">Create Template</span>{' '}
       <PlusIcon className="h-5 md:ml-4" />
-    </Link>
+    </button>
   );
 }
 
 export function UpdateEmailTemplate({ id }: { id: string }) {
+  const handleClick = () => {
+    const modal = document.getElementById(
+      MODAL_ID.UPDATE_EMAIL_TEMPLATE
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.setAttribute('data-email-template-id', id);
+      onOpenModal(MODAL_ID.UPDATE_EMAIL_TEMPLATE);
+    }
+  };
+
   return (
-    <Link
-      href={`/admin/dashboard/email-templates/${id}/edit`}
-      prefetch={true}
+    <button
+      onClick={handleClick}
       className="rounded-md p-2  w-full flex items-center gap-2"
     >
       <PencilIcon className="w-5" />
       <span>Edit</span>
-    </Link>
+    </button>
   );
 }
 
 export function DeleteEmailTemplate({ id }: { id: string }) {
-  const handleDeleteEmailTemplate = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-    await deleteEmailTemplate(id);
+  const handleClick = () => {
+    const modal = document.getElementById(
+      MODAL_ID.DELETE_EMAIL_TEMPLATE
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.setAttribute('data-email-template-id', id);
+      onOpenModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
+    }
   };
 
   return (
-    <form onSubmit={handleDeleteEmailTemplate} className="w-full p-0">
-      <button className="rounded-md p-2 w-full flex items-center gap-2">
-        <TrashIcon className="w-5" />
-        <span>Delete</span>
-      </button>
-    </form>
+    <button
+      type="button"
+      onClick={handleClick}
+      className="rounded-md p-2 w-full flex items-center gap-2"
+    >
+      <TrashIcon className="w-5" />
+      <span>Delete</span>
+    </button>
   );
 }
 

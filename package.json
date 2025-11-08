@@ -29,7 +29,8 @@
     "react-dom": "^19.0.0",
     "react-hotkeys-hook": "^5.1.0",
     "tailwindcss": "^4.1.4",
-    "zod": "^3.25.67"
+    "zod": "^3.25.67",
+    "openai": "^4.87.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

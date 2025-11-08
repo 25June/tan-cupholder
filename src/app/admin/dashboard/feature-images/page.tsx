@@ -11,6 +11,8 @@ import CreateFeatureImage, {
 import { FeatureImage } from '@/models/featureImage';
 import { useState } from 'react';
 import { XCircleIcon } from '@heroicons/react/24/outline';
+import CreateFeatureImageModal from '@/app/admin/ui/feature-images/create-feature-image-modal';
+import DeleteFeatureImagesModal from '@/app/admin/ui/feature-images/delete-feature-images-modal';
 
 export default function Page() {
   const {
@@ -62,6 +64,13 @@ export default function Page() {
         onGetNextPage={onGetNextPage}
         isLoading={loading}
         isEnd={isEnd}
+      />
+      <CreateFeatureImageModal />
+      <DeleteFeatureImagesModal
+        onDeleteComplete={() => {
+          onDelete(Object.keys(selectedImages));
+          setSelectedImages({});
+        }}
       />
     </main>
   );

@@ -2,7 +2,6 @@
 
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { EmailTemplateResponse } from '@/models/emailTemplate';
 
@@ -75,8 +74,10 @@ export async function createEmailTemplate(
     }, ${date}, ${date}) RETURNING id
     `;
     id = result[0].id;
+    revalidatePath('/admin/dashboard/email-templates');
     return {
-      id
+      id,
+      message: 'Email template created successfully.'
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -129,7 +130,7 @@ export async function updateEmailTemplate(
   }
 
   revalidatePath('/admin/dashboard/email-templates');
-  redirect('/admin/dashboard/email-templates');
+  return { message: 'Email template updated successfully.' };
 }
 
 /**

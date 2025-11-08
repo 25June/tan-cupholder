@@ -1,15 +1,24 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import NavLinks from '@/app/admin/ui/dashboard/nav-links';
 import { PencilIcon, PowerIcon } from '@heroicons/react/24/outline';
-import { signOut } from '@/auth';
-import { auth } from '@/auth';
-import { Suspense } from 'react';
+import { signOut } from 'next-auth/react';
+import { useSession } from '@/hooks/useSession';
 import Spinner from '@/components/spinner/Spinner';
 
-export async function UserEmail() {
-  const session = await auth();
-  const user = session?.user;
+function UserEmail() {
+  const { user, isLoading } = useSession();
+
+  if (isLoading) {
+    return (
+      <div className="bg-gray-50 p-3 flex items-center justify-center">
+        <Spinner color="orange" />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-50 p-3 flex items-center justify-between">
       <p className="text-sm text-gray-500">
@@ -27,6 +36,10 @@ export async function UserEmail() {
 }
 
 export default function SideNav() {
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: '/' });
+  };
+
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
@@ -45,20 +58,14 @@ export default function SideNav() {
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
-        <Suspense fallback={<Spinner color="orange" />}>
-          <UserEmail />
-        </Suspense>
-        <form
-          action={async () => {
-            'use server';
-            await signOut({ redirectTo: '/' });
-          }}
+        <UserEmail />
+        <button
+          onClick={handleSignOut}
+          className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-logo-orange-border md:flex-none md:justify-start md:p-2 md:px-3"
         >
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-logo-orange-border md:flex-none md:justify-start md:p-2 md:px-3">
-            <PowerIcon className="w-6" />
-            <div className="hidden md:block">Sign Out</div>
-          </button>
-        </form>
+          <PowerIcon className="w-6" />
+          <div className="hidden md:block">Sign Out</div>
+        </button>
       </div>
     </div>
   );

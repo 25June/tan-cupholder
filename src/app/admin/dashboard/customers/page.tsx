@@ -1,34 +1,53 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import {
   fetchCustomers,
   fetchTotalCustomers
 } from '@/app/admin/lib/actions/customers.action';
-import { Metadata } from 'next';
 import CustomersTable from '@/app/admin/ui/customers/table';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '@/app/admin/ui/search';
 import { CreateCustomer } from '@/app/admin/ui/customers/buttons';
-import { Suspense } from 'react';
 import Pagination from '@/app/admin/ui/invoices/pagination';
+import { Customer } from '@/models/customer';
+import CreateCustomerModal from '@/app/admin/ui/customers/create-customer-modal';
+import EditCustomerModal from '@/app/admin/ui/customers/edit-customer-modal';
+import DeleteCustomerModal from '@/app/admin/ui/customers/delete-customer-modal';
+import { useSearchParams } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Customers'
-};
+export default function Page() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get('query') || '';
+  const currentPage = Number(searchParams?.get('page')) || 1;
 
-export default async function Page(props: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [totalCustomers, setTotalCustomers] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const customers = await fetchCustomers({
-    query,
-    page: currentPage.toString()
-  });
-  const totalCustomers = await fetchTotalCustomers();
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const [customersData, totalData] = await Promise.all([
+          fetchCustomers({
+            query,
+            page: currentPage.toString()
+          }),
+          fetchTotalCustomers()
+        ]);
+
+        setCustomers(customersData);
+        setTotalCustomers(totalData);
+      } catch (error) {
+        console.error('Failed to load customers:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [query, currentPage]);
 
   return (
     <main>
@@ -41,12 +60,21 @@ export default async function Page(props: {
         <Search placeholder="Search customers..." />
         <CreateCustomer />
       </div>
-      <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
-        <CustomersTable customers={customers} />
-      </Suspense>
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={Math.ceil(totalCustomers / 10)} />
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center p-8">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      ) : (
+        <>
+          <CustomersTable customers={customers} />
+          <div className="mt-5 flex w-full justify-center">
+            <Pagination totalPages={Math.ceil(totalCustomers / 10)} />
+          </div>
+        </>
+      )}
+      <CreateCustomerModal />
+      <EditCustomerModal customerId={null} />
+      <DeleteCustomerModal customerId={null} />
     </main>
   );
 }

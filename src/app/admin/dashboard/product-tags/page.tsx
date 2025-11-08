@@ -1,7 +1,8 @@
-import { Metadata } from 'next';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '@/app/admin/ui/search';
-import { Suspense } from 'react';
 import { CreateProductTag } from '@/app/admin/ui/product-tags/buttons';
 import ProductTagsTable from '@/app/admin/ui/product-tags/table';
 import {
@@ -9,23 +10,44 @@ import {
   getProductTags
 } from '@/app/admin/lib/actions/product-tags.actions';
 import Pagination from '@/app/admin/ui/invoices/pagination';
+import { ProductTag } from '@/models/productTag';
+import CreateProductTagModal from '@/app/admin/ui/product-tags/create-product-tag-modal';
+import EditProductTagModal from '@/app/admin/ui/product-tags/edit-product-tag-modal';
+import DeleteProductTagModal from '@/app/admin/ui/product-tags/delete-product-tag-modal';
+import { useSearchParams } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Product Tags'
-};
+export default function Page() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get('query') || '';
+  const currentPage = Number(searchParams?.get('page')) || 1;
 
-export default async function Page(props: {
-  searchParams?: Promise<{ query?: string; page?: string }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+  const [productTags, setProductTags] = useState<ProductTag[]>([]);
+  const [totalProductTags, setTotalProductTags] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const productTags = await getProductTags({
-    query,
-    page: currentPage.toString()
-  });
-  const totalProductTags = await fetchTotalProductTags();
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const [tagsData, totalData] = await Promise.all([
+          getProductTags({
+            query,
+            page: currentPage.toString()
+          }),
+          fetchTotalProductTags()
+        ]);
+
+        setProductTags(tagsData);
+        setTotalProductTags(totalData);
+      } catch (error) {
+        console.error('Failed to load product tags:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [query, currentPage]);
 
   return (
     <main>
@@ -38,12 +60,21 @@ export default async function Page(props: {
         <Search placeholder="Search product tags..." />
         <CreateProductTag />
       </div>
-      <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
-        <ProductTagsTable productTags={productTags} />
-      </Suspense>
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={Math.ceil(totalProductTags / 10)} />
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center p-8">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      ) : (
+        <>
+          <ProductTagsTable productTags={productTags} />
+          <div className="mt-5 flex w-full justify-center">
+            <Pagination totalPages={Math.ceil(totalProductTags / 50)} />
+          </div>
+        </>
+      )}
+      <CreateProductTagModal />
+      <EditProductTagModal productTagId={null} />
+      <DeleteProductTagModal productTagId={null} />
     </main>
   );
 }

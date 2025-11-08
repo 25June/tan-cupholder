@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import { createProduct, State } from '@/app/admin/lib/actions/products.actions';
-import { PhotoIcon } from '@heroicons/react/24/outline';
+import { BoltIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@/components/file-upload/FileUpload';
 import { createImage } from '../../lib/actions/images.actions';
 import { ProductType } from '@/models/productType';
+import { useGenerateProductDescription } from '@/hooks/useGenerateProductDescription';
 
 const initialState: State = { message: null, errors: {} };
 
@@ -23,6 +24,7 @@ export default function CreateProductForm({
   const [presignedUrlObject, setPresignedUrlObject] = useState<
     Record<string, string>
   >({});
+  const { generateDescription, loading } = useGenerateProductDescription();
 
   const onUpload = async (productId: string) => {
     if (!uploadImages.length) {
@@ -210,7 +212,18 @@ export default function CreateProductForm({
             </fieldset>
 
             <fieldset className="fieldset">
-              <legend className="fieldset-legend">Description</legend>
+              <div className="flex justify-between items-center">
+                <legend className="fieldset-legend">Description</legend>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm btn-circle"
+                  onClick={() => generateDescription(uploadImages[0] as File)}
+                  disabled={loading}
+                >
+                  {loading && <span className="loading loading-spinner"></span>}
+                  {!loading && <BoltIcon className="w-6 h-6" />}
+                </button>
+              </div>
               <textarea
                 name="description"
                 className="textarea h-24 w-full"

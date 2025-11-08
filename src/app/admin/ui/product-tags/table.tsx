@@ -13,8 +13,6 @@ export default function ProductTagsTable({
 }: {
   productTags: ProductTag[];
 }) {
-  const [doubleClick, setDoubleClick] = useState<Record<string, boolean>>({});
-
   return (
     <div className="w-full">
       <div className="mt-6 flow-root">
@@ -115,22 +113,7 @@ export default function ProductTagsTable({
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
                           <UpdateProductTag id={tag.id} />
-                          {doubleClick[tag.id] ? (
-                            <DeleteProductTag id={tag.id} />
-                          ) : (
-                            <button
-                              onClick={() =>
-                                setDoubleClick((prev) => ({
-                                  ...prev,
-                                  [tag.id]: true
-                                }))
-                              }
-                              className="rounded-md border p-2 hover:bg-gray-100"
-                            >
-                              <span className="sr-only">Delete</span>
-                              <TrashIcon className="w-5" />
-                            </button>
-                          )}
+                          <DeleteProductTag id={tag.id} />
                         </div>
                       </td>
                     </tr>

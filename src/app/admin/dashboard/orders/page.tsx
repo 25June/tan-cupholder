@@ -1,32 +1,46 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import {
   fetchOrders,
   fetchTotalOrders
 } from '@/app/admin/lib/actions/orders.actions';
-import { Metadata } from 'next';
 import OrdersTable from '@/app/admin/ui/orders/table';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '@/app/admin/ui/search';
-import { Suspense } from 'react';
 import Pagination from '@/app/admin/ui/invoices/pagination';
+import { OrderWithCustomer } from '@/app/admin/lib/actions/orders.actions';
+import { useSearchParams } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Orders Management'
-};
+export default function OrdersPage() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get('query') || '';
+  const currentPage = Number(searchParams?.get('page')) || 1;
 
-export default async function OrdersPage(props: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+  const [orders, setOrders] = useState<OrderWithCustomer[]>([]);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [orders, totalOrders] = await Promise.all([
-    fetchOrders({ query, page: currentPage.toString() }),
-    fetchTotalOrders(query)
-  ]);
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const [ordersData, totalData] = await Promise.all([
+          fetchOrders({ query, page: currentPage.toString() }),
+          fetchTotalOrders(query)
+        ]);
+
+        setOrders(ordersData);
+        setTotalOrders(totalData);
+      } catch (error) {
+        console.error('Failed to load orders:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [query, currentPage]);
 
   const totalPages = Math.ceil(totalOrders / 10);
 
@@ -47,23 +61,21 @@ export default async function OrdersPage(props: {
         <Search placeholder="Search orders by customer name, email, or order ID..." />
       </div>
 
-      <Suspense
-        key={query + currentPage}
-        fallback={
-          <div className="mt-6 flex items-center justify-center">
-            <div className="flex items-center gap-2 text-gray-500">
-              <div className="animate-spin h-4 w-4 border-2 border-logo-orange-border border-t-transparent rounded-full"></div>
-              Loading orders...
-            </div>
+      {isLoading ? (
+        <div className="mt-6 flex items-center justify-center">
+          <div className="flex items-center gap-2 text-gray-500">
+            <div className="animate-spin h-4 w-4 border-2 border-logo-orange-border border-t-transparent rounded-full"></div>
+            Loading orders...
           </div>
-        }
-      >
-        <OrdersTable orders={orders} />
-      </Suspense>
-
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
-      </div>
+        </div>
+      ) : (
+        <>
+          <OrdersTable orders={orders} />
+          <div className="mt-5 flex w-full justify-center">
+            <Pagination totalPages={totalPages} />
+          </div>
+        </>
+      )}
     </main>
   );
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CheckCircleIcon,
   PencilIcon,
@@ -6,31 +8,43 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteProduct } from '@/app/admin/lib/actions/products.actions';
-import Spinner from '@/components/spinner/Spinner';
+import { onOpenModal } from '@/shared/utils/modal.utils';
+import { MODAL_ID } from '@/constants/modal.const';
 
 export function CreateProduct() {
+  const handleClick = () => {
+    onOpenModal(MODAL_ID.ADD_PRODUCT);
+  };
+
   return (
-    <Link
-      href="/admin/dashboard/products/create"
-      prefetch={true}
+    <button
+      onClick={handleClick}
       className="flex h-10 items-center rounded-lg bg-logo-orange-border px-4 text-sm font-medium text-white transition-colors hover:bg-logo-orange-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-logo-orange-border"
     >
       <span className="hidden md:block">Create Product</span>
       <PlusIcon className="h-5 md:ml-4" />
-    </Link>
+    </button>
   );
 }
 
 export function UpdateProduct({ id }: { id: string }) {
+  const handleClick = () => {
+    const modal = document.getElementById(
+      MODAL_ID.UPDATE_PRODUCT
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.setAttribute('data-product-id', id);
+      onOpenModal(MODAL_ID.UPDATE_PRODUCT);
+    }
+  };
+
   return (
-    <Link
-      href={`/admin/dashboard/products/${id}/edit`}
-      prefetch={true}
+    <button
+      onClick={handleClick}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
-    </Link>
+    </button>
   );
 }
 
@@ -47,21 +61,25 @@ export function UpdateImage({ id }: { id: string }) {
 }
 
 export function DeleteProduct({ id }: { id: string }) {
-  const handleDeleteProduct = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await deleteProduct(id);
+  const handleClick = () => {
+    const modal = document.getElementById(
+      MODAL_ID.DELETE_PRODUCT
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.setAttribute('data-product-id', id);
+      onOpenModal(MODAL_ID.DELETE_PRODUCT);
+    }
   };
 
   return (
-    <form onSubmit={handleDeleteProduct}>
-      <button
-        type="submit"
-        className="rounded-md border border-red-400 p-2 bg-gray-100"
-      >
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5 text-red-500" />
-      </button>
-    </form>
+    <button
+      type="button"
+      onClick={handleClick}
+      className="rounded-md border p-2"
+    >
+      <span className="sr-only">Delete</span>
+      <TrashIcon className="w-5" />
+    </button>
   );
 }
 

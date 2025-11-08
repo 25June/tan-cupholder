@@ -3,7 +3,6 @@
 import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { Customer } from '@/models/customer';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -74,7 +73,7 @@ export async function createCustomer(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/admin/dashboard/customers');
-  redirect('/admin/dashboard/customers');
+  return { message: 'Customer created successfully.' };
 }
 
 export async function updateCustomer(prevState: State, formData: FormData) {
@@ -121,7 +120,7 @@ export async function updateCustomer(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/admin/dashboard/customers');
-  redirect('/admin/dashboard/customers');
+  return { message: 'Customer updated successfully.' };
 }
 
 export async function deleteCustomer(id: string) {
