@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { onOpenModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import Spinner from '@/components/spinner/Spinner';
 
 export function CreateProduct() {
   const handleClick = () => {
@@ -41,9 +42,10 @@ export function UpdateProduct({ id }: { id: string }) {
   return (
     <button
       onClick={handleClick}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="w-full flex items-center gap-2 rounded-md p-2 hover:bg-gray-100 text-left"
     >
       <PencilIcon className="w-5" />
+      <span>Edit Product</span>
     </button>
   );
 }
@@ -53,9 +55,10 @@ export function UpdateImage({ id }: { id: string }) {
     <Link
       href={`/admin/dashboard/products/${id}/edit-image`}
       prefetch={true}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="w-full flex items-center gap-2 rounded-md p-2 hover:bg-gray-100 text-left"
     >
       <PhotoIcon className="w-5" />
+      <span>Update Images</span>
     </Link>
   );
 }
@@ -75,10 +78,10 @@ export function DeleteProduct({ id }: { id: string }) {
     <button
       type="button"
       onClick={handleClick}
-      className="rounded-md border p-2"
+      className="w-full flex items-center gap-2 rounded-md p-2 hover:bg-gray-100 text-left text-red-600 hover:text-red-700"
     >
-      <span className="sr-only">Delete</span>
       <TrashIcon className="w-5" />
+      <span>Delete</span>
     </button>
   );
 }

@@ -9,7 +9,7 @@ import ProductsTable from '../../ui/products/table';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '../../ui/search';
 import { CreateProduct } from '../../ui/products/buttons';
-import Pagination from '../../ui/invoices/pagination';
+import PaginationState from '../../ui/pagination-state';
 import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
 import { ProductResponse } from '@/models/product';
 import { ProductType } from '@/models/productType';
@@ -21,12 +21,17 @@ import { useSearchParams } from 'next/navigation';
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams?.get('query') || '';
-  const currentPage = Number(searchParams?.get('page')) || 1;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [totalProducts, setTotalProducts] = useState(0);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Reset to page 1 when query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -78,7 +83,11 @@ export default function Page() {
         <>
           <ProductsTable products={products} productTypes={formattedProducts} />
           <div className="mt-5 flex w-full justify-center">
-            <Pagination totalPages={Math.ceil(totalProducts / 10)} />
+            <PaginationState
+              totalPages={Math.ceil(totalProducts / 10)}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </>
       )}

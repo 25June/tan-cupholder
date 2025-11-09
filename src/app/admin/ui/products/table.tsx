@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { ProductResponse } from '@/models/product';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 
 export default function ProductsTable({
   products,
@@ -131,10 +132,30 @@ export default function ProductsTable({
                         {product.description}
                       </td>
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex justify-end gap-3">
-                          <UpdateImage id={product.id} />
-                          <UpdateProduct id={product.id} />
-                          <DeleteProduct id={product.id} />
+                        <div className="flex justify-end">
+                          <div className="dropdown dropdown-end">
+                            <div
+                              tabIndex={0}
+                              role="button"
+                              className="btn btn-sm btn-ghost btn-circle"
+                            >
+                              <EllipsisVerticalIcon className="w-5" />
+                            </div>
+                            <ul
+                              tabIndex={0}
+                              className="dropdown-content menu bg-white border border-gray-200 rounded-lg w-48 shadow-lg z-50"
+                            >
+                              <li>
+                                <UpdateImage id={product.id} />
+                              </li>
+                              <li>
+                                <UpdateProduct id={product.id} />
+                              </li>
+                              <li>
+                                <DeleteProduct id={product.id} />
+                              </li>
+                            </ul>
+                          </div>
                         </div>
                       </td>
                     </tr>
