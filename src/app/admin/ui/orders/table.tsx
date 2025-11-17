@@ -7,6 +7,7 @@ import {
   getOrderStatusColor,
   getOrderStatusText
 } from '@/shared/utils/order.utils';
+import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
 
 export default function OrdersTable({
   orders
@@ -50,7 +51,7 @@ export default function OrdersTable({
                       <div className="flex w-1/2 flex-col">
                         <p className="text-xs">Total</p>
                         <p className="font-medium">
-                          ${order.total_price.toFixed(2)}
+                          {formatPriceWithoutSymbol(order.total_price)}
                         </p>
                         <p className="text-sm text-gray-600">
                           {order.total_items} items
@@ -167,7 +168,7 @@ export default function OrdersTable({
 
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
                         <span className="font-medium">
-                          ${order.total_price.toFixed(2)}
+                          {formatPriceWithoutSymbol(order.total_price)}
                         </span>
                       </td>
 

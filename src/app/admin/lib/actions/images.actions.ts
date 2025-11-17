@@ -76,6 +76,7 @@ export async function createImage(prevState: State, formData: FormData) {
     await sql`INSERT INTO images (name, type, product_id, is_main, created_at, updated_at) VALUES (${name}, ${type}, ${productId}, ${
       isMain || false
     }, ${date}, ${date} )`;
+    revalidatePath('/admin/dashboard/products');
   } catch (error) {
     console.error('Database Error:', error);
   }
@@ -107,7 +108,7 @@ export async function removeImage(id: string) {
     console.error('Database Error:', error);
   }
 
-  revalidatePath(`/admin/dashboard/products/${image[0].product_id}/edit-image`);
+  revalidatePath('/admin/dashboard/products');
   return {
     message: 'Image removed successfully'
   };

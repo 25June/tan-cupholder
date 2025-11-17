@@ -16,7 +16,9 @@ import { ProductType } from '@/models/productType';
 import CreateProductModal from '../../ui/products/create-product-modal';
 import EditProductModal from '../../ui/products/edit-product-modal';
 import DeleteProductModal from '../../ui/products/delete-product-modal';
+import EditProductImageModal from '../../ui/products/edit-product-image-modal';
 import { useSearchParams } from 'next/navigation';
+import ProductSummary from '../../ui/products/product-summary';
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -28,6 +30,22 @@ export default function Page() {
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch product types only once on initial render
+  useEffect(() => {
+    const loadProductTypes = async () => {
+      try {
+        const typesData = await getProductTypes({
+          query: '',
+          page: '0'
+        });
+        setProductTypes(typesData);
+      } catch (error) {
+        console.error('Failed to load product types:', error);
+      }
+    };
+    loadProductTypes();
+  }, []);
+
   // Reset to page 1 when query changes
   useEffect(() => {
     setCurrentPage(1);
@@ -37,18 +55,13 @@ export default function Page() {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const [productsData, totalData, typesData] = await Promise.all([
+        const [productsData, totalData] = await Promise.all([
           fetchProducts({ query, page: currentPage.toString() }),
-          fetchTotalProducts(),
-          getProductTypes({
-            query: '',
-            page: '1'
-          })
+          fetchTotalProducts()
         ]);
 
         setProducts(productsData);
         setTotalProducts(totalData);
-        setProductTypes(typesData);
       } catch (error) {
         console.error('Failed to load products:', error);
       } finally {
@@ -66,15 +79,19 @@ export default function Page() {
 
   return (
     <main>
-      <div className="flex w-full items-center justify-between mb-8">
-        <h1 className={`${lusitana.className} text-xl md:text-2xl`}>
+      <div className="flex w-full items-center justify-between gap-4 mb-8">
+        <h1 className={`${lusitana.className} text-xl md:text-2xl shrink-0`}>
           Products
         </h1>
+        <div className="flex items-center gap-2">
+          <Search placeholder="Search products..." />
+          <CreateProduct />
+        </div>
       </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search products..." />
-        <CreateProduct />
+      <div>
+        <ProductSummary />
       </div>
+
       {isLoading ? (
         <div className="flex justify-center items-center p-8">
           <span className="loading loading-spinner loading-lg"></span>
@@ -91,9 +108,10 @@ export default function Page() {
           </div>
         </>
       )}
-      <CreateProductModal />
-      <EditProductModal productId={null} />
+      <CreateProductModal productTypes={productTypes} />
+      <EditProductModal productId={null} productTypes={productTypes} />
       <DeleteProductModal productId={null} />
+      <EditProductImageModal productId={null} />
     </main>
   );
 }

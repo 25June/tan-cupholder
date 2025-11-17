@@ -5,6 +5,7 @@ import { ProductResponse } from '@/models/product';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
 
 export default function ProductsTable({
   products,
@@ -117,7 +118,7 @@ export default function ProductsTable({
                       </td>
 
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {product.price}
+                        {formatPriceWithoutSymbol(product.price)}
                       </td>
                       <td className="whitespace-nowrap px-4 py-5 text-sm">
                         {productTypes[product.type] || 'No type found'}
@@ -149,7 +150,18 @@ export default function ProductsTable({
                                 <UpdateImage id={product.id} />
                               </li>
                               <li>
-                                <UpdateProduct id={product.id} />
+                                <UpdateProduct
+                                  id={product.id}
+                                  product={{
+                                    id: product.id,
+                                    name: product.name,
+                                    description: product.description,
+                                    price: product.price,
+                                    sale: product.sale,
+                                    stock: product.stock,
+                                    type: product.type
+                                  }}
+                                />
                               </li>
                               <li>
                                 <DeleteProduct id={product.id} />

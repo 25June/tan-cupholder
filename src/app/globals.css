@@ -14,6 +14,7 @@
   --color-logo-orange: #f57722;
   --color-logo-orange-border: #ec8c4c;
   --color-logo-text: #493213;
+  --color-bone-white: #f9f6ee;
 
   --spacing-8xl: 90rem;
   --spacing-extra-20vw: calc(100vw);
@@ -162,4 +163,13 @@ input[type='number']::-webkit-outer-spin-button {
 .viewed-active {
   @apply text-logo-orange-border;
   background-color: rgba(236, 140, 76, 0.1);
+}
+
+/* Admin pages - Apply Lusitana font to all headings */
+.admin-layout h1,
+.admin-layout h2,
+.admin-layout h3,
+.admin-layout h4,
+.admin-layout h5 {
+  font-family: var(--font-lusitana);
 }

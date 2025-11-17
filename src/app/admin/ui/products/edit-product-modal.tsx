@@ -4,8 +4,9 @@ import { useEffect, useState, useRef } from 'react';
 import {
   updateProduct,
   State,
-  fetchProductById
+  fetchProductImages
 } from '@/app/admin/lib/actions/products.actions';
+import { ProductResponse } from '@/models/product';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
@@ -15,30 +16,25 @@ import Image from 'next/image';
 import { ProductType } from '@/models/productType';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
-import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
-import { useGenerateProductDescription } from '@/hooks/useGenerateProductDescription';
-import { BoltIcon } from '@heroicons/react/24/outline';
-import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 
 const initialState: State = { message: null, errors: {} };
 
 export default function EditProductModal({
-  productId
+  productId,
+  productTypes
 }: {
   productId: string | null;
+  productTypes: ProductType[];
 }) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [images, setImages] = useState<ImageType[]>([]);
-  const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [currentProductId, setCurrentProductId] = useState<string | null>(
     productId
   );
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const prevOpenRef = useRef<boolean>(false);
-
-  const { generateDescription, loading } = useGenerateProductDescription();
 
   useEffect(() => {
     const modal = document.getElementById(
@@ -52,6 +48,9 @@ export default function EditProductModal({
       setImages([]);
       setCurrentProductId(null);
       setState(initialState);
+      if (modal) {
+        modal.removeAttribute('data-product');
+      }
     };
 
     modal.addEventListener('close', handleClose);
@@ -81,19 +80,36 @@ export default function EditProductModal({
 
   useEffect(() => {
     const loadData = async () => {
+      const modal = modalRef.current;
+      if (!modal) return;
+
       const idToLoad = productId || currentProductId;
       if (!idToLoad) return;
 
       try {
-        const types = await getProductTypes({
-          query: '',
-          page: '0'
-        });
-        setProductTypes(types);
+        // Try to get product data from data attribute first
+        const productDataStr = modal.getAttribute('data-product');
+        if (productDataStr) {
+          try {
+            const productData: ProductResponse = JSON.parse(productDataStr);
+            // Convert ProductResponse to Product format
+            setProduct({
+              id: productData.id,
+              name: productData.name,
+              description: productData.description,
+              price: productData.price,
+              sale: productData.sale,
+              stock: productData.stock,
+              type: productData.type
+            });
+          } catch (e) {
+            console.error('Failed to parse product data:', e);
+            // Fallback: if parsing fails, we'd need to fetch, but this shouldn't happen
+          }
+        }
 
-        const { product: productData, images: imagesData } =
-          await fetchProductById(idToLoad);
-        setProduct(productData);
+        // Still need to fetch images (only images, not the full product)
+        const imagesData = await fetchProductImages(idToLoad);
         setImages(imagesData || []);
       } catch (error) {
         console.error('Failed to load product data:', error);
@@ -141,6 +157,10 @@ export default function EditProductModal({
     setState(initialState);
     setProduct(null);
     setImages([]);
+    const modal = modalRef.current;
+    if (modal) {
+      modal.removeAttribute('data-product');
+    }
   };
 
   if (!product) {
@@ -278,21 +298,7 @@ export default function EditProductModal({
                 </fieldset>
 
                 <fieldset className="fieldset">
-                  <div className="flex justify-between items-center">
-                    <legend className="fieldset-legend">Description</legend>
-                    <button
-                      type="button"
-                      className="btn btn-ghost btn-sm btn-circle"
-                      disabled={loading}
-                    >
-                      {loading && (
-                        <span className="loading loading-spinner"></span>
-                      )}
-                      {!loading && (
-                        <BoltIcon className="w-6 h-6 text-logo-orange" />
-                      )}
-                    </button>
-                  </div>{' '}
+                  <legend className="fieldset-legend">Description</legend>
                   <textarea
                     name="description"
                     className="textarea h-24 w-full"

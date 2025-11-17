@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createProduct, State } from '@/app/admin/lib/actions/products.actions';
-import { BoltIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { BoltIcon, PhotoIcon, TagIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import FileUpload from '@/components/file-upload/FileUpload';
 import { createImage } from '../../lib/actions/images.actions';
@@ -10,34 +10,20 @@ import { ProductType } from '@/models/productType';
 import { useGenerateProductDescription } from '@/hooks/useGenerateProductDescription';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
-import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
-
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateProductModal() {
+export default function CreateProductModal({
+  productTypes
+}: {
+  productTypes: ProductType[];
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [uploadImages, setUploadImages] = useState<File[]>([]);
   const [presignedUrlObject, setPresignedUrlObject] = useState<
     Record<string, string>
   >({});
   const { generateDescription, loading } = useGenerateProductDescription();
-
-  useEffect(() => {
-    const loadProductTypes = async () => {
-      try {
-        const types = await getProductTypes({
-          query: '',
-          page: '0'
-        });
-        setProductTypes(types);
-      } catch (error) {
-        console.error('Failed to load product types:', error);
-      }
-    };
-    loadProductTypes();
-  }, []);
 
   const onUpload = async (productId: string) => {
     if (!uploadImages.length) {
@@ -220,31 +206,63 @@ export default function CreateProductModal() {
                   </div>
                 </fieldset>
 
-                <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Sale</legend>
-                  <label className="input w-full">
-                    <PercentBadgeIcon className="w-4 h-4" />
-                    <input
-                      type="number"
-                      name="sale"
-                      className="w-full"
-                      placeholder="Sale Percentage"
-                      defaultValue={10}
-                    />
-                  </label>
+                <div className="flex gap-4 w-full">
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">Sale</legend>
+                    <label className="input w-full">
+                      <PercentBadgeIcon className="w-4 h-4" />
+                      <input
+                        type="number"
+                        name="sale"
+                        className="w-full"
+                        placeholder="Sale Percentage"
+                        defaultValue={10}
+                      />
+                    </label>
 
-                  <div id="sale-error" aria-live="polite" aria-atomic="true">
-                    {state.errors?.sale ? (
-                      state.errors.sale.map((error: string) => (
-                        <p className="text-sm text-red-500" key={error}>
-                          {error}
+                    <div id="sale-error" aria-live="polite" aria-atomic="true">
+                      {state.errors?.sale ? (
+                        state.errors.sale.map((error: string) => (
+                          <p className="text-sm text-red-500" key={error}>
+                            {error}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-500">
+                          Vd: 5, 10, 15, 20
                         </p>
-                      ))
-                    ) : (
-                      <p className="text-sm text-gray-500">Vd: 5, 10, 15, 20</p>
-                    )}
-                  </div>
-                </fieldset>
+                      )}
+                    </div>
+                  </fieldset>
+
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">Tag</legend>
+                    <label className="input w-full">
+                      <TagIcon className="w-4 h-4" />
+                      <input
+                        type="number"
+                        name="tag"
+                        className="w-full"
+                        placeholder="Tag"
+                        defaultValue="New"
+                      />
+                    </label>
+
+                    <div id="sale-error" aria-live="polite" aria-atomic="true">
+                      {state.errors?.sale ? (
+                        state.errors.sale.map((error: string) => (
+                          <p className="text-sm text-red-500" key={error}>
+                            {error}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-500">
+                          Vd: 5, 10, 15, 20
+                        </p>
+                      )}
+                    </div>
+                  </fieldset>
+                </div>
 
                 <fieldset className="fieldset">
                   <div className="flex justify-between items-center">

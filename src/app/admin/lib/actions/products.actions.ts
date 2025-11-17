@@ -136,8 +136,24 @@ export async function updateActiveImage(newId: string, oldId: string) {
   try {
     await sql`UPDATE images SET is_main = ${true} WHERE id = ${newId}`;
     await sql`UPDATE images SET is_main = ${false} WHERE id = ${oldId}`;
+    revalidatePath('/admin/dashboard/products');
   } catch (error) {
     console.error('Database Error:', error);
+  }
+}
+
+export async function fetchProductImages(id: string) {
+  try {
+    const images = await sql<Image[]>`
+      SELECT id, name, type, is_main as "isMain", product_id as "productId", created_at as "createdAt", updated_at as "updatedAt" 
+      FROM images 
+      WHERE product_id = ${id}
+    `;
+
+    return images || [];
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch product images.');
   }
 }
 

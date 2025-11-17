@@ -2,7 +2,6 @@
 
 import {
   HomeIcon,
-  PuzzlePieceIcon,
   ShoppingBagIcon,
   UsersIcon,
   PhotoIcon,
@@ -22,16 +21,6 @@ const links = [
     name: 'Orders',
     href: '/admin/dashboard/orders',
     icon: ClipboardDocumentListIcon
-  },
-  {
-    name: 'Product Types',
-    href: '/admin/dashboard/product-types',
-    icon: PuzzlePieceIcon
-  },
-  {
-    name: 'Product Tags',
-    href: '/admin/dashboard/product-tags',
-    icon: PuzzlePieceIcon
   },
   {
     name: 'Products',

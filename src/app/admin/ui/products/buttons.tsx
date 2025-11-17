@@ -7,7 +7,6 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 import { onOpenModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import Spinner from '@/components/spinner/Spinner';
@@ -28,13 +27,30 @@ export function CreateProduct() {
   );
 }
 
-export function UpdateProduct({ id }: { id: string }) {
+export function UpdateProduct({
+  id,
+  product
+}: {
+  id: string;
+  product?: {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    sale: number;
+    stock: number;
+    type: string;
+  };
+}) {
   const handleClick = () => {
     const modal = document.getElementById(
       MODAL_ID.UPDATE_PRODUCT
     ) as HTMLDialogElement;
     if (modal) {
       modal.setAttribute('data-product-id', id);
+      if (product) {
+        modal.setAttribute('data-product', JSON.stringify(product));
+      }
       onOpenModal(MODAL_ID.UPDATE_PRODUCT);
     }
   };
@@ -51,15 +67,24 @@ export function UpdateProduct({ id }: { id: string }) {
 }
 
 export function UpdateImage({ id }: { id: string }) {
+  const handleClick = () => {
+    const modal = document.getElementById(
+      MODAL_ID.EDIT_PRODUCT_IMAGE
+    ) as HTMLDialogElement;
+    if (modal) {
+      modal.setAttribute('data-product-id', id);
+      onOpenModal(MODAL_ID.EDIT_PRODUCT_IMAGE);
+    }
+  };
+
   return (
-    <Link
-      href={`/admin/dashboard/products/${id}/edit-image`}
-      prefetch={true}
+    <button
+      onClick={handleClick}
       className="w-full flex items-center gap-2 rounded-md p-2 hover:bg-gray-100 text-left"
     >
       <PhotoIcon className="w-5" />
       <span>Update Images</span>
-    </Link>
+    </button>
   );
 }
 
