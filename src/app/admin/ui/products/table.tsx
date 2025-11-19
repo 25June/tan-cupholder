@@ -1,19 +1,32 @@
 'use client';
 
+import { useMemo } from 'react';
 import Image from 'next/image';
 import { ProductResponse } from '@/models/product';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
+import { ProductTag } from '@/models/productTag';
 
 export default function ProductsTable({
   products,
-  productTypes
+  productTypes,
+  productTags
 }: {
   products: ProductResponse[];
   productTypes: Record<string, string>;
+  productTags: ProductTag[];
 }) {
+  const tagObj = useMemo(() => {
+    return productTags.reduce((acc: Record<string, ProductTag>, tag) => {
+      return {
+        ...acc,
+        [tag.id]: tag
+      };
+    }, {});
+  }, [products]);
+
   return (
     <div className="w-full">
       <div className="mt-6 flow-root">
@@ -44,7 +57,19 @@ export default function ProductsTable({
                               width={128}
                               height={128}
                             />
-                            <p>{product.name}</p>
+                            <div className="flex flex-col">
+                              <p>{product.name}</p>
+                              <div className="flex flex-wrap gap-2">
+                                {product.tagIds?.map((tagId) => (
+                                  <span
+                                    key={tagId}
+                                    className="badge badge-outline"
+                                  >
+                                    {tagObj[product.id]?.name}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -95,7 +120,7 @@ export default function ProductsTable({
                 </thead>
 
                 <tbody className="divide-y divide-gray-200 text-gray-900">
-                  {products?.map((product) => (
+                  {products?.map((product, index) => (
                     <tr key={product.id} className="group bg-white">
                       <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
@@ -113,7 +138,22 @@ export default function ProductsTable({
                             width={128}
                             height={128}
                           />
-                          <p>{product.name}</p>
+                          <div>
+                            <p>{product.name}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {product.tagIds?.map((tagId) => (
+                                <span
+                                  key={tagId}
+                                  className="badge badge-sm"
+                                  style={{
+                                    backgroundColor: tagObj[tagId]?.color
+                                  }}
+                                >
+                                  {tagObj[tagId]?.name}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       </td>
 
@@ -134,7 +174,11 @@ export default function ProductsTable({
                       </td>
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end">
-                          <div className="dropdown dropdown-end">
+                          <div
+                            className={`dropdown dropdown-end ${
+                              index > 5 ? 'dropdown-top' : 'dropdown-bottom'
+                            }`}
+                          >
                             <div
                               tabIndex={0}
                               role="button"
@@ -144,7 +188,7 @@ export default function ProductsTable({
                             </div>
                             <ul
                               tabIndex={0}
-                              className="dropdown-content menu bg-white border border-gray-200 rounded-lg w-48 shadow-lg z-50"
+                              className=" dropdown-content menu bg-white border border-gray-200 rounded-lg w-48 shadow-lg z-50"
                             >
                               <li>
                                 <UpdateImage id={product.id} />
@@ -159,7 +203,8 @@ export default function ProductsTable({
                                     price: product.price,
                                     sale: product.sale,
                                     stock: product.stock,
-                                    type: product.type
+                                    type: product.type,
+                                    tagIds: product.tagIds
                                   }}
                                 />
                               </li>

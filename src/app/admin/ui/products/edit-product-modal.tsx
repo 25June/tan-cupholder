@@ -7,7 +7,7 @@ import {
   fetchProductImages
 } from '@/app/admin/lib/actions/products.actions';
 import { ProductResponse } from '@/models/product';
-import { PhotoIcon } from '@heroicons/react/24/outline';
+import { PhotoIcon, TagIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { Product } from '@/models/product';
@@ -16,20 +16,25 @@ import Image from 'next/image';
 import { ProductType } from '@/models/productType';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { ProductTag } from '@/models/productTag';
+import AutoComplete from '../autocomplete/AutoComplete';
 
 const initialState: State = { message: null, errors: {} };
 
 export default function EditProductModal({
   productId,
-  productTypes
+  productTypes,
+  productTags
 }: {
   productId: string | null;
   productTypes: ProductType[];
+  productTags: ProductTag[];
 }) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [images, setImages] = useState<ImageType[]>([]);
+  const [tagIds, setTagIds] = useState<string[]>([]);
   const [currentProductId, setCurrentProductId] = useState<string | null>(
     productId
   );
@@ -46,6 +51,7 @@ export default function EditProductModal({
     const handleClose = () => {
       setProduct(null);
       setImages([]);
+      setTagIds([]);
       setCurrentProductId(null);
       setState(initialState);
       if (modal) {
@@ -92,6 +98,7 @@ export default function EditProductModal({
         if (productDataStr) {
           try {
             const productData: ProductResponse = JSON.parse(productDataStr);
+            console.log({ tagIds: productData.tagIds });
             // Convert ProductResponse to Product format
             setProduct({
               id: productData.id,
@@ -100,7 +107,8 @@ export default function EditProductModal({
               price: productData.price,
               sale: productData.sale,
               stock: productData.stock,
-              type: productData.type
+              type: productData.type,
+              tagIds: productData.tagIds
             });
           } catch (e) {
             console.error('Failed to parse product data:', e);
@@ -126,6 +134,7 @@ export default function EditProductModal({
 
     const formData = new FormData(e.currentTarget);
     formData.set('id', product.id);
+    formData.set('tagIds', tagIds.join(',') || '');
     setIsLoading(true);
     return updateProduct(initialState, formData)
       .then((res: any) => {
@@ -252,31 +261,69 @@ export default function EditProductModal({
                   </div>
                 </fieldset>
 
-                <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Sale</legend>
-                  <label className="input w-full">
-                    <PercentBadgeIcon className="w-4 h-4" />
-                    <input
-                      type="number"
-                      name="sale"
-                      className="w-full"
-                      placeholder="Sale Percentage"
-                      defaultValue={product.sale}
-                    />
-                  </label>
+                <div className="flex gap-4 w-full">
+                  <fieldset className="fieldset w-full max-w-[70px]">
+                    <legend className="fieldset-legend">Sale</legend>
+                    <label className="input w-full">
+                      <PercentBadgeIcon className="w-4 h-4" />
+                      <input
+                        type="number"
+                        name="sale"
+                        className="w-full"
+                        placeholder="Sale Percentage"
+                        defaultValue={product.sale}
+                      />
+                    </label>
 
-                  <div id="sale-error" aria-live="polite" aria-atomic="true">
-                    {state.errors?.sale ? (
-                      state.errors.sale.map((error: string) => (
-                        <p className="text-sm text-red-500" key={error}>
-                          {error}
+                    <div id="sale-error" aria-live="polite" aria-atomic="true">
+                      {state.errors?.sale ? (
+                        state.errors.sale.map((error: string) => (
+                          <p className="text-sm text-red-500" key={error}>
+                            {error}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-500">Vd: 5, 10</p>
+                      )}
+                    </div>
+                  </fieldset>
+                  <fieldset className="fieldset grow w-full">
+                    <legend className="fieldset-legend">Tag</legend>
+                    <label className="input w-full flex items-start gap-2">
+                      <TagIcon className="w-4 h-4 flex-shrink-0 mt-2" />
+                      <AutoComplete
+                        options={(productTags || []).map((tag) => ({
+                          value: tag.id,
+                          label: tag.name
+                        }))}
+                        placeholder="Select a tag"
+                        disabled={false}
+                        loading={false}
+                        multiple={true}
+                        value={tagIds}
+                        onChange={(value) => {
+                          setTagIds(
+                            Array.isArray(value) ? value : value ? [value] : []
+                          );
+                        }}
+                      />
+                    </label>
+
+                    <div id="sale-error" aria-live="polite" aria-atomic="true">
+                      {state.errors?.sale ? (
+                        state.errors.sale.map((error: string) => (
+                          <p className="text-sm text-red-500" key={error}>
+                            {error}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-500">
+                          Vd: Hot, New, Sale
                         </p>
-                      ))
-                    ) : (
-                      <p className="text-sm text-gray-500">Vd: 5, 10, 15, 20</p>
-                    )}
-                  </div>
-                </fieldset>
+                      )}
+                    </div>
+                  </fieldset>
+                </div>
 
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Stock</legend>

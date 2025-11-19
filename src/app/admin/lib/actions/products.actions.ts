@@ -7,6 +7,7 @@ import { batchRemoveImages } from './images.actions';
 import { Product, ProductResponse } from '@/models/product';
 import { Image } from '@/models/image';
 import { ProductType } from '@/models/productType';
+import { ProductTag } from '@/models/productTag';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -17,6 +18,7 @@ const FormSchema = z.object({
   type: z.string(),
   sale: z.string(),
   stock: z.string(),
+  tagIds: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
   id: z.string().min(1, { message: 'Id is required' })
@@ -40,6 +42,7 @@ export type State = {
     type?: string[];
     sale?: string[];
     stock?: string[];
+    tag?: string[];
   };
   message?: string | null;
 };
@@ -51,7 +54,8 @@ export async function createProduct(prevState: State, formData: FormData) {
     price: Number(formData.get('price') || 0),
     type: formData.get('type'),
     sale: formData.get('sale'),
-    stock: formData.get('stock')
+    stock: formData.get('stock'),
+    tagIds: formData.get('tagIds')
   });
 
   if (!validatedFields.success) {
@@ -61,15 +65,21 @@ export async function createProduct(prevState: State, formData: FormData) {
     };
   }
 
-  const { name, description, price, type, sale, stock } = validatedFields.data;
+  const { name, description, price, type, sale, stock, tagIds } =
+    validatedFields.data;
   const date = new Date().toISOString();
 
+  const tagIdsArray = tagIds ? tagIds.split(',') : [];
   let id = '';
   try {
     const result =
       await sql`INSERT INTO products (name, price, type, sale, stock, created_at, updated_at, description) 
     VALUES (${name}, ${price}, ${type}, ${sale}, ${stock}, ${date}, ${date}, ${description}) RETURNING id`;
     id = result[0].id;
+
+    for (const tagId of tagIdsArray) {
+      await sql`INSERT INTO product_tag_mappings (product_id, tag_id, created_at) VALUES (${id}, ${tagId}, ${date})`;
+    }
   } catch (error) {
     console.error('Database Error:', error);
     return {
@@ -93,7 +103,8 @@ export async function updateProduct(prevState: State, formData: FormData) {
     price: Number(formData.get('price') || 0),
     type: formData.get('type'),
     sale: formData.get('sale'),
-    stock: formData.get('stock')
+    stock: formData.get('stock'),
+    tagIds: formData.get('tagIds')
   });
 
   if (!validatedFields.success) {
@@ -103,15 +114,23 @@ export async function updateProduct(prevState: State, formData: FormData) {
     };
   }
 
-  const { name, description, price, type, sale, stock, id } =
+  const { name, description, price, type, sale, stock, id, tagIds } =
     validatedFields.data;
   const date = new Date().toISOString();
-  console.log({ name });
+
+  const tagIdsArray = tagIds ? tagIds.split(',') : [];
+  console.log('Starting update product');
+  console.log({ tagIdsArray, tagIds });
   try {
     await sql`
     UPDATE products 
     SET name = ${name}, description = ${description},  price = ${price}, type = ${type}, sale = ${sale}, stock = ${stock}, updated_at = ${date} 
     WHERE id = ${id}`;
+    // update product tag mappings
+    await sql`DELETE FROM product_tag_mappings WHERE product_id = ${id}`;
+    for (const tagId of tagIdsArray) {
+      await sql`INSERT INTO product_tag_mappings (product_id, tag_id, created_at) VALUES (${id}, ${tagId}, ${date})`;
+    }
   } catch (error) {
     return { message: 'Database Error: Failed to Update Product.' };
   }
@@ -124,6 +143,7 @@ export async function deleteProduct(id: string) {
   try {
     await sql`DELETE FROM images WHERE product_id = ${id}`;
     await sql`DELETE FROM products WHERE id = ${id}`;
+    await sql`DELETE FROM product_tag_mappings WHERE product_id = ${id}`;
     await batchRemoveImages(id);
   } catch (error) {
     console.error('Database Error:', error);
@@ -173,8 +193,15 @@ export async function fetchProductById(id: string) {
       SELECT * FROM product_types WHERE id = ${product[0].type}
     `;
 
+    const tagIds = await sql<ProductTag[]>`
+      SELECT tag_id FROM product_tag_mappings WHERE product_id = ${id}
+    `;
+
     return {
-      product: product[0],
+      product: {
+        ...product[0],
+        tagIds: tagIds.length > 0 ? tagIds.map((tag) => tag.id) : []
+      },
       images: images || [],
       productType: productType[0]
     };
@@ -203,7 +230,15 @@ export async function fetchProducts(searchParams?: {
           'name', product_image.name,
           'type', product_image.type,
           'is_main', product_image.is_main
-        ) as product_image
+        ) as product_image,
+        COALESCE(
+          (
+            SELECT array_agg(ptm.tag_id::text)
+            FROM product_tag_mappings ptm
+            WHERE ptm.product_id = p.id
+          ),
+          ARRAY[]::text[]
+        ) as "tagIds"
       FROM products p
       LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
       WHERE p.name ILIKE ${
@@ -217,7 +252,7 @@ export async function fetchProducts(searchParams?: {
     return products;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
+    throw new Error('Failed to fetch all products.');
   }
 }
 

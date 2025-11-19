@@ -10,6 +10,7 @@ import {
 import { onOpenModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import Spinner from '@/components/spinner/Spinner';
+import { ProductTag } from '@/models/productTag';
 
 export function CreateProduct() {
   const handleClick = () => {
@@ -40,6 +41,7 @@ export function UpdateProduct({
     sale: number;
     stock: number;
     type: string;
+    tagIds: string[];
   };
 }) {
   const handleClick = () => {

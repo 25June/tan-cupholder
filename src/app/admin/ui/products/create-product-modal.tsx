@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createProduct, State } from '@/app/admin/lib/actions/products.actions';
 import { BoltIcon, PhotoIcon, TagIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
@@ -10,14 +10,19 @@ import { ProductType } from '@/models/productType';
 import { useGenerateProductDescription } from '@/hooks/useGenerateProductDescription';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { ProductTag } from '@/models/productTag';
+import AutoComplete from '../autocomplete/AutoComplete';
 const initialState: State = { message: null, errors: {} };
 
 export default function CreateProductModal({
-  productTypes
+  productTypes,
+  productTags
 }: {
   productTypes: ProductType[];
+  productTags: ProductTag[];
 }) {
   const [state, setState] = useState<State>(initialState);
+  const [tagIds, setTagIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [uploadImages, setUploadImages] = useState<File[]>([]);
   const [presignedUrlObject, setPresignedUrlObject] = useState<
@@ -70,6 +75,7 @@ export default function CreateProductModal({
     newFormData.append('sale', formData.get('sale') as string);
     newFormData.append('stock', formData.get('stock') as string);
     newFormData.append('description', formData.get('description') as string);
+    newFormData.append('tagIds', tagIds.join(','));
     return createProduct(initialState, newFormData)
       .then((res) => {
         if (res.errors) {
@@ -85,6 +91,7 @@ export default function CreateProductModal({
           .then(() => {
             onCloseModal(MODAL_ID.ADD_PRODUCT);
             setState(initialState);
+            setTagIds([]);
             setUploadImages([]);
             setPresignedUrlObject({});
             window.location.reload();
@@ -109,6 +116,7 @@ export default function CreateProductModal({
   const handleClose = () => {
     onCloseModal(MODAL_ID.ADD_PRODUCT);
     setState(initialState);
+    setTagIds([]);
     setUploadImages([]);
     setPresignedUrlObject({});
   };
@@ -207,7 +215,7 @@ export default function CreateProductModal({
                 </fieldset>
 
                 <div className="flex gap-4 w-full">
-                  <fieldset className="fieldset">
+                  <fieldset className="fieldset w-full max-w-[70px]">
                     <legend className="fieldset-legend">Sale</legend>
                     <label className="input w-full">
                       <PercentBadgeIcon className="w-4 h-4" />
@@ -228,23 +236,26 @@ export default function CreateProductModal({
                           </p>
                         ))
                       ) : (
-                        <p className="text-sm text-gray-500">
-                          Vd: 5, 10, 15, 20
-                        </p>
+                        <p className="text-sm text-gray-500">Vd: 5, 10</p>
                       )}
                     </div>
                   </fieldset>
 
-                  <fieldset className="fieldset">
+                  <fieldset className="fieldset grow w-full">
                     <legend className="fieldset-legend">Tag</legend>
-                    <label className="input w-full">
-                      <TagIcon className="w-4 h-4" />
-                      <input
-                        type="number"
-                        name="tag"
-                        className="w-full"
-                        placeholder="Tag"
-                        defaultValue="New"
+                    <label className="input w-full flex items-start gap-2">
+                      <TagIcon className="w-4 h-4 flex-shrink-0 mt-2" />
+                      <AutoComplete
+                        options={(productTags || []).map((tag) => ({
+                          value: tag.id,
+                          label: tag.name
+                        }))}
+                        value={tagIds}
+                        onChange={(value) => {
+                          setTagIds((value as string[]) || []);
+                        }}
+                        placeholder="Select tags"
+                        multiple={true}
                       />
                     </label>
 
@@ -257,7 +268,7 @@ export default function CreateProductModal({
                         ))
                       ) : (
                         <p className="text-sm text-gray-500">
-                          Vd: 5, 10, 15, 20
+                          Vd: Hot, New, Sale
                         </p>
                       )}
                     </div>

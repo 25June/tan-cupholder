@@ -19,6 +19,8 @@ import DeleteProductModal from '../../ui/products/delete-product-modal';
 import EditProductImageModal from '../../ui/products/edit-product-image-modal';
 import { useSearchParams } from 'next/navigation';
 import ProductSummary from '../../ui/products/product-summary';
+import { ProductTag } from '@/models/productTag';
+import { getProductTags } from '@/app/admin/lib/actions/product-tags.actions';
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -28,6 +30,7 @@ export default function Page() {
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [totalProducts, setTotalProducts] = useState(0);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+  const [productTags, setProductTags] = useState<ProductTag[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch product types only once on initial render
@@ -44,6 +47,19 @@ export default function Page() {
       }
     };
     loadProductTypes();
+
+    const loadProductTags = async () => {
+      try {
+        const tagsData = await getProductTags({
+          query: '',
+          page: '0'
+        });
+        setProductTags(tagsData);
+      } catch (error) {
+        console.error('Failed to load product tags:', error);
+      }
+    };
+    loadProductTags();
   }, []);
 
   // Reset to page 1 when query changes
@@ -98,7 +114,11 @@ export default function Page() {
         </div>
       ) : (
         <>
-          <ProductsTable products={products} productTypes={formattedProducts} />
+          <ProductsTable
+            products={products}
+            productTypes={formattedProducts}
+            productTags={productTags || []}
+          />
           <div className="mt-5 flex w-full justify-center">
             <PaginationState
               totalPages={Math.ceil(totalProducts / 10)}
@@ -108,8 +128,15 @@ export default function Page() {
           </div>
         </>
       )}
-      <CreateProductModal productTypes={productTypes} />
-      <EditProductModal productId={null} productTypes={productTypes} />
+      <CreateProductModal
+        productTypes={productTypes}
+        productTags={productTags}
+      />
+      <EditProductModal
+        productId={null}
+        productTypes={productTypes}
+        productTags={productTags}
+      />
       <DeleteProductModal productId={null} />
       <EditProductImageModal productId={null} />
     </main>
