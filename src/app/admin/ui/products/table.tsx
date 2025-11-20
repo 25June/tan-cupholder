@@ -8,16 +8,20 @@ import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
 import { ProductTag } from '@/models/productTag';
+import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
 export default function ProductsTable({
   products,
   productTypes,
-  productTags
+  productTags,
+  loading = false
 }: {
   products: ProductResponse[];
   productTypes: Record<string, string>;
   productTags: ProductTag[];
+  loading: boolean;
 }) {
+  // Map tag IDs to tag objects for quick lookup
   const tagObj = useMemo(() => {
     return productTags.reduce((acc: Record<string, ProductTag>, tag) => {
       return {
@@ -25,204 +29,117 @@ export default function ProductsTable({
         [tag.id]: tag
       };
     }, {});
-  }, [products]);
+  }, [productTags]);
 
-  return (
-    <div className="w-full">
-      <div className="mt-6 flow-root">
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
-              <div className="md:hidden">
-                {products?.map((product) => (
-                  <div
-                    key={product.id}
-                    className="mb-2 w-full rounded-md bg-white p-4"
-                  >
-                    <div className="flex items-center justify-between border-b pb-4">
-                      <div>
-                        <div className="mb-2 flex items-center">
-                          <div className="flex items-center gap-3 shrink-0">
-                            <Image
-                              src={
-                                product.product_image.name
-                                  ? `${getImageUrl(
-                                      product.id,
-                                      product.product_image.name
-                                    )}`
-                                  : '/cup.png'
-                              }
-                              className="rounded-full w-16 h-16 object-cover"
-                              alt={`${product.name}'s profile picture`}
-                              width={128}
-                              height={128}
-                            />
-                            <div className="flex flex-col">
-                              <p>{product.name}</p>
-                              <div className="flex flex-wrap gap-2">
-                                {product.tagIds?.map((tagId) => (
-                                  <span
-                                    key={tagId}
-                                    className="badge badge-outline"
-                                  >
-                                    {tagObj[product.id]?.name}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full items-center justify-between border-b py-5">
-                      <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Price</p>
-                        <p className="font-medium">{product.price}</p>
-                      </div>
-                      <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Type</p>
-                        <p className="font-medium">
-                          {productTypes[product.type] || 'No type found'}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="pt-4 text-sm">
-                      <p>{product.sale} invoices</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <table className="hidden min-w-full rounded-md text-gray-900 md:table">
-                <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
-                  <tr>
-                    <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                      Name
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Price
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Type
-                    </th>
-                    <th scope="col" className="px-4 py-5 font-medium">
-                      Sale
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Stock
-                    </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Description
-                    </th>
-                    <th scope="col" className="relative py-3 pl-6 pr-3">
-                      <span className="sr-only">Edit</span>
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody className="divide-y divide-gray-200 text-gray-900">
-                  {products?.map((product, index) => (
-                    <tr key={product.id} className="group bg-white">
-                      <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
-                        <div className="flex items-center gap-3">
-                          <Image
-                            src={
-                              product.product_image.name
-                                ? `${getImageUrl(
-                                    product.id,
-                                    product.product_image.name
-                                  )}`
-                                : '/cup.png'
-                            }
-                            className="rounded-full w-16 h-16 object-cover shrink-0"
-                            alt={`${product.name}'s profile picture`}
-                            width={128}
-                            height={128}
-                          />
-                          <div>
-                            <p>{product.name}</p>
-                            <div className="flex flex-wrap gap-2">
-                              {product.tagIds?.map((tagId) => (
-                                <span
-                                  key={tagId}
-                                  className="badge badge-sm"
-                                  style={{
-                                    backgroundColor: tagObj[tagId]?.color
-                                  }}
-                                >
-                                  {tagObj[tagId]?.name}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {formatPriceWithoutSymbol(product.price)}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {productTypes[product.type] || 'No type found'}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {product.sale}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm">
-                        {product.stock}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-5 text-sm text-ellipsis overflow-hidden max-w-16">
-                        {product.description}
-                      </td>
-                      <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex justify-end">
-                          <div
-                            className={`dropdown dropdown-end ${
-                              index > 5 ? 'dropdown-top' : 'dropdown-bottom'
-                            }`}
-                          >
-                            <div
-                              tabIndex={0}
-                              role="button"
-                              className="btn btn-sm btn-ghost btn-circle"
-                            >
-                              <EllipsisVerticalIcon className="w-5" />
-                            </div>
-                            <ul
-                              tabIndex={0}
-                              className=" dropdown-content menu bg-white border border-gray-200 rounded-lg w-48 shadow-lg z-50"
-                            >
-                              <li>
-                                <UpdateImage id={product.id} />
-                              </li>
-                              <li>
-                                <UpdateProduct
-                                  id={product.id}
-                                  product={{
-                                    id: product.id,
-                                    name: product.name,
-                                    description: product.description,
-                                    price: product.price,
-                                    sale: product.sale,
-                                    stock: product.stock,
-                                    type: product.type,
-                                    tagIds: product.tagIds
-                                  }}
-                                />
-                              </li>
-                              <li>
-                                <DeleteProduct id={product.id} />
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+  const columns: Column<ProductResponse>[] = [
+    {
+      header: 'Name',
+      render: (product) => (
+        <div className="flex items-center gap-3">
+          <Image
+            src={
+              product.product_image.name
+                ? `${getImageUrl(product.id, product.product_image.name)}`
+                : '/cup.png'
+            }
+            className="rounded-full w-16 h-16 object-cover shrink-0"
+            alt={`${product.name}'s profile picture`}
+            width={128}
+            height={128}
+          />
+          <div>
+            <p>{product.name}</p>
+            <div className="flex flex-wrap gap-2">
+              {product.tagIds?.map((tagId) => (
+                <span
+                  key={tagId}
+                  className="badge badge-sm"
+                  style={{
+                    backgroundColor: tagObj[tagId]?.color
+                  }}
+                >
+                  {tagObj[tagId]?.name}
+                </span>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )
+    },
+    {
+      header: 'Price',
+      render: (product) => formatPriceWithoutSymbol(product.price)
+    },
+    {
+      header: 'Type',
+      render: (product) => productTypes[product.type] || 'No type found'
+    },
+    {
+      header: 'Sale',
+      accessor: 'sale'
+    },
+    {
+      header: 'Stock',
+      accessor: 'stock'
+    },
+    {
+      header: 'Description',
+      render: (product) => product.description,
+      className:
+        'whitespace-nowrap px-3 py-3 text-sm text-ellipsis overflow-hidden max-w-16'
+    }
+  ];
+
+  return (
+    <SimpleTable
+      data={products}
+      columns={columns}
+      keyExtractor={(product) => product.id}
+      actions={(product, index) => (
+        <div className="flex justify-end">
+          <div
+            className={`dropdown dropdown-end ${
+              (index ?? 0) > 5 ? 'dropdown-top' : 'dropdown-bottom'
+            }`}
+          >
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-sm btn-ghost btn-circle"
+            >
+              <EllipsisVerticalIcon className="w-5" />
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-white border border-gray-200 rounded-lg w-48 shadow-lg z-50"
+            >
+              <li>
+                <UpdateImage id={product.id} />
+              </li>
+              <li>
+                <UpdateProduct
+                  id={product.id}
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    price: product.price,
+                    sale: product.sale,
+                    stock: product.stock,
+                    type: product.type,
+                    tagIds: product.tagIds
+                  }}
+                />
+              </li>
+              <li>
+                <DeleteProduct id={product.id} />
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
+      emptyMessage="No products found"
+      loading={loading}
+    />
   );
 }

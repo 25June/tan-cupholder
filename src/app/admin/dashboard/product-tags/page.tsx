@@ -60,18 +60,10 @@ export default function Page() {
         <Search placeholder="Search product tags..." />
         <CreateProductTag />
       </div>
-      {isLoading ? (
-        <div className="flex justify-center items-center p-8">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      ) : (
-        <>
-          <ProductTagsTable productTags={productTags} />
-          <div className="mt-5 flex w-full justify-center">
-            <Pagination totalPages={Math.ceil(totalProductTags / 50)} />
-          </div>
-        </>
-      )}
+      <ProductTagsTable productTags={productTags} loading={isLoading} />
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={Math.ceil(totalProductTags / 50)} />
+      </div>
       <CreateProductTagModal />
       <EditProductTagModal productTagId={null} />
       <DeleteProductTagModal productTagId={null} />

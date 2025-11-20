@@ -60,18 +60,10 @@ export default function Page() {
         <Search placeholder="Search customers..." />
         <CreateCustomer />
       </div>
-      {isLoading ? (
-        <div className="flex justify-center items-center p-8">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      ) : (
-        <>
-          <CustomersTable customers={customers} />
-          <div className="mt-5 flex w-full justify-center">
-            <Pagination totalPages={Math.ceil(totalCustomers / 10)} />
-          </div>
-        </>
-      )}
+      <CustomersTable customers={customers} loading={isLoading} />
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={Math.ceil(totalCustomers / 10)} />
+      </div>
       <CreateCustomerModal />
       <EditCustomerModal customerId={null} />
       <DeleteCustomerModal customerId={null} />

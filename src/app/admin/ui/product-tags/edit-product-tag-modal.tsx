@@ -9,6 +9,7 @@ import {
 import { ProductTag } from '@/models/productTag';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { PRODUCT_TAG_SAMPLE_COLOR } from '@/constants/product-tag-sample-color.const';
 
 const initialState: State = { message: null, errors: {} };
 
@@ -23,6 +24,7 @@ export default function EditProductTagModal({
   const [currentProductTagId, setCurrentProductTagId] = useState<string | null>(
     productTagId
   );
+  const [color, setColor] = useState<string>('#FF0000');
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const prevOpenRef = useRef<boolean>(false);
 
@@ -72,6 +74,9 @@ export default function EditProductTagModal({
       try {
         const productTagData = await getProductTagById(idToLoad);
         setProductTag(productTagData);
+        if (productTagData.color) {
+          setColor(productTagData.color);
+        }
       } catch (error) {
         console.error('Failed to load product tag data:', error);
       }
@@ -175,13 +180,31 @@ export default function EditProductTagModal({
             <div className="flex flex-col md:flex-row gap-4 w-full">
               <fieldset className="fieldset w-full">
                 <legend className="fieldset-legend">Color (hex)</legend>
-                <input
-                  type="text"
-                  name="color"
-                  className="input w-full"
-                  placeholder="#FF0000"
-                  defaultValue={productTag.color || ''}
-                />
+                <div className="color-picker flex items-center gap-2">
+                  <div
+                    className={`w-full grow-1 p-2 rounded-md text-sm`}
+                    style={{ backgroundColor: color }}
+                  >
+                    {color}
+                  </div>
+                  <input
+                    type="color"
+                    name="color"
+                    value={color}
+                    onChange={(e) => setColor(e.target.value)}
+                  />
+                </div>
+                <div className="color-picker-samples flex flex-wrap gap-2">
+                  {PRODUCT_TAG_SAMPLE_COLOR.map((color) => (
+                    <button
+                      key={color}
+                      className="w-6 h-6 rounded-full"
+                      style={{ backgroundColor: color }}
+                      onClick={() => setColor(color)}
+                      type="button"
+                    ></button>
+                  ))}
+                </div>
                 <div id="color-error" aria-live="polite" aria-atomic="true">
                   {state.errors?.color &&
                     state.errors.color.map((error: string) => (

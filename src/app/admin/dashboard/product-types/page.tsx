@@ -60,18 +60,10 @@ export default function Page() {
         <Search placeholder="Search product types..." />
         <CreateProductType />
       </div>
-      {isLoading ? (
-        <div className="flex justify-center items-center p-8">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      ) : (
-        <>
-          <ProductTypesTable productTypes={productTypes} />
-          <div className="mt-5 flex w-full justify-center">
-            <Pagination totalPages={Math.ceil(totalProductTypes / 50)} />
-          </div>
-        </>
-      )}
+      <ProductTypesTable productTypes={productTypes} loading={isLoading} />
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={Math.ceil(totalProductTypes / 50)} />
+      </div>
       <CreateProductTypeModal />
       <EditProductTypeModal productTypeId={null} />
       <DeleteProductTypeModal productTypeId={null} />

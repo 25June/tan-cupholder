@@ -108,26 +108,20 @@ export default function Page() {
         <ProductSummary />
       </div>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center p-8">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      ) : (
-        <>
-          <ProductsTable
-            products={products}
-            productTypes={formattedProducts}
-            productTags={productTags || []}
-          />
-          <div className="mt-5 flex w-full justify-center">
-            <PaginationState
-              totalPages={Math.ceil(totalProducts / 10)}
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-            />
-          </div>
-        </>
-      )}
+      <ProductsTable
+        products={products}
+        productTypes={formattedProducts}
+        productTags={productTags || []}
+        loading={isLoading}
+      />
+      <div className="mt-5 flex w-full justify-center">
+        <PaginationState
+          totalPages={Math.ceil(totalProducts / 10)}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
+      </div>
+
       <CreateProductModal
         productTypes={productTypes}
         productTags={productTags}

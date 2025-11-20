@@ -61,21 +61,10 @@ export default function OrdersPage() {
         <Search placeholder="Search orders by customer name, email, or order ID..." />
       </div>
 
-      {isLoading ? (
-        <div className="mt-6 flex items-center justify-center">
-          <div className="flex items-center gap-2 text-gray-500">
-            <div className="animate-spin h-4 w-4 border-2 border-logo-orange-border border-t-transparent rounded-full"></div>
-            Loading orders...
-          </div>
-        </div>
-      ) : (
-        <>
-          <OrdersTable orders={orders} />
-          <div className="mt-5 flex w-full justify-center">
-            <Pagination totalPages={totalPages} />
-          </div>
-        </>
-      )}
+      <OrdersTable orders={orders} loading={isLoading} />
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={totalPages} />
+      </div>
     </main>
   );
 }

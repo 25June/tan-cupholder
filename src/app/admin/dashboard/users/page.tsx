@@ -55,18 +55,10 @@ export default function Page() {
         <Search placeholder="Search users..." />
         <CreateUser />
       </div>
-      {isLoading ? (
-        <div className="flex justify-center items-center p-8">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      ) : (
-        <>
-          <UsersTable users={users} />
-          <div className="mt-5 flex w-full justify-center">
-            <Pagination totalPages={Math.ceil(totalUsers / 10)} />
-          </div>
-        </>
-      )}
+      <UsersTable users={users} loading={isLoading} />
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={Math.ceil(totalUsers / 10)} />
+      </div>
       <CreateUserModal />
       <EditUserModal userId={null} />
       <DeleteUserModal userId={null} />
