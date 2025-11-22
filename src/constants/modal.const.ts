@@ -20,5 +20,8 @@ export enum MODAL_ID {
   DELETE_EMAIL_TEMPLATE = 'delete-email-template',
   ADD_FEATURE_IMAGE = 'add-feature-image',
   DELETE_FEATURE_IMAGES = 'delete-feature-images',
-  EDIT_PRODUCT_IMAGE = 'edit-product-image'
+  EDIT_PRODUCT_IMAGE = 'edit-product-image',
+  CREATE_INVOICE = 'create-invoice',
+  DELETE_INVOICE = 'delete-invoice',
+  VIEW_INVOICE = 'view-invoice'
 }

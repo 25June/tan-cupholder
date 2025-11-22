@@ -9,6 +9,9 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 const FormSchema = z.object({
   id: z.string(),
+  orderId: z.string({
+    invalid_type_error: 'Please provide an order ID.'
+  }),
   customerId: z.string({
     invalid_type_error: 'Please select a customer.'
   }),
@@ -22,10 +25,10 @@ const FormSchema = z.object({
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
-const UpdateInvoice = FormSchema.omit({ date: true, id: true });
 
 export type State = {
   errors?: {
+    orderId?: string[];
     customerId?: string[];
     amount?: string[];
     status?: string[];
@@ -36,6 +39,7 @@ export type State = {
 export async function createInvoice(prevState: State, formData: FormData) {
   // Validate form fields using Zod
   const validatedFields = CreateInvoice.safeParse({
+    orderId: formData.get('orderId'),
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status')
@@ -50,15 +54,15 @@ export async function createInvoice(prevState: State, formData: FormData) {
   }
 
   // Prepare data for insertion into the database
-  const { customerId, amount, status } = validatedFields.data;
+  const { orderId, customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100;
   const date = new Date().toISOString();
 
   // Insert data into the database
   try {
     await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      INSERT INTO invoices (order_id, customer_id, amount, status, date)
+      VALUES (${orderId}, ${customerId}, ${amountInCents}, ${status}, ${date})
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
@@ -67,45 +71,13 @@ export async function createInvoice(prevState: State, formData: FormData) {
     };
   }
 
-  // Revalidate the cache for the invoices page and redirect the user.
+  // Revalidate the cache for the invoices page
   revalidatePath('/admin/dashboard/invoices');
-  redirect('/admin/dashboard/invoices');
+  return { message: 'Invoice created successfully!' };
 }
 
-export async function updateInvoice(
-  id: string,
-  prevState: State,
-  formData: FormData
-) {
-  const validatedFields = UpdateInvoice.safeParse({
-    customerId: formData.get('customerId'),
-    amount: formData.get('amount'),
-    status: formData.get('status')
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update Invoice.'
-    };
-  }
-
-  const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
-
-  try {
-    await sql`
-      UPDATE invoices
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-      WHERE id = ${id}
-    `;
-  } catch (error) {
-    return { message: 'Database Error: Failed to Update Invoice.' };
-  }
-
-  revalidatePath('/admin/dashboard/invoices');
-  redirect('/admin/dashboard/invoices');
-}
+// Invoices can no longer be updated - they are created from orders and are immutable
+// Only status updates might be allowed in the future if needed
 
 export async function deleteInvoice(id: string) {
   await sql`DELETE FROM invoices WHERE id = ${id}`;

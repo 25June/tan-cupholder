@@ -389,9 +389,16 @@ async function seedEmailTemplates() {
   `;
 }
 
+async function seedAddColumnOrderIdToInvoices() {
+  await sql`
+    ALTER TABLE invoices
+    ADD COLUMN IF NOT EXISTS order_id UUID;
+  `;
+}
+
 export async function GET() {
   try {
-    // const userRole = await sql.begin(seedUserRole);
+    const userRole = await sql.begin(seedAddColumnOrderIdToInvoices);
 
     // const userInfo = await sql.begin(seedUser);
     // const userCredentials = await sql.begin(seedUserCredentials);

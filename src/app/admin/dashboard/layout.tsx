@@ -1,3 +1,5 @@
+'use client';
+
 import SideNav from '@/app/admin/ui/dashboard/sidenav';
 import { lusitana } from '@/app/admin/ui/fonts';
 

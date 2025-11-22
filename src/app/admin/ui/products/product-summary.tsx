@@ -5,15 +5,18 @@ import { animate } from 'motion/react';
 import { useProductSummary } from '@/app/admin/hooks/useProductSummary';
 import { ArrowRightCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/components/spinner/Spinner';
 
 function Card({
   title,
   value,
-  onViewMore
+  onViewMore,
+  isLoading
 }: {
   title: string;
   value: number;
   onViewMore?: () => void;
+  isLoading: boolean;
 }) {
   const [displayValue, setDisplayValue] = useState(0);
 
@@ -30,10 +33,10 @@ function Card({
   }, [value]);
 
   return (
-    <div className="rounded-xl overflow-hidden bg-gray-50 shadow-sm">
+    <div className="rounded-xl overflow-hidden bg-logo-orange-pale-companion shadow-sm">
       <div className="flex flex-col items-center justify-center">
-        <div className="flex items-center justify-between w-full bg-logo-orange-border relative">
-          <h3 className="text-sm p-2 font-bold w-full text-center  text-white">
+        <div className="flex items-center justify-between w-full relative">
+          <h3 className="text-sm p-2 font-bold w-full text-left text-logo-orange-border">
             {title}
           </h3>
           {onViewMore && (
@@ -46,7 +49,7 @@ function Card({
           )}
         </div>
         <p className="text-4xl p-2 font-extrabold w-full text-center text-logo-orange">
-          {displayValue}
+          {isLoading ? <Spinner /> : displayValue}
         </p>
       </div>
     </div>
@@ -56,27 +59,6 @@ function Card({
 export default function ProductSummary() {
   const { data, isLoading, error } = useProductSummary();
   const router = useRouter();
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-4 gap-4">
-        {[1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="rounded-xl overflow-hidden bg-gray-50 shadow-sm"
-          >
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-sm p-2 font-bold w-full text-center bg-logo-orange-border text-white">
-                Loading...
-              </div>
-              <div className="text-4xl p-2 font-extrabold w-full text-center text-logo-orange">
-                <span className="loading loading-spinner loading-md"></span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   const handleViewProductTags = () => {
     router.push(`/admin/dashboard/product-tags`);
@@ -98,18 +80,28 @@ export default function ProductSummary() {
 
   return (
     <div className="grid grid-cols-4 gap-4">
-      <Card title="Total Products" value={data.totalProducts} />
+      <Card
+        title="Total Products"
+        value={data.totalProducts}
+        isLoading={isLoading}
+      />
       <Card
         title="Total Products Types"
         value={data.totalProductTypes}
         onViewMore={handleViewProductTypes}
+        isLoading={isLoading}
       />
       <Card
         title="Total Products Tags"
         value={data.totalProductTags}
         onViewMore={handleViewProductTags}
+        isLoading={isLoading}
       />
-      <Card title="Total Products Images" value={data.totalProductImages} />
+      <Card
+        title="Total Products Images"
+        value={data.totalProductImages}
+        isLoading={isLoading}
+      />
     </div>
   );
 }
