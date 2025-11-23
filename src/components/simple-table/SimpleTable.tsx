@@ -5,6 +5,41 @@ import SkeletonRows from './Skeleton';
 
 export type { Column, SimpleTableProps };
 
+// Table row component to properly handle hooks
+const TableRow = <T,>({
+  item,
+  itemIndex,
+  columns,
+  renderCell,
+  actions,
+  keyExtractor
+}: {
+  item: T;
+  itemIndex: number;
+  columns: Column<T>[];
+  renderCell: (item: T, column: Column<T>) => React.ReactNode;
+  actions?: (item: T, index?: number) => React.ReactNode;
+  keyExtractor: (item: T) => string;
+}) => {
+  return (
+    <tr key={keyExtractor(item)} className="group bg-white">
+      {columns.map((column, index) => (
+        <td
+          key={index}
+          className={column.className || `whitespace-nowrap px-3 py-3 text-sm`}
+        >
+          {renderCell(item, column)}
+        </td>
+      ))}
+      {actions && (
+        <td className="whitespace-nowrap px-3 py-3">
+          {actions(item, itemIndex)}
+        </td>
+      )}
+    </tr>
+  );
+};
+
 const SimpleTable = <T,>({
   data,
   columns,
@@ -80,26 +115,15 @@ const SimpleTable = <T,>({
                     />
                   ) : (
                     data.map((item, itemIndex) => (
-                      <tr key={keyExtractor(item)} className="group bg-white">
-                        {columns.map((column, index) => (
-                          <td
-                            key={index}
-                            className={
-                              column.className ||
-                              `whitespace-nowrap px-3 py-3 text-sm`
-                            }
-                          >
-                            {renderCell(item, column)}
-                          </td>
-                        ))}
-                        {actions && (
-                          <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                            <div className="flex justify-end gap-3">
-                              {actions(item, itemIndex)}
-                            </div>
-                          </td>
-                        )}
-                      </tr>
+                      <TableRow
+                        key={keyExtractor(item)}
+                        item={item}
+                        itemIndex={itemIndex}
+                        columns={columns}
+                        renderCell={renderCell}
+                        actions={actions}
+                        keyExtractor={keyExtractor}
+                      />
                     ))
                   )}
                 </tbody>

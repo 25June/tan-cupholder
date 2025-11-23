@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { onOpenModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import SimpleDropdown from '@/components/simple-dropdown/simple-downdown';
 
 export function CreateEmailTemplate() {
   const handleClick = () => {
@@ -72,26 +73,27 @@ export function DeleteEmailTemplate({ id }: { id: string }) {
 
 export function More({ id }: { id: string }) {
   return (
-    <div className="dropdown dropdown-end">
-      <div
-        tabIndex={0}
-        role="button"
-        className="rounded-md border p-2 hover:bg-gray-100"
-      >
-        <span className="sr-only">More</span>
-        <EllipsisVerticalIcon className="w-5" />
-      </div>
-      <ul
-        tabIndex={0}
-        className="dropdown-content menu bg-white border border-gray-200 rounded-lg w-36 shadow-lg z-50"
-      >
-        <li>
-          <UpdateEmailTemplate id={id} />
-        </li>
-        <li>
-          <DeleteEmailTemplate id={id} />
-        </li>
-      </ul>
-    </div>
+    <SimpleDropdown
+      host={
+        <div
+          tabIndex={0}
+          role="button"
+          className="rounded-md border p-2 hover:bg-gray-100"
+        >
+          <span className="sr-only">More</span>
+          <EllipsisVerticalIcon className="w-5" />
+        </div>
+      }
+      content={
+        <>
+          <li>
+            <UpdateEmailTemplate id={id} />
+          </li>
+          <li>
+            <DeleteEmailTemplate id={id} />
+          </li>
+        </>
+      }
+    />
   );
 }

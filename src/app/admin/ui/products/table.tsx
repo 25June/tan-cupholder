@@ -9,6 +9,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
 import { ProductTag } from '@/models/productTag';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
+import SimpleDropdown from '@/components/simple-dropdown/simple-downdown';
 
 export default function ProductsTable({
   products,
@@ -96,46 +97,43 @@ export default function ProductsTable({
       columns={columns}
       keyExtractor={(product) => product.id}
       actions={(product, index) => (
-        <div className="flex justify-end">
-          <div
-            className={`dropdown dropdown-end ${
-              (index ?? 0) > 5 ? 'dropdown-top' : 'dropdown-bottom'
-            }`}
-          >
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-sm btn-ghost btn-circle"
-            >
-              <EllipsisVerticalIcon className="w-5" />
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu bg-white border border-gray-200 rounded-lg w-48 shadow-lg z-50"
-            >
-              <li>
-                <UpdateImage id={product.id} />
-              </li>
-              <li>
-                <UpdateProduct
-                  id={product.id}
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    description: product.description,
-                    price: product.price,
-                    sale: product.sale,
-                    stock: product.stock,
-                    type: product.type,
-                    tagIds: product.tagIds
-                  }}
-                />
-              </li>
-              <li>
-                <DeleteProduct id={product.id} />
-              </li>
-            </ul>
-          </div>
+        <div className="flex justify-end items-center">
+          <SimpleDropdown
+            host={
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-sm btn-ghost btn-circle"
+              >
+                <EllipsisVerticalIcon className="w-5" />
+              </div>
+            }
+            content={
+              <>
+                <li>
+                  <UpdateImage id={product.id} />
+                </li>
+                <li>
+                  <UpdateProduct
+                    id={product.id}
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      description: product.description,
+                      price: product.price,
+                      sale: product.sale,
+                      stock: product.stock,
+                      type: product.type,
+                      tagIds: product.tagIds
+                    }}
+                  />
+                </li>
+                <li>
+                  <DeleteProduct id={product.id} />
+                </li>
+              </>
+            }
+          />
         </div>
       )}
       emptyMessage="No products found"
