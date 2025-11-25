@@ -243,21 +243,17 @@ export default function CreateProductModal({
 
                   <fieldset className="fieldset grow w-full">
                     <legend className="fieldset-legend">Tag</legend>
-                    <label className="input w-full flex items-start gap-2">
-                      <TagIcon className="w-4 h-4 flex-shrink-0 mt-2" />
-                      <AutoComplete
-                        options={(productTags || []).map((tag) => ({
-                          value: tag.id,
-                          label: tag.name
-                        }))}
-                        value={tagIds}
-                        onChange={(value) => {
-                          setTagIds((value as string[]) || []);
-                        }}
-                        placeholder="Select tags"
-                        multiple={true}
-                      />
-                    </label>
+                    <AutoComplete<string>
+                      options={(productTags || []).map((tag) => ({
+                        value: tag.id,
+                        label: tag.name
+                      }))}
+                      value={tagIds}
+                      onChange={(value) => {
+                        setTagIds(value);
+                      }}
+                      placeholder="Select tags"
+                    />
 
                     <div id="sale-error" aria-live="polite" aria-atomic="true">
                       {state.errors?.sale ? (

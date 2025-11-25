@@ -289,25 +289,17 @@ export default function EditProductModal({
                   </fieldset>
                   <fieldset className="fieldset grow w-full">
                     <legend className="fieldset-legend">Tag</legend>
-                    <label className="input w-full flex items-start gap-2">
-                      <TagIcon className="w-4 h-4 flex-shrink-0 mt-2" />
-                      <AutoComplete
-                        options={(productTags || []).map((tag) => ({
-                          value: tag.id,
-                          label: tag.name
-                        }))}
-                        placeholder="Select a tag"
-                        disabled={false}
-                        loading={false}
-                        multiple={true}
-                        value={tagIds}
-                        onChange={(value) => {
-                          setTagIds(
-                            Array.isArray(value) ? value : value ? [value] : []
-                          );
-                        }}
-                      />
-                    </label>
+                    <AutoComplete<string>
+                      options={(productTags || []).map((tag) => ({
+                        value: tag.id,
+                        label: tag.name
+                      }))}
+                      value={tagIds}
+                      onChange={(value) => {
+                        setTagIds(value);
+                      }}
+                      placeholder="Select tags"
+                    />
 
                     <div id="sale-error" aria-live="polite" aria-atomic="true">
                       {state.errors?.sale ? (

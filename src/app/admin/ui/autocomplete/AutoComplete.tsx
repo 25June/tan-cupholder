@@ -1,329 +1,213 @@
-'use client';
-
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import React, { useEffect } from 'react';
+import { useMultipleSelection, useCombobox } from 'downshift';
+import clsx from 'clsx';
 
 export interface AutoCompleteOption<T = string> {
   value: T;
   label: string;
-  disabled?: boolean;
 }
 
 interface AutoCompleteProps<T = string> {
   options: AutoCompleteOption<T>[];
-  value?: T | T[] | null;
-  onChange?: (value: T | T[] | null) => void;
+  value?: T[];
+  onChange: (value: T[]) => void;
   placeholder?: string;
-  name?: string;
-  disabled?: boolean;
-  loading?: boolean;
-  multiple?: boolean;
-  className?: string;
-  emptyMessage?: string;
 }
 
 export default function AutoComplete<T = string>({
   options,
   value,
   onChange,
-  placeholder = 'Type to search...',
-  name,
-  disabled = false,
-  loading = false,
-  multiple = false,
-  className = '',
-  emptyMessage = 'No options found'
+  placeholder
 }: AutoCompleteProps<T>) {
-  const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const [focusedIndex, setFocusedIndex] = useState(-1);
+  function getFilteredOptions(
+    selectedItems: AutoCompleteOption<T>[],
+    inputValue: string
+  ) {
+    const lowerCasedInputValue = inputValue.toLowerCase();
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
+    return options.filter(function filterOption(option: AutoCompleteOption<T>) {
+      return (
+        !selectedItems.includes(option) &&
+        (option.label.toLowerCase().includes(lowerCasedInputValue) ||
+          String(option.value).toLowerCase().includes(lowerCasedInputValue))
+      );
+    });
+  }
 
-  // Get selected options from value prop
-  const getSelectedOptions = useCallback(() => {
-    if (!value) return [];
+  function MultipleComboBox() {
+    const [inputValue, setInputValue] = React.useState('');
+    const [selectedItems, setSelectedItems] = React.useState<
+      AutoCompleteOption<T>[]
+    >([]);
+    const items = React.useMemo(
+      () => getFilteredOptions(selectedItems, inputValue),
+      [selectedItems, inputValue]
+    );
 
-    const values = Array.isArray(value) ? value : [value];
-    return options.filter((opt) => values.includes(opt.value));
-  }, [value, options]);
-
-  const selectedOptions = getSelectedOptions();
-
-  // Filter options based on input value
-  const filteredOptions = options.filter((option) => {
-    // Filter out already selected options in multiple mode
-    if (multiple && selectedOptions.some((sel) => sel.value === option.value)) {
-      return false;
-    }
-
-    // Filter by search term
-    if (inputValue) {
-      return option.label.toLowerCase().includes(inputValue.toLowerCase());
-    }
-
-    return true;
-  });
-
-  // Update input value when single value changes
-  useEffect(() => {
-    if (!multiple && selectedOptions.length > 0) {
-      setInputValue(selectedOptions[0].label);
-    } else if (!multiple && selectedOptions.length === 0) {
-      setInputValue('');
-    }
-  }, [selectedOptions, multiple]);
-
-  // Handle click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-        setFocusedIndex(-1);
-        // Reset input value if no selection in single mode
-        if (!multiple && selectedOptions.length === 0) {
-          setInputValue('');
-        }
-      }
-    };
-
-    if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () =>
-        document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [open, multiple, selectedOptions]);
-
-  // Scroll focused item into view
-  useEffect(() => {
-    if (focusedIndex >= 0 && listRef.current) {
-      const item = listRef.current.children[focusedIndex] as HTMLElement;
-      if (item) {
-        item.scrollIntoView({ block: 'nearest' });
-      }
-    }
-  }, [focusedIndex]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    setOpen(true);
-    setFocusedIndex(-1);
-  };
-
-  const handleInputFocus = () => {
-    if (!disabled) {
-      setOpen(true);
-    }
-  };
-
-  const handleOptionClick = (option: AutoCompleteOption<T>) => {
-    if (option.disabled) return;
-
-    if (multiple) {
-      const currentValues = Array.isArray(value) ? value : value ? [value] : [];
-      const newValue = [...currentValues, option.value];
-      onChange?.(newValue);
-      setInputValue('');
-      setFocusedIndex(-1);
-      // Keep dropdown open in multiple mode
-      inputRef.current?.focus();
-    } else {
-      onChange?.(option.value);
-      setInputValue(option.label);
-      setOpen(false);
-      setFocusedIndex(-1);
-    }
-  };
-
-  const handleRemoveOption = (optionValue: T, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    e?.preventDefault();
-
-    if (multiple && Array.isArray(value)) {
-      const newValue = value.filter((v) => v !== optionValue);
-      onChange?.(newValue);
-    } else {
-      onChange?.(null);
-      setInputValue('');
-    }
-
-    inputRef.current?.focus();
-  };
-
-  const handleClearAll = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onChange?.(null);
-    setInputValue('');
-    setOpen(false);
-    inputRef.current?.focus();
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (disabled) return;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setOpen(true);
-        setFocusedIndex((prev) =>
-          prev < filteredOptions.length - 1 ? prev + 1 : 0
+    useEffect(() => {
+      if (value && options.length > 0) {
+        setSelectedItems(
+          options.filter((option) => value.includes(option.value))
         );
-        break;
-
-      case 'ArrowUp':
-        e.preventDefault();
-        setOpen(true);
-        setFocusedIndex((prev) =>
-          prev > 0 ? prev - 1 : filteredOptions.length - 1
-        );
-        break;
-
-      case 'Enter':
-        e.preventDefault();
-        if (open && focusedIndex >= 0 && filteredOptions[focusedIndex]) {
-          handleOptionClick(filteredOptions[focusedIndex]);
+      }
+    }, [value, options]);
+    const { getSelectedItemProps, getDropdownProps, removeSelectedItem } =
+      useMultipleSelection({
+        selectedItems,
+        onStateChange({ selectedItems: newSelectedItems, type }) {
+          switch (type) {
+            case useMultipleSelection.stateChangeTypes
+              .SelectedItemKeyDownBackspace:
+            case useMultipleSelection.stateChangeTypes
+              .SelectedItemKeyDownDelete:
+            case useMultipleSelection.stateChangeTypes.DropdownKeyDownBackspace:
+            case useMultipleSelection.stateChangeTypes
+              .FunctionRemoveSelectedItem:
+              const updatedItems = newSelectedItems || [];
+              setSelectedItems(updatedItems);
+              onChange(updatedItems.map((item) => item.value));
+              break;
+            default:
+              break;
+          }
         }
-        break;
+      });
+    const {
+      isOpen,
+      getToggleButtonProps,
+      getMenuProps,
+      getInputProps,
+      highlightedIndex,
+      getItemProps,
+      selectedItem
+    } = useCombobox({
+      items,
+      itemToString(item) {
+        return item ? item.label : '';
+      },
+      defaultHighlightedIndex: 0, // after selection, highlight the first item.
+      selectedItem: null,
+      inputValue,
+      stateReducer(state, actionAndChanges) {
+        const { changes, type } = actionAndChanges;
 
-      case 'Escape':
-        e.preventDefault();
-        setOpen(false);
-        setFocusedIndex(-1);
-        break;
-
-      case 'Backspace':
-        if (multiple && !inputValue && selectedOptions.length > 0) {
-          handleRemoveOption(selectedOptions[selectedOptions.length - 1].value);
+        switch (type) {
+          case useCombobox.stateChangeTypes.InputKeyDownEnter:
+          case useCombobox.stateChangeTypes.ItemClick:
+            return {
+              ...changes,
+              isOpen: true, // keep the menu open after selection.
+              highlightedIndex: 0 // with the first option highlighted.
+            };
+          default:
+            return changes;
         }
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const showClearButton = !disabled && selectedOptions.length > 0 && !multiple;
-
-  return (
-    <div ref={containerRef} className={`relative w-full`}>
-      {/* Input Container with proper wrapping */}
-      <div className="relative flex flex-wrap items-start gap-1.5 w-full py-1">
-        {/* Selected Tags (Multiple Mode) */}
-        {multiple &&
-          selectedOptions.map((option) => (
-            <span
-              key={String(option.value)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 bg-logo-orange-border/10 text-logo-orange-border rounded-full text-xs font-medium border border-logo-orange-border/20 transition-colors hover:bg-logo-orange-border/15"
-            >
-              <span>{option.label}</span>
-              <button
-                type="button"
-                onClick={(e) => handleRemoveOption(option.value, e)}
-                className="hover:bg-logo-orange-border/25 rounded-full p-0.5 transition-colors inline-flex items-center justify-center"
-                tabIndex={-1}
-              >
-                <XMarkIcon className="w-3 h-3" />
-              </button>
-            </span>
-          ))}
-
-        {/* Hidden input for form submission */}
-        {name && (
-          <input
-            type="hidden"
-            name={name}
-            value={
-              multiple
-                ? Array.isArray(value)
-                  ? value.join(',')
-                  : ''
-                : (value as string) || ''
+      },
+      onStateChange({
+        inputValue: newInputValue,
+        type,
+        selectedItem: newSelectedItem
+      }) {
+        switch (type) {
+          case useCombobox.stateChangeTypes.InputKeyDownEnter:
+          case useCombobox.stateChangeTypes.ItemClick:
+          case useCombobox.stateChangeTypes.InputBlur:
+            if (newSelectedItem) {
+              const newItems = [...selectedItems, newSelectedItem];
+              setSelectedItems(newItems);
+              onChange(newItems.map((item) => item.value));
+              setInputValue('');
             }
-          />
-        )}
+            break;
 
-        {/* Icons - always on the right */}
-        <div className="w-full flex items-center justify-end gap-0.5">
-          {showClearButton && (
-            <button
-              type="button"
-              onClick={handleClearAll}
-              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-              tabIndex={-1}
-            >
-              <XMarkIcon className="w-4 h-4 text-gray-400 hover:text-gray-600" />
-            </button>
+          case useCombobox.stateChangeTypes.InputChange:
+            setInputValue(newInputValue || '');
+
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+    return (
+      <div className="w-full relative">
+        <div
+          tabIndex={0}
+          className={clsx(
+            'bg-white w-full flex gap-2 items-center p-1.5 border rounded-sm transition-colors outline-none',
+            'border-gray-300', // default border
+            'hover:border-gray-400', // border color on hover
+            'focus:border-logo-orange focus:outline-logo-orange focus:outline-2 focus:outline-offset-[-2px]',
+            'min-h-10' // match the height of other inputs (e.g., input, select ~48px = h-12)
           )}
-          <button
-            type="button"
-            onClick={() => setOpen(!open)}
-            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-            tabIndex={-1}
-          >
-            <ChevronDownIcon
-              className={`w-4 h-4 text-gray-400 transition-all ${
-                open ? 'rotate-180 text-gray-600' : ''
-              }`}
-            />
-          </button>
-        </div>
-      </div>
-
-      {/* Dropdown */}
-      {open && !disabled && (
-        <ul
-          ref={listRef}
-          className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-auto py-1"
-          style={{
-            boxShadow:
-              '0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08)'
-          }}
         >
-          {loading ? (
-            <li className="px-4 py-2.5 text-sm text-gray-500 text-center">
-              <span className="loading loading-spinner loading-sm mr-2"></span>
-              Loading...
-            </li>
-          ) : filteredOptions.length === 0 ? (
-            <li className="px-4 py-2.5 text-sm text-gray-500 text-center">
-              {emptyMessage}
-            </li>
-          ) : (
-            filteredOptions.map((option, index) => {
-              const isSelected = selectedOptions.some(
-                (sel) => sel.value === option.value
-              );
-              const isFocused = index === focusedIndex;
-
+          <div className="gap-2 grow flex-wrap flex">
+            {selectedItems.map((selectedItemForRender, index) => {
               return (
-                <li
-                  key={String(option.value)}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    handleOptionClick(option);
-                  }}
-                  onMouseEnter={() => setFocusedIndex(index)}
-                  onMouseLeave={() => setFocusedIndex(-1)}
-                  className={`px-4 py-2.5 text-sm cursor-pointer transition-all duration-150 ${
-                    isFocused
-                      ? 'bg-logo-orange-border text-white'
-                      : isSelected
-                      ? 'bg-logo-orange-border/10 text-logo-orange-border font-medium'
-                      : 'hover:bg-gray-50 text-gray-700'
-                  } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                <span
+                  className="bg-gray-100 rounded-md px-1 focus:bg-red-400"
+                  key={`selected-item-${index}`}
+                  {...getSelectedItemProps({
+                    selectedItem: selectedItemForRender,
+                    index
+                  })}
                 >
-                  {option.label}
-                </li>
+                  {selectedItemForRender.label}
+                  <span
+                    className="px-1 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeSelectedItem(selectedItemForRender);
+                    }}
+                  >
+                    &#10005;
+                  </span>
+                </span>
               );
-            })
-          )}
+            })}
+            <input
+              className="grow outline-none"
+              placeholder={placeholder}
+              {...getInputProps(getDropdownProps({ preventKeyAction: isOpen }))}
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              aria-label="toggle menu"
+              className="px-2 shrink-0"
+              type="button"
+              {...getToggleButtonProps()}
+            >
+              &#8595;
+            </button>
+          </div>
+        </div>
+        <ul
+          className={`absolute w-full bg-white mt-1 shadow-md max-h-80 overflow-scroll p-0 z-10 ${
+            !(isOpen && items.length) && 'hidden'
+          }`}
+          {...getMenuProps()}
+        >
+          {isOpen &&
+            items.map((item, index) => (
+              <li
+                className={clsx(
+                  highlightedIndex === index && 'bg-blue-300',
+                  selectedItem === item && 'font-bold',
+                  'py-2 px-3 shadow-sm flex flex-col'
+                )}
+                key={`${item.value}${index}`}
+                {...getItemProps({ item, index })}
+              >
+                <span>{item.label}</span>
+              </li>
+            ))}
         </ul>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+  return <MultipleComboBox />;
 }

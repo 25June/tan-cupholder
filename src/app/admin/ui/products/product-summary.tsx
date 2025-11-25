@@ -49,11 +49,15 @@ function Card({
             </button>
           )}
         </div>
-        <p
-          className={`${lusitana.className} text-2xl px-4 py-8 w-full text-center bg-white rounded-xl`}
-        >
-          {isLoading ? <Spinner /> : displayValue}
-        </p>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <p
+            className={`${lusitana.className} text-2xl px-4 py-8 w-full text-center bg-white rounded-xl`}
+          >
+            {displayValue}
+          </p>
+        )}
       </div>
     </div>
   );
