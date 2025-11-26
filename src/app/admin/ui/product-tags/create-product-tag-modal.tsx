@@ -35,7 +35,6 @@ export default function CreateProductTagModal() {
         }
         onCloseModal(MODAL_ID.ADD_PRODUCT_TAG);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({ message: error.message, errors: error.errors });

@@ -62,7 +62,6 @@ export default function DeleteProductModal({
     try {
       await deleteProduct(idToDelete);
       onCloseModal(MODAL_ID.DELETE_PRODUCT);
-      window.location.reload();
     } catch (error) {
       console.error('Failed to delete product:', error);
     } finally {

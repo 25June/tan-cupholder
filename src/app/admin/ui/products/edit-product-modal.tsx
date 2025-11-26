@@ -148,7 +148,6 @@ export default function EditProductModal({
         }
         onCloseModal(MODAL_ID.UPDATE_PRODUCT);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

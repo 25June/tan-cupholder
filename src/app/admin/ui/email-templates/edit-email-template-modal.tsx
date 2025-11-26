@@ -110,7 +110,6 @@ export default function EditEmailTemplateModal({
         }
         onCloseModal(MODAL_ID.UPDATE_EMAIL_TEMPLATE);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

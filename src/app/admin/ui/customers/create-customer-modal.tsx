@@ -41,7 +41,6 @@ export default function CreateCustomerModal() {
         }
         onCloseModal(MODAL_ID.ADD_CUSTOMER);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

@@ -56,7 +56,6 @@ export default function DeleteUserModal({ userId }: { userId: string | null }) {
     try {
       await deleteUser(idToDelete);
       onCloseModal(MODAL_ID.DELETE_USER);
-      window.location.reload();
     } catch (error) {
       console.error('Failed to delete user:', error);
     } finally {

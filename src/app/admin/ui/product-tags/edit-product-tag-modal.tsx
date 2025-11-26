@@ -101,7 +101,6 @@ export default function EditProductTagModal({
         }
         onCloseModal(MODAL_ID.UPDATE_PRODUCT_TAG);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({ message: error.message, errors: error.errors });

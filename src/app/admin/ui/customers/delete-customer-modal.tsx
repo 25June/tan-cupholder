@@ -62,7 +62,6 @@ export default function DeleteCustomerModal({
     try {
       await deleteCustomer(idToDelete);
       onCloseModal(MODAL_ID.DELETE_CUSTOMER);
-      window.location.reload();
     } catch (error) {
       console.error('Failed to delete customer:', error);
     } finally {

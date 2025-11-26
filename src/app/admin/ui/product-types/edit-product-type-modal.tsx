@@ -99,7 +99,6 @@ export default function EditProductTypeModal({
         }
         onCloseModal(MODAL_ID.UPDATE_PRODUCT_TYPE);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

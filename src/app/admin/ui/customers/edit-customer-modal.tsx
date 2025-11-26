@@ -99,7 +99,6 @@ export default function EditCustomerModal({
         }
         onCloseModal(MODAL_ID.UPDATE_CUSTOMER);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

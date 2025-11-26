@@ -95,7 +95,6 @@ export default function EditUserModal({ userId }: { userId: string | null }) {
         }
         onCloseModal(MODAL_ID.UPDATE_USER);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

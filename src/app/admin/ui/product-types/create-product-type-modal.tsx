@@ -35,7 +35,6 @@ export default function CreateProductTypeModal() {
         }
         onCloseModal(MODAL_ID.ADD_PRODUCT_TYPE);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

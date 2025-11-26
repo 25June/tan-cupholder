@@ -35,33 +35,39 @@ export default function CreateProductModal({
       return Promise.resolve();
     }
     setIsLoading(true);
-    const newUploadImage: Record<string, boolean> = {};
-    const promises = uploadImages.map((image, index) => {
-      const newFormData = new FormData();
-      newFormData.append('name', image.name);
-      newFormData.append('type', image.type);
-      newFormData.append('productId', productId);
-      newUploadImage[image.name] = false;
-      if (index === 0) {
-        newFormData.append('isMain', 'true');
-      } else {
-        newFormData.append('isMain', 'false');
-      }
-      return createImage(initialState, newFormData)
-        .then((res) => {
-          setPresignedUrlObject((prev) => ({
-            ...prev,
-            [image.name]: res?.['presignedUrl'] || ''
-          }));
-        })
-        .catch((error) => {
-          setState({
-            message: error.message,
-            errors: error.errors
+    try {
+      const newUploadImage: Record<string, boolean> = {};
+      const promises = uploadImages.map((image, index) => {
+        const newFormData = new FormData();
+        newFormData.append('name', image.name);
+        newFormData.append('type', image.type);
+        newFormData.append('productId', productId);
+        newUploadImage[image.name] = false;
+        if (index === 0) {
+          newFormData.append('isMain', 'true');
+        } else {
+          newFormData.append('isMain', 'false');
+        }
+        return createImage(initialState, newFormData)
+          .then((res) => {
+            setPresignedUrlObject((prev) => ({
+              ...prev,
+              [image.name]: res?.['presignedUrl'] || ''
+            }));
+          })
+          .catch((error) => {
+            setState({
+              message: error.message,
+              errors: error.errors
+            });
           });
-        });
-    });
-    return Promise.all(promises).finally(() => setIsLoading(false));
+      });
+      await Promise.all(promises);
+    } catch (error) {
+      console.error('Error uploading images:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -87,18 +93,14 @@ export default function CreateProductModal({
           return;
         }
         const productId = res?.['id'] || '';
-        onUpload(productId)
-          .then(() => {
-            onCloseModal(MODAL_ID.ADD_PRODUCT);
-            setState(initialState);
-            setTagIds([]);
-            setUploadImages([]);
-            setPresignedUrlObject({});
-            window.location.reload();
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
+        onUpload(productId).then(() => {
+          setState(initialState);
+          setTagIds([]);
+          setUploadImages([]);
+          setPresignedUrlObject({});
+          onCloseModal(MODAL_ID.ADD_PRODUCT);
+          setIsLoading(false);
+        });
       })
       .catch((error) => {
         setState({

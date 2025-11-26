@@ -30,7 +30,6 @@ export default function CreateUserModal() {
         }
         onCloseModal(MODAL_ID.ADD_USER);
         setState(initialState);
-        window.location.reload();
       })
       .catch((error) => {
         setState({

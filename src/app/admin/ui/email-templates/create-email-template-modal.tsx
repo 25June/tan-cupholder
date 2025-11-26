@@ -39,7 +39,6 @@ export default function CreateEmailTemplateModal() {
         onCloseModal(MODAL_ID.ADD_EMAIL_TEMPLATE);
         setState(initialState);
         setMainContent('');
-        window.location.reload();
       })
       .catch((error) => {
         setState({

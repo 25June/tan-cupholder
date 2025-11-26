@@ -62,7 +62,6 @@ export default function DeleteProductTagModal({
     try {
       await deleteProductTag(idToDelete);
       onCloseModal(MODAL_ID.DELETE_PRODUCT_TAG);
-      window.location.reload();
     } catch (error) {
       console.error('Failed to delete product tag:', error);
     } finally {

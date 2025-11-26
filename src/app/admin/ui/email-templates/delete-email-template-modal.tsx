@@ -62,7 +62,6 @@ export default function DeleteEmailTemplateModal({
     try {
       await deleteEmailTemplate(idToDelete);
       onCloseModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
-      window.location.reload();
     } catch (error) {
       console.error('Failed to delete email template:', error);
     } finally {

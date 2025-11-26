@@ -65,7 +65,6 @@ export default function CreateFeatureImageModal() {
       setPresignedUrlObject({});
       setInputKey((prev) => prev + 1);
       setState(initialState);
-      window.location.reload();
     }
   }, [imageUploadCompleted]);
 
