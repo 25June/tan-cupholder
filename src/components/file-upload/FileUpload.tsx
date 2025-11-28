@@ -6,6 +6,7 @@ import {
   useState
 } from 'react';
 import { uploadMedia } from '@/shared/utils/uploadMedia';
+import { debounce } from '@/shared/utils/debounce';
 
 interface Props {
   image: File;
@@ -29,8 +30,10 @@ export default function FileUpload({
       console.error('No presigned url');
       return;
     }
-    return uploadMedia(image, presignedUrl, (progress: number) =>
-      setProgress(progress)
+    return uploadMedia(
+      image,
+      presignedUrl,
+      debounce((progress: number) => setProgress(progress), 200)
     );
   }, []);
 
@@ -41,9 +44,12 @@ export default function FileUpload({
   }, [image, presignedUrl, onUpload]);
 
   useEffect(() => {
-    if (progress === 100) {
-      setImageUploadCompleted((prev) => ({ ...prev, [image.name]: true }));
-    }
+    const id = setTimeout(() => {
+      if (progress === 100) {
+        setImageUploadCompleted((prev) => ({ ...prev, [image.name]: true }));
+      }
+    }, 200);
+    return () => clearTimeout(id);
   }, [progress]);
 
   return (

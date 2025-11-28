@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import Image from 'next/image';
 import { ProductResponse } from '@/models/product';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
@@ -10,6 +10,49 @@ import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
 import { ProductTag } from '@/models/productTag';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 import SimpleDropdown from '@/components/simple-dropdown/simple-downdown';
+
+const ActionDropdown = memo(({ product }: { product: ProductResponse }) => {
+  return (
+    <div className="flex justify-end items-center">
+      <SimpleDropdown
+        host={
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-sm btn-ghost btn-circle"
+          >
+            <EllipsisVerticalIcon className="w-5" />
+          </div>
+        }
+        content={
+          <>
+            <li>
+              <UpdateImage id={product.id} />
+            </li>
+            <li>
+              <UpdateProduct
+                id={product.id}
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  description: product.description,
+                  price: product.price,
+                  sale: product.sale,
+                  stock: product.stock,
+                  type: product.type,
+                  tagIds: product.tagIds
+                }}
+              />
+            </li>
+            <li>
+              <DeleteProduct id={product.id} />
+            </li>
+          </>
+        }
+      />
+    </div>
+  );
+});
 
 export default function ProductsTable({
   products,
@@ -96,46 +139,7 @@ export default function ProductsTable({
       data={products}
       columns={columns}
       keyExtractor={(product) => product.id}
-      actions={(product, index) => (
-        <div className="flex justify-end items-center">
-          <SimpleDropdown
-            host={
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-sm btn-ghost btn-circle"
-              >
-                <EllipsisVerticalIcon className="w-5" />
-              </div>
-            }
-            content={
-              <>
-                <li>
-                  <UpdateImage id={product.id} />
-                </li>
-                <li>
-                  <UpdateProduct
-                    id={product.id}
-                    product={{
-                      id: product.id,
-                      name: product.name,
-                      description: product.description,
-                      price: product.price,
-                      sale: product.sale,
-                      stock: product.stock,
-                      type: product.type,
-                      tagIds: product.tagIds
-                    }}
-                  />
-                </li>
-                <li>
-                  <DeleteProduct id={product.id} />
-                </li>
-              </>
-            }
-          />
-        </div>
-      )}
+      actions={(product, index) => <ActionDropdown product={product} />}
       emptyMessage="No products found"
       loading={loading}
     />

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { MODAL_ID } from '@/constants/modal.const';
 import { onCloseModal } from '@/shared/utils/modal.utils';
-import { getInvoiceWithOrder } from '@/app/admin/lib/invoice-actions';
+import { getInvoiceWithOrder } from '@/app/admin/lib/actions/invoices.actions';
 import { formatCurrency, formatDateToLocal } from '@/app/admin/lib/utils';
 import Spinner from '@/components/spinner/Spinner';
 

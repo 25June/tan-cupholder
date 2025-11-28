@@ -9,7 +9,7 @@ import { lusitana } from '@/app/admin/ui/fonts';
 import {
   getFilteredInvoices,
   getInvoicesPages
-} from '@/app/admin/lib/invoice-actions';
+} from '@/app/admin/lib/actions/invoices.actions';
 import { InvoicesTable as InvoiceType } from '@/app/admin/lib/definitions';
 import CreateInvoiceModal from '@/app/admin/ui/invoices/create-invoice-modal';
 import DeleteInvoiceModal from '@/app/admin/ui/invoices/delete-invoice-modal';

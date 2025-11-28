@@ -142,9 +142,19 @@ export async function updateProduct(prevState: State, formData: FormData) {
 export async function deleteProduct(id: string) {
   try {
     await sql`DELETE FROM images WHERE product_id = ${id}`;
+    console.log('Deleted product images');
+
+    // check if product tag mappings exists
+    const productTagMappings =
+      await sql`SELECT * FROM product_tag_mappings WHERE product_id = ${id}`;
+    if (productTagMappings.length > 0) {
+      await sql`DELETE FROM product_tag_mappings WHERE product_id = ${id}`;
+      console.log('Deleted product tag mappings');
+    }
     await sql`DELETE FROM products WHERE id = ${id}`;
-    await sql`DELETE FROM product_tag_mappings WHERE product_id = ${id}`;
+    console.log('Deleted product');
     await batchRemoveImages(id);
+    console.log('Deleted images media');
   } catch (error) {
     console.error('Database Error:', error);
   }

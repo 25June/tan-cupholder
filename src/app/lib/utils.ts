@@ -1,10 +1,11 @@
 import { Revenue } from './definitions';
 
 export const formatCurrency = (amount: number) => {
-  return (amount / 100).toLocaleString('en-US', {
+  return new Intl.NumberFormat('it-IT', {
     style: 'currency',
-    currency: 'USD'
-  });
+    currency: 'VND',
+    minimumFractionDigits: 0
+  }).format(amount);
 };
 
 export const formatDateToLocal = (

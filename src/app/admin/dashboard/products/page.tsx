@@ -111,7 +111,7 @@ export default function Page() {
       <ProductsTable
         products={products}
         productTypes={formattedProducts}
-        productTags={productTags || []}
+        productTags={productTags}
         loading={isLoading}
       />
       <div className="mt-5 flex w-full justify-center">

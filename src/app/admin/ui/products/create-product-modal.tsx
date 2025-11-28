@@ -1,13 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { createProduct, State } from '@/app/admin/lib/actions/products.actions';
-import { BoltIcon, PhotoIcon, TagIcon } from '@heroicons/react/24/outline';
+import { BoltIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import FileUpload from '@/components/file-upload/FileUpload';
 import { createImage } from '../../lib/actions/images.actions';
 import { ProductType } from '@/models/productType';
-import { useGenerateProductDescription } from '@/hooks/useGenerateProductDescription';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import { ProductTag } from '@/models/productTag';
@@ -28,21 +27,20 @@ export default function CreateProductModal({
   const [presignedUrlObject, setPresignedUrlObject] = useState<
     Record<string, string>
   >({});
-  const { generateDescription, loading } = useGenerateProductDescription();
+  const [imageUploadCompleted, setImageUploadCompleted] = useState<
+    Record<string, boolean>
+  >({});
 
   const onUpload = async (productId: string) => {
     if (!uploadImages.length) {
       return Promise.resolve();
     }
-    setIsLoading(true);
     try {
-      const newUploadImage: Record<string, boolean> = {};
       const promises = uploadImages.map((image, index) => {
         const newFormData = new FormData();
         newFormData.append('name', image.name);
         newFormData.append('type', image.type);
         newFormData.append('productId', productId);
-        newUploadImage[image.name] = false;
         if (index === 0) {
           newFormData.append('isMain', 'true');
         } else {
@@ -50,10 +48,10 @@ export default function CreateProductModal({
         }
         return createImage(initialState, newFormData)
           .then((res) => {
-            setPresignedUrlObject((prev) => ({
-              ...prev,
-              [image.name]: res?.['presignedUrl'] || ''
-            }));
+            return {
+              name: image.name,
+              url: res?.['presignedUrl'] || ''
+            };
           })
           .catch((error) => {
             setState({
@@ -62,53 +60,77 @@ export default function CreateProductModal({
             });
           });
       });
-      await Promise.all(promises);
+      const results = await Promise.all(promises);
+      const urlsObject = results.reduce((acc, { name, url }: any) => {
+        return {
+          ...acc,
+          [name]: url
+        };
+      }, {} as Record<string, string>);
+      setImageUploadCompleted(
+        results.reduce((acc, { name }: any) => {
+          return {
+            ...acc,
+            [name]: false
+          };
+        }, {} as Record<string, boolean>)
+      );
+      setPresignedUrlObject(urlsObject);
     } catch (error) {
       console.error('Error uploading images:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      if (
+        Object.values(imageUploadCompleted).every((value) => value === true)
+      ) {
+        setIsLoading(false);
+        handleClose();
+      }
+    }, 500);
+    return () => clearTimeout(id);
+  }, [imageUploadCompleted]);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     setIsLoading(true);
-    const newFormData = new FormData();
-    newFormData.append('name', formData.get('name') as string);
-    newFormData.append('price', formData.get('price') as string);
-    newFormData.append('type', formData.get('type') as string);
-    newFormData.append('sale', formData.get('sale') as string);
-    newFormData.append('stock', formData.get('stock') as string);
-    newFormData.append('description', formData.get('description') as string);
-    newFormData.append('tagIds', tagIds.join(','));
-    return createProduct(initialState, newFormData)
-      .then((res) => {
-        if (res.errors) {
-          setState({
-            message: res.message,
-            errors: res.errors
-          });
-          setIsLoading(false);
-          return;
-        }
-        const productId = res?.['id'] || '';
-        onUpload(productId).then(() => {
-          setState(initialState);
-          setTagIds([]);
-          setUploadImages([]);
-          setPresignedUrlObject({});
-          onCloseModal(MODAL_ID.ADD_PRODUCT);
-          setIsLoading(false);
-        });
-      })
-      .catch((error) => {
+
+    try {
+      const newFormData = new FormData();
+      newFormData.append('name', formData.get('name') as string);
+      newFormData.append('price', formData.get('price') as string);
+      newFormData.append('type', formData.get('type') as string);
+      newFormData.append('sale', formData.get('sale') as string);
+      newFormData.append('stock', formData.get('stock') as string);
+      newFormData.append('description', formData.get('description') as string);
+      newFormData.append('tagIds', productTags.map((tag) => tag.id).join(','));
+
+      const res = await createProduct(initialState, newFormData);
+
+      if (res.errors) {
         setState({
-          message: error.message,
-          errors: error.errors
+          message: res.message,
+          errors: res.errors
         });
         setIsLoading(false);
+        return;
+      }
+
+      const productId = res?.['id'] || '';
+
+      if (uploadImages.length) {
+        await onUpload(productId);
+      }
+    } catch (error: any) {
+      console.error('Error submitting form:', error);
+      setState({
+        message: error.message || 'Failed to create product',
+        errors: error.errors || {}
       });
+    }
   };
 
   const onSelectImages = (files: FileList) => {
@@ -123,6 +145,17 @@ export default function CreateProductModal({
     setPresignedUrlObject({});
   };
 
+  const productTagOptions = useMemo(() => {
+    return productTags.map((tag) => ({
+      value: tag.id,
+      label: tag.name
+    }));
+  }, [productTags]);
+
+  const handleTagChange = useCallback((values: string[]) => {
+    setTagIds(values);
+  }, []);
+  console.log('imageUploadCompleted', imageUploadCompleted);
   return (
     <dialog id={MODAL_ID.ADD_PRODUCT} className="modal">
       <div className="modal-box max-w-4xl">
@@ -246,14 +279,9 @@ export default function CreateProductModal({
                   <fieldset className="fieldset grow w-full">
                     <legend className="fieldset-legend">Tag</legend>
                     <AutoComplete<string>
-                      options={(productTags || []).map((tag) => ({
-                        value: tag.id,
-                        label: tag.name
-                      }))}
-                      value={tagIds}
-                      onChange={(value) => {
-                        setTagIds(value);
-                      }}
+                      key={productTagOptions.length}
+                      options={productTagOptions}
+                      onChange={handleTagChange}
                       placeholder="Select tags"
                     />
 
@@ -276,22 +304,6 @@ export default function CreateProductModal({
                 <fieldset className="fieldset">
                   <div className="flex justify-between items-center">
                     <legend className="fieldset-legend">Description</legend>
-                    <button
-                      type="button"
-                      className="btn btn-ghost btn-sm btn-circle"
-                      onClick={() =>
-                        uploadImages[0] &&
-                        generateDescription(uploadImages[0] as File)
-                      }
-                      disabled={loading}
-                    >
-                      {loading && (
-                        <span className="loading loading-spinner"></span>
-                      )}
-                      {!loading && (
-                        <BoltIcon className="w-4 h-4 text-logo-orange" />
-                      )}
-                    </button>
                   </div>
                   <textarea
                     name="description"
@@ -347,7 +359,7 @@ export default function CreateProductModal({
                             presignedUrl={
                               presignedUrlObject[uploadImage.name] || ''
                             }
-                            setImageUploadCompleted={() => console.log('done')}
+                            setImageUploadCompleted={setImageUploadCompleted}
                           />
                         </div>
                       ))}

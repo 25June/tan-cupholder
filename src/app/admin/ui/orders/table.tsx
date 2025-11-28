@@ -91,16 +91,18 @@ export default function OrdersTable({
       columns={columns}
       keyExtractor={(order) => order.id}
       actions={(order) => (
-        <Link
-          href={`/admin/dashboard/orders/${order.id}`}
-          prefetch={true}
-          className="rounded-md bg-logo-orange-border px-3 py-2 text-sm font-medium text-white hover:bg-logo-orange-border/90 transition-colors duration-200"
-        >
-          <span className="flex items-center gap-1">
-            <EyeIcon className="w-4 h-4" />
-            View Detail
-          </span>
-        </Link>
+        <div className="flex justify-end items-center gap-1">
+          <Link
+            href={`/admin/dashboard/orders/${order.id}`}
+            prefetch={true}
+            className="rounded-md bg-logo-orange-border px-3 py-2 text-sm font-medium text-white hover:bg-logo-orange-border/90 transition-colors duration-200"
+          >
+            <span className="flex items-center gap-1">
+              <EyeIcon className="w-4 h-4" />
+              View Detail
+            </span>
+          </Link>
+        </div>
       )}
       emptyMessage="No orders found"
       loading={loading}
