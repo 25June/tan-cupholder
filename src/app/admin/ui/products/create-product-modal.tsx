@@ -96,7 +96,7 @@ export default function CreateProductModal({
       newFormData.append('sale', formData.get('sale') as string);
       newFormData.append('stock', formData.get('stock') as string);
       newFormData.append('description', formData.get('description') as string);
-      newFormData.append('tagIds', productTags.map((tag) => tag.id).join(','));
+      newFormData.append('tagIds', tagIds.join(','));
 
       const res = await createProduct(initialState, newFormData);
 
@@ -149,7 +149,7 @@ export default function CreateProductModal({
   const handleTagChange = useCallback((values: string[]) => {
     setTagIds(values);
   }, []);
-  console.log('imageUploadCompleted', imageUploadCompleted);
+
   return (
     <dialog id={MODAL_ID.ADD_PRODUCT} className="modal">
       <div className="modal-box max-w-4xl">

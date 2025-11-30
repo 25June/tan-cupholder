@@ -11,7 +11,6 @@ const SimpleDropdown = ({ host, content }: Props) => {
   const randomId = uuidv4();
   const popoverId = `simple-dropdown-${randomId}`;
   const anchorName = `--anchor-simple-dropdown-${randomId}`;
-  console.log(popoverId, anchorName);
   return (
     <>
       <button
