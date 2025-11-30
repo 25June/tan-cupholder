@@ -1,7 +1,7 @@
 import { Revenue } from './definitions';
 
 export const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('it-IT', {
+  return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
     minimumFractionDigits: 0

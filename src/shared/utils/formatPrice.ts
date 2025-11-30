@@ -4,7 +4,7 @@ export function formatPrice(
   noSymbol: boolean = false
 ) {
   if (noSymbol) {
-    return new Intl.NumberFormat('it-IT', {
+    return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
       currency: 'VND',
       minimumFractionDigits: 0
@@ -17,14 +17,14 @@ export function formatPrice(
       minimumFractionDigits: 0
     }).format(price);
   }
-  return new Intl.NumberFormat('it-IT', {
+  return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND'
   }).format(price);
 }
 
 export function formatPriceWithoutSymbol(price: number) {
-  return new Intl.NumberFormat('it-IT', {
+  return new Intl.NumberFormat('vi-VN', {
     style: 'decimal',
     minimumFractionDigits: 0
   }).format(price);
