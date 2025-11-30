@@ -15,10 +15,10 @@
     "ProductSliderSection": {
       "title": "Thân thiện môi trường",
       "subtitle": "Bộ sưu tập ít tác động",
-      "allProducts": "Tất cả sản phẩm",
-      "new": "Sản phẩm mới nhất",
-      "bestSeller": "Bán chạy nhất",
-      "featured": "Sản phẩm nổi bật"
+      "all": "Tất cả",
+      "new": "Mới",
+      "bestSeller": "Bán chạy",
+      "featured": "Nổi bật"
     },
     "FaqSection": {
       "title": "Những câu hỏi thường gặp",
