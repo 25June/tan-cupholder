@@ -203,14 +203,14 @@ export async function fetchProductById(id: string) {
       SELECT * FROM product_types WHERE id = ${product[0].type}
     `;
 
-    const tagIds = await sql<ProductTag[]>`
+    const tagMappings = await sql<{ tag_id: string }[]>`
       SELECT tag_id FROM product_tag_mappings WHERE product_id = ${id}
     `;
 
     return {
       product: {
         ...product[0],
-        tagIds: tagIds || []
+        tagIds: (tagMappings || []).map(({ tag_id }) => tag_id)
       },
       images: images || [],
       productType: productType[0]
