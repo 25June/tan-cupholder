@@ -129,7 +129,7 @@ export async function createProductType(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/admin/dashboard/product-types');
-  return { message: 'Product type updated successfully.' };
+  return { message: 'Product type created successfully.' };
 }
 
 export async function updateProductType(prevState: State, formData: FormData) {

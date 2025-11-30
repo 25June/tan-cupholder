@@ -45,7 +45,7 @@ export async function createInvoice(orderId: string) {
     const orders = await sql<OrderDetail[]>`
       SELECT * FROM orders WHERE id = ${orderId}
     `;
-    if (!orders) {
+    if (!orders || orders.length === 0) {
       return { message: 'Order not found' };
     }
     const order = orders[0];

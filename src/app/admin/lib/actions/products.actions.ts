@@ -210,7 +210,7 @@ export async function fetchProductById(id: string) {
     return {
       product: {
         ...product[0],
-        tagIds: tagIds.length > 0 ? tagIds.map((tag) => tag.id) : []
+        tagIds: tagIds || []
       },
       images: images || [],
       productType: productType[0]
