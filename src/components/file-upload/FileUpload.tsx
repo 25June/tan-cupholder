@@ -6,6 +6,7 @@ import {
   useState
 } from 'react';
 import { uploadMedia } from '@/shared/utils/uploadMedia';
+import { throttle } from '@/shared/utils/debounce';
 
 interface Props {
   image: File;
@@ -29,22 +30,20 @@ export default function FileUpload({
       console.error('No presigned url');
       return;
     }
-    return uploadMedia(image, presignedUrl, (progress: number) =>
-      setProgress(progress)
+    return uploadMedia(
+      image,
+      presignedUrl,
+      throttle((progress: number) => setProgress(progress), 200)
     );
   }, []);
 
   useEffect(() => {
     if (image && presignedUrl) {
-      onUpload(presignedUrl, image);
+      onUpload(presignedUrl, image)?.then(() => {
+        setImageUploadCompleted((prev) => ({ ...prev, [image.name]: true }));
+      });
     }
   }, [image, presignedUrl, onUpload]);
-
-  useEffect(() => {
-    if (progress === 100) {
-      setImageUploadCompleted((prev) => ({ ...prev, [image.name]: true }));
-    }
-  }, [progress]);
 
   return (
     <div

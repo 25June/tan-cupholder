@@ -49,5 +49,6 @@ export interface ProductResponse {
   sale: number;
   stock: number;
   type: string;
+  tagIds: string[];
   product_image: ProductImage;
 }

@@ -96,6 +96,8 @@ export async function fetchFilteredInvoices(
     const invoices = await sql<InvoicesTable[]>`
       SELECT
         invoices.id,
+        invoices.order_id,
+        invoices.customer_id,
         invoices.amount,
         invoices.date,
         invoices.status,
@@ -109,7 +111,8 @@ export async function fetchFilteredInvoices(
         customers.email ILIKE ${`%${query}%`} OR
         invoices.amount::text ILIKE ${`%${query}%`} OR
         invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
+        invoices.status ILIKE ${`%${query}%`} OR
+        invoices.order_id::text ILIKE ${`%${query}%`}
       ORDER BY invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
@@ -147,6 +150,7 @@ export async function fetchInvoiceById(id: string) {
     const data = await sql<InvoiceForm[]>`
       SELECT
         invoices.id,
+        invoices.order_id,
         invoices.customer_id,
         invoices.amount,
         invoices.status
@@ -166,6 +170,8 @@ export async function fetchInvoiceById(id: string) {
     throw new Error('Failed to fetch invoice.');
   }
 }
+
+// Fetch invoice with order details
 
 export async function fetchCustomers() {
   try {

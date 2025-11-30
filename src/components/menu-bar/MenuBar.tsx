@@ -12,26 +12,26 @@ export function MenuBar() {
   const t = useTranslations('Menu');
 
   useEffect(() => {
-    const handleScroll = (e: Event) => {
-      const element = (e.target as Document).scrollingElement;
-      const clientHeight = element?.clientHeight || 0;
-      const scrollTop = element?.scrollTop || 0;
-      const scrollHeight = element?.scrollHeight || 0;
-      const result = Math.round(
-        (scrollTop / (scrollHeight - clientHeight)) * 100
-      );
-      const scrollElement = document.getElementById('scroll-indicator');
-      if (scrollElement) {
-        scrollElement.style.setProperty(
-          'transform',
-          `translateX(-${100 - result}%)`
-        );
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
+    // const handleScroll = (e: Event) => {
+    //   const element = (e.target as Document).scrollingElement;
+    //   const clientHeight = element?.clientHeight || 0;
+    //   const scrollTop = element?.scrollTop || 0;
+    //   const scrollHeight = element?.scrollHeight || 0;
+    //   const result = Math.round(
+    //     (scrollTop / (scrollHeight - clientHeight)) * 100
+    //   );
+    //   const scrollElement = document.getElementById('scroll-indicator');
+    //   if (scrollElement) {
+    //     scrollElement.style.setProperty(
+    //       'transform',
+    //       `translateX(-${100 - result}%)`
+    //     );
+    //   }
+    // };
+    // window.addEventListener('scroll', handleScroll);
     onAddEvent();
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      // window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -82,24 +82,6 @@ export function MenuBar() {
     <div className="max-w-screen w-full mx-auto fixed top-2 md:top-5 z-50">
       <div className="max-w-[95vw] md:max-w-5xl rounded-3xl mx-auto bg-white overflow-hidden transition-shadow shadow-2xl">
         <div className="relative">
-          <motion.div
-            id="scroll-indicator"
-            style={{
-              width: '100%',
-              transform: 'translateX(-100%)',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 5,
-              originX: 0,
-              zIndex: 1,
-              borderBottomRightRadius: '5px',
-              borderTopRightRadius: '5px',
-              backgroundColor: '#f57722',
-              transition: 'transform 0.1s ease-in'
-            }}
-          />
           <div className="absolute hidden md:block right-4 top-2">
             <TranslateDropdown id={'2'} />
           </div>

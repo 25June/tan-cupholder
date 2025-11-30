@@ -6,6 +6,7 @@ import { useGetOrderProgress } from '@/hooks/useGetOrderProgress';
 import PageLoader from '@/components/page-loader/PageLoader';
 import { ORDER_STATUSES } from '@/constants/common';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import Image from 'next/image';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import { OrderProduct } from '@/models/order';
@@ -136,9 +137,11 @@ export default function OrderStatusPage() {
                         <Image
                           src={
                             productDetails?.image
-                              ? getImageUrl(
-                                  productDetails.id,
-                                  productDetails.image.name
+                              ? formatImagePath(
+                                  getImageUrl(
+                                    productDetails.id,
+                                    productDetails.image.name
+                                  )
                                 )
                               : '/cup.png'
                           }
@@ -182,7 +185,9 @@ export default function OrderStatusPage() {
                 >
                   <div className="h-20 w-16 rounded-lg overflow-hidden shrink-0">
                     <Image
-                      src={getImageUrl(product.id, product.product_image.name)}
+                      src={formatImagePath(
+                        getImageUrl(product.id, product.product_image.name)
+                      )}
                       alt={product.name}
                       width={300}
                       height={400}

@@ -5,6 +5,8 @@ import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { Order, OrderProduct } from '@/models/order';
 import { ProductCustom } from '@/models/product';
+import { createInvoice } from './invoices.actions';
+import { OrderStatus } from '@/constants/common';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -202,6 +204,11 @@ export async function updateOrderStatus(
       SET status = ${status}, updated_at = ${date}
       WHERE id = ${orderId}
     `;
+
+    // if Order status === confirmed, create invoice
+    if (status === OrderStatus.CONFIRMED) {
+      await createInvoice(orderId);
+    }
   } catch (error) {
     return { message: 'Database Error: Failed to Update Order Status.' };
   }

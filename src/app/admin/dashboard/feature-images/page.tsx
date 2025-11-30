@@ -11,6 +11,8 @@ import CreateFeatureImage, {
 import { FeatureImage } from '@/models/featureImage';
 import { useState } from 'react';
 import { XCircleIcon } from '@heroicons/react/24/outline';
+import CreateFeatureImageModal from '@/app/admin/ui/feature-images/create-feature-image-modal';
+import DeleteFeatureImagesModal from '@/app/admin/ui/feature-images/delete-feature-images-modal';
 
 export default function Page() {
   const {
@@ -20,7 +22,8 @@ export default function Page() {
     onGetNextPage,
     onSearch,
     totalCount,
-    onDelete
+    onDelete,
+    onRefresh
   } = useImageFeature();
   const [selectedImages, setSelectedImages] = useState<
     Record<string, FeatureImage | undefined>
@@ -35,13 +38,7 @@ export default function Page() {
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <SearchProducts onSearch={onSearch} />
         <CreateFeatureImage />
-        <DeleteFeatureImage
-          images={selectedImages}
-          callback={() => {
-            onDelete(Object.keys(selectedImages));
-            setSelectedImages({});
-          }}
-        />
+        <DeleteFeatureImage images={selectedImages} />
         {Object.values(selectedImages).length > 0 && (
           <button
             className="btn btn-square"
@@ -62,6 +59,15 @@ export default function Page() {
         onGetNextPage={onGetNextPage}
         isLoading={loading}
         isEnd={isEnd}
+      />
+      <CreateFeatureImageModal onRefresh={onRefresh} />
+      <DeleteFeatureImagesModal
+        selectedImages={selectedImages}
+        onRefresh={() => {
+          onDelete(Object.keys(selectedImages));
+          setSelectedImages({});
+          onRefresh();
+        }}
       />
     </main>
   );

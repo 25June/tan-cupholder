@@ -1,5 +1,27 @@
 export enum MODAL_ID {
   UPDATE_PRODUCT = 'update-product',
   ADD_PRODUCT = 'add-product',
-  VIEW_PRODUCT = 'view-product'
+  VIEW_PRODUCT = 'view-product',
+  DELETE_PRODUCT = 'delete-product',
+  UPDATE_PRODUCT_TYPE = 'update-product-type',
+  ADD_PRODUCT_TYPE = 'add-product-type',
+  DELETE_PRODUCT_TYPE = 'delete-product-type',
+  UPDATE_PRODUCT_TAG = 'update-product-tag',
+  ADD_PRODUCT_TAG = 'add-product-tag',
+  DELETE_PRODUCT_TAG = 'delete-product-tag',
+  UPDATE_CUSTOMER = 'update-customer',
+  ADD_CUSTOMER = 'add-customer',
+  DELETE_CUSTOMER = 'delete-customer',
+  UPDATE_USER = 'update-user',
+  ADD_USER = 'add-user',
+  DELETE_USER = 'delete-user',
+  UPDATE_EMAIL_TEMPLATE = 'update-email-template',
+  ADD_EMAIL_TEMPLATE = 'add-email-template',
+  DELETE_EMAIL_TEMPLATE = 'delete-email-template',
+  ADD_FEATURE_IMAGE = 'add-feature-image',
+  DELETE_FEATURE_IMAGES = 'delete-feature-images',
+  EDIT_PRODUCT_IMAGE = 'edit-product-image',
+  CREATE_INVOICE = 'create-invoice',
+  DELETE_INVOICE = 'delete-invoice',
+  VIEW_INVOICE = 'view-invoice'
 }

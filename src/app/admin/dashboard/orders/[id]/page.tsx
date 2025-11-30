@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { ProductCustom } from '@/models/product';
 import { OrderDetail } from '@/app/admin/lib/actions/orders.actions';
 import CopyButton from '@/components/copy-button/CopyButton';
@@ -318,9 +319,11 @@ export default async function OrderDetailPage({
                         <div className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden bg-gray-100">
                           {productDetails.image ? (
                             <Image
-                              src={getImageUrl(
-                                product.product_id,
-                                productDetails.image.name
+                              src={formatImagePath(
+                                getImageUrl(
+                                  product.product_id,
+                                  productDetails.image.name
+                                )
                               )}
                               alt={product.product_id}
                               width={48}

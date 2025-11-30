@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { yuseiMagic } from '@/styles/fonts';
 import { useTranslations } from 'next-intl';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 export const Faq = () => {
   const t = useTranslations('HomePage.FaqSection');
@@ -109,7 +110,7 @@ export const Faq = () => {
                 >
                   <motion.button
                     onClick={() => onClick(item.id)}
-                    className={`relative z-10 p-4 transition-all duration-300 flex justify-between justify-items-center border-logo-orange-border border-2 rounded-md border-solid w-full text-left cursor-pointer ${
+                    className={`relative z-10 p-4 transition-all duration-300 flex justify-between items-center justify-items-center border-logo-orange-border border-2 rounded-md border-solid w-full text-left cursor-pointer ${
                       item.opened
                         ? 'bg-logo-orange text-white'
                         : 'bg-white text-logo-text'
@@ -122,7 +123,11 @@ export const Faq = () => {
                     >
                       {item.title}
                     </p>
-                    <span>{item.opened ? 'Collapse' : 'Expand'}</span>
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform duration-300 transform ${
+                        item.opened ? 'rotate-0' : '-rotate-90'
+                      }`}
+                    />
                   </motion.button>
                   <div
                     className={`bg-white max-h-full overflow-hidden rounded-md relative -top-3 transition-all duration-300 ${

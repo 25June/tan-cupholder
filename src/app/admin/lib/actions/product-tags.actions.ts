@@ -3,7 +3,6 @@
 import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { ProductTag } from '@/models/productTag';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -135,7 +134,7 @@ export async function createProductTag(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/admin/dashboard/product-tags');
-  redirect('/admin/dashboard/product-tags');
+  return { message: 'Product tag created successfully.' };
 }
 
 export async function updateProductTag(prevState: State, formData: FormData) {
@@ -170,7 +169,7 @@ export async function updateProductTag(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/admin/dashboard/product-tags');
-  redirect('/admin/dashboard/product-tags');
+  return { message: 'Product tag updated successfully.' };
 }
 
 export async function deleteProductTag(id: string) {

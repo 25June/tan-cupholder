@@ -1,47 +1,67 @@
+'use client';
+
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import { deleteCustomer } from '@/app/admin/lib/actions/customers.action';
+import { onOpenModal } from '@/shared/utils/modal.utils';
+import { MODAL_ID } from '@/constants/modal.const';
 
 export function CreateCustomer() {
+  const handleClick = () => {
+    onOpenModal(MODAL_ID.ADD_CUSTOMER);
+  };
+
   return (
-    <Link
-      href="/admin/dashboard/customers/create"
-      prefetch={true}
+    <button
+      onClick={handleClick}
       className="flex h-10 items-center rounded-lg bg-logo-orange-border px-4 text-sm font-medium text-white transition-colors hover:bg-logo-orange-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-logo-orange-border"
     >
       <span className="hidden md:block">Create Customer</span>
       <PlusIcon className="h-5 md:ml-4" />
-    </Link>
+    </button>
   );
 }
 
-export function UpdateCustomer({ id }: { id: string }) {
-  return (
-    <Link
-      href={`/admin/dashboard/customers/${id}/edit`}
-      prefetch={true}
-      className="rounded-md border p-2 hover:bg-gray-100"
-    >
-      <PencilIcon className="w-5" />
-    </Link>
-  );
-}
-
-export function DeleteCustomer({ id }: { id: string }) {
-  const handleDeleteCustomer = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await deleteCustomer(id);
+export function UpdateCustomer({
+  id,
+  onSelectCustomer
+}: {
+  id: string;
+  onSelectCustomer: (id: string) => void;
+}) {
+  const handleClick = () => {
+    onSelectCustomer(id);
+    onOpenModal(MODAL_ID.UPDATE_CUSTOMER);
   };
 
   return (
-    <form onSubmit={handleDeleteCustomer}>
-      <button
-        type="submit"
-        className="rounded-md border border-red-400 p-2 bg-gray-100"
-      >
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5 text-red-500" />
-      </button>
-    </form>
+    <button
+      onClick={handleClick}
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <PencilIcon className="w-5" />
+    </button>
+  );
+}
+
+export function DeleteCustomer({
+  id,
+  onSelectCustomer
+}: {
+  id: string;
+  onSelectCustomer: (id: string) => void;
+}) {
+  const handleClick = () => {
+    onSelectCustomer(id);
+    onOpenModal(MODAL_ID.DELETE_CUSTOMER);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="rounded-md border p-2"
+    >
+      <span className="sr-only">Delete</span>
+      <TrashIcon className="w-5" />
+    </button>
   );
 }

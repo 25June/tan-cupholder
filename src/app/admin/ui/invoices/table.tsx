@@ -1,124 +1,83 @@
+'use client';
+
 import Image from 'next/image';
-import { UpdateInvoice, DeleteInvoice } from '@/app/admin/ui/invoices/buttons';
+import { ViewInvoice, DeleteInvoice } from '@/app/admin/ui/invoices/buttons';
 import InvoiceStatus from '@/app/admin/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/admin/lib/utils';
-import { fetchFilteredInvoices } from '@/app/admin/lib/data';
+import { InvoicesTable as InvoiceType } from '@/app/admin/lib/definitions';
+import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
+import { useMemo } from 'react';
 
-export default async function InvoicesTable({
-  query,
-  currentPage
+export default function InvoicesTable({
+  invoices,
+  onSelectInvoice,
+  loading = false
 }: {
-  query: string;
-  currentPage: number;
+  invoices: InvoiceType[];
+  onSelectInvoice: (id: string) => void;
+  loading?: boolean;
 }) {
-  const invoices = await fetchFilteredInvoices(query, currentPage);
+  // Define table columns
+  const columns: Column<InvoiceType>[] = useMemo(
+    () => [
+      {
+        header: 'Customer',
+        accessor: 'name',
+        headerClassName: 'px-4 py-5 font-medium sm:pl-6',
+        className: 'whitespace-nowrap py-3 pl-6 pr-3',
+        render: (invoice) => (
+          <div className="flex items-center gap-3">
+            <Image
+              src={invoice.image_url}
+              className="rounded-full"
+              width={28}
+              height={28}
+              alt={`${invoice.name}'s profile picture`}
+            />
+            <p>{invoice.name}</p>
+          </div>
+        )
+      },
+      {
+        header: 'Email',
+        accessor: 'email',
+        className: 'whitespace-nowrap px-3 py-3'
+      },
+      {
+        header: 'Amount',
+        accessor: 'amount',
+        className: 'whitespace-nowrap px-3 py-3',
+        render: (invoice) => formatCurrency(invoice.amount)
+      },
+      {
+        header: 'Date',
+        accessor: 'date',
+        className: 'whitespace-nowrap px-3 py-3',
+        render: (invoice) => formatDateToLocal(invoice.date)
+      },
+      {
+        header: 'Status',
+        accessor: 'status',
+        className: 'whitespace-nowrap px-3 py-3',
+        render: (invoice) => <InvoiceStatus status={invoice.status} />
+      }
+    ],
+    []
+  );
 
   return (
-    <div className="mt-6 flow-root">
-      <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="md:hidden">
-            {invoices?.map((invoice) => (
-              <div
-                key={invoice.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
-              >
-                <div className="flex items-center justify-between border-b pb-4">
-                  <div>
-                    <div className="mb-2 flex items-center">
-                      <Image
-                        src={invoice.image_url}
-                        className="mr-2 rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      />
-                      <p>{invoice.name}</p>
-                    </div>
-                    <p className="text-sm text-gray-500">{invoice.email}</p>
-                  </div>
-                  <InvoiceStatus status={invoice.status} />
-                </div>
-                <div className="flex w-full items-center justify-between pt-4">
-                  <div>
-                    <p className="text-xl font-medium">
-                      {formatCurrency(invoice.amount)}
-                    </p>
-                    <p>{formatDateToLocal(invoice.date)}</p>
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <UpdateInvoice id={invoice.id} />
-                    <DeleteInvoice id={invoice.id} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <table className="hidden min-w-full text-gray-900 md:table">
-            <thead className="rounded-lg text-left text-sm font-normal">
-              <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Email
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Date
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Status
-                </th>
-                <th scope="col" className="relative py-3 pl-6 pr-3">
-                  <span className="sr-only">Edit</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              {invoices?.map((invoice) => (
-                <tr
-                  key={invoice.id}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                >
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={invoice.image_url}
-                        className="rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      />
-                      <p>{invoice.name}</p>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {invoice.email}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(invoice.amount)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(invoice.date)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <InvoiceStatus status={invoice.status} />
-                  </td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={invoice.id} />
-                      <DeleteInvoice id={invoice.id} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <SimpleTable<InvoiceType>
+      data={invoices}
+      columns={columns}
+      keyExtractor={(invoice) => invoice.id}
+      loading={loading}
+      emptyMessage="No invoices found."
+      actions={(invoice) => (
+        <div className="flex justify-end items-center gap-1">
+          <ViewInvoice id={invoice.id} onSelect={onSelectInvoice} />
+          <DeleteInvoice id={invoice.id} onSelect={onSelectInvoice} />
         </div>
-      </div>
-    </div>
+      )}
+    />
   );
 }

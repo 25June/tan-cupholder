@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CheckCircleIcon,
   PencilIcon,
@@ -5,63 +7,111 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import { deleteProduct } from '@/app/admin/lib/actions/products.actions';
+import { onOpenModal } from '@/shared/utils/modal.utils';
+import { MODAL_ID } from '@/constants/modal.const';
 import Spinner from '@/components/spinner/Spinner';
+import { ProductTag } from '@/models/productTag';
 
 export function CreateProduct() {
+  const handleClick = () => {
+    onOpenModal(MODAL_ID.ADD_PRODUCT);
+  };
+
   return (
-    <Link
-      href="/admin/dashboard/products/create"
-      prefetch={true}
+    <button
+      onClick={handleClick}
       className="flex h-10 items-center rounded-lg bg-logo-orange-border px-4 text-sm font-medium text-white transition-colors hover:bg-logo-orange-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-logo-orange-border"
     >
       <span className="hidden md:block">Create Product</span>
       <PlusIcon className="h-5 md:ml-4" />
-    </Link>
+    </button>
   );
 }
 
-export function UpdateProduct({ id }: { id: string }) {
-  return (
-    <Link
-      href={`/admin/dashboard/products/${id}/edit`}
-      prefetch={true}
-      className="rounded-md border p-2 hover:bg-gray-100"
-    >
-      <PencilIcon className="w-5" />
-    </Link>
-  );
-}
-
-export function UpdateImage({ id }: { id: string }) {
-  return (
-    <Link
-      href={`/admin/dashboard/products/${id}/edit-image`}
-      prefetch={true}
-      className="rounded-md border p-2 hover:bg-gray-100"
-    >
-      <PhotoIcon className="w-5" />
-    </Link>
-  );
-}
-
-export function DeleteProduct({ id }: { id: string }) {
-  const handleDeleteProduct = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await deleteProduct(id);
+export function UpdateProduct({
+  id,
+  product,
+  onSelectProduct
+}: {
+  id: string;
+  product?: {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    sale: number;
+    stock: number;
+    type: string;
+    tagIds: string[];
+  };
+  onSelectProduct: (id: string) => void;
+}) {
+  const handleClick = () => {
+    const modal = document.getElementById(
+      MODAL_ID.UPDATE_PRODUCT
+    ) as HTMLDialogElement;
+    if (modal && product) {
+      modal.setAttribute('data-product', JSON.stringify(product));
+      onSelectProduct(id);
+      onOpenModal(MODAL_ID.UPDATE_PRODUCT);
+    }
   };
 
   return (
-    <form onSubmit={handleDeleteProduct}>
-      <button
-        type="submit"
-        className="rounded-md border border-red-400 p-2 bg-gray-100"
-      >
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5 text-red-500" />
-      </button>
-    </form>
+    <button
+      onClick={handleClick}
+      className="w-full flex items-center gap-2 rounded-md p-2 hover:bg-gray-100 text-left"
+    >
+      <PencilIcon className="w-5" />
+      <span>Edit Product</span>
+    </button>
+  );
+}
+
+export function UpdateImage({
+  id,
+  onSelectProduct
+}: {
+  id: string;
+  onSelectProduct: (id: string) => void;
+}) {
+  const handleClick = () => {
+    onSelectProduct(id);
+    onOpenModal(MODAL_ID.EDIT_PRODUCT_IMAGE);
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="w-full flex items-center gap-2 rounded-md p-2 hover:bg-gray-100 text-left"
+    >
+      <PhotoIcon className="w-5" />
+      <span>Update Images</span>
+    </button>
+  );
+}
+
+export function DeleteProduct({
+  id,
+  onSelectProduct
+}: {
+  id: string;
+  onSelectProduct: (id: string) => void;
+}) {
+  const handleClick = () => {
+    onSelectProduct(id);
+    onOpenModal(MODAL_ID.DELETE_PRODUCT);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="w-full flex items-center gap-2 rounded-md p-2 hover:bg-gray-100 text-left text-red-600 hover:text-red-700"
+    >
+      <TrashIcon className="w-5" />
+      <span>Delete</span>
+    </button>
   );
 }
 

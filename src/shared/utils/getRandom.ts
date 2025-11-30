@@ -1,6 +1,7 @@
 import { Image } from '@/models/image';
 import { SHAPE_PATH } from '@/styles/shapePath';
 import { getImageUrl } from './getImageUrl';
+import { formatImagePath } from './formatImagePath.utils';
 
 export function getRandomImageArr(
   demandArrLength: number,
@@ -17,7 +18,9 @@ export function getRandomImageArr(
     } while (usedValues.has(shapeIndex));
     usedValues.add(shapeIndex); // Store combined index to ensure unique pairs
     return {
-      mediaUrl: getImageUrl(productId, images[imageIndex].name),
+      mediaUrl: formatImagePath(
+        getImageUrl(productId, images[imageIndex].name)
+      ),
       shapeIndex
     };
   });

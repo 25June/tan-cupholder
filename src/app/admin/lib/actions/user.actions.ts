@@ -4,7 +4,6 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { generateSignedUrl } from '@/app/lib/bucket';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { UserInfo } from '@/models/user';
 import { sendEmail } from './email.actions';
 
@@ -121,8 +120,10 @@ export async function createUser(prevState: State, formData: FormData) {
     return { message: 'Database Error: Failed to Create User Credentials.' };
   }
 
+  revalidatePath('/admin/dashboard/users');
   return {
-    id
+    id,
+    message: 'User created successfully.'
   };
 }
 
@@ -158,8 +159,10 @@ export async function updateUser(prevState: State, formData: FormData) {
     return { message: 'Database Error: Failed to Update User.' };
   }
 
+  revalidatePath('/admin/dashboard/users');
   return {
-    id
+    id,
+    message: 'User updated successfully.'
   };
 }
 
@@ -198,6 +201,7 @@ export async function uploadAvatar(formData: FormData) {
 export async function deleteUser(id: string) {
   try {
     await sql`UPDATE user_info SET status = 'INACTIVE' WHERE id = ${id}`;
+    revalidatePath('/admin/dashboard/users');
   } catch (error) {
     console.error('Database Error:', error);
     return { message: 'Database Error: Failed to Delete User.' };

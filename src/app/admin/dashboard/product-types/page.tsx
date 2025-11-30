@@ -1,34 +1,61 @@
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
 import {
   getProductTypes,
   fetchTotalProductTypes
 } from '@/app/admin/lib/actions/product-types.actions';
-import { Metadata } from 'next';
 import ProductTypesTable from '../../ui/product-types/table';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '../../ui/search';
 import { CreateProductType } from '@/app/admin/ui/product-types/buttons';
-import { Suspense } from 'react';
 import Pagination from '../../ui/invoices/pagination';
+import { ProductType } from '@/models/productType';
+import CreateProductTypeModal from '../../ui/product-types/create-product-type-modal';
+import EditProductTypeModal from '../../ui/product-types/edit-product-type-modal';
+import DeleteProductTypeModal from '../../ui/product-types/delete-product-type-modal';
+import { useSearchParams } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Product Types'
-};
+export default function Page() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get('query') || '';
+  const currentPage = Number(searchParams?.get('page')) || 1;
 
-export default async function Page(props: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+  const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+  const [totalProductTypes, setTotalProductTypes] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedProductTypeId, setSelectedProductTypeId] = useState<
+    string | null
+  >(null);
 
-  const productTypes = await getProductTypes({
-    query,
-    page: currentPage.toString()
-  });
-  const totalProductTypes = await fetchTotalProductTypes();
+  const onFetchProductTypes = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [typesData, totalData] = await Promise.all([
+        getProductTypes({
+          query,
+          page: currentPage.toString()
+        }),
+        fetchTotalProductTypes()
+      ]);
+
+      setProductTypes(typesData);
+      setTotalProductTypes(totalData);
+    } catch (error) {
+      console.error('Failed to load product types:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, query]);
+
+  useEffect(() => {
+    onFetchProductTypes();
+  }, [onFetchProductTypes]);
+
+  const handleRefresh = () => {
+    onFetchProductTypes();
+    setSelectedProductTypeId(null);
+  };
 
   return (
     <main>
@@ -41,12 +68,23 @@ export default async function Page(props: {
         <Search placeholder="Search product types..." />
         <CreateProductType />
       </div>
-      <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
-        <ProductTypesTable productTypes={productTypes} />
-      </Suspense>
+      <ProductTypesTable
+        productTypes={productTypes}
+        loading={isLoading}
+        onSelectProductType={setSelectedProductTypeId}
+      />
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={Math.ceil(totalProductTypes / 10)} />
+        <Pagination totalPages={Math.ceil(totalProductTypes / 50)} />
       </div>
+      <CreateProductTypeModal onRefresh={onFetchProductTypes} />
+      <EditProductTypeModal
+        productTypeId={selectedProductTypeId}
+        onRefresh={handleRefresh}
+      />
+      <DeleteProductTypeModal
+        productTypeId={selectedProductTypeId}
+        onRefresh={handleRefresh}
+      />
     </main>
   );
 }

@@ -1,58 +1,157 @@
+'use client';
+
+import { useEffect, useState, useMemo } from 'react';
 import {
   fetchProducts,
   fetchTotalProducts
 } from '@/app/admin/lib/actions/products.actions';
-import { Metadata } from 'next';
 import ProductsTable from '../../ui/products/table';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '../../ui/search';
 import { CreateProduct } from '../../ui/products/buttons';
-import { Suspense } from 'react';
-import Pagination from '../../ui/invoices/pagination';
+import PaginationState from '../../ui/pagination-state';
 import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
+import { ProductResponse } from '@/models/product';
+import { ProductType } from '@/models/productType';
+import CreateProductModal from '../../ui/products/create-product-modal';
+import EditProductModal from '../../ui/products/edit-product-modal';
+import DeleteProductModal from '../../ui/products/delete-product-modal';
+import EditProductImageModal from '../../ui/products/edit-product-image-modal';
+import { useSearchParams } from 'next/navigation';
+import ProductSummary from '../../ui/products/product-summary';
+import { ProductTag } from '@/models/productTag';
+import { getProductTags } from '@/app/admin/lib/actions/product-tags.actions';
 
-export const metadata: Metadata = {
-  title: 'Products'
-};
+export default function Page() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get('query') || '';
+  const [currentPage, setCurrentPage] = useState(1);
 
-export default async function Page(props: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+  const [products, setProducts] = useState<ProductResponse[]>([]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+  const [productTags, setProductTags] = useState<ProductTag[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
 
-  const products = await fetchProducts({ query, page: currentPage.toString() });
-  const totalProducts = await fetchTotalProducts();
-  const productTypes = await getProductTypes({
-    query: '',
-    page: '1'
-  });
-  const formattedProducts = productTypes.reduce((acc, cur) => {
-    acc[cur.id] = cur.name;
-    return acc;
-  }, {} as Record<string, string>);
+  // Fetch product types only once on initial render
+  useEffect(() => {
+    const loadProductTypes = async () => {
+      try {
+        const typesData = await getProductTypes({
+          query: '',
+          page: '0'
+        });
+        setProductTypes(typesData);
+      } catch (error) {
+        console.error('Failed to load product types:', error);
+      }
+    };
+    loadProductTypes();
+
+    const loadProductTags = async () => {
+      try {
+        const tagsData = await getProductTags({
+          query: '',
+          page: '0'
+        });
+        setProductTags(tagsData);
+      } catch (error) {
+        console.error('Failed to load product tags:', error);
+      }
+    };
+    loadProductTags();
+  }, []);
+
+  // Reset to page 1 when query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
+
+  useEffect(() => {
+    onFetchProducts();
+  }, [query, currentPage]);
+
+  const onFetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const [productsData, totalData] = await Promise.all([
+        fetchProducts({ query, page: currentPage.toString() }),
+        fetchTotalProducts()
+      ]);
+
+      setProducts(productsData);
+      setTotalProducts(totalData);
+    } catch (error) {
+      console.error('Failed to load products:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onRefresh = () => {
+    onFetchProducts();
+    setSelectedProductId(null);
+  };
+
+  const formattedProducts = useMemo(
+    () =>
+      productTypes.reduce((acc: Record<string, string>, cur: ProductType) => {
+        acc[cur.id] = cur.name;
+        return acc;
+      }, {} as Record<string, string>),
+    [productTypes]
+  );
 
   return (
     <main>
-      <div className="flex w-full items-center justify-between mb-8">
-        <h1 className={`${lusitana.className}  text-xl md:text-2xl`}>
+      <div className="flex w-full items-center justify-between gap-4 mb-8">
+        <h1 className={`${lusitana.className} text-xl md:text-2xl shrink-0`}>
           Products
         </h1>
+        <div className="flex items-center gap-2">
+          <Search placeholder="Search products..." />
+          <CreateProduct />
+        </div>
       </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search products..." />
-        <CreateProduct />
+      <div>
+        <ProductSummary />
       </div>
-      <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
-        <ProductsTable products={products} productTypes={formattedProducts} />
-      </Suspense>
+
+      <ProductsTable
+        products={products}
+        productTypes={formattedProducts}
+        productTags={productTags}
+        loading={isLoading}
+        onSelectProduct={setSelectedProductId}
+      />
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={Math.ceil(totalProducts / 10)} />
+        <PaginationState
+          totalPages={Math.ceil(totalProducts / 10)}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
+
+      <CreateProductModal
+        productTypes={productTypes}
+        productTags={productTags}
+        onRefresh={onFetchProducts}
+      />
+      <DeleteProductModal productId={selectedProductId} onRefresh={onRefresh} />
+      <EditProductModal
+        productId={selectedProductId}
+        productTypes={productTypes}
+        productTags={productTags}
+        onRefresh={onRefresh}
+      />
+
+      <EditProductImageModal
+        productId={selectedProductId}
+        onRefresh={onRefresh}
+      />
     </main>
   );
 }

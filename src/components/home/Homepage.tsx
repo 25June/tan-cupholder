@@ -10,11 +10,8 @@ import ProductSlider from '@/components/product-slider/ProductSlider';
 import Preload from '../preload/Preload';
 import { ProductResponse } from '@/models/product';
 import { useModesContext } from '@/contexts/EditMode.context';
-interface Props {
-  readonly products: ProductResponse[];
-}
 
-export default function Homepage({ products }: Props) {
+export default function Homepage() {
   const { isLoading } = useModesContext();
   return (
     <div className="relative min-h-screen">
@@ -29,7 +26,7 @@ export default function Homepage({ products }: Props) {
           <CategorySection />
         </section>
         <section id={View.PRODUCT}>
-          <ProductSlider products={products} />
+          <ProductSlider />
         </section>
         <section id={View.FAQ}>
           <Faq />

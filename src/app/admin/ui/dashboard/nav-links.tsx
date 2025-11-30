@@ -2,13 +2,13 @@
 
 import {
   HomeIcon,
-  PuzzlePieceIcon,
   ShoppingBagIcon,
   UsersIcon,
   PhotoIcon,
   UserGroupIcon,
   EnvelopeIcon,
-  ClipboardDocumentListIcon
+  ClipboardDocumentListIcon,
+  CreditCardIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -24,14 +24,9 @@ const links = [
     icon: ClipboardDocumentListIcon
   },
   {
-    name: 'Product Types',
-    href: '/admin/dashboard/product-types',
-    icon: PuzzlePieceIcon
-  },
-  {
-    name: 'Product Tags',
-    href: '/admin/dashboard/product-tags',
-    icon: PuzzlePieceIcon
+    name: 'Invoices',
+    href: '/admin/dashboard/invoices',
+    icon: CreditCardIcon
   },
   {
     name: 'Products',

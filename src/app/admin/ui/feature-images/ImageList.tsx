@@ -8,6 +8,7 @@ import {
   ClipboardDocumentIcon
 } from '@heroicons/react/24/outline';
 import { Dispatch, SetStateAction } from 'react';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 
 export default function ImageList({
   images,
@@ -24,7 +25,9 @@ export default function ImageList({
     e: React.MouseEvent<HTMLButtonElement>,
     image: FeatureImage
   ) => {
-    navigator.clipboard.writeText(getImageUrl('feature-images', image.name));
+    navigator.clipboard.writeText(
+      formatImagePath(getImageUrl('feature-images', image.name))
+    );
     setTimeout(() => {
       const input = document.getElementById(`copy-${image.id}`);
       if (input) {
@@ -44,7 +47,7 @@ export default function ImageList({
           }`}
         >
           <Image
-            src={getImageUrl('feature-images', image.name)}
+            src={formatImagePath(getImageUrl('feature-images', image.name))}
             alt={image.name}
             width={500}
             height={500}

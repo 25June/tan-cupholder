@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { createOrder, OrderState } from '@/app/lib/public-order.actions';
 import { getProductById } from '@/app/lib/product.actions';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import Image from 'next/image';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
@@ -146,9 +147,11 @@ export default function PaymentPage() {
                       <Image
                         src={
                           product.product_image?.name
-                            ? getImageUrl(
-                                product.id,
-                                product.product_image.name
+                            ? formatImagePath(
+                                getImageUrl(
+                                  product.id,
+                                  product.product_image.name
+                                )
                               )
                             : '/cup.png'
                         }

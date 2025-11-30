@@ -3,7 +3,6 @@
 import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { ProductType } from '@/models/productType';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -130,7 +129,7 @@ export async function createProductType(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/admin/dashboard/product-types');
-  redirect('/admin/dashboard/product-types');
+  return { message: 'Product type created successfully.' };
 }
 
 export async function updateProductType(prevState: State, formData: FormData) {
@@ -164,7 +163,7 @@ export async function updateProductType(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/admin/dashboard/product-types');
-  redirect('/admin/dashboard/product-types');
+  return { message: 'Product type updated successfully.' };
 }
 
 export async function deleteProductType(id: string) {
