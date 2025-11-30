@@ -6,7 +6,7 @@ import {
   useState
 } from 'react';
 import { uploadMedia } from '@/shared/utils/uploadMedia';
-import { debounce } from '@/shared/utils/debounce';
+import { throttle } from '@/shared/utils/debounce';
 
 interface Props {
   image: File;
@@ -32,8 +32,8 @@ export default function FileUpload({
     }
     return uploadMedia(
       image,
-      presignedUrl
-      // debounce((progress: number) => setProgress(progress), 200)
+      presignedUrl,
+      throttle((progress: number) => setProgress(progress), 200)
     );
   }, []);
 

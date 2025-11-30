@@ -10,6 +10,7 @@ import { ProductResponse } from '@/models/product';
 import { PhotoIcon, TagIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { Product } from '@/models/product';
 import { Image as ImageType } from '@/models/image';
 import Image from 'next/image';
@@ -316,7 +317,9 @@ export default function EditProductModal({
                     className={`w-full h-full bg-gray-200 rounded-md max-h-48 p-2`}
                   >
                     <Image
-                      src={getImageUrl(product.id, mainImage.name)}
+                      src={formatImagePath(
+                        getImageUrl(product.id, mainImage.name)
+                      )}
                       alt="Product Image"
                       className="object-contain w-full h-full"
                       width={200}
@@ -342,7 +345,9 @@ export default function EditProductModal({
                         className={`w-full h-full bg-gray-200 rounded-md max-h-56 relative p-2`}
                       >
                         <Image
-                          src={getImageUrl(product.id, image.name)}
+                          src={formatImagePath(
+                            getImageUrl(product.id, image.name)
+                          )}
                           alt={image.name}
                           className="object-contain w-full h-full"
                           width={200}

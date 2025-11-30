@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ProductResponse } from '@/models/product';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
 import { ProductTag } from '@/models/productTag';
@@ -100,7 +101,9 @@ export default function ProductsTable({
           <Image
             src={
               product.product_image.name
-                ? `${getImageUrl(product.id, product.product_image.name)}`
+                ? formatImagePath(
+                    getImageUrl(product.id, product.product_image.name)
+                  )
                 : '/cup.png'
             }
             className="rounded-full w-16 h-16 object-cover shrink-0"

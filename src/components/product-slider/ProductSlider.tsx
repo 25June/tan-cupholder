@@ -12,6 +12,7 @@ import Spinner from '../spinner/Spinner';
 
 export default function ProductSlider() {
   const t = useTranslations('HomePage.ProductSliderSection');
+
   const [categories, setCategories] = useState<
     Record<string, ProductResponse[]>
   >({});
@@ -30,7 +31,7 @@ export default function ProductSlider() {
         setLoading(false);
       });
   }, []);
-  console.log({ categories, selectedCategory });
+
   return (
     <div className="relative">
       <div className="relative z-20 w-full max-w-screen md:max-w-8xl mx-auto grid grid-rows-[40px_1fr_20px] items-center min-h-screen p-4 md:p-8 pb-10 md:pb-20 gap:8 md:gap-16 overflow-hidden">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchFeatureImages } from '../lib/actions/image-feature.actions';
 import { FeatureImage } from '@/models/featureImage';
+import { getUniqueItems } from '@/shared/utils/onDedup.utils';
 
 export const useImageFeature = () => {
   const [images, setImages] = useState<FeatureImage[]>([]);
@@ -20,7 +21,7 @@ export const useImageFeature = () => {
     if (images.length === 0) {
       setIsEnd(true);
     }
-    setImages((prev) => [...prev, ...images]);
+    setImages((prev) => getUniqueItems([...prev, ...images]));
     setTotalCount(totalCount);
     setLoading(false);
   };
@@ -38,9 +39,7 @@ export const useImageFeature = () => {
   };
 
   const handleRefresh = () => {
-    setImages([]);
-    setPage(0);
-    handleFetchFeatureImages(query, 0);
+    handleFetchFeatureImages(query, page);
   };
 
   const handleDelete = (ids: string[]) => {

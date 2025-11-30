@@ -8,6 +8,7 @@ import {
 import Footer from '@/components/footer/Footer';
 import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import Image from 'next/image';
 import { formatPrice } from '@/shared/utils/formatPrice';
 import Quantity from '@/components/quantity/Quantity';
@@ -37,7 +38,9 @@ const ProductCard = memo(
         <div className="flex items-center gap-2 grow">
           <div className="h-32 w-24 rounded-lg overflow-hidden shrink-0">
             <Image
-              src={getImageUrl(product.id, product.product_image.name)}
+              src={formatImagePath(
+                getImageUrl(product.id, product.product_image.name)
+              )}
               alt={product.name}
               width={300}
               height={400}

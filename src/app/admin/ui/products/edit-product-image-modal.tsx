@@ -10,6 +10,7 @@ import { Product } from '@/models/product';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import FileUpload from '@/components/file-upload/FileUpload';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import Image from 'next/image';
 import { Image as ImageType } from '@/models/image';
 import { ActiveButton, DeleteImage } from './buttons';
@@ -185,7 +186,9 @@ export default function EditProductImageModal({
             <div className="flex gap-2">
               <div className="w-full bg-gray-200 rounded-md max-w-24 max-h-24">
                 <Image
-                  src={getImageUrl(product.id, mainImage?.name || '')}
+                  src={formatImagePath(
+                    getImageUrl(product.id, mainImage?.name || '')
+                  )}
                   alt={product.name}
                   className="w-full h-full object-contain rounded-md"
                   width={100}
@@ -207,7 +210,9 @@ export default function EditProductImageModal({
                   className={`w-full h-full bg-gray-100 rounded-md max-h-56 relative flex gap-2`}
                 >
                   <Image
-                    src={getImageUrl(product.id, mainImage.name)}
+                    src={formatImagePath(
+                      getImageUrl(product.id, mainImage.name)
+                    )}
                     alt={mainImage.name}
                     className="object-contain h-full flex-1 p-2"
                     width={200}
@@ -238,7 +243,9 @@ export default function EditProductImageModal({
                       className={`w-full h-full bg-gray-100 rounded-md max-h-56 relative flex gap-2`}
                     >
                       <Image
-                        src={getImageUrl(product.id, image.name)}
+                        src={formatImagePath(
+                          getImageUrl(product.id, image.name)
+                        )}
                         alt={image.name}
                         className="object-contain flex-1 h-full p-2"
                         width={200}

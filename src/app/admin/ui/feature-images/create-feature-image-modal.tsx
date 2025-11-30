@@ -51,7 +51,7 @@ export default function CreateFeatureImageModal({
           });
         });
     });
-    Promise.all(promises).finally(() => setIsLoading(false));
+    Promise.all(promises);
   };
 
   const onSelectImages = (files: FileList) => {
@@ -64,6 +64,7 @@ export default function CreateFeatureImageModal({
       Object.values(imageUploadCompleted).every((value) => value === true)
     ) {
       handleClose(true);
+      setIsLoading(false);
     }
   }, [imageUploadCompleted]);
 
@@ -152,7 +153,11 @@ export default function CreateFeatureImageModal({
                 Cancel
               </button>
 
-              <button type="submit" className="btn btn-primary grow-1">
+              <button
+                type="submit"
+                className="btn btn-primary grow-1"
+                disabled={isLoading || !uploadImages.length}
+              >
                 {isLoading && <span className="loading loading-spinner"></span>}{' '}
                 Add Feature Image
               </button>
