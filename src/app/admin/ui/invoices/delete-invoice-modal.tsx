@@ -4,14 +4,13 @@ import { useState } from 'react';
 import { MODAL_ID } from '@/constants/modal.const';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { deleteInvoice } from '@/app/admin/lib/actions';
-import Spinner from '@/components/spinner/Spinner';
 
 export default function DeleteInvoiceModal({
   invoiceId,
-  onDeleteSuccess
+  onRefresh
 }: {
   invoiceId: string | null;
-  onDeleteSuccess?: () => void;
+  onRefresh: () => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,10 +21,6 @@ export default function DeleteInvoiceModal({
     try {
       await deleteInvoice(invoiceId);
       handleClose();
-      // Refresh the data after successful deletion
-      if (onDeleteSuccess) {
-        onDeleteSuccess();
-      }
     } catch (error) {
       console.error('Failed to delete invoice:', error);
       alert('Failed to delete invoice. Please try again.');
@@ -36,6 +31,7 @@ export default function DeleteInvoiceModal({
 
   const handleClose = () => {
     onCloseModal(MODAL_ID.DELETE_INVOICE);
+    onRefresh();
   };
 
   return (
@@ -63,7 +59,7 @@ export default function DeleteInvoiceModal({
           >
             {isLoading ? (
               <>
-                <Spinner color="white" />
+                <div className="loading loading-spinner loading-sm" />
                 <span>Deleting...</span>
               </>
             ) : (

@@ -26,15 +26,16 @@ export function CreateEmailTemplate() {
   );
 }
 
-export function UpdateEmailTemplate({ id }: { id: string }) {
+export function UpdateEmailTemplate({
+  id,
+  onSelectTemplate
+}: {
+  id: string;
+  onSelectTemplate: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.UPDATE_EMAIL_TEMPLATE
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-email-template-id', id);
-      onOpenModal(MODAL_ID.UPDATE_EMAIL_TEMPLATE);
-    }
+    onSelectTemplate(id);
+    onOpenModal(MODAL_ID.UPDATE_EMAIL_TEMPLATE);
   };
 
   return (
@@ -48,15 +49,16 @@ export function UpdateEmailTemplate({ id }: { id: string }) {
   );
 }
 
-export function DeleteEmailTemplate({ id }: { id: string }) {
+export function DeleteEmailTemplate({
+  id,
+  onSelectTemplate
+}: {
+  id: string;
+  onSelectTemplate: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_EMAIL_TEMPLATE
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-email-template-id', id);
-      onOpenModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
-    }
+    onSelectTemplate(id);
+    onOpenModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
   };
 
   return (
@@ -71,7 +73,13 @@ export function DeleteEmailTemplate({ id }: { id: string }) {
   );
 }
 
-export function More({ id }: { id: string }) {
+export function More({
+  id,
+  onSelectTemplate
+}: {
+  id: string;
+  onSelectTemplate: (id: string) => void;
+}) {
   return (
     <SimpleDropdown
       host={
@@ -87,10 +95,10 @@ export function More({ id }: { id: string }) {
       content={
         <>
           <li>
-            <UpdateEmailTemplate id={id} />
+            <UpdateEmailTemplate id={id} onSelectTemplate={onSelectTemplate} />
           </li>
           <li>
-            <DeleteEmailTemplate id={id} />
+            <DeleteEmailTemplate id={id} onSelectTemplate={onSelectTemplate} />
           </li>
         </>
       }

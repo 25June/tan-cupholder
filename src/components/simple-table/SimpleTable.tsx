@@ -11,39 +11,34 @@ const TableRow = <T,>({
   itemIndex,
   columns,
   renderCell,
-  actions,
-  keyExtractor
+  actions
 }: {
   item: T;
   itemIndex: number;
   columns: Column<T>[];
   renderCell: (item: T, column: Column<T>) => React.ReactNode;
   actions?: (item: T, index?: number) => React.ReactNode;
-  keyExtractor: (item: T) => string;
 }) => {
   return (
-    <tr key={keyExtractor(item)} className="group bg-white">
+    <tr className="group bg-white">
       {columns.map((column, index) => (
         <td
-          key={index}
+          key={`${column.header}-${index}`}
           className={column.className || `whitespace-nowrap px-3 py-3 text-sm`}
         >
           {renderCell(item, column)}
         </td>
       ))}
       {actions && (
-        <td className="whitespace-nowrap px-3 py-3">
-          {actions(item, itemIndex)}
-        </td>
+        <td className="whitespace-nowrap px-3 py-3">{actions(item)}</td>
       )}
     </tr>
   );
 };
 
-const SimpleTable = <T,>({
+const SimpleTable = <T extends { id: string }>({
   data,
   columns,
-  keyExtractor,
   actions,
   emptyMessage = 'No data available',
   className = '',
@@ -116,13 +111,12 @@ const SimpleTable = <T,>({
                   ) : (
                     data.map((item, itemIndex) => (
                       <TableRow
-                        key={keyExtractor(item)}
+                        key={item.id}
                         item={item}
                         itemIndex={itemIndex}
                         columns={columns}
                         renderCell={renderCell}
                         actions={actions}
-                        keyExtractor={keyExtractor}
                       />
                     ))
                   )}

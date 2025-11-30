@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '@/app/admin/ui/search';
 import { CreateProductTag } from '@/app/admin/ui/product-tags/buttons';
@@ -24,30 +24,38 @@ export default function Page() {
   const [productTags, setProductTags] = useState<ProductTag[]>([]);
   const [totalProductTags, setTotalProductTags] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProductTagId, setSelectedProductTagId] = useState<
+    string | null
+  >(null);
+
+  const onFetchProductTags = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [tagsData, totalData] = await Promise.all([
+        getProductTags({
+          query,
+          page: currentPage.toString()
+        }),
+        fetchTotalProductTags()
+      ]);
+
+      setProductTags(tagsData);
+      setTotalProductTags(totalData);
+    } catch (error) {
+      console.error('Failed to load product tags:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, query]);
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const [tagsData, totalData] = await Promise.all([
-          getProductTags({
-            query,
-            page: currentPage.toString()
-          }),
-          fetchTotalProductTags()
-        ]);
+    onFetchProductTags();
+  }, [onFetchProductTags]);
 
-        setProductTags(tagsData);
-        setTotalProductTags(totalData);
-      } catch (error) {
-        console.error('Failed to load product tags:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, [query, currentPage]);
+  const handleRefresh = () => {
+    onFetchProductTags();
+    setSelectedProductTagId(null);
+  };
 
   return (
     <main>
@@ -60,13 +68,23 @@ export default function Page() {
         <Search placeholder="Search product tags..." />
         <CreateProductTag />
       </div>
-      <ProductTagsTable productTags={productTags} loading={isLoading} />
+      <ProductTagsTable
+        productTags={productTags}
+        loading={isLoading}
+        onSelectProductTag={setSelectedProductTagId}
+      />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalProductTags / 50)} />
       </div>
-      <CreateProductTagModal />
-      <EditProductTagModal productTagId={null} />
-      <DeleteProductTagModal productTagId={null} />
+      <CreateProductTagModal onRefresh={onFetchProductTags} />
+      <EditProductTagModal
+        productTagId={selectedProductTagId}
+        onRefresh={handleRefresh}
+      />
+      <DeleteProductTagModal
+        productTagId={selectedProductTagId}
+        onRefresh={handleRefresh}
+      />
     </main>
   );
 }

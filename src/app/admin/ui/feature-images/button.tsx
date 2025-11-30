@@ -23,11 +23,9 @@ export default function CreateFeatureImage() {
 }
 
 export function DeleteFeatureImage({
-  images,
-  callback
+  images
 }: {
   images: Record<string, FeatureImage | undefined>;
-  callback: () => void;
 }) {
   const numberOfImages = useDeferredValue(
     Object.values(images).filter((image) => image !== undefined).length
@@ -37,13 +35,7 @@ export function DeleteFeatureImage({
     if (numberOfImages === 0) {
       return;
     }
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_FEATURE_IMAGES
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-images', JSON.stringify(images));
-      onOpenModal(MODAL_ID.DELETE_FEATURE_IMAGES);
-    }
+    onOpenModal(MODAL_ID.DELETE_FEATURE_IMAGES);
   };
 
   return (

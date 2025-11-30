@@ -6,10 +6,12 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
 export default function EmailTemplatesTable({
   templates,
-  loading = false
+  loading = false,
+  onSelectTemplate
 }: {
   templates: EmailTemplateResponse[];
   loading: boolean;
+  onSelectTemplate: (id: string) => void;
 }) {
   const columns: Column<EmailTemplateResponse>[] = [
     {
@@ -39,7 +41,9 @@ export default function EmailTemplatesTable({
       data={templates}
       columns={columns}
       keyExtractor={(template) => template.id}
-      actions={(template) => <More id={template.id} />}
+      actions={(template) => (
+        <More id={template.id} onSelectTemplate={onSelectTemplate} />
+      )}
       emptyMessage="No email templates found"
       loading={loading}
     />

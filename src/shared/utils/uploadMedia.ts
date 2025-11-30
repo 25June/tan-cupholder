@@ -1,7 +1,7 @@
 export async function uploadMedia(
   file: File,
   presignedUrl: string,
-  onProgress: (percent: number) => void
+  onProgress?: (percent: number) => void
 ) {
   const xhr = new XMLHttpRequest();
 
@@ -9,8 +9,8 @@ export async function uploadMedia(
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
         console.log(event.loaded, event.total);
-        const percentComplete = (event.loaded / event.total) * 100;
-        onProgress(percentComplete);
+        const percentComplete = Math.round((event.loaded / event.total) * 100);
+        onProgress?.(percentComplete);
       }
     };
 

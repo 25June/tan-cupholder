@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createProduct, State } from '@/app/admin/lib/actions/products.actions';
-import { BoltIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { PhotoIcon } from '@heroicons/react/24/outline';
 import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import FileUpload from '@/components/file-upload/FileUpload';
 import { createImage } from '../../lib/actions/images.actions';
@@ -15,11 +15,14 @@ const initialState: State = { message: null, errors: {} };
 
 export default function CreateProductModal({
   productTypes,
-  productTags
+  productTags,
+  onRefresh
 }: {
   productTypes: ProductType[];
   productTags: ProductTag[];
+  onRefresh: () => void;
 }) {
+  const [formId, setFormId] = useState<string>('');
   const [state, setState] = useState<State>(initialState);
   const [tagIds, setTagIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -67,14 +70,6 @@ export default function CreateProductModal({
           [name]: url
         };
       }, {} as Record<string, string>);
-      setImageUploadCompleted(
-        results.reduce((acc, { name }: any) => {
-          return {
-            ...acc,
-            [name]: false
-          };
-        }, {} as Record<string, boolean>)
-      );
       setPresignedUrlObject(urlsObject);
     } catch (error) {
       console.error('Error uploading images:', error);
@@ -82,15 +77,10 @@ export default function CreateProductModal({
   };
 
   useEffect(() => {
-    const id = setTimeout(() => {
-      if (
-        Object.values(imageUploadCompleted).every((value) => value === true)
-      ) {
-        setIsLoading(false);
-        handleClose();
-      }
-    }, 500);
-    return () => clearTimeout(id);
+    if (Object.values(imageUploadCompleted).every((value) => value === true)) {
+      setIsLoading(false);
+      handleClose();
+    }
   }, [imageUploadCompleted]);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -143,6 +133,8 @@ export default function CreateProductModal({
     setTagIds([]);
     setUploadImages([]);
     setPresignedUrlObject({});
+    setFormId(Date.now().toString());
+    onRefresh();
   };
 
   const productTagOptions = useMemo(() => {
@@ -160,7 +152,7 @@ export default function CreateProductModal({
     <dialog id={MODAL_ID.ADD_PRODUCT} className="modal">
       <div className="modal-box max-w-4xl">
         <h3 className="font-bold text-lg mb-4">Create Product</h3>
-        <form onSubmit={handleFormSubmit}>
+        <form key={formId} onSubmit={handleFormSubmit}>
           <div className="form-control w-full max-w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-4 w-full">

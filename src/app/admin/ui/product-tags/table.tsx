@@ -9,10 +9,12 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
 export default function ProductTagsTable({
   productTags,
-  loading = false
+  loading = false,
+  onSelectProductTag
 }: {
   productTags: ProductTag[];
   loading: boolean;
+  onSelectProductTag: (id: string) => void;
 }) {
   // Define columns configuration
   const columns: Column<ProductTag>[] = [
@@ -58,8 +60,14 @@ export default function ProductTagsTable({
       keyExtractor={(tag) => tag.id}
       actions={(tag) => (
         <>
-          <UpdateProductTag id={tag.id} />
-          <DeleteProductTag id={tag.id} />
+          <UpdateProductTag
+            id={tag.id}
+            onSelectProductTag={onSelectProductTag}
+          />
+          <DeleteProductTag
+            id={tag.id}
+            onSelectProductTag={onSelectProductTag}
+          />
         </>
       )}
       loading={loading}

@@ -30,7 +30,8 @@ export function CreateProduct() {
 
 export function UpdateProduct({
   id,
-  product
+  product,
+  onSelectProduct
 }: {
   id: string;
   product?: {
@@ -43,16 +44,15 @@ export function UpdateProduct({
     type: string;
     tagIds: string[];
   };
+  onSelectProduct: (id: string) => void;
 }) {
   const handleClick = () => {
     const modal = document.getElementById(
       MODAL_ID.UPDATE_PRODUCT
     ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-product-id', id);
-      if (product) {
-        modal.setAttribute('data-product', JSON.stringify(product));
-      }
+    if (modal && product) {
+      modal.setAttribute('data-product', JSON.stringify(product));
+      onSelectProduct(id);
       onOpenModal(MODAL_ID.UPDATE_PRODUCT);
     }
   };
@@ -68,15 +68,16 @@ export function UpdateProduct({
   );
 }
 
-export function UpdateImage({ id }: { id: string }) {
+export function UpdateImage({
+  id,
+  onSelectProduct
+}: {
+  id: string;
+  onSelectProduct: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.EDIT_PRODUCT_IMAGE
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-product-id', id);
-      onOpenModal(MODAL_ID.EDIT_PRODUCT_IMAGE);
-    }
+    onSelectProduct(id);
+    onOpenModal(MODAL_ID.EDIT_PRODUCT_IMAGE);
   };
 
   return (
@@ -90,15 +91,16 @@ export function UpdateImage({ id }: { id: string }) {
   );
 }
 
-export function DeleteProduct({ id }: { id: string }) {
+export function DeleteProduct({
+  id,
+  onSelectProduct
+}: {
+  id: string;
+  onSelectProduct: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_PRODUCT
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-product-id', id);
-      onOpenModal(MODAL_ID.DELETE_PRODUCT);
-    }
+    onSelectProduct(id);
+    onOpenModal(MODAL_ID.DELETE_PRODUCT);
   };
 
   return (

@@ -1,67 +1,26 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import { deleteEmailTemplate } from '@/app/admin/lib/actions/email-templates.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
-import Spinner from '@/components/spinner/Spinner';
 
 export default function DeleteEmailTemplateModal({
-  emailTemplateId
+  emailTemplateId,
+  onRefresh
 }: {
   emailTemplateId: string | null;
+  onRefresh: () => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [currentEmailTemplateId, setCurrentEmailTemplateId] = useState<
-    string | null
-  >(emailTemplateId);
-  const modalRef = useRef<HTMLDialogElement | null>(null);
-  const prevOpenRef = useRef<boolean>(false);
-
-  useEffect(() => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_EMAIL_TEMPLATE
-    ) as HTMLDialogElement;
-    modalRef.current = modal;
-    if (!modal) return;
-
-    const handleClose = () => {
-      setCurrentEmailTemplateId(null);
-    };
-
-    modal.addEventListener('close', handleClose);
-    return () => {
-      modal.removeEventListener('close', handleClose);
-    };
-  }, []);
-
-  useEffect(() => {
-    const modal = modalRef.current;
-    if (!modal) return;
-
-    const checkModalState = () => {
-      const isOpen = modal.open;
-      const id = modal.getAttribute('data-email-template-id');
-
-      if (isOpen && !prevOpenRef.current && id) {
-        setCurrentEmailTemplateId(id);
-      }
-
-      prevOpenRef.current = isOpen;
-    };
-
-    const interval = setInterval(checkModalState, 100);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleConfirmDelete = async () => {
-    const idToDelete = emailTemplateId || currentEmailTemplateId;
-    if (!idToDelete) return;
+    if (!emailTemplateId) return;
 
     setIsLoading(true);
     try {
-      await deleteEmailTemplate(idToDelete);
-      onCloseModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
+      await deleteEmailTemplate(emailTemplateId);
+      handleClose();
     } catch (error) {
       console.error('Failed to delete email template:', error);
     } finally {
@@ -71,7 +30,7 @@ export default function DeleteEmailTemplateModal({
 
   const handleClose = () => {
     onCloseModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
-    setCurrentEmailTemplateId(null);
+    onRefresh();
   };
 
   return (
@@ -99,7 +58,7 @@ export default function DeleteEmailTemplateModal({
           >
             {isLoading ? (
               <>
-                <Spinner />
+                <div className="loading loading-spinner loading-sm" />
                 <span>Deleting...</span>
               </>
             ) : (

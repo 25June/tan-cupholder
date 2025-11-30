@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   getProductTypes,
   fetchTotalProductTypes
@@ -24,30 +24,38 @@ export default function Page() {
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [totalProductTypes, setTotalProductTypes] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProductTypeId, setSelectedProductTypeId] = useState<
+    string | null
+  >(null);
+
+  const onFetchProductTypes = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [typesData, totalData] = await Promise.all([
+        getProductTypes({
+          query,
+          page: currentPage.toString()
+        }),
+        fetchTotalProductTypes()
+      ]);
+
+      setProductTypes(typesData);
+      setTotalProductTypes(totalData);
+    } catch (error) {
+      console.error('Failed to load product types:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, query]);
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const [typesData, totalData] = await Promise.all([
-          getProductTypes({
-            query,
-            page: currentPage.toString()
-          }),
-          fetchTotalProductTypes()
-        ]);
+    onFetchProductTypes();
+  }, [onFetchProductTypes]);
 
-        setProductTypes(typesData);
-        setTotalProductTypes(totalData);
-      } catch (error) {
-        console.error('Failed to load product types:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, [query, currentPage]);
+  const handleRefresh = () => {
+    onFetchProductTypes();
+    setSelectedProductTypeId(null);
+  };
 
   return (
     <main>
@@ -60,13 +68,23 @@ export default function Page() {
         <Search placeholder="Search product types..." />
         <CreateProductType />
       </div>
-      <ProductTypesTable productTypes={productTypes} loading={isLoading} />
+      <ProductTypesTable
+        productTypes={productTypes}
+        loading={isLoading}
+        onSelectProductType={setSelectedProductTypeId}
+      />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalProductTypes / 50)} />
       </div>
-      <CreateProductTypeModal />
-      <EditProductTypeModal productTypeId={null} />
-      <DeleteProductTypeModal productTypeId={null} />
+      <CreateProductTypeModal onRefresh={onFetchProductTypes} />
+      <EditProductTypeModal
+        productTypeId={selectedProductTypeId}
+        onRefresh={handleRefresh}
+      />
+      <DeleteProductTypeModal
+        productTypeId={selectedProductTypeId}
+        onRefresh={handleRefresh}
+      />
     </main>
   );
 }

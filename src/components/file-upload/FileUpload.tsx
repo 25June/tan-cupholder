@@ -32,25 +32,18 @@ export default function FileUpload({
     }
     return uploadMedia(
       image,
-      presignedUrl,
-      debounce((progress: number) => setProgress(progress), 200)
+      presignedUrl
+      // debounce((progress: number) => setProgress(progress), 200)
     );
   }, []);
 
   useEffect(() => {
     if (image && presignedUrl) {
-      onUpload(presignedUrl, image);
+      onUpload(presignedUrl, image)?.then(() => {
+        setImageUploadCompleted((prev) => ({ ...prev, [image.name]: true }));
+      });
     }
   }, [image, presignedUrl, onUpload]);
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      if (progress === 100) {
-        setImageUploadCompleted((prev) => ({ ...prev, [image.name]: true }));
-      }
-    }, 200);
-    return () => clearTimeout(id);
-  }, [progress]);
 
   return (
     <div

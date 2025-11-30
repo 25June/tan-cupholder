@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   fetchEmailTemplates,
   fetchTotalEmailTemplates
@@ -30,6 +30,9 @@ export default function Page() {
   );
   const [totalTemplates, setTotalTemplates] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedEmailTemplateId, setSelectedEmailTemplateId] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     if (!sessionLoading && !isAuthenticated) {
@@ -38,31 +41,36 @@ export default function Page() {
     }
   }, [isAuthenticated, sessionLoading, router]);
 
-  useEffect(() => {
+  const loadEmailTemplates = useCallback(async () => {
     if (!isAuthenticated) return;
 
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const [templatesData, totalData] = await Promise.all([
-          fetchEmailTemplates({
-            query,
-            page: containsPage.toString()
-          }),
-          fetchTotalEmailTemplates()
-        ]);
+    setIsLoading(true);
+    try {
+      const [templatesData, totalData] = await Promise.all([
+        fetchEmailTemplates({
+          query,
+          page: containsPage.toString()
+        }),
+        fetchTotalEmailTemplates()
+      ]);
 
-        setEmailTemplates(templatesData);
-        setTotalTemplates(totalData);
-      } catch (error) {
-        console.error('Failed to load email templates:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      setEmailTemplates(templatesData);
+      setTotalTemplates(totalData);
+    } catch (error) {
+      console.error('Failed to load email templates:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [containsPage, isAuthenticated, query]);
 
-    loadData();
-  }, [query, containsPage, isAuthenticated]);
+  useEffect(() => {
+    loadEmailTemplates();
+  }, [loadEmailTemplates]);
+
+  const handleRefresh = () => {
+    loadEmailTemplates();
+    setSelectedEmailTemplateId(null);
+  };
 
   if (sessionLoading || !isAuthenticated) {
     return (
@@ -85,13 +93,23 @@ export default function Page() {
         <Search placeholder="Search email templates..." />
         <CreateEmailTemplate />
       </div>
-      <EmailTemplatesTable templates={emailTemplates} loading={isLoading} />
+      <EmailTemplatesTable
+        templates={emailTemplates}
+        loading={isLoading}
+        onSelectTemplate={setSelectedEmailTemplateId}
+      />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalTemplates / 10)} />
       </div>
-      <CreateEmailTemplateModal />
-      <EditEmailTemplateModal emailTemplateId={null} />
-      <DeleteEmailTemplateModal emailTemplateId={null} />
+      <CreateEmailTemplateModal onRefresh={handleRefresh} />
+      <EditEmailTemplateModal
+        emailTemplateId={selectedEmailTemplateId}
+        onRefresh={handleRefresh}
+      />
+      <DeleteEmailTemplateModal
+        emailTemplateId={selectedEmailTemplateId}
+        onRefresh={handleRefresh}
+      />
     </main>
   );
 }

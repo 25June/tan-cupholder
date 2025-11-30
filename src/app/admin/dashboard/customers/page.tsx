@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   fetchCustomers,
   fetchTotalCustomers
@@ -24,30 +24,38 @@ export default function Page() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [totalCustomers, setTotalCustomers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
+    null
+  );
+
+  const onFetchCustomers = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [customersData, totalData] = await Promise.all([
+        fetchCustomers({
+          query,
+          page: currentPage.toString()
+        }),
+        fetchTotalCustomers()
+      ]);
+
+      setCustomers(customersData);
+      setTotalCustomers(totalData);
+    } catch (error) {
+      console.error('Failed to load customers:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, query]);
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const [customersData, totalData] = await Promise.all([
-          fetchCustomers({
-            query,
-            page: currentPage.toString()
-          }),
-          fetchTotalCustomers()
-        ]);
+    onFetchCustomers();
+  }, [onFetchCustomers]);
 
-        setCustomers(customersData);
-        setTotalCustomers(totalData);
-      } catch (error) {
-        console.error('Failed to load customers:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, [query, currentPage]);
+  const handleRefresh = () => {
+    onFetchCustomers();
+    setSelectedCustomerId(null);
+  };
 
   return (
     <main>
@@ -60,13 +68,23 @@ export default function Page() {
         <Search placeholder="Search customers..." />
         <CreateCustomer />
       </div>
-      <CustomersTable customers={customers} loading={isLoading} />
+      <CustomersTable
+        customers={customers}
+        loading={isLoading}
+        onSelectCustomer={setSelectedCustomerId}
+      />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalCustomers / 10)} />
       </div>
-      <CreateCustomerModal />
-      <EditCustomerModal customerId={null} />
-      <DeleteCustomerModal customerId={null} />
+      <CreateCustomerModal onRefresh={onFetchCustomers} />
+      <EditCustomerModal
+        customerId={selectedCustomerId}
+        onRefresh={handleRefresh}
+      />
+      <DeleteCustomerModal
+        customerId={selectedCustomerId}
+        onRefresh={handleRefresh}
+      />
     </main>
   );
 }

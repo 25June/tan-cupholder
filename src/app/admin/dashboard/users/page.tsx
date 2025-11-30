@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   fetchUsers,
   fetchTotalUsers
@@ -24,27 +24,33 @@ export default function Page() {
   const [users, setUsers] = useState<UserInfo[]>([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+  const onFetchUsers = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [usersData, totalData] = await Promise.all([
+        fetchUsers({ query, page: currentPage.toString() }),
+        fetchTotalUsers()
+      ]);
+
+      setUsers(usersData);
+      setTotalUsers(totalData);
+    } catch (error) {
+      console.error('Failed to load users:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, query]);
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const [usersData, totalData] = await Promise.all([
-          fetchUsers({ query, page: currentPage.toString() }),
-          fetchTotalUsers()
-        ]);
+    onFetchUsers();
+  }, [onFetchUsers]);
 
-        setUsers(usersData);
-        setTotalUsers(totalData);
-      } catch (error) {
-        console.error('Failed to load users:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, [query, currentPage]);
+  const handleRefresh = () => {
+    onFetchUsers();
+    setSelectedUserId(null);
+  };
 
   return (
     <main>
@@ -55,13 +61,17 @@ export default function Page() {
         <Search placeholder="Search users..." />
         <CreateUser />
       </div>
-      <UsersTable users={users} loading={isLoading} />
+      <UsersTable
+        users={users}
+        loading={isLoading}
+        onSelectUser={setSelectedUserId}
+      />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalUsers / 10)} />
       </div>
-      <CreateUserModal />
-      <EditUserModal userId={null} />
-      <DeleteUserModal userId={null} />
+      <CreateUserModal onRefresh={onFetchUsers} />
+      <EditUserModal userId={selectedUserId} onRefresh={handleRefresh} />
+      <DeleteUserModal userId={selectedUserId} onRefresh={handleRefresh} />
     </main>
   );
 }

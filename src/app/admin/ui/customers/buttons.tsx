@@ -20,15 +20,16 @@ export function CreateCustomer() {
   );
 }
 
-export function UpdateCustomer({ id }: { id: string }) {
+export function UpdateCustomer({
+  id,
+  onSelectCustomer
+}: {
+  id: string;
+  onSelectCustomer: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.UPDATE_CUSTOMER
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-customer-id', id);
-      onOpenModal(MODAL_ID.UPDATE_CUSTOMER);
-    }
+    onSelectCustomer(id);
+    onOpenModal(MODAL_ID.UPDATE_CUSTOMER);
   };
 
   return (
@@ -41,15 +42,16 @@ export function UpdateCustomer({ id }: { id: string }) {
   );
 }
 
-export function DeleteCustomer({ id }: { id: string }) {
+export function DeleteCustomer({
+  id,
+  onSelectCustomer
+}: {
+  id: string;
+  onSelectCustomer: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_CUSTOMER
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-customer-id', id);
-      onOpenModal(MODAL_ID.DELETE_CUSTOMER);
-    }
+    onSelectCustomer(id);
+    onOpenModal(MODAL_ID.DELETE_CUSTOMER);
   };
 
   return (

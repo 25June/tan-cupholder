@@ -8,7 +8,7 @@ export interface Column<T> {
   headerClassName?: string;
 }
 
-export interface SimpleTableProps<T> {
+export interface SimpleTableProps<T extends { id: string }> {
   data: T[];
   columns: Column<T>[];
   keyExtractor: (item: T) => string;

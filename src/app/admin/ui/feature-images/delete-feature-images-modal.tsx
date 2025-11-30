@@ -1,70 +1,29 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useMemo, useState } from 'react';
 import { deleteFeatureImages } from '@/app/admin/lib/actions/image-feature.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import { FeatureImage } from '@/models/featureImage';
-import Spinner from '@/components/spinner/Spinner';
 
 export default function DeleteFeatureImagesModal({
-  onDeleteComplete
+  selectedImages,
+  onRefresh
 }: {
-  onDeleteComplete: () => void;
+  selectedImages: Record<string, FeatureImage | undefined>;
+  onRefresh: () => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [images, setImages] = useState<
-    Record<string, FeatureImage | undefined>
-  >({});
-  const modalRef = useRef<HTMLDialogElement | null>(null);
-  const prevOpenRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_FEATURE_IMAGES
-    ) as HTMLDialogElement;
-    modalRef.current = modal;
-    if (!modal) return;
-
-    const handleClose = () => {
-      setImages({});
-    };
-
-    modal.addEventListener('close', handleClose);
-    return () => {
-      modal.removeEventListener('close', handleClose);
-    };
-  }, []);
-
-  useEffect(() => {
-    const modal = modalRef.current;
-    if (!modal) return;
-
-    const checkModalState = () => {
-      const isOpen = modal.open;
-      const imagesData = modal.getAttribute('data-images');
-
-      if (isOpen && !prevOpenRef.current && imagesData) {
-        try {
-          const parsedImages = JSON.parse(imagesData);
-          setImages(parsedImages);
-        } catch (error) {
-          console.error('Failed to parse images data:', error);
-        }
-      }
-
-      prevOpenRef.current = isOpen;
-    };
-
-    const interval = setInterval(checkModalState, 100);
-    return () => clearInterval(interval);
-  }, []);
+  const imageIds = useMemo(
+    () =>
+      Object.values(selectedImages)
+        .filter((image) => image !== undefined)
+        .map((image) => image!.id),
+    [selectedImages]
+  );
 
   const handleConfirmDelete = async () => {
-    const imageIds = Object.values(images)
-      .filter((image) => image !== undefined)
-      .map((image) => image!.id);
-
     if (imageIds.length === 0) {
       return;
     }
@@ -72,8 +31,7 @@ export default function DeleteFeatureImagesModal({
     setIsLoading(true);
     try {
       await deleteFeatureImages(imageIds);
-      onCloseModal(MODAL_ID.DELETE_FEATURE_IMAGES);
-      onDeleteComplete();
+      handleClose();
     } catch (error) {
       console.error('Failed to delete feature images:', error);
     } finally {
@@ -83,12 +41,10 @@ export default function DeleteFeatureImagesModal({
 
   const handleClose = () => {
     onCloseModal(MODAL_ID.DELETE_FEATURE_IMAGES);
-    setImages({});
+    onRefresh();
   };
 
-  const numberOfImages = Object.values(images).filter(
-    (image) => image !== undefined
-  ).length;
+  const numberOfImages = imageIds.length;
 
   return (
     <dialog id={MODAL_ID.DELETE_FEATURE_IMAGES} className="modal">
@@ -115,7 +71,7 @@ export default function DeleteFeatureImagesModal({
           >
             {isLoading ? (
               <>
-                <Spinner />
+                <div className="loading loading-spinner loading-sm" />
                 <span>Deleting...</span>
               </>
             ) : (

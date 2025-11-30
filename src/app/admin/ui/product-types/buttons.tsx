@@ -20,15 +20,16 @@ export function CreateProductType() {
   );
 }
 
-export function UpdateProductType({ id }: { id: string }) {
+export function UpdateProductType({
+  id,
+  onSelectProductType
+}: {
+  id: string;
+  onSelectProductType: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.UPDATE_PRODUCT_TYPE
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-product-type-id', id);
-      onOpenModal(MODAL_ID.UPDATE_PRODUCT_TYPE);
-    }
+    onSelectProductType(id);
+    onOpenModal(MODAL_ID.UPDATE_PRODUCT_TYPE);
   };
 
   return (
@@ -41,15 +42,16 @@ export function UpdateProductType({ id }: { id: string }) {
   );
 }
 
-export function DeleteProductType({ id }: { id: string }) {
+export function DeleteProductType({
+  id,
+  onSelectProductType
+}: {
+  id: string;
+  onSelectProductType: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_PRODUCT_TYPE
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-product-type-id', id);
-      onOpenModal(MODAL_ID.DELETE_PRODUCT_TYPE);
-    }
+    onSelectProductType(id);
+    onOpenModal(MODAL_ID.DELETE_PRODUCT_TYPE);
   };
 
   return (

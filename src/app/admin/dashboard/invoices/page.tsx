@@ -51,6 +51,11 @@ export default function Page() {
     loadInvoices();
   }, [loadInvoices]);
 
+  const handleRefresh = () => {
+    loadInvoices();
+    setSelectedInvoiceId(null);
+  };
+
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -78,10 +83,10 @@ export default function Page() {
       </div>
 
       {/* Modals */}
-      <CreateInvoiceModal onCreateSuccess={loadInvoices} />
+      <CreateInvoiceModal onRefresh={loadInvoices} />
       <DeleteInvoiceModal
         invoiceId={selectedInvoiceId}
-        onDeleteSuccess={loadInvoices}
+        onRefresh={handleRefresh}
       />
       <ViewInvoiceModal
         invoiceId={selectedInvoiceId}

@@ -9,7 +9,11 @@ import { formatUserData } from '@/shared/utils/user.utils';
 
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateUserModal() {
+export default function CreateUserModal({
+  onRefresh
+}: {
+  onRefresh: () => void;
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -28,8 +32,7 @@ export default function CreateUserModal() {
           setIsLoading(false);
           return;
         }
-        onCloseModal(MODAL_ID.ADD_USER);
-        setState(initialState);
+        handleClose();
       })
       .catch((error) => {
         setState({
@@ -43,6 +46,7 @@ export default function CreateUserModal() {
   const handleClose = () => {
     onCloseModal(MODAL_ID.ADD_USER);
     setState(initialState);
+    onRefresh();
   };
 
   return (

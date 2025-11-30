@@ -22,7 +22,8 @@ export default function Page() {
     onGetNextPage,
     onSearch,
     totalCount,
-    onDelete
+    onDelete,
+    onRefresh
   } = useImageFeature();
   const [selectedImages, setSelectedImages] = useState<
     Record<string, FeatureImage | undefined>
@@ -37,13 +38,7 @@ export default function Page() {
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <SearchProducts onSearch={onSearch} />
         <CreateFeatureImage />
-        <DeleteFeatureImage
-          images={selectedImages}
-          callback={() => {
-            onDelete(Object.keys(selectedImages));
-            setSelectedImages({});
-          }}
-        />
+        <DeleteFeatureImage images={selectedImages} />
         {Object.values(selectedImages).length > 0 && (
           <button
             className="btn btn-square"
@@ -65,11 +60,13 @@ export default function Page() {
         isLoading={loading}
         isEnd={isEnd}
       />
-      <CreateFeatureImageModal />
+      <CreateFeatureImageModal onRefresh={onRefresh} />
       <DeleteFeatureImagesModal
-        onDeleteComplete={() => {
+        selectedImages={selectedImages}
+        onRefresh={() => {
           onDelete(Object.keys(selectedImages));
           setSelectedImages({});
+          onRefresh();
         }}
       />
     </main>

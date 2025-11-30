@@ -37,6 +37,12 @@ export const useImageFeature = () => {
     handleFetchFeatureImages(query, 0);
   };
 
+  const handleRefresh = () => {
+    setImages([]);
+    setPage(0);
+    handleFetchFeatureImages(query, 0);
+  };
+
   const handleDelete = (ids: string[]) => {
     setImages((prev) => prev.filter((image) => !ids.includes(image.id)));
     setTotalCount((prev) => prev - ids.length);
@@ -62,6 +68,7 @@ export const useImageFeature = () => {
     onFetchFeatureImages: handleFetchFeatureImages,
     onGetNextPage: handleGetNextPage,
     onSearch: handleSearch,
-    onDelete: handleDelete
+    onDelete: handleDelete,
+    onRefresh: handleRefresh
   };
 };

@@ -10,9 +10,9 @@ import Spinner from '@/components/spinner/Spinner';
 import { useActionState } from 'react';
 
 export default function CreateInvoiceModal({
-  onCreateSuccess
+  onRefresh
 }: {
-  onCreateSuccess?: () => void;
+  onRefresh: () => void;
 }) {
   const [orderId, setOrderId] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -50,10 +50,10 @@ export default function CreateInvoiceModal({
 
   const handleClose = () => {
     onCloseModal(MODAL_ID.CREATE_INVOICE);
-    // Reset form state
     setOrderId('');
     setOrderData(null);
     setSearchError(null);
+    onRefresh();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,13 +61,8 @@ export default function CreateInvoiceModal({
     const formData = new FormData(e.currentTarget);
     const result: any = await formAction(formData);
 
-    // Close modal on success
     if (result?.message && !result.errors) {
       handleClose();
-      // Refresh the data after successful creation
-      if (onCreateSuccess) {
-        onCreateSuccess();
-      }
     }
   };
 

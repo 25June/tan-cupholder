@@ -7,10 +7,12 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
 export default function CustomersTable({
   customers,
-  loading = false
+  loading = false,
+  onSelectCustomer
 }: {
   customers: Customer[];
   loading: boolean;
+  onSelectCustomer: (id: string) => void;
 }) {
   const columns: Column<Customer>[] = [
     {
@@ -62,8 +64,14 @@ export default function CustomersTable({
       keyExtractor={(customer) => customer.id}
       actions={(customer) => (
         <>
-          <UpdateCustomer id={customer.id} />
-          <DeleteCustomer id={customer.id} />
+          <UpdateCustomer
+            id={customer.id}
+            onSelectCustomer={onSelectCustomer}
+          />
+          <DeleteCustomer
+            id={customer.id}
+            onSelectCustomer={onSelectCustomer}
+          />
         </>
       )}
       loading={loading}

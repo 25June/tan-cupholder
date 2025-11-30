@@ -20,15 +20,16 @@ export function CreateProductTag() {
   );
 }
 
-export function UpdateProductTag({ id }: { id: string }) {
+export function UpdateProductTag({
+  id,
+  onSelectProductTag
+}: {
+  id: string;
+  onSelectProductTag: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.UPDATE_PRODUCT_TAG
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-product-tag-id', id);
-      onOpenModal(MODAL_ID.UPDATE_PRODUCT_TAG);
-    }
+    onSelectProductTag(id);
+    onOpenModal(MODAL_ID.UPDATE_PRODUCT_TAG);
   };
 
   return (
@@ -41,15 +42,16 @@ export function UpdateProductTag({ id }: { id: string }) {
   );
 }
 
-export function DeleteProductTag({ id }: { id: string }) {
+export function DeleteProductTag({
+  id,
+  onSelectProductTag
+}: {
+  id: string;
+  onSelectProductTag: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_PRODUCT_TAG
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-product-tag-id', id);
-      onOpenModal(MODAL_ID.DELETE_PRODUCT_TAG);
-    }
+    onSelectProductTag(id);
+    onOpenModal(MODAL_ID.DELETE_PRODUCT_TAG);
   };
 
   return (

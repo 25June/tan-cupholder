@@ -11,7 +11,11 @@ import { getLayoutTemplate } from '@/constants/email-template.const';
 
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateEmailTemplateModal() {
+export default function CreateEmailTemplateModal({
+  onRefresh
+}: {
+  onRefresh: () => void;
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [mainContent, setMainContent] = useState<string>('');
@@ -36,9 +40,7 @@ export default function CreateEmailTemplateModal() {
           setIsLoading(false);
           return;
         }
-        onCloseModal(MODAL_ID.ADD_EMAIL_TEMPLATE);
-        setState(initialState);
-        setMainContent('');
+        handleClose();
       })
       .catch((error) => {
         setState({
@@ -53,6 +55,7 @@ export default function CreateEmailTemplateModal() {
     onCloseModal(MODAL_ID.ADD_EMAIL_TEMPLATE);
     setState(initialState);
     setMainContent('');
+    onRefresh();
   };
 
   return (

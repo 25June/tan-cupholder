@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   fetchProducts,
   fetchTotalProducts
@@ -32,6 +32,9 @@ export default function Page() {
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [productTags, setProductTags] = useState<ProductTag[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
 
   // Fetch product types only once on initial render
   useEffect(() => {
@@ -68,30 +71,39 @@ export default function Page() {
   }, [query]);
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const [productsData, totalData] = await Promise.all([
-          fetchProducts({ query, page: currentPage.toString() }),
-          fetchTotalProducts()
-        ]);
-
-        setProducts(productsData);
-        setTotalProducts(totalData);
-      } catch (error) {
-        console.error('Failed to load products:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
+    onFetchProducts();
   }, [query, currentPage]);
 
-  const formattedProducts = productTypes.reduce((acc, cur) => {
-    acc[cur.id] = cur.name;
-    return acc;
-  }, {} as Record<string, string>);
+  const onFetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const [productsData, totalData] = await Promise.all([
+        fetchProducts({ query, page: currentPage.toString() }),
+        fetchTotalProducts()
+      ]);
+
+      setProducts(productsData);
+      setTotalProducts(totalData);
+    } catch (error) {
+      console.error('Failed to load products:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onRefresh = () => {
+    onFetchProducts();
+    setSelectedProductId(null);
+  };
+
+  const formattedProducts = useMemo(
+    () =>
+      productTypes.reduce((acc: Record<string, string>, cur: ProductType) => {
+        acc[cur.id] = cur.name;
+        return acc;
+      }, {} as Record<string, string>),
+    [productTypes]
+  );
 
   return (
     <main>
@@ -113,6 +125,7 @@ export default function Page() {
         productTypes={formattedProducts}
         productTags={productTags}
         loading={isLoading}
+        onSelectProduct={setSelectedProductId}
       />
       <div className="mt-5 flex w-full justify-center">
         <PaginationState
@@ -125,14 +138,20 @@ export default function Page() {
       <CreateProductModal
         productTypes={productTypes}
         productTags={productTags}
+        onRefresh={onFetchProducts}
       />
+      <DeleteProductModal productId={selectedProductId} onRefresh={onRefresh} />
       <EditProductModal
-        productId={null}
+        productId={selectedProductId}
         productTypes={productTypes}
         productTags={productTags}
+        onRefresh={onRefresh}
       />
-      <DeleteProductModal productId={null} />
-      <EditProductImageModal productId={null} />
+
+      <EditProductImageModal
+        productId={selectedProductId}
+        onRefresh={onRefresh}
+      />
     </main>
   );
 }

@@ -11,59 +11,76 @@ import { ProductTag } from '@/models/productTag';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 import SimpleDropdown from '@/components/simple-dropdown/simple-downdown';
 
-const ActionDropdown = memo(({ product }: { product: ProductResponse }) => {
-  return (
-    <div className="flex justify-end items-center">
-      <SimpleDropdown
-        host={
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-sm btn-ghost btn-circle"
-          >
-            <EllipsisVerticalIcon className="w-5" />
-          </div>
-        }
-        content={
-          <>
-            <li>
-              <UpdateImage id={product.id} />
-            </li>
-            <li>
-              <UpdateProduct
-                id={product.id}
-                product={{
-                  id: product.id,
-                  name: product.name,
-                  description: product.description,
-                  price: product.price,
-                  sale: product.sale,
-                  stock: product.stock,
-                  type: product.type,
-                  tagIds: product.tagIds
-                }}
-              />
-            </li>
-            <li>
-              <DeleteProduct id={product.id} />
-            </li>
-          </>
-        }
-      />
-    </div>
-  );
-});
+const ActionDropdown = memo(
+  ({
+    product,
+    onSelectProduct
+  }: {
+    product: ProductResponse;
+    onSelectProduct: (productId: string) => void;
+  }) => {
+    return (
+      <div className="flex justify-end items-center">
+        <SimpleDropdown
+          host={
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-sm btn-ghost btn-circle"
+            >
+              <EllipsisVerticalIcon className="w-5" />
+            </div>
+          }
+          content={
+            <>
+              <li>
+                <UpdateImage
+                  id={product.id}
+                  onSelectProduct={onSelectProduct}
+                />
+              </li>
+              <li>
+                <UpdateProduct
+                  id={product.id}
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    price: product.price,
+                    sale: product.sale,
+                    stock: product.stock,
+                    type: product.type,
+                    tagIds: product.tagIds
+                  }}
+                  onSelectProduct={onSelectProduct}
+                />
+              </li>
+              <li>
+                <DeleteProduct
+                  id={product.id}
+                  onSelectProduct={onSelectProduct}
+                />
+              </li>
+            </>
+          }
+        />
+      </div>
+    );
+  }
+);
 
 export default function ProductsTable({
   products,
   productTypes,
   productTags,
-  loading = false
+  loading = false,
+  onSelectProduct
 }: {
   products: ProductResponse[];
   productTypes: Record<string, string>;
   productTags: ProductTag[];
   loading: boolean;
+  onSelectProduct: (productId: string) => void;
 }) {
   // Map tag IDs to tag objects for quick lookup
   const tagObj = useMemo(() => {
@@ -139,7 +156,9 @@ export default function ProductsTable({
       data={products}
       columns={columns}
       keyExtractor={(product) => product.id}
-      actions={(product, index) => <ActionDropdown product={product} />}
+      actions={(product, index) => (
+        <ActionDropdown product={product} onSelectProduct={onSelectProduct} />
+      )}
       emptyMessage="No products found"
       loading={loading}
     />

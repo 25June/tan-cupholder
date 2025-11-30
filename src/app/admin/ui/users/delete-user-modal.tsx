@@ -1,61 +1,26 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import { deleteUser } from '@/app/admin/lib/actions/user.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
-import Spinner from '@/components/spinner/Spinner';
 
-export default function DeleteUserModal({ userId }: { userId: string | null }) {
+export default function DeleteUserModal({
+  userId,
+  onRefresh
+}: {
+  userId: string | null;
+  onRefresh: () => void;
+}) {
   const [isLoading, setIsLoading] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(userId);
-  const modalRef = useRef<HTMLDialogElement | null>(null);
-  const prevOpenRef = useRef<boolean>(false);
-
-  useEffect(() => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_USER
-    ) as HTMLDialogElement;
-    modalRef.current = modal;
-    if (!modal) return;
-
-    const handleClose = () => {
-      setCurrentUserId(null);
-    };
-
-    modal.addEventListener('close', handleClose);
-    return () => {
-      modal.removeEventListener('close', handleClose);
-    };
-  }, []);
-
-  useEffect(() => {
-    const modal = modalRef.current;
-    if (!modal) return;
-
-    const checkModalState = () => {
-      const isOpen = modal.open;
-      const id = modal.getAttribute('data-user-id');
-
-      if (isOpen && !prevOpenRef.current && id) {
-        setCurrentUserId(id);
-      }
-
-      prevOpenRef.current = isOpen;
-    };
-
-    const interval = setInterval(checkModalState, 100);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleConfirmDelete = async () => {
-    const idToDelete = userId || currentUserId;
-    if (!idToDelete) return;
+    if (!userId) return;
 
     setIsLoading(true);
     try {
-      await deleteUser(idToDelete);
-      onCloseModal(MODAL_ID.DELETE_USER);
+      await deleteUser(userId);
+      handleClose();
     } catch (error) {
       console.error('Failed to delete user:', error);
     } finally {
@@ -65,7 +30,7 @@ export default function DeleteUserModal({ userId }: { userId: string | null }) {
 
   const handleClose = () => {
     onCloseModal(MODAL_ID.DELETE_USER);
-    setCurrentUserId(null);
+    onRefresh();
   };
 
   return (
@@ -93,7 +58,7 @@ export default function DeleteUserModal({ userId }: { userId: string | null }) {
           >
             {isLoading ? (
               <>
-                <Spinner />
+                <div className="loading loading-spinner loading-sm" />
                 <span>Deleting...</span>
               </>
             ) : (

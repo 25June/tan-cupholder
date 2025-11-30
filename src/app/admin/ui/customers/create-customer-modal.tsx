@@ -10,7 +10,11 @@ import { MODAL_ID } from '@/constants/modal.const';
 
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateCustomerModal() {
+export default function CreateCustomerModal({
+  onRefresh
+}: {
+  onRefresh: () => void;
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -39,8 +43,7 @@ export default function CreateCustomerModal() {
           setIsLoading(false);
           return;
         }
-        onCloseModal(MODAL_ID.ADD_CUSTOMER);
-        setState(initialState);
+        handleClose();
       })
       .catch((error) => {
         setState({
@@ -54,6 +57,7 @@ export default function CreateCustomerModal() {
   const handleClose = () => {
     onCloseModal(MODAL_ID.ADD_CUSTOMER);
     setState(initialState);
+    onRefresh();
   };
 
   return (

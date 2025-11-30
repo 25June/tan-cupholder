@@ -8,10 +8,12 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
 export default function UsersTable({
   users,
-  loading = false
+  loading = false,
+  onSelectUser
 }: {
   users: UserInfo[];
   loading: boolean;
+  onSelectUser: (id: string) => void;
 }) {
   const columns: Column<UserInfo>[] = [
     {
@@ -98,8 +100,8 @@ export default function UsersTable({
       keyExtractor={(user) => user.id}
       actions={(user) => (
         <>
-          <UpdateUser id={user.id} />
-          <DeleteUser id={user.id} />
+          <UpdateUser id={user.id} onSelectUser={onSelectUser} />
+          <DeleteUser id={user.id} onSelectUser={onSelectUser} />
         </>
       )}
       emptyMessage="No users found"

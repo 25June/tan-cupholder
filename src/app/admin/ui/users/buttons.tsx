@@ -20,15 +20,16 @@ export function CreateUser() {
   );
 }
 
-export function UpdateUser({ id }: { id: string }) {
+export function UpdateUser({
+  id,
+  onSelectUser
+}: {
+  id: string;
+  onSelectUser: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.UPDATE_USER
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-user-id', id);
-      onOpenModal(MODAL_ID.UPDATE_USER);
-    }
+    onSelectUser(id);
+    onOpenModal(MODAL_ID.UPDATE_USER);
   };
 
   return (
@@ -41,15 +42,16 @@ export function UpdateUser({ id }: { id: string }) {
   );
 }
 
-export function DeleteUser({ id }: { id: string }) {
+export function DeleteUser({
+  id,
+  onSelectUser
+}: {
+  id: string;
+  onSelectUser: (id: string) => void;
+}) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_USER
-    ) as HTMLDialogElement;
-    if (modal) {
-      modal.setAttribute('data-user-id', id);
-      onOpenModal(MODAL_ID.DELETE_USER);
-    }
+    onSelectUser(id);
+    onOpenModal(MODAL_ID.DELETE_USER);
   };
 
   return (

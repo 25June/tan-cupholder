@@ -11,7 +11,11 @@ import { PRODUCT_TAG_SAMPLE_COLOR } from '@/constants/product-tag-sample-color.c
 
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateProductTagModal() {
+export default function CreateProductTagModal({
+  onRefresh
+}: {
+  onRefresh: () => void;
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [color, setColor] = useState<string>('#FF0000');
@@ -33,8 +37,7 @@ export default function CreateProductTagModal() {
           setIsLoading(false);
           return;
         }
-        onCloseModal(MODAL_ID.ADD_PRODUCT_TAG);
-        setState(initialState);
+        handleClose();
       })
       .catch((error) => {
         setState({ message: error.message, errors: error.errors });
@@ -45,6 +48,7 @@ export default function CreateProductTagModal() {
   const handleClose = () => {
     onCloseModal(MODAL_ID.ADD_PRODUCT_TAG);
     setState(initialState);
+    onRefresh();
   };
 
   return (

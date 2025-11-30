@@ -10,7 +10,11 @@ import { MODAL_ID } from '@/constants/modal.const';
 
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateProductTypeModal() {
+export default function CreateProductTypeModal({
+  onRefresh
+}: {
+  onRefresh: () => void;
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -33,8 +37,7 @@ export default function CreateProductTypeModal() {
           setIsLoading(false);
           return;
         }
-        onCloseModal(MODAL_ID.ADD_PRODUCT_TYPE);
-        setState(initialState);
+        handleClose();
       })
       .catch((error) => {
         setState({
@@ -48,6 +51,7 @@ export default function CreateProductTypeModal() {
   const handleClose = () => {
     onCloseModal(MODAL_ID.ADD_PRODUCT_TYPE);
     setState(initialState);
+    onRefresh();
   };
 
   return (

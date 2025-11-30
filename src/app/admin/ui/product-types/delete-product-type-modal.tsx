@@ -1,67 +1,26 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import { deleteProductType } from '@/app/admin/lib/actions/product-types.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
-import Spinner from '@/components/spinner/Spinner';
 
 export default function DeleteProductTypeModal({
-  productTypeId
+  productTypeId,
+  onRefresh
 }: {
   productTypeId: string | null;
+  onRefresh: () => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [currentProductTypeId, setCurrentProductTypeId] = useState<
-    string | null
-  >(productTypeId);
-  const modalRef = useRef<HTMLDialogElement | null>(null);
-  const prevOpenRef = useRef<boolean>(false);
-
-  useEffect(() => {
-    const modal = document.getElementById(
-      MODAL_ID.DELETE_PRODUCT_TYPE
-    ) as HTMLDialogElement;
-    modalRef.current = modal;
-    if (!modal) return;
-
-    const handleClose = () => {
-      setCurrentProductTypeId(null);
-    };
-
-    modal.addEventListener('close', handleClose);
-    return () => {
-      modal.removeEventListener('close', handleClose);
-    };
-  }, []);
-
-  useEffect(() => {
-    const modal = modalRef.current;
-    if (!modal) return;
-
-    const checkModalState = () => {
-      const isOpen = modal.open;
-      const id = modal.getAttribute('data-product-type-id');
-
-      if (isOpen && !prevOpenRef.current && id) {
-        setCurrentProductTypeId(id);
-      }
-
-      prevOpenRef.current = isOpen;
-    };
-
-    const interval = setInterval(checkModalState, 100);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleConfirmDelete = async () => {
-    const idToDelete = productTypeId || currentProductTypeId;
-    if (!idToDelete) return;
+    if (!productTypeId) return;
 
     setIsLoading(true);
     try {
-      await deleteProductType(idToDelete);
-      onCloseModal(MODAL_ID.DELETE_PRODUCT_TYPE);
+      await deleteProductType(productTypeId);
+      handleClose();
     } catch (error) {
       console.error('Failed to delete product type:', error);
     } finally {
@@ -71,7 +30,7 @@ export default function DeleteProductTypeModal({
 
   const handleClose = () => {
     onCloseModal(MODAL_ID.DELETE_PRODUCT_TYPE);
-    setCurrentProductTypeId(null);
+    onRefresh();
   };
 
   return (
@@ -99,7 +58,7 @@ export default function DeleteProductTypeModal({
           >
             {isLoading ? (
               <>
-                <Spinner />
+                <div className="loading loading-spinner loading-sm" />
                 <span>Deleting...</span>
               </>
             ) : (

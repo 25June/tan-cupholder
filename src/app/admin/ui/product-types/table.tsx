@@ -9,10 +9,12 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
 export default function ProductTypesTable({
   productTypes,
-  loading = false
+  loading = false,
+  onSelectProductType
 }: {
   productTypes: ProductType[];
   loading: boolean;
+  onSelectProductType: (id: string) => void;
 }) {
   const columns: Column<ProductType>[] = [
     {
@@ -44,8 +46,14 @@ export default function ProductTypesTable({
       keyExtractor={(productType) => productType.id}
       actions={(productType) => (
         <>
-          <UpdateProductType id={productType.id} />
-          <DeleteProductType id={productType.id} />
+          <UpdateProductType
+            id={productType.id}
+            onSelectProductType={onSelectProductType}
+          />
+          <DeleteProductType
+            id={productType.id}
+            onSelectProductType={onSelectProductType}
+          />
         </>
       )}
       emptyMessage="No product types found"

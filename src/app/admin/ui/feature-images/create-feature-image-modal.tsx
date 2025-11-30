@@ -12,7 +12,11 @@ import { MODAL_ID } from '@/constants/modal.const';
 
 const initialState: State = { message: null, errors: {} };
 
-export default function CreateFeatureImageModal() {
+export default function CreateFeatureImageModal({
+  onRefresh
+}: {
+  onRefresh: () => void;
+}) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [uploadImages, setUploadImages] = useState<File[]>([]);
@@ -59,12 +63,7 @@ export default function CreateFeatureImageModal() {
       Object.values(imageUploadCompleted).length &&
       Object.values(imageUploadCompleted).every((value) => value === true)
     ) {
-      onCloseModal(MODAL_ID.ADD_FEATURE_IMAGE);
-      setUploadImages([]);
-      setImageUploadCompleted({});
-      setPresignedUrlObject({});
-      setInputKey((prev) => prev + 1);
-      setState(initialState);
+      handleClose();
     }
   }, [imageUploadCompleted]);
 
@@ -75,6 +74,7 @@ export default function CreateFeatureImageModal() {
     setPresignedUrlObject({});
     setInputKey((prev) => prev + 1);
     setState(initialState);
+    onRefresh();
   };
 
   return (
