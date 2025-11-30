@@ -63,7 +63,7 @@ export default function CustomersTable({
       columns={columns}
       keyExtractor={(customer) => customer.id}
       actions={(customer) => (
-        <>
+        <div className="flex items-center gap-2">
           <UpdateCustomer
             id={customer.id}
             onSelectCustomer={onSelectCustomer}
@@ -72,7 +72,7 @@ export default function CustomersTable({
             id={customer.id}
             onSelectCustomer={onSelectCustomer}
           />
-        </>
+        </div>
       )}
       loading={loading}
       emptyMessage="No customers found"

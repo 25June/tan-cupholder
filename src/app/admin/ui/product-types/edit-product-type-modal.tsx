@@ -60,7 +60,7 @@ export default function EditProductTypeModal({
           setIsLoading(false);
           return;
         }
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({
@@ -73,11 +73,13 @@ export default function EditProductTypeModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_PRODUCT_TYPE);
     setState(initialState);
     setProductType(null);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -161,7 +163,7 @@ export default function EditProductTypeModal({
               <div className="flex justify-end gap-2 mt-4">
                 <button
                   type="button"
-                  onClick={handleClose}
+                  onClick={() => handleClose()}
                   className="btn btn-ghost max-w-40 w-full"
                 >
                   Cancel

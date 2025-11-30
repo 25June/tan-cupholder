@@ -43,7 +43,7 @@ export default function CreateCustomerModal({
           setIsLoading(false);
           return;
         }
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({
@@ -54,10 +54,12 @@ export default function CreateCustomerModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.ADD_CUSTOMER);
     setState(initialState);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -186,7 +188,7 @@ export default function CreateCustomerModal({
             <div className="flex justify-end gap-2 mt-4">
               <button
                 type="button"
-                onClick={handleClose}
+                onClick={() => handleClose()}
                 className="btn btn-ghost max-w-40 w-full"
               >
                 Cancel
@@ -201,7 +203,7 @@ export default function CreateCustomerModal({
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

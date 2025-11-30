@@ -69,7 +69,7 @@ export default function EditEmailTemplateModal({
           setIsLoading(false);
           return;
         }
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({
@@ -82,12 +82,14 @@ export default function EditEmailTemplateModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_EMAIL_TEMPLATE);
     setState(initialState);
     setEmailTemplate(null);
     setMainContent('');
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -182,7 +184,7 @@ export default function EditEmailTemplateModal({
               <div className="flex justify-end gap-2 mt-4">
                 <button
                   type="button"
-                  onClick={handleClose}
+                  onClick={() => handleClose()}
                   className="btn btn-ghost max-w-40 w-full"
                 >
                   Cancel

@@ -63,18 +63,20 @@ export default function CreateFeatureImageModal({
       Object.values(imageUploadCompleted).length &&
       Object.values(imageUploadCompleted).every((value) => value === true)
     ) {
-      handleClose();
+      handleClose(true);
     }
   }, [imageUploadCompleted]);
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.ADD_FEATURE_IMAGE);
     setUploadImages([]);
     setImageUploadCompleted({});
     setPresignedUrlObject({});
     setInputKey((prev) => prev + 1);
     setState(initialState);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -144,7 +146,7 @@ export default function CreateFeatureImageModal({
             <div className="flex justify-end gap-2 mt-4">
               <button
                 type="button"
-                onClick={handleClose}
+                onClick={() => handleClose()}
                 className="btn btn-ghost max-w-40 w-full"
               >
                 Cancel
@@ -159,7 +161,7 @@ export default function CreateFeatureImageModal({
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

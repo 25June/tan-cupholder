@@ -40,7 +40,7 @@ export default function CreateEmailTemplateModal({
           setIsLoading(false);
           return;
         }
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({
@@ -51,11 +51,13 @@ export default function CreateEmailTemplateModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.ADD_EMAIL_TEMPLATE);
     setState(initialState);
     setMainContent('');
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -139,7 +141,7 @@ export default function CreateEmailTemplateModal({
             <div className="flex justify-end gap-2 mt-4">
               <button
                 type="button"
-                onClick={handleClose}
+                onClick={() => handleClose()}
                 className="btn btn-ghost max-w-40 w-full"
               >
                 Cancel
@@ -154,7 +156,7 @@ export default function CreateEmailTemplateModal({
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

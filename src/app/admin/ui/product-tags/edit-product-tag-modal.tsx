@@ -61,7 +61,7 @@ export default function EditProductTagModal({
           setIsLoading(false);
           return;
         }
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({ message: error.message, errors: error.errors });
@@ -71,12 +71,14 @@ export default function EditProductTagModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_PRODUCT_TAG);
     setState(initialState);
     setProductTag(null);
     setColor('#FF0000');
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -198,7 +200,7 @@ export default function EditProductTagModal({
               <div className="flex justify-end gap-2 mt-4">
                 <button
                   type="button"
-                  onClick={handleClose}
+                  onClick={() => handleClose()}
                   className="btn btn-ghost max-w-40 w-full"
                 >
                   Cancel

@@ -79,7 +79,7 @@ export default function CreateProductModal({
   useEffect(() => {
     if (Object.values(imageUploadCompleted).every((value) => value === true)) {
       setIsLoading(false);
-      handleClose();
+      handleClose(true);
     }
   }, [imageUploadCompleted]);
 
@@ -127,14 +127,16 @@ export default function CreateProductModal({
     setUploadImages(Array.from(files));
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.ADD_PRODUCT);
     setState(initialState);
     setTagIds([]);
     setUploadImages([]);
     setPresignedUrlObject({});
     setFormId(Date.now().toString());
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   const productTagOptions = useMemo(() => {
@@ -369,7 +371,7 @@ export default function CreateProductModal({
             <div className="flex justify-end gap-2 mt-4">
               <button
                 type="button"
-                onClick={handleClose}
+                onClick={() => handleClose()}
                 className="btn btn-ghost max-w-40 w-full"
               >
                 Cancel
@@ -384,7 +386,7 @@ export default function CreateProductModal({
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

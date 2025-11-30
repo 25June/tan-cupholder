@@ -20,7 +20,7 @@ export default function DeleteProductTypeModal({
     setIsLoading(true);
     try {
       await deleteProductType(productTypeId);
-      handleClose();
+      handleClose(true);
     } catch (error) {
       console.error('Failed to delete product type:', error);
     } finally {
@@ -28,9 +28,9 @@ export default function DeleteProductTypeModal({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.DELETE_PRODUCT_TYPE);
-    onRefresh();
+    refresh && onRefresh();
   };
 
   return (
@@ -44,7 +44,7 @@ export default function DeleteProductTypeModal({
         <div className="modal-action">
           <button
             type="button"
-            onClick={handleClose}
+            onClick={() => handleClose()}
             disabled={isLoading}
             className="btn btn-ghost"
           >
@@ -68,7 +68,7 @@ export default function DeleteProductTypeModal({
         </div>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

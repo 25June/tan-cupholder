@@ -32,7 +32,7 @@ export default function CreateUserModal({
           setIsLoading(false);
           return;
         }
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({
@@ -43,10 +43,12 @@ export default function CreateUserModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.ADD_USER);
     setState(initialState);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -172,7 +174,7 @@ export default function CreateUserModal({
             <div className="mt-6 flex justify-end gap-4">
               <button
                 type="button"
-                onClick={handleClose}
+                onClick={() => handleClose()}
                 className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
               >
                 Cancel
@@ -189,7 +191,7 @@ export default function CreateUserModal({
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

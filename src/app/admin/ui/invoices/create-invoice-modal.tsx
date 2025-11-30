@@ -48,12 +48,14 @@ export default function CreateInvoiceModal({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.CREATE_INVOICE);
     setOrderId('');
     setOrderData(null);
     setSearchError(null);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,7 +64,7 @@ export default function CreateInvoiceModal({
     const result: any = await formAction(formData);
 
     if (result?.message && !result.errors) {
-      handleClose();
+      handleClose(true);
     }
   };
 
@@ -235,7 +237,7 @@ export default function CreateInvoiceModal({
             <div className="modal-action">
               <button
                 type="button"
-                onClick={handleClose}
+                onClick={() => handleClose()}
                 className="btn btn-ghost"
               >
                 Cancel
@@ -251,7 +253,7 @@ export default function CreateInvoiceModal({
           <div className="modal-action">
             <button
               type="button"
-              onClick={handleClose}
+              onClick={() => handleClose()}
               className="btn btn-ghost"
             >
               Close
@@ -260,7 +262,7 @@ export default function CreateInvoiceModal({
         )}
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

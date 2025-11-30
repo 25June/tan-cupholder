@@ -37,7 +37,7 @@ export default function CreateProductTagModal({
           setIsLoading(false);
           return;
         }
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({ message: error.message, errors: error.errors });
@@ -45,10 +45,12 @@ export default function CreateProductTagModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.ADD_PRODUCT_TAG);
     setState(initialState);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -158,7 +160,7 @@ export default function CreateProductTagModal({
             <div className="flex justify-end gap-2 mt-4">
               <button
                 type="button"
-                onClick={handleClose}
+                onClick={() => handleClose()}
                 className="btn btn-ghost max-w-40 w-full"
               >
                 Cancel
@@ -172,7 +174,7 @@ export default function CreateProductTagModal({
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

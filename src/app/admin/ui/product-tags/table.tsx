@@ -59,7 +59,7 @@ export default function ProductTagsTable({
       columns={columns}
       keyExtractor={(tag) => tag.id}
       actions={(tag) => (
-        <>
+        <div className="flex items-center gap-2">
           <UpdateProductTag
             id={tag.id}
             onSelectProductTag={onSelectProductTag}
@@ -68,7 +68,7 @@ export default function ProductTagsTable({
             id={tag.id}
             onSelectProductTag={onSelectProductTag}
           />
-        </>
+        </div>
       )}
       loading={loading}
       emptyMessage="No product tags found"

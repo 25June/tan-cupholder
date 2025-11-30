@@ -41,6 +41,7 @@ export default function EditProductImageModal({
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMain, setIsMain] = useState<Record<string, boolean>>({});
+  const [shouldRefresh, setShouldRefresh] = useState(false);
 
   const mainImage = images.find((image) => image.isMain);
 
@@ -52,6 +53,7 @@ export default function EditProductImageModal({
     setImageUploadCompleted({});
     setState(initialState);
     setIsMain({});
+    setShouldRefresh(false);
   };
 
   useEffect(() => {
@@ -124,6 +126,7 @@ export default function EditProductImageModal({
         });
     });
     setImageUploadCompleted(newUploadImage);
+    setShouldRefresh(true);
     Promise.all(promises).finally(() => setIsLoading(false));
   };
 
@@ -136,6 +139,7 @@ export default function EditProductImageModal({
           const { images: imagesData } = await fetchProductById(productId);
           setImages(imagesData);
         }
+        setShouldRefresh(true);
       } catch (error) {
         console.error('Failed to delete image:', error);
       } finally {
@@ -152,6 +156,7 @@ export default function EditProductImageModal({
         const { images: imagesData } = await fetchProductById(productId);
         setImages(imagesData);
       }
+      setShouldRefresh(true);
     } catch (error) {
       console.error('Failed to update active image:', error);
     } finally {
@@ -162,7 +167,9 @@ export default function EditProductImageModal({
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.EDIT_PRODUCT_IMAGE);
     resetState();
-    onRefresh();
+    if (refresh ?? shouldRefresh) {
+      onRefresh();
+    }
   };
 
   return (

@@ -45,7 +45,7 @@ export default function ProductTypesTable({
       columns={columns}
       keyExtractor={(productType) => productType.id}
       actions={(productType) => (
-        <>
+        <div className="flex items-center gap-2">
           <UpdateProductType
             id={productType.id}
             onSelectProductType={onSelectProductType}
@@ -54,7 +54,7 @@ export default function ProductTypesTable({
             id={productType.id}
             onSelectProductType={onSelectProductType}
           />
-        </>
+        </div>
       )}
       emptyMessage="No product types found"
       loading={loading}

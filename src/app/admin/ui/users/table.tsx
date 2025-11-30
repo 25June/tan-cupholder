@@ -99,10 +99,10 @@ export default function UsersTable({
       columns={columns}
       keyExtractor={(user) => user.id}
       actions={(user) => (
-        <>
+        <div className="flex items-center gap-2">
           <UpdateUser id={user.id} onSelectUser={onSelectUser} />
           <DeleteUser id={user.id} onSelectUser={onSelectUser} />
-        </>
+        </div>
       )}
       emptyMessage="No users found"
       loading={loading}

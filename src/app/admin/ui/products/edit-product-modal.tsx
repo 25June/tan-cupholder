@@ -105,7 +105,7 @@ export default function EditProductModal({
           return;
         }
         setState(initialState);
-        handleClose();
+        handleClose(true);
       })
       .catch((error) => {
         setState({
@@ -118,7 +118,7 @@ export default function EditProductModal({
       });
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_PRODUCT);
     setState(initialState);
     setProduct(null);
@@ -128,7 +128,9 @@ export default function EditProductModal({
     if (modal) {
       modal.removeAttribute('data-product');
     }
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   const renderForm = () => {
@@ -356,7 +358,7 @@ export default function EditProductModal({
           <div className="flex justify-end gap-2 mt-4">
             <button
               type="button"
-              onClick={handleClose}
+              onClick={() => handleClose()}
               className="btn btn-ghost max-w-40 w-full"
             >
               Cancel
@@ -379,7 +381,7 @@ export default function EditProductModal({
         {renderForm()}
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

@@ -30,7 +30,7 @@ export default function DeleteProductModal({
 
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.DELETE_PRODUCT);
-    onRefresh();
+    refresh && onRefresh();
   };
 
   return (

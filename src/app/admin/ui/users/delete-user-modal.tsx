@@ -20,7 +20,7 @@ export default function DeleteUserModal({
     setIsLoading(true);
     try {
       await deleteUser(userId);
-      handleClose();
+      handleClose(true);
     } catch (error) {
       console.error('Failed to delete user:', error);
     } finally {
@@ -28,9 +28,11 @@ export default function DeleteUserModal({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.DELETE_USER);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -44,7 +46,7 @@ export default function DeleteUserModal({
         <div className="modal-action">
           <button
             type="button"
-            onClick={handleClose}
+            onClick={() => handleClose()}
             disabled={isLoading}
             className="btn btn-ghost"
           >
@@ -68,7 +70,7 @@ export default function DeleteUserModal({
         </div>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

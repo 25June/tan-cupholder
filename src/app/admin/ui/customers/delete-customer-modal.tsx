@@ -20,7 +20,7 @@ export default function DeleteCustomerModal({
     setIsLoading(true);
     try {
       await deleteCustomer(customerId);
-      handleClose();
+      handleClose(true);
     } catch (error) {
       console.error('Failed to delete customer:', error);
     } finally {
@@ -28,9 +28,11 @@ export default function DeleteCustomerModal({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.DELETE_CUSTOMER);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -44,7 +46,7 @@ export default function DeleteCustomerModal({
         <div className="modal-action">
           <button
             type="button"
-            onClick={handleClose}
+            onClick={() => handleClose()}
             disabled={isLoading}
             className="btn btn-ghost"
           >
@@ -68,7 +70,7 @@ export default function DeleteCustomerModal({
         </div>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );

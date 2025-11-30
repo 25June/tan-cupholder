@@ -20,7 +20,7 @@ export default function DeleteEmailTemplateModal({
     setIsLoading(true);
     try {
       await deleteEmailTemplate(emailTemplateId);
-      handleClose();
+      handleClose(true);
     } catch (error) {
       console.error('Failed to delete email template:', error);
     } finally {
@@ -28,9 +28,11 @@ export default function DeleteEmailTemplateModal({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
-    onRefresh();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (
@@ -44,7 +46,7 @@ export default function DeleteEmailTemplateModal({
         <div className="modal-action">
           <button
             type="button"
-            onClick={handleClose}
+            onClick={() => handleClose()}
             disabled={isLoading}
             className="btn btn-ghost"
           >
@@ -68,7 +70,7 @@ export default function DeleteEmailTemplateModal({
         </div>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={handleClose}>close</button>
+        <button onClick={() => handleClose()}>close</button>
       </form>
     </dialog>
   );
