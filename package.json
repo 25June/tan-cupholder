@@ -21,7 +21,7 @@
     "clsx": "^2.1.1",
     "downshift": "^9.0.10",
     "motion": "^12.6.0",
-    "next": "15.1.7",
+    "next": "15.1.9",
     "next-auth": "^5.0.0-beta.29",
     "next-intl": "^4.1.0",
     "nodemailer": "^6.10.1",
