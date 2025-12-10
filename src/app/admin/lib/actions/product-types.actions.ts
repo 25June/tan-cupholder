@@ -4,6 +4,7 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { ProductType } from '@/models/productType';
+import { generateSignedUrl } from '@/app/lib/bucket';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -12,6 +13,7 @@ const ProductTypeSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   shortName: z.string().min(1, { message: 'Short name is required' }),
   description: z.string().optional(),
+  imageUrl: z.string().or(z.null()).optional(),
   createdAt: z.string(),
   updatedAt: z.string()
 });
@@ -32,6 +34,7 @@ export type State = {
     name?: string[];
     shortName?: string[];
     description?: string[];
+    imageUrl?: string[];
   };
   message?: string | null;
 };
@@ -106,7 +109,8 @@ export async function createProductType(prevState: State, formData: FormData) {
   const validatedFields = CreateProductType.safeParse({
     name: formData.get('name'),
     shortName: formData.get('shortName'),
-    description: formData.get('description')
+    description: formData.get('description'),
+    imageUrl: formData.get('imageUrl')
   });
 
   if (!validatedFields.success) {
@@ -116,13 +120,15 @@ export async function createProductType(prevState: State, formData: FormData) {
     };
   }
 
-  const { name, shortName, description } = validatedFields.data;
+  const { name, shortName, description, imageUrl } = validatedFields.data;
   const date = new Date().toISOString();
 
   try {
     await sql`
-      INSERT INTO product_types (name, short_name, description, created_at, updated_at)
-      VALUES (${name}, ${shortName}, ${description || null}, ${date}, ${date})
+      INSERT INTO product_types (name, short_name, description, image_url, created_at, updated_at)
+      VALUES (${name}, ${shortName}, ${description || null}, ${
+      imageUrl || null
+    }, ${date}, ${date})
     `;
   } catch (error) {
     return { message: 'Database Error: Failed to Create Product Type.' };
@@ -137,7 +143,8 @@ export async function updateProductType(prevState: State, formData: FormData) {
     id: formData.get('id'),
     name: formData.get('name'),
     shortName: formData.get('shortName'),
-    description: formData.get('description')
+    description: formData.get('description'),
+    imageUrl: formData.get('imageUrl')
   });
 
   if (!validatedFields.success) {
@@ -147,7 +154,7 @@ export async function updateProductType(prevState: State, formData: FormData) {
     };
   }
 
-  const { id, name, shortName, description } = validatedFields.data;
+  const { id, name, shortName, description, imageUrl } = validatedFields.data;
   const date = new Date().toISOString();
 
   try {
@@ -155,7 +162,7 @@ export async function updateProductType(prevState: State, formData: FormData) {
       UPDATE product_types
       SET name = ${name}, short_name = ${shortName}, description = ${
       description || null
-    }, updated_at = ${date}
+    }, image_url = ${imageUrl || null}, updated_at = ${date}
       WHERE id = ${id}
     `;
   } catch (error) {
@@ -174,4 +181,33 @@ export async function deleteProductType(id: string) {
   }
 
   revalidatePath('/admin/dashboard/product-types');
+}
+
+const UploadProductTypeImage = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  type: z.string().min(1, { message: 'Type is required' })
+});
+
+export async function uploadProductTypeImage(formData: FormData) {
+  const validatedFields = UploadProductTypeImage.safeParse({
+    name: formData.get('name'),
+    type: formData.get('type')
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors
+    };
+  }
+
+  const { name, type } = validatedFields.data;
+
+  let presignedUrl = '';
+  try {
+    presignedUrl = await generateSignedUrl('product-types', name, type);
+  } catch (error) {
+    console.error('S3 Error:', error);
+  }
+
+  return { presignedUrl };
 }
