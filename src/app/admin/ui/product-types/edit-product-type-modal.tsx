@@ -166,6 +166,15 @@ export default function EditProductTypeModal({
     onCloseModal(MODAL_ID.UPDATE_PRODUCT_TYPE);
     setState(initialState);
     setProductType(null);
+    setUploadImage(undefined);
+    setPresignedUrl('');
+    setImageUploadCompleted(false);
+    const form = document.getElementById(
+      'edit-product-type-form'
+    ) as HTMLFormElement;
+    if (form) {
+      form.reset();
+    }
     if (refresh) {
       onRefresh();
     }

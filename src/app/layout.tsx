@@ -82,9 +82,9 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className="scroll-smooth">
+    <html lang={locale}>
       <body
-        className={`${comingSoon.variable} ${yuseiMagic.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${comingSoon.variable} ${yuseiMagic.variable} ${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
         <SessionProvider>
           <NextIntlClientProvider>

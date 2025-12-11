@@ -6,6 +6,9 @@ import {
   UpdateProductType
 } from '@/app/admin/ui/product-types/buttons';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
+import Image from 'next/image';
 
 export default function ProductTypesTable({
   productTypes,
@@ -19,11 +22,26 @@ export default function ProductTypesTable({
   const columns: Column<ProductType>[] = [
     {
       header: 'Name',
-      render: (productType) => (
-        <div className="flex items-center gap-3">
-          <p className="font-medium">{productType.name}</p>
-        </div>
-      )
+      render: (productType) => {
+        return (
+          <div className="flex items-center gap-4">
+            <Image
+              src={
+                productType.image_url
+                  ? formatImagePath(
+                      getImageUrl('product-types', productType.image_url)
+                    )
+                  : '/cup.png'
+              }
+              alt={`${productType.name}-${productType.image_url}`}
+              width={128}
+              height={128}
+              className="rounded-lg w-16 h-16 object-cover shrink-0"
+            />
+            <p className="font-medium">{productType.name}</p>
+          </div>
+        );
+      }
     },
     {
       header: 'Short Name',
