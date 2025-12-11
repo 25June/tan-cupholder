@@ -33,11 +33,11 @@ export const useQueryMedia = () => {
       setCurrentLayout(newLayout);
     };
     handleChange();
-    window.addEventListener('resize', debounce(handleChange, 500));
+    window.addEventListener('resize', debounce(handleChange, 1000));
 
     // Cleanup function to remove the event listener
     return () => {
-      window.removeEventListener('resize', debounce(handleChange, 500));
+      window.removeEventListener('resize', debounce(handleChange, 1000));
     };
   }, []);
 

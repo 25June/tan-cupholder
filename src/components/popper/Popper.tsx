@@ -248,25 +248,6 @@ const Popper: React.FC<PopperProps> = ({
     }
   }, [open, calculatePosition]);
 
-  // Handle click outside
-  useEffect(() => {
-    if (!open || !closeOnClickOutside || !onClose) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        popperRef.current &&
-        !popperRef.current.contains(event.target as Node) &&
-        anchorEl &&
-        !anchorEl.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [open, closeOnClickOutside, onClose, anchorEl]);
-
   // Handle escape key
   useEffect(() => {
     if (!open || !closeOnEscape || !onClose) return;

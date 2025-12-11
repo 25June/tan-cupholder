@@ -84,7 +84,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${comingSoon.variable} ${yuseiMagic.variable} ${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
+        className={`${comingSoon.variable} ${yuseiMagic.variable} ${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         <SessionProvider>
           <NextIntlClientProvider>

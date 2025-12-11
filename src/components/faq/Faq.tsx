@@ -1,7 +1,7 @@
 'use client';
 
 import * as motion from 'motion/react-client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { yuseiMagic } from '@/styles/fonts';
 import { useTranslations } from 'next-intl';
@@ -9,38 +9,43 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 export const Faq = () => {
   const t = useTranslations('HomePage.FaqSection');
-  const mockData = [
-    {
-      id: '1',
-      title: t('question1.title'),
-      answer: t('question1.answer'),
-      opened: false
-    },
-    {
-      id: '2',
-      title: t('question2.title'),
-      answer: t('question2.answer'),
-      opened: false
-    },
-    {
-      id: '3',
-      title: t('question3.title'),
-      answer: t('question3.answer'),
-      opened: false
-    },
-    {
-      id: '4',
-      title: t('question4.title'),
-      answer: t('question4.answer'),
-      opened: false
-    },
-    {
-      id: '5',
-      title: t('question5.title'),
-      answer: t('question5.answer'),
-      opened: false
-    }
-  ];
+
+  const mockData = useMemo(
+    () => [
+      {
+        id: '1',
+        title: t('question1.title'),
+        answer: t('question1.answer'),
+        opened: false
+      },
+      {
+        id: '2',
+        title: t('question2.title'),
+        answer: t('question2.answer'),
+        opened: false
+      },
+      {
+        id: '3',
+        title: t('question3.title'),
+        answer: t('question3.answer'),
+        opened: false
+      },
+      {
+        id: '4',
+        title: t('question4.title'),
+        answer: t('question4.answer'),
+        opened: false
+      },
+      {
+        id: '5',
+        title: t('question5.title'),
+        answer: t('question5.answer'),
+        opened: false
+      }
+    ],
+    [t]
+  );
+
   const [data, setData] = useState<any[]>(mockData);
   const onClick = (id: string) => {
     setData((prev) =>

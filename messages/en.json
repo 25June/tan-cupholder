@@ -15,10 +15,10 @@
     "ProductSliderSection": {
       "title": "Environment Friendly",
       "subtitle": "Low Impact Collections",
-      "all": "All Products",
-      "new": "New Products",
-      "bestSeller": "Best Seller Products",
-      "featured": "Featured Products"
+      "all": "All",
+      "new": "New",
+      "bestSeller": "Best Seller",
+      "featured": "Featured"
     },
     "FaqSection": {
       "title": "Frequently Asked Questions",

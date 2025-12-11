@@ -34,7 +34,7 @@ export default function ProductSlider() {
 
   return (
     <div className="relative">
-      <div className="relative z-20 w-full max-w-screen md:max-w-8xl mx-auto grid grid-rows-[40px_1fr_20px] items-center min-h-screen p-4 md:p-8 pb-10 md:pb-20 gap:8 md:gap-16 overflow-hidden">
+      <div className="relative z-20 w-full max-w-screen md:max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] md:grid-rows-[10%_1fr_20px] items-center min-h-screen p-4 md:p-8 pb-10 md:pb-20 gap:8 md:gap-16 overflow-hidden">
         <main className="w-full gap-8 row-start-2 text-center">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -56,7 +56,7 @@ export default function ProductSlider() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="flex gap-2 md:gap-8 justify-center flex-wrap mb-2 md:mb-10 font-extrabold"
+            className="flex gap-x-2 gap-y-2 md:gap-x-6 justify-center flex-wrap mb-2 md:mb-10 font-extrabold"
           >
             {['all', 'new', 'bestSeller', 'featured'].map((category) => (
               <motion.button

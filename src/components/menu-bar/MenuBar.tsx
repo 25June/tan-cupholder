@@ -12,27 +12,7 @@ export function MenuBar() {
   const t = useTranslations('Menu');
 
   useEffect(() => {
-    // const handleScroll = (e: Event) => {
-    //   const element = (e.target as Document).scrollingElement;
-    //   const clientHeight = element?.clientHeight || 0;
-    //   const scrollTop = element?.scrollTop || 0;
-    //   const scrollHeight = element?.scrollHeight || 0;
-    //   const result = Math.round(
-    //     (scrollTop / (scrollHeight - clientHeight)) * 100
-    //   );
-    //   const scrollElement = document.getElementById('scroll-indicator');
-    //   if (scrollElement) {
-    //     scrollElement.style.setProperty(
-    //       'transform',
-    //       `translateX(-${100 - result}%)`
-    //     );
-    //   }
-    // };
-    // window.addEventListener('scroll', handleScroll);
     onAddEvent();
-    return () => {
-      // window.removeEventListener('scroll', handleScroll);
-    };
   }, []);
 
   const onAddEvent = () => {
