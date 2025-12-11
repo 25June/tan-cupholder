@@ -4,7 +4,7 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { ProductType } from '@/models/productType';
-import { generateSignedUrl } from '@/app/lib/bucket';
+import { deleteFile, generateSignedUrl } from '@/app/lib/bucket';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -158,6 +158,17 @@ export async function updateProductType(prevState: State, formData: FormData) {
   const date = new Date().toISOString();
 
   try {
+    const currentRecord = await sql<ProductType[]>`
+      SELECT * FROM product_types
+      WHERE id = ${id}
+    `;
+    if (
+      imageUrl &&
+      currentRecord[0].image_url &&
+      imageUrl !== currentRecord[0].image_url
+    ) {
+      await deleteFile('product-types', currentRecord[0].image_url);
+    }
     await sql`
       UPDATE product_types
       SET name = ${name}, short_name = ${shortName}, description = ${
@@ -210,4 +221,16 @@ export async function uploadProductTypeImage(formData: FormData) {
   }
 
   return { presignedUrl };
+}
+
+export async function deleteProductTypeImage(name: string) {
+  try {
+    await deleteFile('product-types', name);
+  } catch (error) {
+    console.error('S3 Error:', error);
+  }
+
+  revalidatePath('/admin/dashboard/product-types');
+  console.log('Product type image deleted successfully.');
+  return { message: 'Product type image deleted successfully.' };
 }

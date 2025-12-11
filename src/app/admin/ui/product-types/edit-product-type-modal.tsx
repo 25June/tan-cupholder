@@ -4,11 +4,65 @@ import { useEffect, useState } from 'react';
 import {
   updateProductType,
   State,
-  getProductTypeById
+  getProductTypeById,
+  uploadProductTypeImage
 } from '@/app/admin/lib/actions/product-types.actions';
 import { ProductType } from '@/models/productType';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import FileUpload from '@/components/file-upload/FileUpload';
+import { PhotoIcon } from '@heroicons/react/24/outline';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
+import Image from 'next/image';
+interface ImageFieldProps {
+  uploadImage?: File;
+  presignedUrl?: string;
+  setImageUploadCompleted: (completed: boolean) => void;
+  imageUrl?: string;
+}
+
+const ImageField = ({
+  uploadImage,
+  presignedUrl,
+  setImageUploadCompleted,
+  imageUrl
+}: ImageFieldProps) => {
+  if (uploadImage) {
+    return (
+      <div
+        key={uploadImage.name}
+        className="w-full h-48 flex justify-center items-center"
+      >
+        <FileUpload
+          key={uploadImage.name}
+          image={uploadImage}
+          presignedUrl={presignedUrl || ''}
+          setImageUploadCompleted={() => setImageUploadCompleted(true)}
+        />
+      </div>
+    );
+  }
+  if (imageUrl) {
+    return (
+      <div className="w-full h-48 bg-gray-200 rounded-md p-2 relative">
+        <Image
+          src={formatImagePath(getImageUrl('product-types', imageUrl))}
+          alt="Product Type Image"
+          className="object-contain h-full w-full"
+          width={500}
+          height={500}
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-gray-200 rounded-md max-h-48 p-4">
+      <PhotoIcon className="w-10 h-10 text-gray-500" />
+      <p className="text-sm text-gray-500">No image selected</p>
+    </div>
+  );
+};
 
 const initialState: State = { message: null, errors: {} };
 
@@ -22,6 +76,10 @@ export default function EditProductTypeModal({
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [productType, setProductType] = useState<ProductType | null>(null);
+  const [uploadImage, setUploadImage] = useState<File>();
+  const [presignedUrl, setPresignedUrl] = useState<string>('');
+  const [imageUploadCompleted, setImageUploadCompleted] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -42,6 +100,27 @@ export default function EditProductTypeModal({
     loadData();
   }, [productTypeId]);
 
+  const onUpload = async (): Promise<string> => {
+    if (!uploadImage) {
+      return '';
+    }
+    setIsLoading(true);
+    const newFormData = new FormData();
+    newFormData.append('name', uploadImage.name);
+    newFormData.append('type', uploadImage.type);
+    try {
+      const res = await uploadProductTypeImage(newFormData);
+      if (res.errors) {
+        throw new Error('Failed to upload image');
+      }
+      setPresignedUrl(res.presignedUrl);
+      return uploadImage.name;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return '';
+    }
+  };
+
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!productType) return;
@@ -49,9 +128,11 @@ export default function EditProductTypeModal({
     const formData = new FormData(e.currentTarget);
     formData.set('id', productType.id);
     formData.set('description', formData.get('description') as string);
+    formData.set('imageUrl', uploadImage?.name ?? '');
     setIsLoading(true);
     return updateProductType(initialState, formData)
       .then((res: any) => {
+        onUpload();
         if (res.errors) {
           setState({
             message: res.message,
@@ -60,7 +141,9 @@ export default function EditProductTypeModal({
           setIsLoading(false);
           return;
         }
-        handleClose(true);
+        if (!uploadImage) {
+          handleClose(true);
+        }
       })
       .catch((error) => {
         setState({
@@ -72,6 +155,12 @@ export default function EditProductTypeModal({
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    if (imageUploadCompleted) {
+      handleClose(true);
+    }
+  }, [imageUploadCompleted]);
 
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_PRODUCT_TYPE);
@@ -158,6 +247,48 @@ export default function EditProductTypeModal({
                       ))}
                   </div>
                 </fieldset>
+              </div>
+
+              <div className="flex flex-col gap-1 w-full">
+                <fieldset className="fieldset w-full">
+                  <legend className="fieldset-legend">Image</legend>
+                  <input
+                    type="file"
+                    name="image"
+                    className="file-input w-full"
+                    placeholder="Product Image"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      if (event.target.files) {
+                        setUploadImage(event.target.files[0]);
+                      }
+                    }}
+                  />
+                  <div className="label">
+                    <span className="label-text-alt text-gray-500">
+                      Supported formats: PNG, JPEG
+                    </span>
+                  </div>
+                  <div
+                    id="imageUrl-error"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    {state.errors?.imageUrl &&
+                      state.errors.imageUrl.map((error: string) => (
+                        <p className="text-sm text-red-500" key={error}>
+                          {error}
+                        </p>
+                      ))}
+                  </div>
+                </fieldset>
+                <div className="mb-1 w-full h-full rounded-md min-h-24">
+                  <ImageField
+                    uploadImage={uploadImage}
+                    presignedUrl={presignedUrl}
+                    setImageUploadCompleted={setImageUploadCompleted}
+                    imageUrl={productType.image_url}
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end gap-2 mt-4">
