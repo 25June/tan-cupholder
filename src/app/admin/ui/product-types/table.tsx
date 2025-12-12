@@ -25,7 +25,7 @@ export default function ProductTypesTable({
       render: (productType) => {
         return (
           <div className="flex items-center gap-4">
-            <Image
+            <img
               src={
                 productType.image_url
                   ? formatImagePath(
@@ -34,8 +34,6 @@ export default function ProductTypesTable({
                   : '/cup.png'
               }
               alt={`${productType.name}-${productType.image_url}`}
-              width={128}
-              height={128}
               className="rounded-lg w-16 h-16 object-cover shrink-0"
             />
             <p className="font-medium">{productType.name}</p>

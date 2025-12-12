@@ -117,7 +117,7 @@ export const Faq = () => {
                     onClick={() => onClick(item.id)}
                     className={`relative z-10 p-4 transition-all duration-300 flex justify-between items-center justify-items-center border-logo-orange-border border-2 rounded-md border-solid w-full text-left cursor-pointer ${
                       item.opened
-                        ? 'bg-logo-orange text-white'
+                        ? 'bg-logo-orange-pale-companion text-logo-orange-border'
                         : 'bg-white text-logo-text'
                     }`}
                   >

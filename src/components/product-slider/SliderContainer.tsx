@@ -1,5 +1,5 @@
 'use client';
-import Card from '@/components/card/Card';
+import SpecialCard from '@/components/card/SpecialCard';
 import { useEffect, useState, useRef } from 'react';
 import { chunkArray } from '@/shared/utils/chunkArray';
 import { useQueryMedia } from '@/hooks/useQueryLayout';
@@ -105,7 +105,9 @@ export default function SliderContainer({ products }: Props) {
               </div>
             )}
             {Array.from({ length: chunkNumber }).map((_, idx) => {
-              return chunk[idx] ? <Card item={chunk[idx]} key={idx} /> : null;
+              return chunk[idx] ? (
+                <SpecialCard item={chunk[idx]} key={idx} />
+              ) : null;
             })}
             {!isLastChunk && (
               <div className="absolute -right-2 md:right-0 h-full flex items-center">

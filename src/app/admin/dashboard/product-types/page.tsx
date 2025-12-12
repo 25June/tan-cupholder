@@ -57,6 +57,8 @@ export default function Page() {
     setSelectedProductTypeId(null);
   };
 
+  console.log(productTypes);
+
   return (
     <main>
       <div className="flex w-full items-center justify-between mb-8">

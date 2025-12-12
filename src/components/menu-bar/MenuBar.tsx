@@ -3,7 +3,6 @@
 import { View } from '@/constants/common';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { motion } from 'motion/react';
 import DropdownMenu from '@/components/menu-bar/DropdownMenu';
 import TranslateDropdown from '../translate-dropdown/TranslateDropdown';
 import { useEffect } from 'react';
@@ -31,7 +30,6 @@ export function MenuBar() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log(entries);
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const linkTarget = linkMap[entry.target.id as keyof typeof linkMap];

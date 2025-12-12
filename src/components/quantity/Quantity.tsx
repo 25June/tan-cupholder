@@ -1,5 +1,6 @@
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { Dispatch, SetStateAction } from 'react';
+import { motion } from 'motion/react';
 
 interface Props {
   quantity: number;
@@ -20,19 +21,23 @@ export default function Quantity({
     <div>
       <p className={`${textSize} font-bold mb-2`}>Quantity</p>
       <div className="flex items-center gap-2">
-        <button
-          className={`btn btn-primary ${buttonSize} btn-soft`}
-          onClick={() => setQuantity((prev) => prev - 1)}
+        <motion.button
+          onClick={() => setQuantity((prev) => (prev === 0 ? 0 : prev - 1))}
+          whileHover={{ scale: 1.25 }}
+          whileTap={{ scale: 0.8 }}
+          className={`bg-logo-orange-pale-companion rounded-full p-2`}
         >
-          <MinusCircleIcon className={'size-6'} />
-        </button>
+          <MinusIcon className={'size-6 stroke-logo-orange-border'} />
+        </motion.button>
         <span className={`${textSize} font-bold mx-4`}>{quantity}</span>
-        <button
-          className={`btn btn-primary ${buttonSize} btn-soft`}
+        <motion.button
+          className={`bg-logo-orange-pale-companion rounded-full p-2`}
           onClick={() => setQuantity((prev) => prev + 1)}
+          whileHover={{ scale: 1.25 }}
+          whileTap={{ scale: 0.8 }}
         >
-          <PlusCircleIcon className={'size-6'} />
-        </button>
+          <PlusIcon className={'size-6 stroke-logo-orange-border'} />
+        </motion.button>
       </div>
     </div>
   );
