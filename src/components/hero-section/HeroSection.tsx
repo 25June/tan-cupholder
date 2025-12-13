@@ -10,8 +10,6 @@ import CartIcon from '@/components/cart-icon/CartIcon';
 import { getCartCountFromStorage } from '@/shared/utils/storage';
 import Link from 'next/link';
 import Slider from './Slider';
-import { useModesContext } from '@/contexts/EditMode.context';
-import EditableSlider from './EditableSlider';
 import { editableKey } from '@/constants/editableKey';
 
 const imageArr = [
@@ -26,7 +24,6 @@ const Break = () => <br />;
 export function HeroSection() {
   const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
-  const { isEditorMode } = useModesContext();
 
   const [cartCount, setCartCount] = useState<number>(0);
 
@@ -36,8 +33,8 @@ export function HeroSection() {
   }, []);
 
   return (
-    <div className="relative">
-      <div className="max-w-8xl w-full min-h-screen flex flex-col md:flex-row gap-4 md:gap-0 align-middle justify-center mx-auto pt-14 z-10 relative">
+    <div className="relative min-h-screen">
+      <div className="max-w-8xl w-full  flex flex-col md:flex-row gap-4 md:gap-0 align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full flex justify-start lg:justify-end pt-2 sm:pt-4 md:pt-16">
           <div className="w-5/5 lg:w-4/5 pl-4 md:pl-10">
             <motion.div
