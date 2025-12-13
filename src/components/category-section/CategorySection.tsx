@@ -12,9 +12,9 @@ export const CategorySection = () => {
   const { categories, loading, onGetCategories } = useGetCategories();
   useEffect(() => {
     onGetCategories();
-  }, []);
+  }, [onGetCategories]);
   return (
-    <div className="relative max-w-screen md:max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-full md:min-h-screen p-4 md:p-8 pb-20 gap-16 ">
+    <div className="relative max-w-screen md:max-w-8xl mx-auto grid grid-rows-[15%_1fr_5%] md:grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-full md:min-h-screen p-4 md:p-8 pb-20 gap-4 md:gap-16 ">
       <motion.div
         initial="offscreen"
         whileInView="visible"

@@ -37,9 +37,9 @@ export function HeroSection() {
 
   return (
     <div className="relative">
-      <div className="max-w-8xl w-full h-screen flex align-middle justify-center mx-auto pt-14 z-10 relative">
-        <div className="relative w-full h-full flex justify-start lg:justify-end pt-4 md:pt-16">
-          <div className="w-5/5 lg:w-4/5">
+      <div className="max-w-8xl w-full h-screen flex flex-col md:flex-row gap-4 md:gap-0 align-middle justify-center mx-auto pt-14 z-10 relative">
+        <div className="relative w-full flex justify-start lg:justify-end pt-2 sm:pt-4 md:pt-16">
+          <div className="w-5/5 lg:w-4/5 pl-4 md:pl-10">
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -51,13 +51,13 @@ export function HeroSection() {
               <Image
                 src="/logo.png"
                 alt="TAN cupholder logo"
-                width={200}
-                height={200}
-                className={`rounded-full`}
+                width={400}
+                height={400}
+                className={`rounded-full w-[100px] sm:w-[120px] md:w-[140px] lg:w-[160px]`}
               />
             </motion.div>
 
-            <motion.div className="pl-10">
+            <motion.div>
               <motion.h1
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -100,56 +100,20 @@ export function HeroSection() {
                   <CartIcon cartCount={cartCount} />
                 </Link>
               </div>
-
-              <motion.p
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.35,
-                  scale: { type: 'spring', visualDuration: 0.35, bounce: 0.5 }
-                }}
-                className="font-sm font-light leading-6 text-gray-600 mt-4"
-              >
-                {t('caption')}
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.5,
-                  scale: { type: 'spring', visualDuration: 0.5, bounce: 0.5 }
-                }}
-                className="flex gap-2 mt-2"
-              >
-                {variants.map((item) => {
-                  return (
-                    <div
-                      key={item}
-                      className="p-2 md:p-4 border-2 border-stone-500 rounded-lg w-[64px] md:w-[100px]"
-                    >
-                      <Image width={64} height={64} src={item} alt={item} />
-                    </div>
-                  );
-                })}
-              </motion.div>
             </motion.div>
           </div>
         </div>
-        <div className="relative w-full h-full hidden md:flex justify-center pt-28">
-          {isEditorMode ? (
-            <EditableSlider imageArr={imageArr} />
-          ) : (
-            <Slider imageArr={imageArr} />
-          )}
+        <div className="grow relative w-full h-full flex justify-center align-top sm:pt-28 ">
+          <Slider imageArr={imageArr} />
         </div>
       </div>
-      <div className="absolute -bottom-1 w-full">
+      <div className="absolute -bottom-1 w-full overflow-x-hidden">
         <Image
           src={'/bottom-wave.svg'}
           width={160}
           height={90}
           alt="wave"
-          className="w-full"
+          className="w-full h-full object-cover object-bottom overflow-x-hidden color-transparent min-w-[768px] "
           priority
         />
       </div>

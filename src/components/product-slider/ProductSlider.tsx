@@ -34,7 +34,7 @@ export default function ProductSlider() {
 
   return (
     <div className="relative">
-      <div className="relative z-20 w-full max-w-screen md:max-w-8xl mx-auto grid grid-rows-[20px_1fr_20px] md:grid-rows-[10%_1fr_20px] items-center min-h-screen p-4 md:p-8 pb-10 md:pb-20 gap:8 md:gap-16 overflow-hidden">
+      <div className="relative z-20 w-full max-w-screen md:max-w-8xl mx-auto grid grid-rows-[10%_1fr_20px] md:grid-rows-[10%_1fr_20px] items-center min-h-screen p-4 md:p-8 pb-10 md:pb-20 gap:8 md:gap-16 overflow-hidden">
         <main className="w-full gap-8 row-start-2 text-center">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -106,13 +106,13 @@ export default function ProductSlider() {
           <SliderContainer products={products} />
         </main>
       </div>
-      <div className="absolute -top-1 w-full">
+      <div className="absolute -top-1 w-full overflow-x-hidden">
         <Image
           src={'/top-wave.svg'}
           width={160}
           height={90}
           alt="wave"
-          className="w-full"
+          className="w-full h-full object-cover object-top overflow-x-hidden color-transparent min-w-[768px] "
         />
       </div>
     </div>

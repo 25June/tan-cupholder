@@ -26,7 +26,6 @@ export default function Slider({ imageArr }: { imageArr: editableKey[] }) {
   const [opacity, setOpacity] = useState<string[]>([]);
   const [translateY, setTranslateY] = useState<string[]>([]);
   const [zIndex] = useState<string[]>(Z_INDEX);
-  const [isLoaded, setIsLoaded] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -81,7 +80,7 @@ export default function Slider({ imageArr }: { imageArr: editableKey[] }) {
         return (
           <div
             key={img}
-            className={`w-2/3 md:w-4/5 h-4/5 max-w-md max-h-128 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
+            className={`w-4/5 h-4/5 max-w-md max-h-128 top-16 left-16 md:top-0 md:left-0 absolute transition-all duration-700 drop-shadow-lg overflow-hidden rounded-xl ${tranformY} ${zIndex[transitionIndex]} ${tranformX} ${contrast[index]} ${o}`}
           >
             <EditableImage
               imageKey={img}

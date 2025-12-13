@@ -3,13 +3,9 @@
 import { motion } from 'motion/react';
 import CDNImage from '@/components/cdn-image/CDNImage';
 
-import {
-  numberWithCommas,
-  calculatePercent
-} from '@/shared/utils/formatNumber';
+import { calculatePercent } from '@/shared/utils/formatNumber';
 import { ProductResponse } from '@/models/product';
 import {
-  ArrowRightCircleIcon,
   ArrowLongRightIcon,
   ArrowUpRightIcon
 } from '@heroicons/react/24/outline';
@@ -39,7 +35,7 @@ export default function SpecialCard({ item }: SpecialCardProps) {
       className="relative max-w-72 justify-self-center shadow-md shadow-logo-orange-pale-companion hover:shadow-lg transition-shadow duration-300 rounded-2xl w-auto min-w-72 bg-logo-orange-pale-companion p-2"
     >
       <div className="relative mb-2 rounded-2xl overflow-hidden outline-2 -outline-offset-8 outline-logo-orange-pale-companion transition-all duration-300">
-        <div className="z-10 absolute text-xs top-4 left-4 text-slate-100 rounded-full bg-logo-orange py-1 px-2 tracking-wider font-black">
+        <div className="z-10 absolute text-xs top-4 left-4 text-logo-orange-border rounded-full bg-logo-orange-pale-companion py-1 px-2 tracking-wider font-black">
           {item.sale}%
         </div>
         <CDNImage
@@ -66,7 +62,7 @@ export default function SpecialCard({ item }: SpecialCardProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-slate-400 line-through decoration-slate-400">
-            {numberWithCommas(item.price)} VND
+            {formatPrice(item.price, '', true)}
           </span>
           <ArrowLongRightIcon className="size-4" />
           <span className="text-logo-orange font-extrabold">
