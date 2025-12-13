@@ -37,7 +37,7 @@ export function HeroSection() {
 
   return (
     <div className="relative">
-      <div className="max-w-8xl w-full h-screen flex flex-col md:flex-row gap-4 md:gap-0 align-middle justify-center mx-auto pt-14 z-10 relative">
+      <div className="max-w-8xl w-full min-h-screen flex flex-col md:flex-row gap-4 md:gap-0 align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full flex justify-start lg:justify-end pt-2 sm:pt-4 md:pt-16">
           <div className="w-5/5 lg:w-4/5 pl-4 md:pl-10">
             <motion.div
@@ -103,7 +103,7 @@ export function HeroSection() {
             </motion.div>
           </div>
         </div>
-        <div className="grow relative w-full h-full flex justify-center align-top sm:pt-28 ">
+        <div className="grow relative w-full h-full md:min-h-[512px] flex justify-center align-top pt-4 md:pt-28 ">
           <Slider imageArr={imageArr} />
         </div>
       </div>
