@@ -33,7 +33,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-[90vh]">
       <div className="max-w-8xl w-full  flex flex-col md:flex-row gap-4 md:gap-0 align-middle justify-center mx-auto pt-14 z-10 relative">
         <div className="relative w-full flex justify-start lg:justify-end pt-2 sm:pt-4 md:pt-16">
           <div className="w-5/5 lg:w-4/5 pl-4 md:pl-10">
