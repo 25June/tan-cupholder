@@ -94,7 +94,7 @@ export default function SliderContainer({ products }: Props) {
         const isLastChunk = index === displayedProducts.length - 1;
         return (
           <div
-            className="relative w-full flex-shrink-0 flex flex-row gap-8 justify-center snap-center snap-always"
+            className="relative h-full w-full flex-shrink-0 flex flex-row gap-8 justify-center snap-center snap-always"
             key={index}
           >
             {!isFirstChunk && (
