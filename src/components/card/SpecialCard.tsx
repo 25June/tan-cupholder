@@ -32,9 +32,9 @@ export default function SpecialCard({ item }: SpecialCardProps) {
           bounce: 0.25
         }
       }}
-      className="relative max-w-72 justify-self-center shadow-md shadow-logo-orange-pale-companion hover:shadow-lg transition-shadow duration-300 rounded-2xl w-auto min-w-72 bg-logo-orange-pale-companion p-2"
+      className="relative max-w-72 flex flex-col gap-2 justify-self-center shadow-md shadow-logo-orange-pale-companion hover:shadow-lg transition-shadow duration-300 rounded-2xl w-auto min-w-72 bg-logo-orange-pale-companion p-2"
     >
-      <div className="relative mb-2 rounded-2xl overflow-hidden outline-2 -outline-offset-8 outline-logo-orange-pale-companion transition-all duration-300">
+      <div className="relative rounded-2xl overflow-hidden outline-2 -outline-offset-8 outline-logo-orange-pale-companion transition-all duration-300">
         <div className="z-10 absolute text-xs top-4 left-4 text-logo-orange-border rounded-full bg-logo-orange-pale-companion py-1 px-2 tracking-wider font-black">
           {item.sale}%
         </div>
@@ -46,7 +46,7 @@ export default function SpecialCard({ item }: SpecialCardProps) {
           className="h-72 w-72 object-cover hover:scale-110 transform-none transition-all duration-300"
         />
       </div>
-      <div className="relative text-left p-4 bg-white rounded-2xl">
+      <div className="relative grow text-left p-4 bg-white rounded-2xl">
         <div className="mb-2 flex justify-between items-center gap-2">
           <div className="flex flex-col gap-1 grow">
             <h4 className="text-lg font-semibold">{item.name}</h4>
