@@ -86,8 +86,8 @@ export default function Slider({ imageArr }: { imageArr: editableKey[] }) {
               imageKey={img}
               src={''}
               alt={img}
-              width={800}
-              height={800}
+              width={600}
+              height={600}
               className={`w-full h-full object-cover object-center transition-all duration-300 ${zoomIn}`}
             />
           </div>

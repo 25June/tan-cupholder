@@ -40,6 +40,8 @@ export default function CDNImage({
       unoptimized
       width={width}
       height={height}
+      placeholder="blur"
+      blurDataURL={'/logo-round.png'}
     />
   );
 }

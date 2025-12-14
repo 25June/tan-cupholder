@@ -40,8 +40,8 @@ export default function SpecialCard({ item }: SpecialCardProps) {
         </div>
         <CDNImage
           src={getImageUrl(item.id, item.product_image.name)}
-          width={500}
-          height={500}
+          width={400}
+          height={400}
           alt={item.product_image.name}
           className="h-72 w-72 object-cover hover:scale-110 transform-none transition-all duration-300"
         />
