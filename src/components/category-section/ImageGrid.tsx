@@ -3,6 +3,9 @@ import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { motion } from 'motion/react';
 import { yuseiMagic } from '@/styles/fonts';
+import Image from 'next/image';
+import { ScreenLayout } from '@/constants/common';
+import { useQueryMedia } from '@/hooks/useQueryLayout';
 
 const ImageGridItem = ({
   category,
@@ -11,6 +14,7 @@ const ImageGridItem = ({
   category: ProductType;
   loading: boolean;
 }) => {
+  const currentLayout = useQueryMedia();
   if (loading || !category) {
     return <div className="skeleton h-64"></div>;
   }
@@ -23,7 +27,7 @@ const ImageGridItem = ({
           {category.name}
         </p>
       </div>
-      <img
+      <Image
         src={
           category.image_url
             ? formatImagePath(getImageUrl('product-types', category.image_url))
@@ -32,6 +36,9 @@ const ImageGridItem = ({
         alt={category.name}
         className="relative object-cover w-full h-full scale-110 group-hover:scale-100 transition-all duration-300"
         style={{ objectPosition: 'center center' }}
+        width={currentLayout === ScreenLayout.Mobile ? 300 : 600}
+        height={currentLayout === ScreenLayout.Mobile ? 300 : 600}
+        priority={true}
       />
     </div>
   );
@@ -57,6 +64,7 @@ export default function ImageGrid({
     `row-start-3 col-start-2 col-span-1 ${generalStyle}`,
     `row-start-3 col-start-3 col-span-2 ${generalStyle}`
   ];
+
   const classes = classesArr.map((className, index) => {
     return (
       <motion.button

@@ -1,13 +1,13 @@
 'use server';
 
 import { z } from 'zod';
-import postgres from 'postgres';
+
 import { Content } from '@/models/content';
 import { cookies } from 'next/headers';
 import { validateAuth } from '@/shared/utils/auth.utils';
 import { NextResponse } from 'next/server';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const ContentSchema = z.object({
   key: z.string(),

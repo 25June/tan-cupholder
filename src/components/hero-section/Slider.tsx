@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import EditableImage from '../editable-image/EditableImage';
 import { editableKey } from '@/constants/editableKey';
+import { useQueryMedia } from '@/hooks/useQueryLayout';
+import { ScreenLayout } from '@/constants/common';
 
 const Z_INDEX = ['z-30', 'z-20', 'z-10', 'z-0'];
 const CONTRAST = ['contrast-100', 'contrast-75', 'contrast-50', 'contrast-0'];
@@ -26,6 +28,7 @@ export default function Slider({ imageArr }: { imageArr: editableKey[] }) {
   const [opacity, setOpacity] = useState<string[]>([]);
   const [translateY, setTranslateY] = useState<string[]>([]);
   const [zIndex] = useState<string[]>(Z_INDEX);
+  const currentLayout = useQueryMedia();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -86,8 +89,9 @@ export default function Slider({ imageArr }: { imageArr: editableKey[] }) {
               imageKey={img}
               src={''}
               alt={img}
-              width={600}
-              height={600}
+              width={currentLayout === ScreenLayout.Mobile ? 300 : 600}
+              height={currentLayout === ScreenLayout.Mobile ? 300 : 600}
+              priority={true}
               className={`w-full h-full object-cover object-center transition-all duration-300 ${zoomIn}`}
             />
           </div>

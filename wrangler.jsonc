@@ -1,0 +1,57 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "tan-cupholder",
+  "compatibility_date": "2024-12-30",
+  "compatibility_flags": [
+    // Enable Node.js API
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
+    "nodejs_compat",
+    // Allow to fetch URLs in your app
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
+    "global_fetch_strictly_public"
+  ],
+  "dev": {
+    "port": 3000,
+    "ip": "localhost"
+  },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    // Public variables (non-sensitive)
+    "NEXTJS_ENV": "production"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      // The service should match the "name" of your worker
+      "service": "tan-cupholder"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "bucket_name": "tan-cache",
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "remote": true
+    }
+    // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
+    // {
+    //   "binding": "NEXT_INC_CACHE_R2_BUCKET",
+    //   "bucket_name": "<BUCKET_NAME>",
+    // },
+  ],
+  "images": {
+    // Enable image optimization
+    // see https://opennext.js.org/cloudflare/howtos/image
+    "binding": "IMAGES"
+  },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "3ba6bbe98dab4d75aa1ff9fc421689db",
+      "localConnectionString": "postgres://default:whScD8z9LtBW@ep-solitary-mud-a19diwix-pooler.ap-southeast-1.aws.neon.tech/verceldb?sslmode=require"
+    }
+  ]
+}

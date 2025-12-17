@@ -1,11 +1,10 @@
 'use server';
 
-import postgres from 'postgres';
 import { z } from 'zod';
 import { deleteFile, generateSignedUrl } from '@/app/lib/bucket';
 import { FeatureImage } from '@/models/featureImage';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const FormSchema = z.object({
   id: z.string().min(1, { message: 'Id is required' }),
@@ -83,8 +82,9 @@ export async function deleteFeatureImages(ids: string[]) {
     };
   }
 
-  const featureImages =
-    await sql`SELECT * FROM feature_images WHERE id = ANY(${ids})`;
+  const featureImages = await sql<
+    FeatureImage[]
+  >`SELECT * FROM feature_images WHERE id = ANY(${ids})`;
 
   if (!featureImages.length) {
     return {

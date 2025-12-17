@@ -127,8 +127,10 @@ export default function EditProductTypeModal({
 
     const formData = new FormData(e.currentTarget);
     formData.set('id', productType.id);
-    formData.set('description', formData.get('description') as string);
-    formData.set('imageUrl', uploadImage?.name ?? '');
+    if (uploadImage) {
+      formData.set('imageUrl', uploadImage?.name ?? '');
+    }
+    formData.delete('image');
     setIsLoading(true);
     return updateProductType(initialState, formData)
       .then((res: any) => {

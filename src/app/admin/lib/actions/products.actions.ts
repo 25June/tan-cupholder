@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import postgres from 'postgres';
+
 import { revalidatePath } from 'next/cache';
 import { batchRemoveImages } from './images.actions';
 import { Product, ProductResponse } from '@/models/product';
@@ -9,7 +9,7 @@ import { Image } from '@/models/image';
 import { ProductType } from '@/models/productType';
 import { ProductTag } from '@/models/productTag';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const FormSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),

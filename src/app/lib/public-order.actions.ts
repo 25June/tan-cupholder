@@ -1,10 +1,10 @@
 'use server';
 
 import { z } from 'zod';
-import postgres from 'postgres';
+
 import { sendEmail } from '@/app/admin/lib/actions/email.actions';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const OrderSchema = z.object({
   products: z.string(),
@@ -101,7 +101,14 @@ export async function createOrder(prevState: OrderState, formData: FormData) {
       SELECT * FROM products WHERE id = ANY(${productIds})
     `;
     const { totalQuantity, totalPrice, prices } = getProducts.reduce(
-      (acc, product) => {
+      (
+        acc: {
+          totalQuantity: number;
+          totalPrice: number;
+          prices: Record<string, number>;
+        },
+        product: { id: string; price: number }
+      ) => {
         return {
           totalQuantity: acc.totalQuantity + quantities[product.id],
           totalPrice: acc.totalPrice + product.price * quantities[product.id],

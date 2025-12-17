@@ -1,11 +1,11 @@
 'use server';
 
 import { z } from 'zod';
-import postgres from 'postgres';
+
 import { revalidatePath } from 'next/cache';
 import { ProductTag } from '@/models/productTag';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const ProductTagSchema = z.object({
   id: z.string().min(1, { message: 'Id is required' }),

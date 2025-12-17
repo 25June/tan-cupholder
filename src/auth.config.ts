@@ -1,8 +1,11 @@
 import type { NextAuthConfig } from 'next-auth';
 
+const THIRTY_MINUTES = 30 * 60;
+
 export const authConfig = {
-  session: { strategy: 'jwt' },
+  session: { strategy: 'jwt', maxAge: THIRTY_MINUTES },
   secret: process.env.AUTH_SECRET,
+  trustHost: true,
   pages: {
     signIn: '/admin'
   },

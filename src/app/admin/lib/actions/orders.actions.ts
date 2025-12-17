@@ -1,14 +1,14 @@
 'use server';
 
 import { z } from 'zod';
-import postgres from 'postgres';
+
 import { revalidatePath } from 'next/cache';
 import { Order, OrderProduct } from '@/models/order';
 import { ProductCustom } from '@/models/product';
 import { createInvoice } from './invoices.actions';
 import { OrderStatus } from '@/constants/common';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 // Define order status schema
 const OrderStatusSchema = z.object({

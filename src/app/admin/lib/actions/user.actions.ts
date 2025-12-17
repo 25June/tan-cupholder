@@ -1,13 +1,13 @@
 'use server';
 
 import { z } from 'zod';
-import postgres from 'postgres';
+
 import { generateSignedUrl } from '@/app/lib/bucket';
 import { revalidatePath } from 'next/cache';
 import { UserInfo } from '@/models/user';
 import { sendEmail } from './email.actions';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const UserSchema = z.object({
   id: z.string().min(1, { message: 'Id is required' }),

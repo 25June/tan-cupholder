@@ -1,11 +1,10 @@
 'use server';
 
 import { z } from 'zod';
-import postgres from 'postgres';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { UserInfo } from '@/models/user';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 // Password validation schema
 const PasswordSchema = z

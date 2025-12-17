@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import postgres from 'postgres';
+
 import {
   deleteFile,
   deleteFiles,
@@ -10,7 +10,7 @@ import {
   listFiles
 } from '@/app/lib/bucket';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const FormSchema = z.object({
   id: z.string().min(1, { message: 'Id is required' }),

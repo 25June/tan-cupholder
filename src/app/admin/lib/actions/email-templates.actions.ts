@@ -1,11 +1,10 @@
 'use server';
 
-import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { EmailTemplateResponse } from '@/models/emailTemplate';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 const EmailTemplateSchema = z.object({
   id: z.string().min(1, { message: 'Id is required' }),

@@ -21,7 +21,7 @@ const Card = ({
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    const controls = animate(0, value, {
+    const controls = animate(0, value || 0, {
       duration: 1.5,
       ease: 'easeOut',
       onUpdate: (latest) => {

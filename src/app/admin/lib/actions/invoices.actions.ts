@@ -3,9 +3,8 @@
 import { fetchFilteredInvoices, fetchInvoicesPages } from '../data';
 import { Invoice } from '@/app/lib/definitions';
 import { OrderDetail } from './orders.actions';
-import postgres from 'postgres';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 // Server action to fetch filtered invoices
 export const getFilteredInvoices = async (

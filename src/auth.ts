@@ -1,21 +1,19 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import bcrypt from 'bcrypt';
-import postgres from 'postgres';
+import bcrypt from 'bcryptjs';
+
 import { z } from 'zod';
 import { authConfig } from './auth.config';
 import { UserCredentials } from './models/user';
-
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from './lib/db';
 
 async function getUserCredentials(
   email: string
 ): Promise<UserCredentials | undefined> {
   try {
-    const userCredentials = await sql<
-      UserCredentials[]
-    >`SELECT * FROM user_credentials WHERE email=${email}`;
-    return userCredentials[0];
+    const userCredentials =
+      await sql`SELECT * FROM user_credentials WHERE email=${email}`;
+    return userCredentials[0] as UserCredentials;
   } catch (error) {
     console.error('Failed to fetch user credentials:', error);
     throw new Error('Failed to fetch user credentials.');

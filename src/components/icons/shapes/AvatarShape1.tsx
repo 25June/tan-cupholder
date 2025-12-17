@@ -1,22 +1,13 @@
 'use client';
 
-import { getImageProps } from 'next/image';
 import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 
 export default function AvatarShape1() {
-  const {
-    props: { src: imageUrl }
-  } = getImageProps({
-    alt: 'avatar-1',
-    width: 300,
-    height: 300,
-    quality: 100,
-    src: `${formatImagePath(
-      'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/avatar-1.jpg',
-      600,
-      600
-    )}`
-  });
+  const imageUrl = formatImagePath(
+    'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/avatar-1.jpg',
+    600,
+    600
+  );
   // Define the path data for the blob shape
   const blobPathData =
     'M25.1,-23.9C31.4,-18.8,34.6,-9.4,34.6,0.1C34.7,9.5,31.7,19.1,25.4,24.8C19.1,30.5,9.5,32.3,0.6,31.7C-8.4,31.2,-16.8,28.2,-21,22.5C-25.1,16.8,-25.1,8.4,-24.8,0.3C-24.5,-7.8,-23.9,-15.5,-19.7,-20.5C-15.5,-25.6,-7.8,-27.8,0.8,-28.7C9.4,-29.5,18.8,-28.9,25.1,-23.9Z'; // Define the desired scale factor (e.g., 0.8 for 80%)

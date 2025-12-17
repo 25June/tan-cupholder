@@ -13,7 +13,7 @@ export default function Preload({ isLoading }: { isLoading: boolean }) {
     if (!loadingMedia) {
       const timer = setTimeout(() => {
         setRemoveLoading(true);
-      }, 300); // Simulate loading time
+      }, 100); // Simulate loading time
 
       return () => clearTimeout(timer);
     }

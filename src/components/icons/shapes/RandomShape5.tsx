@@ -1,21 +1,12 @@
 'use client';
-import { getImageProps } from 'next/image';
 import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 
 export default function RandomShape5() {
-  const {
-    props: { src: imageUrl }
-  } = getImageProps({
-    alt: 'IMG_8884_re-shape',
-    width: 300,
-    height: 300,
-    quality: 100,
-    src: `${formatImagePath(
-      'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_8884_re-shape.png',
-      600,
-      600
-    )}`
-  });
+  const imageUrl = formatImagePath(
+    'https://pub-485637738840450490e408cee2acb72c.r2.dev/feature-images/IMG_8884_re-shape.png',
+    600,
+    600
+  );
   // Define the path data for the blob shape
   const blobPathData =
     'M24.5,-38.2C31.8,-33.3,38,-26.7,37.9,-19.5C37.8,-12.2,31.5,-4.3,28.8,3.1C26.1,10.4,26.9,17.2,24.4,22.4C21.8,27.5,16,30.9,9.5,33.2C3,35.5,-4,36.7,-10.1,34.8C-16.3,32.9,-21.4,28,-26.3,22.6C-31.1,17.3,-35.7,11.5,-35.1,5.9C-34.6,0.3,-29.1,-5.2,-26.3,-12.3C-23.5,-19.4,-23.5,-28,-19.6,-34.5C-15.7,-41,-7.9,-45.3,0.3,-45.8C8.6,-46.4,17.1,-43.2,24.5,-38.2Z'; // Define the desired scale factor (e.g., 0.8 for 80%)

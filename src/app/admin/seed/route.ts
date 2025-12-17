@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
-import postgres from 'postgres';
+import bcrypt from 'bcryptjs';
+
 import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 async function seedUsers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -398,7 +398,7 @@ async function seedAddColumnOrderIdToInvoices() {
 
 export async function GET() {
   try {
-    const userRole = await sql.begin(seedAddColumnOrderIdToInvoices);
+    // const userRole = await sql.begin(seedAddColumnOrderIdToInvoices);
 
     // const userInfo = await sql.begin(seedUser);
     // const userCredentials = await sql.begin(seedUserCredentials);

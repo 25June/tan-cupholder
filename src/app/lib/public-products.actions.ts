@@ -1,9 +1,8 @@
 'use server';
 
-import postgres from 'postgres';
-import { Product, ProductResponse } from '@/models/product';
+import { ProductResponse } from '@/models/product';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from '@/lib/db';
 
 export async function publicFetchProducts(searchParams?: {
   readonly query?: string;

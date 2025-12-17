@@ -19,9 +19,15 @@ export const useGetOrderProgress = () => {
     return getOrderById(orderId)
       .then(({ order, products }) => {
         order && setOrder(order as OrderProduct);
-        const productMap = products?.reduce((acc, product) => {
-          return { ...acc, [product.id]: product };
-        }, {} as Record<string, OrderProductDetails>);
+        const productMap = products?.reduce(
+          (
+            acc: Record<string, OrderProductDetails>,
+            product: OrderProductDetails
+          ) => {
+            return { ...acc, [product.id]: product };
+          },
+          {} as Record<string, OrderProductDetails>
+        );
         productMap && setProducts(productMap);
       })
       .finally(() => {
