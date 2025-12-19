@@ -6,6 +6,10 @@ import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 import { ScreenLayout } from '@/constants/common';
 import { useQueryMedia } from '@/hooks/useQueryLayout';
+import Link from 'next/link';
+import { unaccent } from '@/shared/utils/unaccent';
+
+const MotionLink = motion.create(Link);
 
 const ImageGridItem = ({
   category,
@@ -67,7 +71,7 @@ export default function ImageGrid({
 
   const classes = classesArr.map((className, index) => {
     return (
-      <motion.button
+      <MotionLink
         viewport={{ once: true }}
         initial="offscreen"
         whileInView="visible"
@@ -90,9 +94,11 @@ export default function ImageGrid({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.8 }}
         className={className}
+        href={`/products?search=${unaccent(categories[index]?.name || '')}`}
+        prefetch={true}
       >
         <ImageGridItem category={categories[index]} loading={loading} />
-      </motion.button>
+      </MotionLink>
     );
   });
   return (
@@ -114,7 +120,7 @@ export default function ImageGrid({
           }
         }
       }}
-      className="grid grid-rows-3 grid-cols-4 gap-4 w-full h-full "
+      className="grid grid-rows-3 grid-cols-4 gap-4 w-full h-full"
     >
       {classes}
     </motion.div>

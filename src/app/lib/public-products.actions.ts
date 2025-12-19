@@ -1,14 +1,28 @@
 'use server';
 
 import { ProductResponse } from '@/models/product';
-
+import { ProductType } from '@/models/productType';
 import { sql } from '@/lib/db';
+
+export async function fetchProductsByType(type: string) {
+  try {
+    const productType = await sql<ProductType[]>`
+      SELECT * FROM product_types WHERE LOWER(unaccent(name)) LIKE LOWER(unaccent(${`%${type.toLowerCase()}%`}))
+    `;
+
+    return productType;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch products by type.');
+  }
+}
 
 export async function publicFetchProducts(searchParams?: {
   readonly query?: string;
   readonly page?: string;
 }) {
   try {
+    const productTypes = await fetchProductsByType(searchParams?.query || '');
     const products = await sql<ProductResponse[]>`
       SELECT 
         p.id,
@@ -27,11 +41,17 @@ export async function publicFetchProducts(searchParams?: {
       FROM products p
       LEFT JOIN product_types pt ON p.type = pt.id
       LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
-      WHERE p.name ILIKE '%' || ${searchParams?.query || ''} || '%'
+      WHERE p.name ILIKE '%' || ${
+        searchParams?.query || ''
+      } || '%'  OR p.type = ANY(${productTypes.map(
+      (productType) => productType.id
+    )})
       ORDER BY p.name ASC
       LIMIT 10 
       OFFSET ${searchParams?.page ? (Number(searchParams.page) - 1) * 10 : 0}
     `;
+
+    console.log('[fetchProducts] products found:', products.length);
 
     const totalCount = await sql<{ count: string }[]>`
       SELECT COUNT(*) AS count

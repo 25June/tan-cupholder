@@ -1,11 +1,19 @@
 'use client';
 
+import { useEffect } from 'react';
 import { debounce } from '@/shared/utils/debounce';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 interface Props {
   readonly onSearch: (search: string) => void;
 }
 export default function SearchProducts({ onSearch }: Props) {
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const search = searchParams.get('search');
+    if (search) {
+      onSearch(search);
+    }
+  }, []);
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value || '');
   };
@@ -16,7 +24,7 @@ export default function SearchProducts({ onSearch }: Props) {
         type="search"
         className="grow"
         placeholder="Search"
-        onChange={debounce(handleSearch, 500)}
+        onChange={debounce(handleSearch, 1000)}
       />
     </label>
   );

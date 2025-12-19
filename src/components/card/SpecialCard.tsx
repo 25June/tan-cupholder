@@ -14,6 +14,8 @@ import { formatPrice } from '@/shared/utils/formatPrice';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import Link from 'next/link';
 
+const MotionLink = motion.create(Link);
+
 interface SpecialCardProps {
   readonly item: ProductResponse;
 }
@@ -52,13 +54,15 @@ export default function SpecialCard({ item }: SpecialCardProps) {
             <h4 className="text-lg font-semibold">{item.name}</h4>
             <p className="text-sm font-light text-slate-500">{item.type}</p>
           </div>
-          <Link
+          <MotionLink
             href={`/products/${item.id}`}
             prefetch={true}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.8 }}
             className="hover:scale-110 transform-none transition-all duration-300 bg-special-card rounded-full p-2 shrink-0"
           >
             <ArrowUpRightIcon className="size-4 stroke-logo-orange-border" />
-          </Link>
+          </MotionLink>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-slate-400 line-through decoration-slate-400">
