@@ -5,8 +5,8 @@ import { ScreenLayout } from '@/constants/common';
 
 const breakpoints: Record<ScreenLayout, (size: number) => boolean> = {
   mobile: (size: number) => size < 768, // Up to 767px wide (typical phone portrait)
-  tablet: (size: number) => size > 768 && size < 1023, // 768px to 1023px (typical tablet portrait)
-  desktop: (size: number) => size > 1024 // 1024px and up (typical desktop)
+  tablet: (size: number) => size >= 768 && size < 1023, // 768px to 1023px (typical tablet portrait)
+  desktop: (size: number) => size >= 1024 // 1024px and up (typical desktop)
 };
 
 export const useQueryMedia = () => {

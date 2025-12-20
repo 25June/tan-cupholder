@@ -52,7 +52,7 @@ export const CategorySection = () => {
               }
             }
           }}
-          className={`${yuseiMagic.className} text-4xl font-bold text-white`}
+          className={`${yuseiMagic.className} text-2xl md:text-4xl font-bold text-white`}
         >
           {t('title')}
         </motion.h2>

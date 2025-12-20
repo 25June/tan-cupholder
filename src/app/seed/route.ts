@@ -204,11 +204,35 @@ async function seedProductTags() {
   );
 }
 
+async function seedPublicConfig() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS public_config (
+      key VARCHAR(255) PRIMARY KEY,
+      value TEXT NOT NULL,
+      description TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  const date = new Date().toISOString();
+
+  // Example: product_type_orders configuration
+  const productTypeOrders = JSON.stringify([]);
+
+  await sql`
+    INSERT INTO public_config (key, value, description, created_at, updated_at)
+    VALUES ('product_types', ${productTypeOrders}, 'Order configuration for product types display', ${date}, ${date})
+    ON CONFLICT (key) DO NOTHING;
+  `;
+}
+
 export async function GET() {
   try {
     // Optionally run seeders:
     // await seedProducts();
     // await seedProductTags();
+    await seedPublicConfig();
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

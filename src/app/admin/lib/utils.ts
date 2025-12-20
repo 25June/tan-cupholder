@@ -1,3 +1,4 @@
+import { PublicConfig } from '@/models/publicConfig';
 import { Revenue } from './definitions';
 
 export const formatCurrency = (amount: number) => {
@@ -67,4 +68,18 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     '...',
     totalPages
   ];
+};
+
+// Helper function to parse JSON value
+export const parseConfigValue = <T = any>(
+  config: PublicConfig | null
+): T | null => {
+  if (!config) return null;
+
+  try {
+    return JSON.parse(config.value) as T;
+  } catch (error) {
+    console.error('Failed to parse config value:', error);
+    return null;
+  }
 };

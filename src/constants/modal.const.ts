@@ -5,6 +5,7 @@ export enum MODAL_ID {
   DELETE_PRODUCT = 'delete-product',
   UPDATE_PRODUCT_TYPE = 'update-product-type',
   ADD_PRODUCT_TYPE = 'add-product-type',
+  ARRANGE_PRODUCT_TYPES = 'arrange-product-types',
   DELETE_PRODUCT_TYPE = 'delete-product-type',
   UPDATE_PRODUCT_TAG = 'update-product-tag',
   ADD_PRODUCT_TAG = 'add-product-tag',

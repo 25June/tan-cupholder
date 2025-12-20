@@ -8,7 +8,6 @@ import {
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
-import Image from 'next/image';
 
 export default function ProductTypesTable({
   productTypes,

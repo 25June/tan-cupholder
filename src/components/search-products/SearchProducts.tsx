@@ -3,17 +3,21 @@
 import { useEffect } from 'react';
 import { debounce } from '@/shared/utils/debounce';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useRouter, useSearchParams } from 'next/navigation';
 interface Props {
   readonly onSearch: (search: string) => void;
 }
 export default function SearchProducts({ onSearch }: Props) {
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
+
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
     const search = searchParams.get('search');
     if (search) {
       onSearch(search);
+      replace(`/products`);
     }
-  }, []);
+  }, [searchParams]);
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value || '');
   };
@@ -25,6 +29,7 @@ export default function SearchProducts({ onSearch }: Props) {
         className="grow"
         placeholder="Search"
         onChange={debounce(handleSearch, 1000)}
+        defaultValue={searchParams.get('search') || undefined}
       />
     </label>
   );

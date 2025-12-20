@@ -8,12 +8,16 @@ import {
 import ProductTypesTable from '../../ui/product-types/table';
 import { lusitana } from '@/app/admin/ui/fonts';
 import Search from '../../ui/search';
-import { CreateProductType } from '@/app/admin/ui/product-types/buttons';
+import {
+  ArrangeProductTypes,
+  CreateProductType
+} from '@/app/admin/ui/product-types/buttons';
 import Pagination from '../../ui/invoices/pagination';
 import { ProductType } from '@/models/productType';
 import CreateProductTypeModal from '../../ui/product-types/create-product-type-modal';
 import EditProductTypeModal from '../../ui/product-types/edit-product-type-modal';
 import DeleteProductTypeModal from '../../ui/product-types/delete-product-type-modal';
+import ArrangeProductTypeModal from '../../ui/product-types/arrange-product-type-modal';
 import { useSearchParams } from 'next/navigation';
 
 export default function Page() {
@@ -69,6 +73,7 @@ export default function Page() {
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search product types..." />
         <CreateProductType />
+        <ArrangeProductTypes />
       </div>
       <ProductTypesTable
         productTypes={productTypes}
@@ -87,6 +92,7 @@ export default function Page() {
         productTypeId={selectedProductTypeId}
         onRefresh={handleRefresh}
       />
+      <ArrangeProductTypeModal onRefresh={handleRefresh} />
     </main>
   );
 }
