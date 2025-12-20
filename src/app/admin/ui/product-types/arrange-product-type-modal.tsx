@@ -6,8 +6,13 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import { ProductType } from '@/models/productType';
-import { getProductTypes } from '@/app/admin/lib/actions/product-types.actions';
-import { updatePublicConfigDirect } from '@/app/admin/lib/actions/public-config.actions';
+import {
+  getAndParseConfig,
+  updatePublicConfigDirect
+} from '@/app/admin/lib/actions/public-config.actions';
+import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
+import { getImageUrl } from '@/shared/utils/getImageUrl';
+import Image from 'next/image';
 
 const ITEM_TYPE = 'PRODUCT_TYPE';
 
@@ -78,6 +83,22 @@ const DraggableProductType = ({
             </svg>
           </div>
           <div>
+            <Image
+              src={
+                productType.image_url
+                  ? formatImagePath(
+                      getImageUrl('product-types', productType.image_url)
+                    )
+                  : '/cup.png'
+              }
+              alt={productType.name}
+              width={128}
+              height={128}
+              unoptimized
+              className="rounded-lg w-16 h-16 object-cover shrink-0"
+            />
+          </div>
+          <div>
             <h4 className="font-semibold text-gray-900">{productType.name}</h4>
             <p className="text-sm text-gray-500">{productType.short_name}</p>
           </div>
@@ -90,28 +111,31 @@ const DraggableProductType = ({
 
 interface ArrangeProductTypeModalProps {
   onRefresh?: () => void;
+  productTypesObj: Record<string, ProductType>;
 }
 
 export default function ArrangeProductTypeModal({
-  onRefresh
+  onRefresh,
+  productTypesObj
 }: ArrangeProductTypeModalProps) {
-  const [productTypes, setProductTypes] = useState<ProductType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [productTypes, setProductTypes] = useState<ProductType[]>([]);
 
-  // Fetch product types when modal opens
-  const fetchProductTypes = useCallback(async () => {
+  const fetchProductTypesConfig = useCallback(async () => {
     setIsLoading(true);
     try {
-      const types = await getProductTypes({ query: '', page: '0' });
-      setProductTypes(types);
+      const data = await getAndParseConfig<string[]>('product_types');
+      if (data) {
+        setProductTypes(data.map((id) => productTypesObj[id]));
+      }
     } catch (error) {
-      console.error('Failed to fetch product types:', error);
+      console.error('Failed to fetch product types config:', error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [productTypesObj]);
 
   // Listen for modal open event
   useEffect(() => {
@@ -123,7 +147,7 @@ export default function ArrangeProductTypeModal({
             const isModalOpen = (modal as HTMLDialogElement).open;
             setIsOpen(isModalOpen);
             if (isModalOpen) {
-              fetchProductTypes();
+              fetchProductTypesConfig();
             }
           }
         });
@@ -133,19 +157,19 @@ export default function ArrangeProductTypeModal({
 
       return () => observer.disconnect();
     }
-  }, [fetchProductTypes]);
+  }, [fetchProductTypesConfig]);
 
   // Handle drag and drop reordering
   const moveProductType = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      setProductTypes((prevTypes) => {
+      setProductTypes((prevTypes: ProductType[]) => {
         const newTypes = [...prevTypes];
         const [removed] = newTypes.splice(dragIndex, 1);
-        newTypes.splice(hoverIndex, 0, removed);
+        newTypes.splice(hoverIndex, 0, removed as ProductType);
         return newTypes;
       });
     },
-    []
+    [productTypes]
   );
 
   // Save the new order to database
@@ -153,11 +177,7 @@ export default function ArrangeProductTypeModal({
     setIsSaving(true);
     try {
       // Create array with minimal data for storage
-      const orderData = productTypes.map((pt) => ({
-        id: pt.id,
-        name: pt.name,
-        description: pt.description || ''
-      }));
+      const orderData = productTypes.map((pt) => pt.id);
 
       await updatePublicConfigDirect('product_types', {
         value: JSON.stringify(orderData),

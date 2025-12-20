@@ -194,7 +194,7 @@ export const updatePublicConfigDirect = async (
   }
 ) => {
   const date = new Date().toISOString();
-
+  console.log('Updating public config:', key, data);
   try {
     const result = await sql`
       UPDATE public_config
@@ -203,10 +203,6 @@ export const updatePublicConfigDirect = async (
     }, updated_at = ${date}
       WHERE key = ${key}
     `;
-
-    if (result.length === 0) {
-      throw new Error('Public config not found.');
-    }
 
     revalidatePath('/admin/dashboard/public-config');
     return { success: true, message: 'Public config updated successfully.' };

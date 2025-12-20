@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getProductTypes,
   fetchTotalProductTypes
@@ -61,6 +61,13 @@ export default function Page() {
     setSelectedProductTypeId(null);
   };
 
+  const productTypesObj = useMemo(() => {
+    return productTypes.reduce((acc, pt) => {
+      acc[pt.id] = pt;
+      return acc;
+    }, {} as Record<string, ProductType>);
+  }, [productTypes]);
+
   console.log(productTypes);
 
   return (
@@ -92,7 +99,10 @@ export default function Page() {
         productTypeId={selectedProductTypeId}
         onRefresh={handleRefresh}
       />
-      <ArrangeProductTypeModal onRefresh={handleRefresh} />
+      <ArrangeProductTypeModal
+        onRefresh={handleRefresh}
+        productTypesObj={productTypesObj}
+      />
     </main>
   );
 }

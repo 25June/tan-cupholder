@@ -6,10 +6,8 @@ import { ProductType } from '@/models/productType';
 
 export async function getPublicCategories() {
   try {
-    const productTypes = await getAndParseConfig<ProductType[]>(
-      'product_types'
-    );
-    if (!productTypes || productTypes.length === 0) {
+    const ids = await getAndParseConfig<string[]>('product_types');
+    if (!ids || ids.length === 0) {
       const categories = await sql`
       SELECT * FROM product_types 
       WHERE image_url IS NOT NULL
@@ -19,12 +17,16 @@ export async function getPublicCategories() {
       return categories;
     }
 
-    const categories = await sql`
+    const top9 = ids.slice(0, 9);
+
+    const productTypes = await sql`
       SELECT * FROM product_types 
-      WHERE id = ANY(${productTypes.map((productType) => productType.id)})
-      ORDER BY created_at DESC
-      LIMIT 9
     `;
+
+    const categories = top9.map((id) =>
+      productTypes.find((productType: ProductType) => productType.id === id)
+    );
+
     return categories;
   } catch (error) {
     console.error('Database Error:', error);
