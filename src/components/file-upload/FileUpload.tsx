@@ -12,11 +12,13 @@ interface Props {
   image: File;
   presignedUrl: string;
   setImageUploadCompleted: Dispatch<SetStateAction<Record<string, boolean>>>;
+  imageId?: string;
 }
 export default function FileUpload({
   image,
   presignedUrl,
-  setImageUploadCompleted
+  setImageUploadCompleted,
+  imageId
 }: Props) {
   const [progress, setProgress] = useState<number>(0);
 
@@ -53,6 +55,7 @@ export default function FileUpload({
         src={URL.createObjectURL(image)}
         alt="Product Image"
         className="object-contain w-full h-full"
+        id={imageId}
       />
       {progress > 0 && (
         <progress

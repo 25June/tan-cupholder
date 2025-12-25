@@ -11,6 +11,8 @@ import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import { ProductTag } from '@/models/productTag';
 import AutoComplete from '../autocomplete/AutoComplete';
+import ColorDetecter from '@/components/color-detecter/ColorDetecter';
+
 const initialState: State = { message: null, errors: {} };
 
 export default function CreateProductModal({
@@ -33,6 +35,15 @@ export default function CreateProductModal({
   const [imageUploadCompleted, setImageUploadCompleted] = useState<
     Record<string, boolean>
   >({});
+  const [imageId, setImageId] = useState<string>();
+
+  useEffect(() => {
+    if (uploadImages.length) {
+      setTimeout(() => {
+        setImageId(`image-0`);
+      }, 3000);
+    }
+  }, [uploadImages]);
 
   const onUpload = async (productId: string) => {
     if (!uploadImages.length) {
@@ -134,6 +145,7 @@ export default function CreateProductModal({
     setUploadImages([]);
     setPresignedUrlObject({});
     setFormId(Date.now().toString());
+    setImageId(undefined);
     if (refresh) {
       onRefresh();
     }
@@ -323,6 +335,7 @@ export default function CreateProductModal({
               </div>
 
               <div className="text-sm text-muted-foreground">
+                <ColorDetecter imageId={imageId || ''} />
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Images</legend>
                   <input
@@ -339,10 +352,10 @@ export default function CreateProductModal({
                   />
                 </fieldset>
 
-                <div className="mt-4 mb-4 w-full h-full rounded-md min-h-24">
+                <div className="mt-4 mb-4 w-full h-full rounded-md">
                   {uploadImages.length ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
-                      {uploadImages.map((uploadImage) => (
+                      {uploadImages.map((uploadImage, index) => (
                         <div
                           key={uploadImage.name}
                           className="w-full h-full flex justify-center items-center"
@@ -354,6 +367,7 @@ export default function CreateProductModal({
                               presignedUrlObject[uploadImage.name] || ''
                             }
                             setImageUploadCompleted={setImageUploadCompleted}
+                            imageId={`image-${index}`}
                           />
                         </div>
                       ))}
