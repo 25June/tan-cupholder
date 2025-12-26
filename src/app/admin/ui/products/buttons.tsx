@@ -10,7 +10,7 @@ import {
 import { onOpenModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import Spinner from '@/components/spinner/Spinner';
-import { ProductTag } from '@/models/productTag';
+import { ProductResponse } from '@/models/product';
 
 export function CreateProduct() {
   const handleClick = () => {
@@ -34,16 +34,7 @@ export function UpdateProduct({
   onSelectProduct
 }: {
   id: string;
-  product?: {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    sale: number;
-    stock: number;
-    type: string;
-    tagIds: string[];
-  };
+  product: ProductResponse;
   onSelectProduct: (id: string) => void;
 }) {
   const handleClick = () => {

@@ -396,9 +396,20 @@ async function seedAddColumnOrderIdToInvoices() {
   `;
 }
 
+async function seedAddColorFieldsToProducts() {
+  await sql`
+    ALTER TABLE products
+    ADD COLUMN IF NOT EXISTS primary_color VARCHAR(255) DEFAULT '',
+    ADD COLUMN IF NOT EXISTS colors TEXT DEFAULT '',
+    ADD COLUMN IF NOT EXISTS pattern VARCHAR(255) DEFAULT '';
+  `;
+}
+
 export async function GET() {
   try {
+    const colorFields = await seedAddColorFieldsToProducts();
     // const userRole = await sql.begin(seedAddColumnOrderIdToInvoices);
+    // const colorFields = await sql.begin(seedAddColorFieldsToProducts);
 
     // const userInfo = await sql.begin(seedUser);
     // const userCredentials = await sql.begin(seedUserCredentials);

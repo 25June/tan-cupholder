@@ -81,7 +81,7 @@ export default function Page() {
         fetchProducts({ query, page: currentPage.toString() }),
         fetchTotalProducts()
       ]);
-
+      console.log('productsData', productsData);
       setProducts(productsData);
       setTotalProducts(totalData);
     } catch (error) {
@@ -91,9 +91,11 @@ export default function Page() {
     }
   };
 
-  const onRefresh = () => {
-    onFetchProducts();
+  const onRefresh = (refresh?: boolean) => {
     setSelectedProductId(null);
+    if (refresh) {
+      onFetchProducts();
+    }
   };
 
   const formattedProducts = useMemo(

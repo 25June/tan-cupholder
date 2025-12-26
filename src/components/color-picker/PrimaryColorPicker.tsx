@@ -1,0 +1,112 @@
+'use client';
+
+import { useCallback, useState } from 'react';
+
+interface PrimaryColorPickerProps {
+  defaultColor?: string;
+  onChange?: (color: string) => void;
+}
+
+const PASTEL_COLORS = [
+  {
+    name: 'Red',
+    hex: '#FF0000'
+  },
+  {
+    name: 'Yellow',
+    hex: '#FFFF00'
+  },
+  {
+    name: 'Blue',
+    hex: '#0000FF'
+  },
+  {
+    name: 'Orange',
+    hex: '#FFA500'
+  },
+  {
+    name: 'Green',
+    hex: '#008000'
+  },
+  {
+    name: 'Violet',
+    hex: '#800080'
+  },
+  {
+    name: 'Black',
+    hex: '#000000'
+  },
+  {
+    name: 'White',
+    hex: '#FFFFFF'
+  },
+  {
+    name: 'Blue-Green',
+    hex: '#00CED1'
+  }
+];
+
+const PrimaryColorPicker = ({
+  defaultColor = '',
+  onChange
+}: PrimaryColorPickerProps) => {
+  const [selectedColor, setSelectedColor] = useState<string>(defaultColor);
+
+  const handleColorSelect = (hexColor: string) => {
+    if (selectedColor === hexColor) {
+      setSelectedColor('');
+      onChange?.('');
+      return;
+    }
+    setSelectedColor(hexColor);
+    onChange?.(hexColor);
+  };
+
+  return (
+    <fieldset className="fieldset">
+      <legend className="fieldset-legend w-full relative">Primary Color</legend>
+
+      <div className="space-y-2 p-2">
+        <div className="flex flex-wrap gap-3">
+          {PASTEL_COLORS.map((color) => {
+            const isSelected = selectedColor === color.hex;
+            return (
+              <div
+                key={color.hex}
+                className="flex flex-col items-center gap-2 group"
+              >
+                <button
+                  type="button"
+                  onClick={() => handleColorSelect(color.hex)}
+                  className={`w-6 h-6 rounded-full shadow-md border-2 transition-all hover:scale-110 ${
+                    isSelected
+                      ? 'border-logo-orange-border ring-2 ring-logo-orange-border ring-offset-2'
+                      : 'border-gray-200'
+                  }`}
+                  style={{
+                    backgroundColor: color.hex
+                  }}
+                  title={`${color.name} (${color.hex})`}
+                >
+                  {isSelected && (
+                    <div className="flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-white drop-shadow-lg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                      </svg>
+                    </div>
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </fieldset>
+  );
+};
+
+export default PrimaryColorPicker;

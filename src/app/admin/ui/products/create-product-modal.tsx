@@ -12,6 +12,7 @@ import { MODAL_ID } from '@/constants/modal.const';
 import { ProductTag } from '@/models/productTag';
 import AutoComplete from '../autocomplete/AutoComplete';
 import ColorDetecter from '@/components/color-detecter/ColorDetecter';
+import PrimaryColorPicker from '@/components/color-picker/PrimaryColorPicker';
 
 const initialState: State = { message: null, errors: {} };
 
@@ -36,6 +37,8 @@ export default function CreateProductModal({
     Record<string, boolean>
   >({});
   const [imageId, setImageId] = useState<string>();
+  const [primaryColor, setPrimaryColor] = useState<string>('');
+  const [detectedColors, setDetectedColors] = useState<string>('');
 
   useEffect(() => {
     if (uploadImages.length) {
@@ -108,6 +111,9 @@ export default function CreateProductModal({
       newFormData.append('stock', formData.get('stock') as string);
       newFormData.append('description', formData.get('description') as string);
       newFormData.append('tagIds', tagIds.join(','));
+      newFormData.append('primaryColor', primaryColor);
+      newFormData.append('colors', detectedColors);
+      newFormData.append('pattern', formData.get('pattern') as string);
 
       const res = await createProduct(initialState, newFormData);
 
@@ -146,6 +152,8 @@ export default function CreateProductModal({
     setPresignedUrlObject({});
     setFormId(Date.now().toString());
     setImageId(undefined);
+    setPrimaryColor('');
+    setDetectedColors('');
     if (refresh) {
       onRefresh();
     }
@@ -335,7 +343,26 @@ export default function CreateProductModal({
               </div>
 
               <div className="text-sm text-muted-foreground">
-                <ColorDetecter imageId={imageId || ''} />
+                <PrimaryColorPicker
+                  defaultColor={primaryColor}
+                  onChange={setPrimaryColor}
+                />
+
+                <ColorDetecter
+                  imageId={imageId || ''}
+                  onChange={setDetectedColors}
+                />
+
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Pattern</legend>
+                  <input
+                    type="text"
+                    name="pattern"
+                    className="input w-full"
+                    placeholder="e.g., Striped, Dotted, Floral"
+                  />
+                </fieldset>
+
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Images</legend>
                   <input

@@ -43,16 +43,7 @@ const ActionDropdown = memo(
               <li>
                 <UpdateProduct
                   id={product.id}
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    description: product.description,
-                    price: product.price,
-                    sale: product.sale,
-                    stock: product.stock,
-                    type: product.type,
-                    tagIds: product.tagIds
-                  }}
+                  product={product}
                   onSelectProduct={onSelectProduct}
                 />
               </li>
@@ -147,8 +138,27 @@ export default function ProductsTable({
       accessor: 'stock'
     },
     {
-      header: 'Description',
-      render: (product) => product.description,
+      header: 'Colors',
+      render: (product) => {
+        const colors = product.colors ? JSON.parse(product.colors) : [];
+        return (
+          <div className="flex flex-col gap-2">
+            <div
+              className="w-12 h-4 rounded-full"
+              style={{ backgroundColor: product.primaryColor }}
+            />
+            <div className="flex flex-wrap gap-2">
+              {colors.map((hex: string) => (
+                <div
+                  key={hex}
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: hex }}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      },
       className:
         'whitespace-nowrap px-3 py-3 text-sm text-ellipsis overflow-hidden max-w-16'
     }

@@ -7,7 +7,6 @@ import { batchRemoveImages } from './images.actions';
 import { Product, ProductResponse } from '@/models/product';
 import { Image } from '@/models/image';
 import { ProductType } from '@/models/productType';
-import { ProductTag } from '@/models/productTag';
 
 import { sql } from '@/lib/db';
 
@@ -19,6 +18,9 @@ const FormSchema = z.object({
   sale: z.string(),
   stock: z.string(),
   tagIds: z.string().optional(),
+  primaryColor: z.string().optional(),
+  colors: z.string().optional(),
+  pattern: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
   id: z.string().min(1, { message: 'Id is required' })
@@ -55,7 +57,10 @@ export async function createProduct(prevState: State, formData: FormData) {
     type: formData.get('type'),
     sale: formData.get('sale'),
     stock: formData.get('stock'),
-    tagIds: formData.get('tagIds')
+    tagIds: formData.get('tagIds'),
+    primaryColor: formData.get('primaryColor'),
+    colors: formData.get('colors'),
+    pattern: formData.get('pattern')
   });
 
   if (!validatedFields.success) {
@@ -65,16 +70,28 @@ export async function createProduct(prevState: State, formData: FormData) {
     };
   }
 
-  const { name, description, price, type, sale, stock, tagIds } =
-    validatedFields.data;
+  const {
+    name,
+    description,
+    price,
+    type,
+    sale,
+    stock,
+    tagIds,
+    primaryColor,
+    colors,
+    pattern
+  } = validatedFields.data;
   const date = new Date().toISOString();
 
   const tagIdsArray = tagIds ? tagIds.split(',') : [];
   let id = '';
   try {
     const result =
-      await sql`INSERT INTO products (name, price, type, sale, stock, created_at, updated_at, description) 
-    VALUES (${name}, ${price}, ${type}, ${sale}, ${stock}, ${date}, ${date}, ${description}) RETURNING id`;
+      await sql`INSERT INTO products (name, price, type, sale, stock, created_at, updated_at, description, primary_color, colors, pattern) 
+    VALUES (${name}, ${price}, ${type}, ${sale}, ${stock}, ${date}, ${date}, ${description}, ${
+        primaryColor || ''
+      }, ${colors || ''}, ${pattern || ''}) RETURNING id`;
     id = result[0].id;
 
     for (const tagId of tagIdsArray) {
@@ -104,7 +121,10 @@ export async function updateProduct(prevState: State, formData: FormData) {
     type: formData.get('type'),
     sale: formData.get('sale'),
     stock: formData.get('stock'),
-    tagIds: formData.get('tagIds')
+    tagIds: formData.get('tagIds'),
+    primaryColor: formData.get('primaryColor'),
+    colors: formData.get('colors'),
+    pattern: formData.get('pattern')
   });
 
   if (!validatedFields.success) {
@@ -114,8 +134,19 @@ export async function updateProduct(prevState: State, formData: FormData) {
     };
   }
 
-  const { name, description, price, type, sale, stock, id, tagIds } =
-    validatedFields.data;
+  const {
+    name,
+    description,
+    price,
+    type,
+    sale,
+    stock,
+    id,
+    tagIds,
+    primaryColor,
+    colors,
+    pattern
+  } = validatedFields.data;
   const date = new Date().toISOString();
 
   const tagIdsArray = tagIds ? tagIds.split(',') : [];
@@ -124,7 +155,9 @@ export async function updateProduct(prevState: State, formData: FormData) {
   try {
     await sql`
     UPDATE products 
-    SET name = ${name}, description = ${description},  price = ${price}, type = ${type}, sale = ${sale}, stock = ${stock}, updated_at = ${date} 
+    SET name = ${name}, description = ${description},  price = ${price}, type = ${type}, sale = ${sale}, stock = ${stock}, updated_at = ${date}, primary_color = ${
+      primaryColor || ''
+    }, colors = ${colors || ''}, pattern = ${pattern || ''} 
     WHERE id = ${id}`;
     // update product tag mappings
     await sql`DELETE FROM product_tag_mappings WHERE product_id = ${id}`;
@@ -192,9 +225,10 @@ export async function fetchProductById(id: string) {
     const product = await sql<Product[]>`
       SELECT * FROM products WHERE id = ${id}
     `;
+    console.log('product', product);
 
     const images = await sql<Image[]>`
-      SELECT id, name, type, is_main as "isMain", product_id as "productId", created_at as "createdAt", updated_at as "updatedAt" 
+      SELECT id, name, type, is_main as "isMain", product_id as "productId", created_at as "createdAt", updated_at as "updatedAt"
       FROM images 
       WHERE product_id = ${id}
     `;
@@ -235,6 +269,9 @@ export async function fetchProducts(searchParams?: {
         p.sale,
         p.type,
         p.stock,
+        p.primary_color as "primaryColor",
+        p.colors,
+        p.pattern,
         json_build_object(
           'id', product_image.id,
           'name', product_image.name,

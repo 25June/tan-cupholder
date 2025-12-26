@@ -3,47 +3,77 @@
 import ColorThief from 'colorthief';
 import { useCallback, useState, useEffect } from 'react';
 import { BeakerIcon } from '@heroicons/react/24/outline';
+import Spinner from '../spinner/Spinner';
 
 interface ColorDetecterProps {
   imageId: string;
+  onChange?: (colors: string) => void;
+  defaultColors?: string;
 }
 
-const ColorDetecter = ({ imageId }: ColorDetecterProps) => {
-  const [color, setColor] = useState<Array<[number, number, number]> | null>(
-    null
-  );
+const ColorDetecter = ({
+  imageId,
+  onChange,
+  defaultColors
+}: ColorDetecterProps) => {
+  const [color, setColor] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const removeColor = useCallback((index: number) => {
     setColor((prevColors) => {
-      if (!prevColors) return null;
       const newColors = prevColors.filter((_, i) => i !== index);
-      return newColors.length > 0 ? newColors : null;
+      return newColors.length > 0 ? newColors : [];
     });
   }, []);
 
   const detectColor = useCallback((id: string) => {
     if (!id) return;
 
+    setLoading(true);
     const colorThief = new ColorThief();
     const img = document.querySelector(`#${id}`) as HTMLImageElement;
     if (!img) return;
 
     if (img.complete) {
       const colors = colorThief.getPalette(img);
-      setColor(colors);
+      setColor(convertRgbToHex(colors));
+      setLoading(false);
     } else {
-      img?.addEventListener('load', () => {
+      const onSetColor = () => {
         const colors = colorThief.getPalette(img);
-        setColor(colors);
-      });
+        setColor(convertRgbToHex(colors));
+        img.removeEventListener('load', onSetColor);
+        setLoading(false);
+      };
+      img?.addEventListener('load', onSetColor);
     }
   }, []);
 
+  const convertRgbToHex = (
+    rgb: Array<[number, number, number]>
+  ): Array<string> => {
+    return rgb.map(
+      (c) => `#${c.map((c) => c.toString(16).padStart(2, '0')).join('')}`
+    );
+  };
+
   useEffect(() => {
-    if (imageId) {
+    if (imageId && !defaultColors) {
+      console.log('detecting color');
       detectColor(imageId);
     }
-  }, [imageId, detectColor]);
+    if (defaultColors) {
+      setColor(JSON.parse(defaultColors));
+    }
+  }, [imageId, detectColor, defaultColors]);
+
+  useEffect(() => {
+    if (color && onChange) {
+      onChange(JSON.stringify(color));
+    } else if (!color && onChange) {
+      onChange('');
+    }
+  }, [color, onChange]);
 
   return (
     <fieldset className="fieldset">
@@ -52,6 +82,7 @@ const ColorDetecter = ({ imageId }: ColorDetecterProps) => {
         {color && color.length > 0 ? `(${color?.length} colors)` : ''}
         <div className="absolute top-0 right-0">
           <button
+            type="button"
             onClick={() => detectColor(imageId)}
             className="p-1 bg-logo-orange-pale-companion rounded-full"
           >
@@ -63,23 +94,20 @@ const ColorDetecter = ({ imageId }: ColorDetecterProps) => {
       {color && color.length > 0 ? (
         <div className="space-y-2 p-2">
           <div className="flex flex-wrap gap-3">
-            {color.map((rgb, index) => {
-              const hexColor = rgb
-                .map((c) => c.toString(16).padStart(2, '0'))
-                .join('');
+            {color.map((hex, index) => {
               return (
                 <div
-                  key={`${hexColor}-${index}`}
+                  key={`${hex}-${index}`}
                   className="flex flex-col items-center gap-2 group"
                 >
                   <button
                     type="button"
                     onClick={() => removeColor(index)}
-                    className="w-12 h-12 rounded-full shadow-md border-2 border-gray-200 transition-all hover:scale-110 relative"
+                    className="w-6 h-6 rounded-full shadow-md border-2 border-gray-200 transition-all hover:scale-110 relative"
                     style={{
-                      backgroundColor: `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
+                      backgroundColor: hex
                     }}
-                    title={`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]}) - Click to remove`}
+                    title={`${hex} - Click to remove`}
                   >
                     <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <svg
@@ -97,16 +125,20 @@ const ColorDetecter = ({ imageId }: ColorDetecterProps) => {
                       </svg>
                     </div>
                   </button>
-                  <span className="text-xs text-gray-500 font-mono">
-                    #{hexColor}
-                  </span>
+                  <span className="text-xs text-gray-500 font-mono">{hex}</span>
                 </div>
               );
             })}
           </div>
         </div>
       ) : (
-        <div className="text-sm text-gray-500">No colors detected</div>
+        <>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <div className="text-sm text-gray-500">No colors detected</div>
+          )}
+        </>
       )}
     </fieldset>
   );

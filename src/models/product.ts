@@ -12,6 +12,9 @@ export interface Product {
   updatedAt?: string;
   priority?: number;
   tagIds?: string[]; // tag ids mapping for many-to-many relationship
+  primaryColor?: string;
+  colors?: string;
+  pattern?: string;
 }
 
 export interface ProductCustom {
@@ -51,4 +54,7 @@ export interface ProductResponse {
   type: string;
   tagIds: string[];
   product_image: ProductImage;
+  primaryColor?: string;
+  colors?: string;
+  pattern?: string;
 }
