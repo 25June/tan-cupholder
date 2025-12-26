@@ -225,7 +225,6 @@ export async function fetchProductById(id: string) {
     const product = await sql<Product[]>`
       SELECT * FROM products WHERE id = ${id}
     `;
-    console.log('product', product);
 
     const images = await sql<Image[]>`
       SELECT id, name, type, is_main as "isMain", product_id as "productId", created_at as "createdAt", updated_at as "updatedAt"
