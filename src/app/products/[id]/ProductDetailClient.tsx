@@ -16,12 +16,14 @@ import {
   saveProductToCart,
   saveViewedProductToStorage
 } from '@/shared/utils/storage';
+import { ProductTag } from '@/models/productTag';
 
 interface Props {
   readonly product: Product;
   readonly images: ImageType[];
   readonly productType: ProductType | null;
   readonly onCartUpdate?: () => void;
+  readonly tags: ProductTag[];
 }
 
 // Purchase actions component
@@ -58,14 +60,14 @@ const PurchaseActions = ({
           onClick={handleAddToCart}
           disabled={isAddedToCart}
         >
-          {isAddedToCart ? 'Added to Cart' : 'Add to Cart'}
+          {isAddedToCart ? 'Added to cart' : 'Add to cart'}
         </button>
         <Link
           className="btn btn-primary btn-md flex-1"
           href={`/payment/${product.id}?quantity=${quantity}`}
           prefetch={true}
         >
-          Buy Now
+          Book now
         </Link>
       </div>
     </div>
@@ -76,7 +78,8 @@ export default function ProductDetailClient({
   product,
   images,
   productType,
-  onCartUpdate
+  onCartUpdate,
+  tags
 }: Props) {
   // Save viewed product on mount
   useEffect(() => {
@@ -87,19 +90,30 @@ export default function ProductDetailClient({
   const randomArr = useMemo(() => {
     return getRandomImageArr(3, images, product.id);
   }, [images, product.id]);
-
+  console.log(tags);
   return (
     <>
       {/* Product detail section */}
-      <section className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row">
+      <section className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row items-center">
         <ImageGallery product={product} images={images} />
 
-        <div className="flex-1 mt-2 md:mt-4 flex flex-col gap-4 justify-between">
+        <div className="flex-1 flex flex-col gap-4 justify-between">
           <div>
             <h1 className="text-2xl md:text-5xl font-bold mb-4">
               {product.name}
             </h1>
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag.id}
+                  className={`text-xs p-2 rounded-lg font-semibold`}
+                  style={{ backgroundColor: tag.color || '#000000' }}
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+            <div className="flex items-center gap-4 mb-2">
               <span className="text-xl md:text-3xl font-bold text-slate-400">
                 {formatPrice(calculatePercent(product.price, product.sale), '')}
               </span>
@@ -107,7 +121,8 @@ export default function ProductDetailClient({
                 {formatPrice(product.price, '')}
               </span>
             </div>
-            <p className="mb-4">{product.description}</p>
+
+            <p>{product.description}</p>
           </div>
           <PurchaseActions product={product} onCartUpdate={onCartUpdate} />
         </div>

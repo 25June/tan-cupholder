@@ -23,7 +23,7 @@ const ImageGallery = ({
   }, [mainImage, images]);
 
   return (
-    <div className="flex flex-1 gap-4 flex-col-reverse md:flex-row">
+    <div className="flex flex-1 gap-4 h-full flex-col-reverse md:flex-row">
       {/* Thumbnail images */}
       <nav
         className="shrink-0 md:h-full max-h-24 md:max-h-88 w-full md:max-w-24 overflow-auto flex flex-row md:flex-col gap-2"

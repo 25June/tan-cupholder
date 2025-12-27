@@ -7,12 +7,14 @@ import ProductDetailClient from './ProductDetailClient';
 import { Product } from '@/models/product';
 import { Image as ImageType } from '@/models/image';
 import { ProductType } from '@/models/productType';
+import { ProductTag } from '@/models/productTag';
 
 interface Props {
   readonly product: Product;
   readonly images: ImageType[];
   readonly productType: ProductType | null;
   readonly productId: string;
+  readonly tags: ProductTag[];
   readonly children: React.ReactNode; // Related products (streamed from server)
 }
 
@@ -22,6 +24,7 @@ export default function ProductPageClient({
   images,
   productType,
   productId,
+  tags,
   children
 }: Props) {
   const [triggerCartCount, setTriggerCartCount] = useState<number>(Date.now());
@@ -56,6 +59,7 @@ export default function ProductPageClient({
           images={images}
           productType={productType}
           onCartUpdate={handleCartUpdate}
+          tags={tags}
         />
 
         {/* Related products - Streamed from server via children */}

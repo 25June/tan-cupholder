@@ -1,8 +1,10 @@
 'use server';
 
-import { ProductResponse } from '@/models/product';
+import { Product, ProductResponse } from '@/models/product';
 import { ProductType } from '@/models/productType';
 import { sql } from '@/lib/db';
+import { Image } from '@/models/image';
+import { ProductTag } from '@/models/productTag';
 
 export async function fetchProductsByType(type: string) {
   try {
@@ -112,6 +114,46 @@ export async function publicFetchProductByIds(ids: string[]) {
     WHERE p.id = ANY(${ids})
   `;
   return products;
+}
+
+export async function publicFetchProductById(id: string) {
+  try {
+    const product = await sql<Product[]>`
+      SELECT * FROM products WHERE id = ${id}
+    `;
+
+    const images = await sql<Image[]>`
+      SELECT id, name, type, is_main as "isMain", product_id as "productId"
+      FROM images 
+      WHERE product_id = ${id}
+    `;
+
+    const productType = await sql<ProductType[]>`
+      SELECT * FROM product_types WHERE id = ${product[0].type}
+    `;
+
+    const tags = await sql<ProductTag[]>`
+      SELECT 
+        product_tags.id,
+        product_tags.name,
+        product_tags.color
+      FROM product_tag_mappings 
+      LEFT JOIN product_tags ON product_tag_mappings.tag_id = product_tags.id
+      WHERE product_tag_mappings.product_id = ${id}
+    `;
+
+    return {
+      product: {
+        ...product?.[0]
+      },
+      tags: tags ?? [],
+      images: images || [],
+      productType: productType?.[0] ?? null
+    };
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch product.');
+  }
 }
 
 async function getProductsByTag(tagId: string) {
