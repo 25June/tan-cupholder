@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 interface PrimaryColorPickerProps {
   defaultColor?: string;
@@ -50,26 +50,32 @@ const PrimaryColorPicker = ({
   defaultColor = '',
   onChange
 }: PrimaryColorPickerProps) => {
-  const [selectedColor, setSelectedColor] = useState<string>(defaultColor);
+  const [selectedColors, setSelectedColors] = useState<string[]>(
+    JSON.parse(defaultColor || '[]') as string[]
+  ); // JSON array of color hex values
 
   const handleColorSelect = (hexColor: string) => {
-    if (selectedColor === hexColor) {
-      setSelectedColor('');
-      onChange?.('');
+    if (selectedColors.includes(hexColor)) {
+      const newColors = selectedColors.filter((color) => color !== hexColor);
+      setSelectedColors(newColors);
+      onChange?.(JSON.stringify(newColors));
       return;
     }
-    setSelectedColor(hexColor);
-    onChange?.(hexColor);
+    const newColors = [...selectedColors, hexColor];
+    setSelectedColors(newColors);
+    onChange?.(JSON.stringify(newColors));
   };
 
   return (
     <fieldset className="fieldset">
-      <legend className="fieldset-legend w-full relative">Primary Color</legend>
+      <legend className="fieldset-legend w-full relative">
+        Searchable Colors
+      </legend>
 
       <div className="space-y-2 p-2">
         <div className="flex flex-wrap gap-3">
           {PASTEL_COLORS.map((color) => {
-            const isSelected = selectedColor === color.hex;
+            const isSelected = selectedColors.includes(color.hex);
             return (
               <div
                 key={color.hex}

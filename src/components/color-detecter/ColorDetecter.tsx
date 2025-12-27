@@ -78,7 +78,7 @@ const ColorDetecter = ({
   return (
     <fieldset className="fieldset">
       <legend className="fieldset-legend w-full relative">
-        Color Palette
+        Auto Detected Colors
         {color && color.length > 0 ? `(${color?.length} colors)` : ''}
         <div className="absolute top-0 right-0">
           <button

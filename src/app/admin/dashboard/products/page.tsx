@@ -92,10 +92,13 @@ export default function Page() {
   };
 
   const onRefresh = (refresh?: boolean) => {
-    setSelectedProductId(null);
     if (refresh) {
       onFetchProducts();
     }
+  };
+
+  const onReset = () => {
+    setSelectedProductId(null);
   };
 
   const formattedProducts = useMemo(
@@ -148,6 +151,7 @@ export default function Page() {
         productTypes={productTypes}
         productTags={productTags}
         onRefresh={onRefresh}
+        onReset={onReset}
       />
 
       <EditProductImageModal

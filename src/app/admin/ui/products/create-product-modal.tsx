@@ -37,7 +37,7 @@ export default function CreateProductModal({
     Record<string, boolean>
   >({});
   const [imageId, setImageId] = useState<string>();
-  const [primaryColor, setPrimaryColor] = useState<string>('');
+  const [primaryColor, setPrimaryColor] = useState<string>(''); // JSON array of color hex values
   const [detectedColors, setDetectedColors] = useState<string>('');
 
   useEffect(() => {

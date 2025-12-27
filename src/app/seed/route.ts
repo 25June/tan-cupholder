@@ -232,7 +232,7 @@ export async function GET() {
     // Optionally run seeders:
     // await seedProducts();
     // await seedProductTags();
-    await seedPublicConfig();
+    // await seedPublicConfig();
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

@@ -404,10 +404,30 @@ async function seedAddColorFieldsToProducts() {
     ADD COLUMN IF NOT EXISTS pattern VARCHAR(255) DEFAULT '';
   `;
 }
+async function seedProductColors() {
+  await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
+  // Create product_colors table for many-to-many relationship between products and colors
+  await sql`
+    CREATE TABLE IF NOT EXISTS product_colors (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+      color_hex VARCHAR(16) NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(product_id, color_hex)
+    );
+  `;
+
+  // Create index for faster color-based product searches
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_product_colors_color_hex ON product_colors(color_hex);
+  `;
+}
 export async function GET() {
   try {
-    const colorFields = await seedAddColorFieldsToProducts();
+    // await seedProductColors();
+
+    // const colorFields = await seedAddColorFieldsToProducts();
     // const userRole = await sql.begin(seedAddColumnOrderIdToInvoices);
     // const colorFields = await sql.begin(seedAddColorFieldsToProducts);
 

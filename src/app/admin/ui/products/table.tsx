@@ -6,7 +6,11 @@ import { ProductResponse } from '@/models/product';
 import { DeleteProduct, UpdateImage, UpdateProduct } from './buttons';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisVerticalIcon,
+  MagnifyingGlassIcon,
+  BoltIcon
+} from '@heroicons/react/24/outline';
 import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
 import { ProductTag } from '@/models/productTag';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
@@ -141,17 +145,27 @@ export default function ProductsTable({
       header: 'Colors',
       render: (product) => {
         const colors = product.colors ? JSON.parse(product.colors) : [];
+        const primaryColors = product.primaryColor
+          ? JSON.parse(product.primaryColor)
+          : [];
         return (
           <div className="flex flex-col gap-2">
-            <div
-              className="w-12 h-4 rounded-full"
-              style={{ backgroundColor: product.primaryColor }}
-            />
             <div className="flex flex-wrap gap-2">
+              <MagnifyingGlassIcon className="w-4 h-4 text-gray-500" />
+              {primaryColors.map((hex: string) => (
+                <div
+                  key={hex}
+                  className="w-4 h-4 rounded-full border border-gray-200"
+                  style={{ backgroundColor: hex }}
+                />
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <BoltIcon className="w-4 h-4 text-gray-500" />
               {colors.map((hex: string) => (
                 <div
                   key={hex}
-                  className="w-4 h-4 rounded-full"
+                  className="w-4 h-4 rounded-full border border-gray-200"
                   style={{ backgroundColor: hex }}
                 />
               ))}

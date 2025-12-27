@@ -85,6 +85,10 @@ export async function createProduct(prevState: State, formData: FormData) {
   const date = new Date().toISOString();
 
   const tagIdsArray = tagIds ? tagIds.split(',') : [];
+
+  // Parse primaryColor as JSON array of color hex values
+  const colorHexArray = JSON.parse(primaryColor || '[]') as string[];
+
   let id = '';
   try {
     const result =
@@ -94,8 +98,14 @@ export async function createProduct(prevState: State, formData: FormData) {
       }, ${colors || ''}, ${pattern || ''}) RETURNING id`;
     id = result[0].id;
 
+    // Insert tag mappings
     for (const tagId of tagIdsArray) {
       await sql`INSERT INTO product_tag_mappings (product_id, tag_id, created_at) VALUES (${id}, ${tagId}, ${date})`;
+    }
+
+    // Insert color mappings for searchable product colors
+    for (const colorHex of colorHexArray) {
+      await sql`INSERT INTO product_colors (product_id, color_hex, created_at) VALUES (${id}, ${colorHex}, ${date})`;
     }
   } catch (error) {
     console.error('Database Error:', error);
@@ -150,8 +160,12 @@ export async function updateProduct(prevState: State, formData: FormData) {
   const date = new Date().toISOString();
 
   const tagIdsArray = tagIds ? tagIds.split(',') : [];
+
+  // Parse primaryColor as JSON array of color hex values
+  const colorHexArray = JSON.parse(primaryColor || '[]') as string[];
+
   console.log('Starting update product');
-  console.log({ tagIdsArray, tagIds });
+  console.log({ tagIdsArray, tagIds, colorHexArray });
   try {
     await sql`
     UPDATE products 
@@ -159,10 +173,17 @@ export async function updateProduct(prevState: State, formData: FormData) {
       primaryColor || ''
     }, colors = ${colors || ''}, pattern = ${pattern || ''} 
     WHERE id = ${id}`;
-    // update product tag mappings
+
+    // Update product tag mappings (delete and re-insert)
     await sql`DELETE FROM product_tag_mappings WHERE product_id = ${id}`;
     for (const tagId of tagIdsArray) {
       await sql`INSERT INTO product_tag_mappings (product_id, tag_id, created_at) VALUES (${id}, ${tagId}, ${date})`;
+    }
+
+    // Update product color mappings for searchable colors (delete and re-insert)
+    await sql`DELETE FROM product_colors WHERE product_id = ${id}`;
+    for (const colorHex of colorHexArray) {
+      await sql`INSERT INTO product_colors (product_id, color_hex, created_at) VALUES (${id}, ${colorHex}, ${date})`;
     }
   } catch (error) {
     return { message: 'Database Error: Failed to Update Product.' };
@@ -177,13 +198,18 @@ export async function deleteProduct(id: string) {
     await sql`DELETE FROM images WHERE product_id = ${id}`;
     console.log('Deleted product images');
 
-    // check if product tag mappings exists
+    // Delete product tag mappings if exist
     const productTagMappings =
       await sql`SELECT * FROM product_tag_mappings WHERE product_id = ${id}`;
     if (productTagMappings.length > 0) {
       await sql`DELETE FROM product_tag_mappings WHERE product_id = ${id}`;
       console.log('Deleted product tag mappings');
     }
+
+    // Delete product color mappings (also handled by ON DELETE CASCADE)
+    await sql`DELETE FROM product_colors WHERE product_id = ${id}`;
+    console.log('Deleted product color mappings');
+
     await sql`DELETE FROM products WHERE id = ${id}`;
     console.log('Deleted product');
     await batchRemoveImages(id);

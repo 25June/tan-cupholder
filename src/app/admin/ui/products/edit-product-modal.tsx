@@ -223,7 +223,7 @@ const Form = ({
           </div>
           <div>
             <PrimaryColorPicker
-              defaultColor={product.primaryColor}
+              defaultColor={product.primaryColor || '[]'}
               onChange={setPrimaryColor}
             />
 
@@ -320,12 +320,14 @@ export default function EditProductModal({
   productId,
   productTypes,
   productTags,
-  onRefresh
+  onRefresh,
+  onReset
 }: {
   productId: string | null;
   productTypes: ProductType[];
   productTags: ProductTag[];
-  onRefresh: () => void;
+  onRefresh: (refresh?: boolean) => void;
+  onReset: () => void;
 }) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -334,8 +336,8 @@ export default function EditProductModal({
   const [tagIds, setTagIds] = useState<string[]>([]);
   const [formId, setFormId] = useState<string>('');
   const modalRef = useRef<HTMLDialogElement | null>(null);
-  const [primaryColor, setPrimaryColor] = useState<string>('');
-  const [detectedColors, setDetectedColors] = useState<string>('');
+  const [primaryColor, setPrimaryColor] = useState<string>(''); // JSON array of color hex values
+  const [detectedColors, setDetectedColors] = useState<string>(''); // JSON array of color hex values
   const [imageId, setImageId] = useState<string>();
 
   useEffect(() => {
@@ -367,7 +369,7 @@ export default function EditProductModal({
               pattern: productData.pattern
             });
             setTagIds(productData.tagIds || []);
-            setPrimaryColor(productData.primaryColor || '');
+            setPrimaryColor(productData.primaryColor || '[]');
             setDetectedColors(productData.colors || '');
           } catch (e) {
             console.error('Failed to parse product data:', e);
@@ -418,6 +420,7 @@ export default function EditProductModal({
         }
         setState(initialState);
         handleClose(true);
+        onRefresh(true);
       })
       .catch((error) => {
         setState({
@@ -439,9 +442,9 @@ export default function EditProductModal({
     setPrimaryColor('');
     setDetectedColors('');
     setImageId(undefined);
+    onReset();
     const modal = modalRef.current;
     if (modal) {
-      onRefresh();
       modal.removeAttribute('data-product');
     }
   };
