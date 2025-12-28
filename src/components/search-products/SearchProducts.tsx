@@ -5,7 +5,7 @@ import { debounce } from '@/shared/utils/debounce';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useRouter, useSearchParams } from 'next/navigation';
 interface Props {
-  readonly onSearch: (search: string) => void;
+  readonly onSearch: (search: string, color: string) => void;
 }
 export default function SearchProducts({ onSearch }: Props) {
   const { replace } = useRouter();
@@ -14,15 +14,17 @@ export default function SearchProducts({ onSearch }: Props) {
   useEffect(() => {
     const search = searchParams.get('search');
     if (search) {
-      onSearch(search);
+      onSearch(search, '');
       replace(`/products`);
     }
   }, [searchParams]);
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch(e.target.value || '');
+    onSearch(e.target.value || '', '');
   };
   return (
-    <label className="input input-md input-primary w-full">
+    <label
+      className={`input input-sm md:input-md focus:input-primary w-full max-w-64`}
+    >
       <MagnifyingGlassIcon className="w-4 h-4" />
       <input
         type="search"

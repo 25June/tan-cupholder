@@ -6,64 +6,70 @@ import { sql } from '@/lib/db';
 import { Image } from '@/models/image';
 import { ProductTag } from '@/models/productTag';
 
-export async function fetchProductsByType(type: string) {
-  try {
-    const productType = await sql<ProductType[]>`
-      SELECT * FROM product_types WHERE LOWER(unaccent(name)) LIKE LOWER(unaccent(${`%${type.toLowerCase()}%`}))
-    `;
-
-    return productType;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch products by type.');
-  }
-}
-
 export async function publicFetchProducts(searchParams?: {
   readonly query?: string;
   readonly page?: string;
+  readonly selectedColors?: string;
 }) {
   try {
-    const productTypes = await fetchProductsByType(searchParams?.query || '');
-    const products = await sql<ProductResponse[]>`
-      SELECT 
-        p.id,
-        p.name,
-        p.description,
-        p.price,
-        p.sale,
-        pt.name as type,
-        p.stock,
-        json_build_object(
-          'id', product_image.id,
-          'name', product_image.name,
-          'type', product_image.type,
-          'is_main', product_image.is_main
-        ) as product_image
-      FROM products p
-      LEFT JOIN product_types pt ON p.type = pt.id
-      LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
-      WHERE p.name ILIKE '%' || ${
-        searchParams?.query || ''
-      } || '%'  OR p.type = ANY(${productTypes.map(
-      (productType) => productType.id
-    )})
-      ORDER BY p.name ASC
-      LIMIT 10 
-      OFFSET ${searchParams?.page ? (Number(searchParams.page) - 1) * 10 : 0}
-    `;
+    const query = searchParams?.query || '';
+    const offset = searchParams?.page
+      ? (Number(searchParams.page) - 1) * 10
+      : 0;
+    const selectedColors =
+      searchParams?.selectedColors?.split(',').filter(Boolean) ?? [];
+    const hasColorFilter = selectedColors.length > 0;
 
-    console.log('[fetchProducts] products found:', products.length);
+    // Single optimized query with window function for total count
+    const results = hasColorFilter
+      ? await sql<(ProductResponse & { total_count: string })[]>`
+          SELECT DISTINCT ON (p.id)
+            p.id, p.name, p.description, p.price, p.sale,
+            pt.name as type, p.stock,
+            json_build_object(
+              'id', product_image.id,
+              'name', product_image.name,
+              'type', product_image.type,
+              'is_main', product_image.is_main
+            ) as product_image,
+            COUNT(*) OVER() as total_count
+          FROM products p
+          LEFT JOIN product_types pt ON p.type = pt.id
+          LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
+          INNER JOIN product_colors pc ON p.id = pc.product_id
+          WHERE (p.name ILIKE '%' || ${query} || '%' OR pt.name ILIKE '%' || ${query} || '%')
+            AND pc.color_hex = ANY(${selectedColors})
+          ORDER BY p.id, p.name DESC
+          LIMIT 10 OFFSET ${offset}
+        `
+      : await sql<(ProductResponse & { total_count: string })[]>`
+          SELECT 
+            p.id, p.name, p.description, p.price, p.sale,
+            pt.name as type, p.stock,
+            json_build_object(
+              'id', product_image.id,
+              'name', product_image.name,
+              'type', product_image.type,
+              'is_main', product_image.is_main
+            ) as product_image,
+            COUNT(*) OVER() as total_count
+          FROM products p
+          LEFT JOIN product_types pt ON p.type = pt.id
+          LEFT JOIN images product_image ON p.id = product_image.product_id AND product_image.is_main = TRUE
+          WHERE p.name ILIKE '%' || ${query} || '%' OR LOWER(unaccent(pt.name)) ILIKE '%' || LOWER(unaccent(${query})) || '%'
+          ORDER BY p.name DESC
+          LIMIT 10 OFFSET ${offset}
+        `;
 
-    const totalCount = await sql<{ count: string }[]>`
-      SELECT COUNT(*) AS count
-      FROM products
-    `;
+    const totalCount = results.length > 0 ? Number(results[0].total_count) : 0;
 
-    return { products, totalCount: Number(totalCount[0].count) };
+    // Strip total_count from response
+    const products = results.map(({ total_count, ...product }) => product);
+
+    return { products, totalCount };
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
+    throw new Error('Failed to fetch products.');
   }
 }
 

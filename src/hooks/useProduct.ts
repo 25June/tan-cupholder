@@ -14,40 +14,55 @@ export const useProducts = () => {
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
-  const fetchData = async (search: string, page: number) => {
+  const fetchData = async (
+    search: string,
+    page: number,
+    selectedColors: string[],
+    isSearching: boolean
+  ) => {
     if (isLoading) return;
     setIsLoading(true);
     const { products, totalCount } = await publicFetchProducts({
       query: search,
-      page: page.toString()
+      page: page.toString(),
+      selectedColors: selectedColors.length > 0 ? selectedColors.join(',') : ''
     });
-    if (products.length === 0) {
+    console.log('totalCount', totalCount);
+    if (products.length === 0 || totalCount === 0) {
       setIsEnd(true);
     }
-    setProductList((prev) => [...prev, ...products]);
+
+    if (isSearching) {
+      setProductList(() => [...products]);
+    } else {
+      setProductList((prev) => [...prev, ...products]);
+    }
     setTotalCount(totalCount);
     setIsLoading(false);
   };
 
-  const handleSearch = (search: string) => {
+  const handleSearch = (search: string, color: string) => {
+    if (color) {
+      setSelectedColors(JSON.parse(color));
+    }
     setQuery(search);
     setPage(1);
-    setProductList([]);
-    fetchData(search, 1);
+    fetchData(search, 1, color ? JSON.parse(color) : selectedColors, true);
   };
 
   const handleGetNextPage = () => {
     if (isLoading) return;
     setPage((prev) => prev + 1);
-    fetchData(query, page + 1);
+    fetchData(query, page + 1, selectedColors, false);
   };
 
   useEffect(() => {
     if (isLoading) return;
     if (totalCount && totalCount / 10 <= page) {
       setIsEnd(true);
-    } else {
+    } else if (totalCount / 10 > page) {
       setIsEnd(false);
     }
   }, [totalCount, page, isLoading]);

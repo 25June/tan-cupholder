@@ -1,50 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { PRODUCT_COLORS } from '@/models/productColor';
 
 interface PrimaryColorPickerProps {
   defaultColor?: string;
   onChange?: (color: string) => void;
 }
-
-const PASTEL_COLORS = [
-  {
-    name: 'Red',
-    hex: '#FF0000'
-  },
-  {
-    name: 'Yellow',
-    hex: '#FFFF00'
-  },
-  {
-    name: 'Blue',
-    hex: '#0000FF'
-  },
-  {
-    name: 'Orange',
-    hex: '#FFA500'
-  },
-  {
-    name: 'Green',
-    hex: '#008000'
-  },
-  {
-    name: 'Violet',
-    hex: '#800080'
-  },
-  {
-    name: 'Black',
-    hex: '#000000'
-  },
-  {
-    name: 'White',
-    hex: '#FFFFFF'
-  },
-  {
-    name: 'Blue-Green',
-    hex: '#00CED1'
-  }
-];
 
 const PrimaryColorPicker = ({
   defaultColor = '',
@@ -74,7 +36,7 @@ const PrimaryColorPicker = ({
 
       <div className="space-y-2 p-2">
         <div className="flex flex-wrap gap-3">
-          {PASTEL_COLORS.map((color) => {
+          {PRODUCT_COLORS.map((color) => {
             const isSelected = selectedColors.includes(color.hex);
             return (
               <div

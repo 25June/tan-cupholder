@@ -8,6 +8,7 @@ import SearchProducts from '@/components/search-products/SearchProducts';
 import { useProducts } from '@/hooks/useProduct';
 import Card from '@/components/card/Card';
 import CDNImage from '../cdn-image/CDNImage';
+import ColorFilter from '@/components/color-filter/ColorFilter';
 
 export default function ProductsContainer() {
   const { onSearch, isEnd, productList, isLoading, onGetNextPage } =
@@ -31,7 +32,7 @@ export default function ProductsContainer() {
       </div>
       <div className="relative h-full max-w-8xl mx-auto p-4 pb-20 gap-16 md:p-20 ">
         <div className="flex justify-between items-start md:items-end flex-col md:flex-row">
-          <div className="shink-0">
+          <div className="shink-0 w-full">
             <h2 className={`text-md md:text-lg text-slate-400`}>
               Environment Friendly
             </h2>
@@ -41,8 +42,12 @@ export default function ProductsContainer() {
               Low Impact Collections
             </h3>
           </div>
-          <div className="mb-4 w-full md:w-64">
+          <div className="flex gap-2 mb-4 w-full justify-end">
             <SearchProducts onSearch={onSearch} />
+            <ColorFilter
+              defaultColor={''}
+              onChange={(color) => onSearch('', color)}
+            />
           </div>
         </div>
 
