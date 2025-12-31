@@ -110,6 +110,10 @@ export default function CreateProductModal({
       newFormData.append('sale', formData.get('sale') as string);
       newFormData.append('stock', formData.get('stock') as string);
       newFormData.append('description', formData.get('description') as string);
+      newFormData.append(
+        'shortDescription',
+        formData.get('shortDescription') as string
+      );
       newFormData.append('tagIds', tagIds.join(','));
       newFormData.append('primaryColor', primaryColor);
       newFormData.append('colors', detectedColors);
@@ -335,6 +339,33 @@ export default function CreateProductModal({
                     {state.errors?.description &&
                       state.errors.description.map((error: string) => (
                         <p className=" text-sm text-red-500" key={error}>
+                          {error}
+                        </p>
+                      ))}
+                  </div>
+                </fieldset>
+
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">
+                    Short Description
+                    <span className="text-xs text-gray-400 ml-2">
+                      (max 255 chars)
+                    </span>
+                  </legend>
+                  <textarea
+                    name="shortDescription"
+                    className="textarea h-16 w-full"
+                    placeholder="Brief summary for preview pages..."
+                    maxLength={255}
+                  ></textarea>
+                  <div
+                    id="short-description-error"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    {state.errors?.shortDescription &&
+                      state.errors.shortDescription.map((error: string) => (
+                        <p className="text-sm text-red-500" key={error}>
                           {error}
                         </p>
                       ))}

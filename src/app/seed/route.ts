@@ -227,12 +227,21 @@ async function seedPublicConfig() {
   `;
 }
 
+// Add short_description column to products table for preview pages
+async function addShortDescriptionColumn() {
+  await sql`
+    ALTER TABLE products 
+    ADD COLUMN IF NOT EXISTS short_description VARCHAR(255);
+  `;
+}
+
 export async function GET() {
   try {
     // Optionally run seeders:
     // await seedProducts();
     // await seedProductTags();
     // await seedPublicConfig();
+    // await addShortDescriptionColumn();
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {

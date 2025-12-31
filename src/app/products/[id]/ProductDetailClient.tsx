@@ -114,7 +114,7 @@ export default function ProductDetailClient({
               ))}
             </div>
             <div className="flex items-center gap-4 mb-2">
-              <span className="text-xl md:text-3xl font-bold text-slate-400">
+              <span className="text-xl md:text-3xl font-bold text-logo-orange-border">
                 {formatPrice(calculatePercent(product.price, product.sale), '')}
               </span>
               <span className="text-slate-400 line-through decoration-slate-400">
@@ -122,7 +122,7 @@ export default function ProductDetailClient({
               </span>
             </div>
 
-            <p>{product.description}</p>
+            <p>{product.shortDescription}</p>
           </div>
           <PurchaseActions product={product} onCartUpdate={onCartUpdate} />
         </div>

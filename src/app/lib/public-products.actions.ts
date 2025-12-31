@@ -125,7 +125,11 @@ export async function publicFetchProductByIds(ids: string[]) {
 export async function publicFetchProductById(id: string) {
   try {
     const product = await sql<Product[]>`
-      SELECT * FROM products WHERE id = ${id}
+      SELECT id, name, price, sale, type, stock, description, 
+        short_description as "shortDescription", 
+        primary_color as "primaryColor", colors, pattern,
+        created_at as "createdAt", updated_at as "updatedAt"
+      FROM products WHERE id = ${id}
     `;
 
     const images = await sql<Image[]>`

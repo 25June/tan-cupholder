@@ -8,6 +8,7 @@ export interface Product {
   type: string;
   stock: number;
   description: string;
+  shortDescription?: string; // Short summary for preview pages (max 255 chars)
   createdAt?: string;
   updatedAt?: string;
   priority?: number;
@@ -48,6 +49,7 @@ export interface ProductResponse {
   id: string;
   name: string;
   description: string;
+  shortDescription?: string; // Short summary for preview pages (max 255 chars)
   price: number;
   sale: number;
   stock: number;

@@ -220,6 +220,34 @@ const Form = ({
                   ))}
               </div>
             </fieldset>
+
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">
+                Short Description
+                <span className="text-xs text-gray-400 ml-2">
+                  (max 255 chars)
+                </span>
+              </legend>
+              <textarea
+                name="shortDescription"
+                className="textarea h-16 w-full"
+                placeholder="Brief summary for preview pages..."
+                defaultValue={product.shortDescription || ''}
+                maxLength={255}
+              />
+              <div
+                id="short-description-error"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {state.errors?.shortDescription &&
+                  state.errors.shortDescription.map((error: string) => (
+                    <p className="text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ))}
+              </div>
+            </fieldset>
           </div>
           <div>
             <PrimaryColorPicker
@@ -359,6 +387,7 @@ export default function EditProductModal({
               id: productData.id,
               name: productData.name,
               description: productData.description,
+              shortDescription: productData.shortDescription,
               price: productData.price,
               sale: productData.sale,
               stock: productData.stock,

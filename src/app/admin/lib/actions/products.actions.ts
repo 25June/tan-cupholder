@@ -13,6 +13,7 @@ import { sql } from '@/lib/db';
 const FormSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   description: z.string(),
+  shortDescription: z.string().max(255).optional(), // Short summary for preview pages
   price: z.number(),
   type: z.string(),
   sale: z.string(),
@@ -40,6 +41,7 @@ export type State = {
   errors?: {
     name?: string[];
     description?: string[];
+    shortDescription?: string[];
     price?: string[];
     type?: string[];
     sale?: string[];
@@ -53,6 +55,7 @@ export async function createProduct(prevState: State, formData: FormData) {
   const validatedFields = CreateProduct.safeParse({
     name: formData.get('name'),
     description: formData.get('description'),
+    shortDescription: formData.get('shortDescription') || '',
     price: Number(formData.get('price') || 0),
     type: formData.get('type'),
     sale: formData.get('sale'),
@@ -73,6 +76,7 @@ export async function createProduct(prevState: State, formData: FormData) {
   const {
     name,
     description,
+    shortDescription,
     price,
     type,
     sale,
@@ -92,10 +96,12 @@ export async function createProduct(prevState: State, formData: FormData) {
   let id = '';
   try {
     const result =
-      await sql`INSERT INTO products (name, price, type, sale, stock, created_at, updated_at, description, primary_color, colors, pattern) 
+      await sql`INSERT INTO products (name, price, type, sale, stock, created_at, updated_at, description, short_description, primary_color, colors, pattern) 
     VALUES (${name}, ${price}, ${type}, ${sale}, ${stock}, ${date}, ${date}, ${description}, ${
-        primaryColor || ''
-      }, ${colors || ''}, ${pattern || ''}) RETURNING id`;
+        shortDescription || ''
+      }, ${primaryColor || ''}, ${colors || ''}, ${
+        pattern || ''
+      }) RETURNING id`;
     id = result[0].id;
 
     // Insert tag mappings
@@ -127,6 +133,7 @@ export async function updateProduct(prevState: State, formData: FormData) {
     id: formData.get('id'),
     name: formData.get('name'),
     description: formData.get('description'),
+    shortDescription: formData.get('shortDescription') || '',
     price: Number(formData.get('price') || 0),
     type: formData.get('type'),
     sale: formData.get('sale'),
@@ -147,6 +154,7 @@ export async function updateProduct(prevState: State, formData: FormData) {
   const {
     name,
     description,
+    shortDescription,
     price,
     type,
     sale,
@@ -169,7 +177,9 @@ export async function updateProduct(prevState: State, formData: FormData) {
   try {
     await sql`
     UPDATE products 
-    SET name = ${name}, description = ${description},  price = ${price}, type = ${type}, sale = ${sale}, stock = ${stock}, updated_at = ${date}, primary_color = ${
+    SET name = ${name}, description = ${description}, short_description = ${
+      shortDescription || ''
+    }, price = ${price}, type = ${type}, sale = ${sale}, stock = ${stock}, updated_at = ${date}, primary_color = ${
       primaryColor || ''
     }, colors = ${colors || ''}, pattern = ${pattern || ''} 
     WHERE id = ${id}`;
@@ -249,7 +259,8 @@ export async function fetchProductImages(id: string) {
 export async function fetchProductById(id: string) {
   try {
     const product = await sql<Product[]>`
-      SELECT * FROM products WHERE id = ${id}
+      SELECT id, name, price, sale, type, stock, description, short_description as "shortDescription", primary_color as "primaryColor", colors, pattern, created_at as "createdAt", updated_at as "updatedAt"
+      FROM products WHERE id = ${id}
     `;
 
     const images = await sql<Image[]>`
@@ -290,6 +301,7 @@ export async function fetchProducts(searchParams?: {
         p.id,
         p.name,
         p.description,
+        p.short_description as "shortDescription",
         p.price,
         p.sale,
         p.type,
