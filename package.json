@@ -20,6 +20,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.835.0",
     "@aws-sdk/s3-request-presigner": "^3.844.0",
+    "@google/genai": "^1.34.0",
     "@heroicons/react": "^2.2.0",
     "@neondatabase/serverless": "^1.0.2",
     "@opennextjs/cloudflare": "^1.14.6",
@@ -33,7 +34,6 @@
     "next-auth": "^5.0.0-beta.29",
     "next-intl": "^4.1.0",
     "nodemailer": "^6.10.1",
-    "openai": "^4.87.2",
     "react": "^19.0.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",

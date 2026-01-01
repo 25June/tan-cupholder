@@ -4,19 +4,20 @@ import { useState } from 'react';
 import { onGenerateDescription } from '@/app/admin/lib/actions/ai-generate.actions';
 
 export const useGenerateProductDescription = () => {
-  const [description, setDescription] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [description, setDescription] = useState<{
+    productDescription: string;
+    productAppearance: string;
+    productPromise: string;
+  } | null>(null);
+  const [thinking, setThinking] = useState<boolean>(false);
 
-  const generateDescription = async (imageUrl: File) => {
-    setLoading(true);
-    const formData = new FormData();
-    formData.append('image', imageUrl);
+  const generateDescription = async (formData: FormData) => {
+    setThinking(true);
     const result = await onGenerateDescription(formData);
-
-    console.log(result);
-    // setDescription(result || null);
-    setLoading(false);
+    setDescription(result || null);
+    setThinking(false);
+    return result;
   };
-  console.log({ description, loading });
-  return { description, loading, generateDescription };
+  console.log({ description, thinking });
+  return { description, thinking, generateDescription: generateDescription };
 };

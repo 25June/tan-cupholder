@@ -94,10 +94,12 @@ export default function Page() {
       <EditProductTypeModal
         productTypeId={selectedProductTypeId}
         onRefresh={handleRefresh}
+        onReset={() => setSelectedProductTypeId(null)}
       />
       <DeleteProductTypeModal
         productTypeId={selectedProductTypeId}
         onRefresh={handleRefresh}
+        onReset={() => setSelectedProductTypeId(null)}
       />
       <ArrangeProductTypeModal
         onRefresh={handleRefresh}

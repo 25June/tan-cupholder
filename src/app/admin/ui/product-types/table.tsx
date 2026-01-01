@@ -9,15 +9,17 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 
+interface Props {
+  readonly productTypes: ProductType[];
+  readonly loading: boolean;
+  readonly onSelectProductType: (id: string) => void;
+}
+
 export default function ProductTypesTable({
   productTypes,
   loading = false,
   onSelectProductType
-}: {
-  productTypes: ProductType[];
-  loading: boolean;
-  onSelectProductType: (id: string) => void;
-}) {
+}: Props) {
   const columns: Column<ProductType>[] = [
     {
       header: 'Name',

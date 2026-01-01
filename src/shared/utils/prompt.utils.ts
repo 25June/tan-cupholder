@@ -1,52 +1,134 @@
 'use server';
 
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 
-export const convertFileToBase64 = async (file: File) => {
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  const base64Image = buffer.toString('base64');
-  return `data:${file.type};base64,${base64Image}`;
-};
+interface Props {
+  readonly productTypeName: string;
+  readonly productTypeDescription: string;
+  readonly colors: string[];
+  readonly pattern: string;
+  readonly productName: string;
+}
 
-export const generateDescription = async (base64Image: string) => {
+const PRODUCT_DESCRIPTION_PROMPT = ({
+  productName,
+  productTypeName,
+  productTypeDescription,
+  colors,
+  pattern
+}: Props) => `
+You are a very talented senior content creator, you will help me to write a content to description & advertise the product base on the product type description and name, colors and pattern.
+Here is Product Name: ${productName}.
+Here is Product Type Name: ${productTypeName}.
+Here is Product Type Description: ${productTypeDescription}.
+Here are Colors: ${colors.join(', ')}.
+Here is Pattern: ${pattern}.
+Here is the strategy for the content:
+1. Generate a medium content (3-4 sentences) introducing the product name based on the product type name & description.
+The purpose of the product is to hold cups in many different kinds or sizes.
+The target buyer: who is fit for this product type, the age range or the youth you care about the environment.
+2. Generate a medium content (5-7 sentences) advertising about the product appearance based on the colors and pattern.
+The purpose of color and pattern is to make the product more attractive and unique. 
+The color I provide is the hex colors, you need to convert them to a fancy name, descriptive color name.
+Also the color will map with Zodiac Sign and people related to it. For example: The primary color for the Aries zodiac sign is red so the color will fit for Aries people.
+The pattern I provide is the pattern name, you need to convert it to a fancy name, descriptive pattern name. for example: jungle bear => Jungle Bear Pattern.
+3. Generate a short content (1-2 sentences) summarizing the product appearance and a promise it will be a good gift for the target buyer.
+
+Output the response in the following JSON format, return only valid JSON, with no markdown, no extra text:
+{ "productDescription": "string", "productAppearance": "string", "productPromise": "string" }
+`;
+
+export const productDescription = async ({
+  productTypeName,
+  productTypeDescription,
+  colors,
+  pattern,
+  productName
+}: Props) => {
+  const startTime = Date.now();
+  const requestId = `gen_${Date.now()}_${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
+
+  console.log(`[${requestId}] 🚀 Starting product description generation`, {
+    productName,
+    productTypeName,
+    colorsCount: colors.length,
+    pattern
+  });
+
   try {
-    const openai = new OpenAI({
-      apiKey: process.env.NEXT_PUBLIC_OPEN_AI_KEY,
-      baseURL: process.env.NEXT_PUBLIC_OPEN_AI_DOMAIN
+    const genai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_KEY
     });
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      stream: false,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'text',
-              text: `The image you are given is a cup holder image. Ignore the background, focus on the object and analyze this product image and return a JSON string matching this type:
-                      {
-                        generalDescription: string; // 2-4 sentences about the style, the purpose of the product, fashion, ...
-                        color: string[]; // color of the product
-                        detailDescription: string; // 2-3 sentences about eco-friendly material and the convenience, the benefit of it
-                      }
-  
-                      ⚠️ IMPORTANT: Return only valid JSON, with no markdown, no extra text.`
-            },
-            {
-              type: 'image_url',
-              image_url: {
-                url: base64Image
-              }
-            }
-          ]
-        }
-      ],
-      temperature: 0.5
+
+    console.log(`[${requestId}] 📡 Sending request to Gemini API...`, {
+      model: process.env.GEMINI_MODEL || 'not specified'
     });
-    return response;
+
+    const response = await genai.models.generateContent({
+      model: process.env.GEMINI_MODEL || '',
+      contents: PRODUCT_DESCRIPTION_PROMPT({
+        productTypeName,
+        productTypeDescription,
+        colors,
+        pattern,
+        productName
+      }),
+      config: {
+        responseMimeType: 'application/json'
+      }
+    });
+
+    const responseTime = Date.now() - startTime;
+    console.log(`[${requestId}] ✅ Received response from Gemini API`, {
+      responseTime: `${responseTime}ms`,
+      hasText: !!response.text,
+      textLength: response.text?.length || 0
+    });
+
+    console.log({ response: response.text });
+    const jsonResponse = JSON.parse(response.text || '{}');
+    if (!jsonResponse) {
+      throw new Error('Empty JSON response');
+    }
+    if (
+      !jsonResponse.productDescription ||
+      !jsonResponse.productAppearance ||
+      !jsonResponse.productPromise
+    ) {
+      console.warn(`[${requestId}] ⚠️ Invalid JSON structure received`, {
+        hasDescription: !!jsonResponse.productDescription,
+        hasAppearance: !!jsonResponse.productAppearance,
+        hasPromise: !!jsonResponse.productPromise
+      });
+      throw new Error('Invalid JSON response');
+    }
+
+    const totalTime = Date.now() - startTime;
+    console.log(
+      `[${requestId}] 🎉 Successfully generated product description`,
+      {
+        totalTime: `${totalTime}ms`,
+        descriptionLength: jsonResponse.productDescription.length,
+        appearanceLength: jsonResponse.productAppearance.length,
+        promiseLength: jsonResponse.productPromise.length
+      }
+    );
+
+    return jsonResponse;
   } catch (error) {
-    console.error('Error generating description:', error);
-    return null;
+    const errorTime = Date.now() - startTime;
+    console.error(`[${requestId}] ❌ Error generating description`, {
+      errorTime: `${errorTime}ms`,
+      errorType: error instanceof Error ? error.name : 'Unknown',
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
+
+    return {
+      error: 'Error generating description',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    };
   }
 };

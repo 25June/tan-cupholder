@@ -66,13 +66,17 @@ const ImageField = ({
 
 const initialState: State = { message: null, errors: {} };
 
+interface Props {
+  readonly productTypeId: string | null;
+  readonly onRefresh: () => void;
+  readonly onReset: () => void;
+}
+
 export default function EditProductTypeModal({
   productTypeId,
-  onRefresh
-}: {
-  productTypeId: string | null;
-  onRefresh: () => void;
-}) {
+  onRefresh,
+  onReset
+}: Props) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [productType, setProductType] = useState<ProductType | null>(null);
@@ -174,6 +178,7 @@ export default function EditProductTypeModal({
     const form = document.getElementById(
       'edit-product-type-form'
     ) as HTMLFormElement;
+    onReset();
     if (form) {
       form.reset();
     }

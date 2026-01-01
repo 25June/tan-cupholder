@@ -5,13 +5,17 @@ import { deleteProductType } from '@/app/admin/lib/actions/product-types.actions
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 
+interface Props {
+  readonly productTypeId: string | null;
+  readonly onRefresh: () => void;
+  readonly onReset: () => void;
+}
+
 export default function DeleteProductTypeModal({
   productTypeId,
-  onRefresh
-}: {
-  productTypeId: string | null;
-  onRefresh: () => void;
-}) {
+  onRefresh,
+  onReset
+}: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmDelete = async () => {
@@ -30,7 +34,10 @@ export default function DeleteProductTypeModal({
 
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.DELETE_PRODUCT_TYPE);
-    refresh && onRefresh();
+    onReset();
+    if (refresh) {
+      onRefresh();
+    }
   };
 
   return (

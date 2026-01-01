@@ -1,32 +1,45 @@
 'use server';
 
-import {
-  generateDescription,
-  convertFileToBase64
-} from '@/shared/utils/prompt.utils';
+import { productDescription } from '@/shared/utils/prompt.utils';
 import z from 'zod';
 
 const GenerateDescriptionSchema = z.object({
-  image: z.instanceof(File)
+  name: z.string(),
+  productTypeName: z.string(),
+  productTypeDescription: z.string(),
+  colors: z.string(),
+  pattern: z.string()
 });
+
+// This function generate description from a product which
+// has product name
+// has product type description and name,
+// has array of color
+// has pattern
 
 export async function onGenerateDescription(formData: FormData) {
   const validatedFields = GenerateDescriptionSchema.safeParse({
-    image: formData.get('image')
+    name: formData.get('name'),
+    productTypeName: formData.get('productTypeName'),
+    productTypeDescription: formData.get('productTypeDescription'),
+    colors: formData.get('colors'),
+    pattern: formData.get('pattern')
   });
 
   if (!validatedFields.success) {
     return { errors: validatedFields.error.flatten().fieldErrors };
   }
   try {
-    const { image } = validatedFields.data;
+    const { name, productTypeName, productTypeDescription, colors, pattern } =
+      validatedFields.data;
 
-    // transform image to base64
-    const base64Image = await convertFileToBase64(image);
-    console.log({ base64Image, fileSize: image.size / 1024 / 1024 });
-    const result = (await generateDescription(base64Image)) as any;
-    console.log({ result });
-    return result;
+    return await productDescription({
+      productName: name,
+      productTypeName,
+      productTypeDescription,
+      colors: JSON.parse(colors || '[]') as string[],
+      pattern
+    });
   } catch (error) {
     console.error('Error generating description:', error);
     return { error: 'Error generating description' };
