@@ -90,7 +90,36 @@ export default function ProductDetailClient({
   const randomArr = useMemo(() => {
     return getRandomImageArr(3, images, product.id);
   }, [images, product.id]);
-  console.log(tags);
+
+  const autoDescription = useMemo(() => {
+    try {
+      const description = JSON.parse(product.description);
+      if (
+        !description.productDescription ||
+        !description.productAppearance ||
+        !description.productPromise
+      ) {
+        return {
+          productDescription: '',
+          productAppearance: '',
+          productPromise: ''
+        };
+      }
+      return {
+        productDescription: description.productDescription,
+        productAppearance: description.productAppearance,
+        productPromise: description.productPromise
+      };
+    } catch {
+      // Fallback to empty strings if JSON parsing fails
+      return {
+        productDescription: '',
+        productAppearance: '',
+        productPromise: ''
+      };
+    }
+  }, [product.description]);
+
   return (
     <>
       {/* Product detail section */}
@@ -132,7 +161,7 @@ export default function ProductDetailClient({
       <article className="mt-8 md:mt-24">
         <section className="max-w-4xl mx-auto space-y-12 px-6 mb-16">
           <p className="text-lg text-gray-700 leading-relaxed first-letter:text-4xl first-letter:font-serif first-letter:mr-2 first-letter:float-left first-letter:text-primary">
-            {product.description ||
+            {autoDescription.productDescription ||
               `Our premium cup holder is designed with both style and functionality
             in mind. Crafted from high-quality materials, this elegant solution
             keeps your beverages secure and within easy reach. The sturdy
@@ -151,8 +180,11 @@ export default function ProductDetailClient({
             ))}
           </div>
 
-          <blockquote className="text-lg text-gray-700 leading-relaxed border-l-4 border-primary pl-6 italic">
-            {productType?.description ||
+          <blockquote
+            className="text-lg text-gray-700 leading-relaxed border-r-4 border-primary rounded-lg pr-6 italic"
+            style={{ textAlign: 'right' }}
+          >
+            {autoDescription.productAppearance ||
               `The innovative design features a non-slip base and protective
             padding to prevent scratches on your furniture. Whether you're
             working at your desk, relaxing on your couch, or entertaining
@@ -161,13 +193,24 @@ export default function ProductDetailClient({
             storage when not in use, making it an ideal accessory for any space.`}
           </blockquote>
 
-          <p className="text-lg text-gray-700 leading-relaxed bg-gray-50 p-6 rounded-lg shadow-sm">
-            Maintenance is effortless with our cup holder's water-resistant
+          <blockquote className="text-lg text-gray-700 leading-relaxed border-l-4 border-primary pl-6 italic">
+            {autoDescription.productPromise ||
+              `The innovative design features a non-slip base and protective
+            padding to prevent scratches on your furniture. Whether you're
+            working at your desk, relaxing on your couch, or entertaining
+            guests, this cup holder provides the perfect balance of convenience
+            and protection. The carefully considered dimensions allow for easy
+            storage when not in use, making it an ideal accessory for any space.`}
+          </blockquote>
+
+          <p className="text-lg text-gray-700 leading-relaxed bg-logo-orange-pale-companion p-6 rounded-lg shadow-sm">
+            {productType?.description ||
+              `Maintenance is effortless with our cup holder's water-resistant
             surface that can be easily wiped clean. The durable materials ensure
             long-lasting performance, making this an investment in both
             convenience and peace of mind. Experience the perfect blend of form
             and function with our thoughtfully designed cup holder that makes
-            beverage management a breeze.
+            beverage management a breeze.`}
           </p>
         </section>
       </article>

@@ -1,6 +1,6 @@
 'use client';
 
-import * as motion from 'motion/react-client';
+import { motion } from 'motion/react';
 import { yuseiMagic } from '@/styles/fonts';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -19,8 +19,9 @@ const imageArr = [
   editableKey.HERO_SECTION_IMAGE_4
 ];
 
-const variants = ['/glass.png', '/coffee.png', '/cup.png'];
 const Break = () => <br />;
+const MotionLink = motion.create(Link);
+
 export function HeroSection() {
   const t = useTranslations('HomePage.HeroSection');
   const router = useRouter();
@@ -54,7 +55,7 @@ export function HeroSection() {
               />
             </motion.div>
 
-            <motion.div>
+            <div>
               <motion.h1
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -79,25 +80,71 @@ export function HeroSection() {
               >
                 {t('subtitle')}
               </motion.p>
-              <div className="flex gap-2 items-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.35,
+                  scale: { type: 'spring', visualDuration: 0.35, bounce: 0.5 }
+                }}
+                viewport={{ once: true }}
+                className="flex gap-2 items-center"
+              >
                 <motion.button
                   onClick={() => router.push('/products')}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{
-                    duration: 0.4,
-                    scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
+                  viewport={{ once: true }}
+                  initial="offscreen"
+                  whileInView="visible"
+                  variants={{
+                    offscreen: {
+                      opacity: 0,
+                      y: -20
+                    },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: 0.5,
+                        ease: [0, 0.71, 0.2, 1.01]
+                      }
+                    }
                   }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  whileHover={{ x: 3 }}
+                  whileTap={{ x: 3 }}
                   type="button"
-                  className="text-lg tracking-wide text-slate-100 font-semibold rounded-full transition-all duration-300 bg-logo-orange hover:bg-logo-orange-border py-1 px-4"
+                  className="text-lg tracking-wide text-slate-100 font-semibold rounded-full bg-logo-orange py-1 px-4"
                 >
                   {t('button')}
                 </motion.button>
-                <Link href={'/cart'} prefetch={true}>
+                <MotionLink
+                  viewport={{ once: true }}
+                  initial="offscreen"
+                  whileInView="visible"
+                  variants={{
+                    offscreen: {
+                      opacity: 0,
+                      y: -20
+                    },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: 0.5,
+                        ease: [0, 0.71, 0.2, 1.01]
+                      }
+                    }
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  whileHover={{ x: 3 }}
+                  whileTap={{ x: 3 }}
+                  href={'/cart'}
+                  prefetch={true}
+                >
                   <CartIcon cartCount={cartCount} />
-                </Link>
-              </div>
-            </motion.div>
+                </MotionLink>
+              </motion.div>
+            </div>
           </div>
         </div>
         <div className="grow relative w-full h-full md:min-h-[512px] flex justify-center align-top pt-4 md:pt-28 ">

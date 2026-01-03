@@ -8,6 +8,7 @@ export const useGenerateProductDescription = () => {
     productDescription: string;
     productAppearance: string;
     productPromise: string;
+    tagline: string;
   } | null>(null);
   const [thinking, setThinking] = useState<boolean>(false);
 

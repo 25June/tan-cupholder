@@ -1,8 +1,6 @@
 import AvatarShape1 from '@/components/icons/shapes/AvatarShape1';
 import AvatarShape2 from '@/components/icons/shapes/AvatarShape2';
 import AvatarShape3 from '@/components/icons/shapes/AvatarShape3';
-import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
-import Footer from '@/components/footer/Footer';
 import { getTranslations } from 'next-intl/server';
 
 export default async function AboutUsPage() {
@@ -29,32 +27,28 @@ export default async function AboutUsPage() {
   ];
   return (
     <div>
-      <StaticMenuBar triggerCartCount={1} />
-      <div className="max-w-7xl p-4 mx-auto">
-        <h1 className="text-3xl font-bold mb-4 text-center mt-12 uppercase">
-          {t('title')}
-        </h1>
-        <div className="flex gap-2 justify-center items-center w-full flex-col md:flex-row mb-8">
-          {founders.map((founder, index) => (
-            <div
-              key={index}
-              className={
-                'flex gap-2 justify-center items-center w-full flex-col mb-8'
-              }
-            >
-              <div className="min-w-96 max-w-4xl w-full grow-1">
-                {founder.avatar}
-              </div>
-              <div className="max-w-lg w-full grow-1 px-2">
-                <h5 className="text-2xl font-bold mb-2">{founder.name}</h5>
-                <p className="mb-4">{founder.role}</p>
-                <p className="text-gray-400">{founder.bio}</p>
-              </div>
+      <h1 className="text-3xl font-bold mb-4 text-center mt-12 uppercase">
+        {t('title')}
+      </h1>
+      <div className="flex gap-2 justify-center items-center w-full flex-col md:flex-row mb-8">
+        {founders.map((founder, index) => (
+          <div
+            key={index}
+            className={
+              'flex gap-2 justify-center items-center w-full flex-col mb-8'
+            }
+          >
+            <div className="min-w-96 max-w-4xl w-full grow-1">
+              {founder.avatar}
             </div>
-          ))}
-        </div>
+            <div className="max-w-lg w-full grow-1 px-2">
+              <h5 className="text-2xl font-bold mb-2">{founder.name}</h5>
+              <p className="mb-4">{founder.role}</p>
+              <p className="text-gray-400">{founder.bio}</p>
+            </div>
+          </div>
+        ))}
       </div>
-      <Footer />
     </div>
   );
 }

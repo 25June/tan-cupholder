@@ -24,18 +24,20 @@ Here is Product Type Description: ${productTypeDescription}.
 Here are Colors: ${colors.join(', ')}.
 Here is Pattern: ${pattern}.
 Here is the strategy for the content:
-1. Generate a medium content (3-4 sentences) introducing the product name based on the product type name & description.
+1. Product description: Generate a medium content (3-4 sentences) introducing the product name based on the product type name & description.
 The purpose of the product is to hold cups in many different kinds or sizes.
 The target buyer: who is fit for this product type, the age range or the youth you care about the environment.
-2. Generate a medium content (5-7 sentences) advertising about the product appearance based on the colors and pattern.
+2. Product appearance: Generate a medium content (5-7 sentences) advertising about the product appearance based on the colors and pattern.
 The purpose of color and pattern is to make the product more attractive and unique. 
-The color I provide is the hex colors, you need to convert them to a fancy name, descriptive color name.
+The color I provided is the hex colors, you need to transform them into a fancy, descriptive color name, if you can not find any name for any hex color in the list of colors, by pass it, don't force it. I don't want to see any hex color in the output.
 Also the color will map with Zodiac Sign and people related to it. For example: The primary color for the Aries zodiac sign is red so the color will fit for Aries people.
 The pattern I provide is the pattern name, you need to convert it to a fancy name, descriptive pattern name. for example: jungle bear => Jungle Bear Pattern.
-3. Generate a short content (1-2 sentences) summarizing the product appearance and a promise it will be a good gift for the target buyer.
+3. Product promise: Generate a short content (1-2 sentences) summarizing the product appearance and a promise it will be a good gift for the target buyer.
+4. Tagline: Generate a short tagline (1-2 sentences - maximum 20 words) for the product.
+The purpose of the tagline - a very short sentence, like a quote or a trendy statement—Slogan - is to make the product more attractive and unique. It will be displayed at the top of the product page, below the name and the prices. Make it attractive and unique.
 
 Output the response in the following JSON format, return only valid JSON, with no markdown, no extra text:
-{ "productDescription": "string", "productAppearance": "string", "productPromise": "string" }
+{ "productDescription": "string", "productAppearance": "string", "productPromise": "string", "tagline": "string" }
 `;
 
 export const productDescription = async ({
@@ -95,12 +97,14 @@ export const productDescription = async ({
     if (
       !jsonResponse.productDescription ||
       !jsonResponse.productAppearance ||
-      !jsonResponse.productPromise
+      !jsonResponse.productPromise ||
+      !jsonResponse.tagline
     ) {
       console.warn(`[${requestId}] ⚠️ Invalid JSON structure received`, {
         hasDescription: !!jsonResponse.productDescription,
         hasAppearance: !!jsonResponse.productAppearance,
-        hasPromise: !!jsonResponse.productPromise
+        hasPromise: !!jsonResponse.productPromise,
+        hasTagline: !!jsonResponse.tagline
       });
       throw new Error('Invalid JSON response');
     }
@@ -112,7 +116,8 @@ export const productDescription = async ({
         totalTime: `${totalTime}ms`,
         descriptionLength: jsonResponse.productDescription.length,
         appearanceLength: jsonResponse.productAppearance.length,
-        promiseLength: jsonResponse.productPromise.length
+        promiseLength: jsonResponse.productPromise.length,
+        taglineLength: jsonResponse.tagline.length
       }
     );
 

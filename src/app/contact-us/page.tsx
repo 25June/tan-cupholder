@@ -1,44 +1,35 @@
 import RandomShape3 from '@/components/icons/shapes/RandomShape3';
 import RandomShape5 from '@/components/icons/shapes/RandomShape5';
-import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
-import Footer from '@/components/footer/Footer';
 import { getTranslations } from 'next-intl/server';
 
-export default async function AboutUsPage() {
+export default async function ContactUsPage() {
   const t = await getTranslations('ContactUsPage');
+
   return (
-    <div>
-      <StaticMenuBar triggerCartCount={1} />
-      <div className="max-w-7xl p-4 mx-auto">
-        <h1 className="text-3xl font-bold mb-4 text-center mt-12 uppercase">
-          {t('title')}
-        </h1>
-        <div
-          className={
-            'flex gap-2 justify-center items-center w-full flex-col md:flex-row mb-8'
-          }
-        >
-          <div className="min-w-96 max-w-4xl w-full grow-1">
-            <RandomShape3 />
-          </div>
-          <div className="max-w-lg w-full grow-1">
-            <p>{t('paragraph1')}</p>
-          </div>
+    <section>
+      <h1 className="text-3xl font-bold mb-4 text-center mt-12 uppercase">
+        {t('title')}
+      </h1>
+
+      {/* First content block - shape left, text right */}
+      <article className="flex gap-2 justify-center items-center w-full flex-col md:flex-row mb-8">
+        <figure className="min-w-96 max-w-4xl w-full grow">
+          <RandomShape3 />
+        </figure>
+        <div className="max-w-lg w-full grow">
+          <p>{t('paragraph1')}</p>
         </div>
-        <div
-          className={
-            'flex gap-2 justify-center items-center flex-col md:flex-row w-full'
-          }
-        >
-          <div className="max-w-lg w-full grow-1 text-right">
-            <p>{t('paragraph2')}</p>
-          </div>
-          <div className="min-w-96 max-w-4xl w-full grow-1">
-            <RandomShape5 />
-          </div>
+      </article>
+
+      {/* Second content block - text left, shape right */}
+      <article className="flex gap-2 justify-center items-center flex-col md:flex-row w-full">
+        <div className="max-w-lg w-full grow text-right">
+          <p>{t('paragraph2')}</p>
         </div>
-      </div>
-      <Footer />
-    </div>
+        <figure className="min-w-96 max-w-4xl w-full grow">
+          <RandomShape5 />
+        </figure>
+      </article>
+    </section>
   );
 }

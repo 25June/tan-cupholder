@@ -3,16 +3,24 @@ import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { durationLeft, durationRight, menus, socialMedias } from './constant';
 import { yuseiMagic } from '@/styles/fonts';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const MotionLink = motion(Link);
 export default function Footer() {
   const t = useTranslations('HomePage.FooterSection');
-  const route = useRouter();
   return (
-    <div className="bg-logo-orange-border">
-      <footer className="text-[16px] text-white max-w-8xl mx-auto leading-[24px] grid sm:grid-cols-2 grid-cols-1 justify-between  sm:px-8 px-4 py-[40px] sm:py-[64px] font-bold">
+    <div className="bg-logo-orange-border relative">
+      <div className="absolute w-full overflow-x-hidden transform -translate-y-[95%]">
+        <Image
+          src={'/bottom-wave.svg'}
+          width={160}
+          height={90}
+          alt="wave"
+          className="w-full h-full object-cover object-bottom overflow-x-hidden color-transparent min-w-[768px]"
+        />
+      </div>
+      <footer className="text-[16px] text-white max-w-8xl mx-auto leading-[24px] grid sm:grid-cols-2 grid-cols-1 justify-between sm:px-8 px-4 py-[40px] sm:py-[48px] font-bold">
         <motion.div
           className="flex flex-col sm:gap-3 gap-5 md:justify-between"
           initial="offscreen"
@@ -205,7 +213,11 @@ export default function Footer() {
                     href={item.href}
                     whileHover={{ x: 3 }}
                     whileTap={{ x: 3 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 400,
+                      damping: 10
+                    }}
                     variants={{
                       offscreen: {
                         opacity: 0,

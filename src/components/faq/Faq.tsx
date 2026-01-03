@@ -153,15 +153,6 @@ export const Faq = () => {
           </motion.div>
         </div>
       </div>
-      <div className="absolute -bottom-1 w-full overflow-x-hidden">
-        <Image
-          src={'/bottom-wave.svg'}
-          width={160}
-          height={90}
-          alt="wave"
-          className="w-full h-full object-cover object-bottom overflow-x-hidden color-transparent min-w-[768px] "
-        />
-      </div>
     </div>
   );
 };

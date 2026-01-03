@@ -60,7 +60,7 @@ const ImageGallery = ({
       </nav>
 
       {/* Main image display */}
-      <figure className="w-full h-88 bg-gray-100 p-2 rounded-md">
+      <figure className="w-full h-88 bg-logo-orange-pale-companion p-2 rounded-md">
         {selectedImage && (
           <CDNImage
             src={getImageUrl(product.id, selectedImage.name)}
