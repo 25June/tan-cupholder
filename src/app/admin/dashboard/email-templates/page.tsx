@@ -16,6 +16,7 @@ import EditEmailTemplateModal from '@/app/admin/ui/email-templates/edit-email-te
 import DeleteEmailTemplateModal from '@/app/admin/ui/email-templates/delete-email-template-modal';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from '@/hooks/useSession';
+import SendEmailModal from '../../ui/email-templates/send-email-modal';
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -31,6 +32,8 @@ export default function Page() {
   const [selectedEmailTemplateId, setSelectedEmailTemplateId] = useState<
     string | null
   >(null);
+  const [selectedEmailTemplate, setSelectedEmailTemplate] =
+    useState<EmailTemplateResponse | null>(null);
 
   const loadEmailTemplates = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -61,6 +64,7 @@ export default function Page() {
   const handleRefresh = () => {
     loadEmailTemplates();
     setSelectedEmailTemplateId(null);
+    setSelectedEmailTemplate(null);
   };
 
   if (sessionLoading) {
@@ -87,7 +91,15 @@ export default function Page() {
       <EmailTemplatesTable
         templates={emailTemplates}
         loading={isLoading}
-        onSelectTemplate={setSelectedEmailTemplateId}
+        onSelectTemplate={(id) => {
+          setSelectedEmailTemplateId(id);
+          const template = emailTemplates.find(
+            (template) => template.id === id
+          );
+          if (template) {
+            setSelectedEmailTemplate(template);
+          }
+        }}
       />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalTemplates / 10)} />
@@ -100,6 +112,11 @@ export default function Page() {
       <DeleteEmailTemplateModal
         emailTemplateId={selectedEmailTemplateId}
         onRefresh={handleRefresh}
+      />
+      <SendEmailModal
+        jsonEmailTemplate={
+          selectedEmailTemplate ? JSON.stringify(selectedEmailTemplate) : null
+        }
       />
     </main>
   );

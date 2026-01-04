@@ -8,7 +8,10 @@ import {
   EmailResult,
   EmailTemplate
 } from '@/models/email';
-import { EMAIL_TEMPLATES } from '@/constants/email-template.const';
+import {
+  EMAIL_TEMPLATES,
+  getLayoutTemplate
+} from '@/constants/email-template.const';
 
 // Email template schemas
 const EmailTemplateSchema = z.object({
@@ -19,12 +22,12 @@ const EmailTemplateSchema = z.object({
  * Get SMTP configuration from environment variables
  * @returns SMTPConfig object
  */
-const getSMTPConfig = (): SMTPConfig => {
+export const getSMTPConfig = async (): Promise<SMTPConfig> => {
   const host = process.env.SMTP_HOST;
-  const port = parseInt(process.env.SMTP_PORT || '587');
+  const port = Number(process.env.SMTP_PORT || '465');
   const secure = process.env.SMTP_SECURE === 'true';
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const user = process.env.SMTP_EMAIL;
+  const pass = process.env.SMTP_PASSWORD;
 
   if (!host || !user || !pass) {
     throw new Error(
@@ -32,7 +35,7 @@ const getSMTPConfig = (): SMTPConfig => {
     );
   }
 
-  return {
+  return Promise.resolve({
     host,
     port,
     secure,
@@ -40,7 +43,7 @@ const getSMTPConfig = (): SMTPConfig => {
       user,
       pass
     }
-  };
+  });
 };
 
 /**
@@ -75,15 +78,9 @@ export const sendEmail = async (
   try {
     console.log('start sending email');
     // Create transporter
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASSWORD
-      }
-    });
+    const config = await getSMTPConfig();
+
+    const transporter = nodemailer.createTransport(config);
     console.log('transporter created');
     const template =
       EMAIL_TEMPLATES[templateName as keyof typeof EMAIL_TEMPLATES];
@@ -96,7 +93,7 @@ export const sendEmail = async (
     console.log('template found');
     // Send email
     const info = await transporter.sendMail({
-      from: process.env.SMTP_EMAIL,
+      from: config.auth.user,
       to: to,
       subject: template.subject(data),
       html: template.html(data)
@@ -116,3 +113,88 @@ export const sendEmail = async (
     };
   }
 };
+
+export type SendCustomEmailState = {
+  errors?: {
+    to?: string[];
+    subject?: string[];
+    htmlContent?: string[];
+  };
+  message?: string | null;
+};
+
+const SendEmailSchema = z.object({
+  to: z.string().email({ message: 'Invalid email address' }),
+  subject: z.string().min(1, { message: 'Subject is required' }),
+  htmlContent: z.string().min(1, { message: 'HTML content is required' })
+});
+
+export async function sendCustomEmail(formData: FormData) {
+  const startTime = Date.now();
+  const requestId = `email_${Date.now()}_${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
+
+  console.log(`[${requestId}] 📧 Starting custom email send`, {
+    to: formData.get('to'),
+    subject: formData.get('subject'),
+    contentLength: (formData.get('htmlContent') as string)?.length || 0
+  });
+
+  try {
+    // Validate form data
+    const validationResult = SendEmailSchema.safeParse({
+      to: formData.get('to'),
+      subject: formData.get('subject'),
+      htmlContent: formData.get('htmlContent')
+    });
+
+    if (!validationResult.success) {
+      console.warn(`[${requestId}] ⚠️ Validation failed`, {
+        errors: validationResult.error.flatten().fieldErrors
+      });
+      return { errors: validationResult.error.flatten().fieldErrors };
+    }
+
+    const { to, subject, htmlContent } = validationResult.data;
+
+    console.log(`[${requestId}] 📧 Add layout template`);
+    const wrappedHtmlContent = getLayoutTemplate(htmlContent);
+
+    console.log(`[${requestId}] 🔧 Creating SMTP transporter...`);
+    const smtpConfig = await getSMTPConfig();
+    const transporter = nodemailer.createTransport(smtpConfig);
+
+    console.log(`[${requestId}] 📤 Sending email...`, {
+      from: smtpConfig.auth.user,
+      to,
+      subject
+    });
+
+    const info = await transporter.sendMail({
+      from: smtpConfig.auth.user,
+      to,
+      subject,
+      html: wrappedHtmlContent
+    });
+
+    const duration = Date.now() - startTime;
+    console.log(`[${requestId}] ✅ Email sent successfully`, {
+      messageId: info.messageId,
+      duration: `${duration}ms`
+    });
+
+    return {
+      message: 'Email sent successfully.',
+      emailId: info.messageId
+    };
+  } catch (error) {
+    const duration = Date.now() - startTime;
+    console.error(`[${requestId}] ❌ Failed to send email`, {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      duration: `${duration}ms`
+    });
+    return { message: 'Failed to send email.' };
+  }
+}

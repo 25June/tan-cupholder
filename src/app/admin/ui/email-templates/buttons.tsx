@@ -1,6 +1,6 @@
 'use client';
 
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon, PlusIcon } from '@heroicons/react/24/outline';
 import {
   PencilIcon,
   TrashIcon,
@@ -73,6 +73,29 @@ export function DeleteEmailTemplate({
   );
 }
 
+export function SendEmailTemplate({
+  id,
+  onSelectTemplate
+}: {
+  id: string;
+  onSelectTemplate: (id: string) => void;
+}) {
+  const handleClick = () => {
+    onSelectTemplate(id);
+    onOpenModal(MODAL_ID.SEND_EMAIL);
+  };
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="rounded-md p-2 w-full flex items-center gap-2"
+    >
+      <EnvelopeIcon className="w-5" />
+      <span>Send</span>
+    </button>
+  );
+}
+
 export function More({
   id,
   onSelectTemplate
@@ -99,6 +122,9 @@ export function More({
           </li>
           <li>
             <DeleteEmailTemplate id={id} onSelectTemplate={onSelectTemplate} />
+          </li>
+          <li>
+            <SendEmailTemplate id={id} onSelectTemplate={onSelectTemplate} />
           </li>
         </>
       }
