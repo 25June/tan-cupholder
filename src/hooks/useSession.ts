@@ -1,5 +1,6 @@
 'use client';
 
+import { data } from 'motion/react-client';
 import { useSession as useNextAuthSession } from 'next-auth/react';
 
 /**

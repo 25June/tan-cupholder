@@ -86,10 +86,10 @@ export function More({
         <div
           tabIndex={0}
           role="button"
-          className="rounded-md border p-2 hover:bg-gray-100"
+          className="rounded-md border border-gray-500 hover:border-gray-700 transition-all duration-100 p-2 hover:bg-gray-100"
         >
           <span className="sr-only">More</span>
-          <EllipsisVerticalIcon className="w-5" />
+          <EllipsisVerticalIcon className="w-5 text-gray-500" />
         </div>
       }
       content={

@@ -16,13 +16,11 @@ import EditEmailTemplateModal from '@/app/admin/ui/email-templates/edit-email-te
 import DeleteEmailTemplateModal from '@/app/admin/ui/email-templates/delete-email-template-modal';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from '@/hooks/useSession';
-import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams?.get('query') || '';
   const containsPage = Number(searchParams?.get('page')) || 1;
-  const router = useRouter();
   const { isAuthenticated, isLoading: sessionLoading } = useSession();
 
   const [emailTemplates, setEmailTemplates] = useState<EmailTemplateResponse[]>(
@@ -33,13 +31,6 @@ export default function Page() {
   const [selectedEmailTemplateId, setSelectedEmailTemplateId] = useState<
     string | null
   >(null);
-
-  useEffect(() => {
-    if (!sessionLoading && !isAuthenticated) {
-      router.push('/admin');
-      return;
-    }
-  }, [isAuthenticated, sessionLoading, router]);
 
   const loadEmailTemplates = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -72,7 +63,7 @@ export default function Page() {
     setSelectedEmailTemplateId(null);
   };
 
-  if (sessionLoading || !isAuthenticated) {
+  if (sessionLoading) {
     return (
       <main>
         <div className="flex justify-center items-center p-8">

@@ -19,6 +19,5 @@ export const useGenerateProductDescription = () => {
     setThinking(false);
     return result;
   };
-  console.log({ description, thinking });
   return { description, thinking, generateDescription: generateDescription };
 };

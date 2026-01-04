@@ -30,8 +30,8 @@ export const getLayoutTemplate = (mainContent: string) => `
           <!-- Footer Section -->
           <tr>
             <td align="center" style="padding: 20px; background-color: #ec8c4c; color: #f4f4f4;">
-              <p style="margin: 0; font-size: 12px;">© 2025 Tan Cup Holder. All rights reserved.</p>
-              <p style="margin: 10px 0 0 0; font-size: 12px;">
+              <p style="margin: 0; font-size: 12px; color: white;">© 2025 Tan Cup Holder. All rights reserved.</p>
+              <p style="margin: 10px 0 0 0; font-size: 12px; color: white;">
                 Tan Cup Holder, 123 Resiliant St, Eco City, EC 12345
               </p>
             </td>

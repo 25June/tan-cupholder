@@ -4,15 +4,17 @@ import { EmailTemplateResponse } from '@/models/emailTemplate';
 import { More } from '@/app/admin/ui/email-templates/buttons';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
+interface EmailTemplatesTableProps {
+  readonly templates: EmailTemplateResponse[];
+  readonly loading: boolean;
+  readonly onSelectTemplate: (id: string) => void;
+}
+
 export default function EmailTemplatesTable({
   templates,
   loading = false,
   onSelectTemplate
-}: {
-  templates: EmailTemplateResponse[];
-  loading: boolean;
-  onSelectTemplate: (id: string) => void;
-}) {
+}: EmailTemplatesTableProps) {
   const columns: Column<EmailTemplateResponse>[] = [
     {
       header: 'Name',
