@@ -2,6 +2,8 @@ import { FormEventHandler } from 'react';
 import { getLayoutTemplate } from '@/constants/email-template.const';
 import { EmailTemplateFormData } from '@/models/emailTemplate';
 import FieldErrors from '@/app/material/field-errors';
+import { DEFAULT_HTML_CONTENT } from '@/constants/email-template';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 interface FormProps {
   readonly defaultValues?: EmailTemplateFormData | null;
@@ -62,12 +64,26 @@ const Form = ({
             </fieldset>
 
             <fieldset className="fieldset">
-              <legend className="fieldset-legend">HTML Content</legend>
+              <div className="flex justify-between items-center">
+                <legend className="fieldset-legend">HTML Content</legend>
+                <div className="tooltip tooltip-info">
+                  <div className="tooltip-content">
+                    <span>How to use the HTML content:</span>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: DEFAULT_HTML_CONTENT }}
+                    />
+                  </div>
+                  <InformationCircleIcon className="w-4 h-4" />
+                </div>
+              </div>
+
               <textarea
                 name="htmlContent"
                 className="textarea w-full h-48"
                 placeholder="Email Template HTML Content"
-                defaultValue={defaultValues?.htmlContent}
+                defaultValue={
+                  defaultValues?.htmlContent || DEFAULT_HTML_CONTENT
+                }
                 onChange={(e) => setMainContent(e.target.value)}
                 aria-describedby="htmlContent-error"
                 aria-invalid={!!errors?.htmlContent?.length}
@@ -100,7 +116,9 @@ const Form = ({
                 className="m-auto w-full"
                 dangerouslySetInnerHTML={{
                   __html: getLayoutTemplate(
-                    mainContent || defaultValues?.htmlContent || ''
+                    mainContent ||
+                      defaultValues?.htmlContent ||
+                      DEFAULT_HTML_CONTENT
                   )
                 }}
               />

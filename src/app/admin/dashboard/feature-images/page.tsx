@@ -37,16 +37,18 @@ export default function Page() {
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <SearchProducts onSearch={onSearch} />
-        <CreateFeatureImage />
-        <DeleteFeatureImage images={selectedImages} />
-        {Object.values(selectedImages).length > 0 && (
-          <button
-            className="btn btn-square"
-            onClick={() => setSelectedImages({})}
-          >
-            <XCircleIcon className="w-6 h-6" />
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          <CreateFeatureImage />
+          <DeleteFeatureImage images={selectedImages} />
+          {Object.values(selectedImages).length > 0 && (
+            <button
+              className="btn btn-square"
+              onClick={() => setSelectedImages({})}
+            >
+              <XCircleIcon className="w-6 h-6" />
+            </button>
+          )}
+        </div>
       </div>
       <div className="mt-4">
         <ImageList

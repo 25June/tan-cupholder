@@ -1,4 +1,7 @@
-import { fetchOrderById } from '@/app/admin/lib/actions/orders.actions';
+import {
+  fetchOrderById,
+  OrderDetail
+} from '@/app/admin/lib/actions/orders.actions';
 import { Metadata } from 'next';
 import { lusitana } from '@/app/admin/ui/fonts';
 import StatusForm from '@/app/admin/ui/orders/status-form';
@@ -6,15 +9,12 @@ import {
   getOrderStatusColor,
   getOrderStatusText
 } from '@/shared/utils/order.utils';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
-import { getImageUrl } from '@/shared/utils/getImageUrl';
-import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import { ProductCustom } from '@/models/product';
-import { OrderDetail } from '@/app/admin/lib/actions/orders.actions';
 import CopyButton from '@/components/copy-button/CopyButton';
+import ProductTable from '@/app/admin/ui/orders/product-table';
 
 interface OrderDetailPageProps {
   params: Promise<{ id: string }>;
@@ -279,102 +279,7 @@ export default async function OrderDetailPage({
       </div>
 
       {/* Products List */}
-      <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">
-            Products in this Order
-          </h2>
-          <p className="text-sm text-gray-500 mt-1">
-            {order.order_products.length || 0} products ordered
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Product
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Price
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Quantity
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {order.order_products.map((product: any, index: number) => {
-                const productDetails = productObj[product.product_id];
-                return (
-                  <tr key={product.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-3">
-                        <div className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden bg-gray-100">
-                          {productDetails.image ? (
-                            <Image
-                              src={formatImagePath(
-                                getImageUrl(
-                                  product.product_id,
-                                  productDetails.image.name
-                                )
-                              )}
-                              alt={product.product_id}
-                              width={48}
-                              height={48}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <div className="h-full w-full flex items-center justify-center bg-gray-200">
-                              <span className="text-gray-400 text-xs">
-                                No image
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">
-                            {product.name}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            ID: {product.id.slice(-8)}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">
-                        {product.type_name || 'N/A'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">
-                        {formatCurrency(product.price)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">
-                        {product.quantity}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-gray-900">
-                        {formatCurrency(product.price * product.quantity)}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <ProductTable order={order} productObj={productObj} />
     </main>
   );
 }
