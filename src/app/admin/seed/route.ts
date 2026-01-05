@@ -396,6 +396,30 @@ async function seedAddColumnOrderIdToInvoices() {
   `;
 }
 
+async function seedEmailLogs() {
+  await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await sql`
+    CREATE TABLE IF NOT EXISTS email_logs (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+      to_email VARCHAR(255) NOT NULL,
+      subject VARCHAR(500) NOT NULL,
+      content TEXT NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  // Create index for faster email-based searches
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_email_logs_to_email ON email_logs(to_email);
+  `;
+
+  // Create index for faster order-based searches
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_email_logs_order_id ON email_logs(order_id);
+  `;
+}
+
 async function seedAddColorFieldsToProducts() {
   await sql`
     ALTER TABLE products
@@ -426,7 +450,7 @@ async function seedProductColors() {
 export async function GET() {
   try {
     // await seedProductColors();
-
+    await seedEmailLogs();
     // const colorFields = await seedAddColorFieldsToProducts();
     // const userRole = await sql.begin(seedAddColumnOrderIdToInvoices);
     // const colorFields = await sql.begin(seedAddColorFieldsToProducts);
