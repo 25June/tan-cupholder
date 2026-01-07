@@ -12,6 +12,7 @@ import {
   EMAIL_TEMPLATES,
   getLayoutTemplate
 } from '@/constants/email-template.const';
+import { addEmailLog } from './email-logs.actions';
 
 // Email template schemas
 const EmailTemplateSchema = z.object({
@@ -126,7 +127,8 @@ export type SendCustomEmailState = {
 const SendEmailSchema = z.object({
   to: z.string().email({ message: 'Invalid email address' }),
   subject: z.string().min(1, { message: 'Subject is required' }),
-  htmlContent: z.string().min(1, { message: 'HTML content is required' })
+  htmlContent: z.string().min(1, { message: 'HTML content is required' }),
+  orderId: z.string().optional()
 });
 
 export async function sendCustomEmail(formData: FormData) {
@@ -146,7 +148,8 @@ export async function sendCustomEmail(formData: FormData) {
     const validationResult = SendEmailSchema.safeParse({
       to: formData.get('to'),
       subject: formData.get('subject'),
-      htmlContent: formData.get('htmlContent')
+      htmlContent: formData.get('htmlContent'),
+      orderId: formData.get('orderId')
     });
 
     if (!validationResult.success) {
@@ -156,7 +159,7 @@ export async function sendCustomEmail(formData: FormData) {
       return { errors: validationResult.error.flatten().fieldErrors };
     }
 
-    const { to, subject, htmlContent } = validationResult.data;
+    const { to, subject, htmlContent, orderId } = validationResult.data;
 
     console.log(`[${requestId}] 📧 Add layout template`);
     const wrappedHtmlContent = getLayoutTemplate(htmlContent);
@@ -183,6 +186,14 @@ export async function sendCustomEmail(formData: FormData) {
       messageId: info.messageId,
       duration: `${duration}ms`
     });
+
+    try {
+      console.log('Adding email log', orderId);
+      await addEmailLog(orderId || '', to, subject, wrappedHtmlContent);
+      console.log('Email log added successfully');
+    } catch (error) {
+      console.error('Failed to add email log:', error);
+    }
 
     return {
       message: 'Email sent successfully.',

@@ -18,30 +18,17 @@ const EmailLogSchema = z.object({
  * Add a new email log entry to the database
  */
 export async function addEmailLog(
-  prevState: EmailLogState,
-  formData: FormData
+  orderId: string,
+  to: string,
+  subject: string,
+  content: string
 ): Promise<EmailLogState> {
-  const validatedFields = EmailLogSchema.safeParse({
-    order_id: formData.get('order_id'),
-    to: formData.get('to'),
-    subject: formData.get('subject'),
-    content: formData.get('content')
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Email Log.'
-    };
-  }
-
-  const { order_id, to, subject, content } = validatedFields.data;
   const date = new Date().toISOString();
 
   try {
     await sql`
       INSERT INTO email_logs (order_id, to_email, subject, content, created_at)
-      VALUES (${order_id}, ${to}, ${subject}, ${content}, ${date})
+      VALUES (${orderId}, ${to}, ${subject}, ${content}, ${date})
     `;
   } catch (error) {
     console.error('Database Error:', error);

@@ -450,7 +450,7 @@ async function seedProductColors() {
 export async function GET() {
   try {
     // await seedProductColors();
-    await seedEmailLogs();
+    // await seedEmailLogs();
     // const colorFields = await seedAddColorFieldsToProducts();
     // const userRole = await sql.begin(seedAddColumnOrderIdToInvoices);
     // const colorFields = await sql.begin(seedAddColorFieldsToProducts);

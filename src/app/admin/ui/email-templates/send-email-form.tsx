@@ -14,6 +14,7 @@ interface SendEmailFormProps {
     htmlContent?: string[];
   };
   readonly isPending: boolean;
+  readonly defaultTo: string;
 }
 
 // Regex to match ${data.variableName} or ${data.variableName || 'default'} patterns
@@ -58,7 +59,8 @@ const SendEmailForm = ({
   onSubmit,
   onCancel,
   errors,
-  isPending
+  isPending,
+  defaultTo
 }: SendEmailFormProps) => {
   const [variableValues, setVariableValues] = useState<Record<string, string>>(
     {}
@@ -109,6 +111,7 @@ const SendEmailForm = ({
                 required
                 aria-describedby="to-error"
                 aria-invalid={!!errors?.to?.length}
+                defaultValue={defaultTo}
               />
               <FieldErrors id="to-error" errors={errors?.to} />
             </fieldset>

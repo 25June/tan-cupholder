@@ -13,9 +13,15 @@ import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 import { ProductCustom } from '@/models/product';
-import CopyButton from '@/components/copy-button/CopyButton';
 import ProductTable from '@/app/admin/ui/orders/product-table';
-
+import CustomerInfo from '@/app/admin/ui/orders/customer-info';
+import ShippingInfo from '@/app/admin/ui/orders/shipping-info';
+import OrderDetails from '@/app/admin/ui/orders/order-details';
+import OrderSummary from '@/app/admin/ui/orders/order-summary';
+import MailLogger, {
+  MailLoggerSkeleton
+} from '@/app/admin/ui/orders/mail-logger';
+import { Suspense } from 'react';
 interface OrderDetailPageProps {
   params: Promise<{ id: string }>;
 }
@@ -53,23 +59,6 @@ export default async function OrderDetailPage({
     notFound();
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  };
-
   return (
     <main className="max-w-6xl mx-auto">
       {/* Header */}
@@ -99,144 +88,25 @@ export default async function OrderDetailPage({
         {/* Order Overview */}
         <div className="lg:col-span-2 space-y-6">
           {/* Customer Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">
-                Customer Information
-              </h2>
-            </div>
-            <div className="px-6 py-4 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Name
-                  </label>
-                  <p className="text-gray-900">{order.customer.name}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <p className="text-gray-900">{order.customer.email}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Phone
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <p className="text-gray-900">
-                      {order.customer.phone_number || 'N/A'}
-                    </p>
-                    {order.customer.phone_number && (
-                      <CopyButton text={order.customer.phone_number || ''} />
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Payment Status
-                  </label>
-                  <p className="text-gray-900 capitalise">
-                    {order.payment_status}
-                  </p>
-                </div>
-              </div>
-              {order.customer.address && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Address
-                  </label>
-                  <p className="text-gray-900">{order.customer.address}</p>
-                </div>
-              )}
-            </div>
-          </div>
+          <CustomerInfo
+            customer={order.customer}
+            payment_status={order.payment_status}
+          />
 
           {/* Shipping Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">
-                Shipping Information
-              </h2>
-            </div>
-            <div className="px-6 py-4 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Shipping Address
-                  </label>
-                  <p className="text-gray-900">
-                    {order.shipping_address || 'N/A'}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    City
-                  </label>
-                  <p className="text-gray-900">
-                    {order.shipping_city || 'N/A'}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Payment Method
-                  </label>
-                  <p className="text-gray-900 capitalise">
-                    {order.payment_method}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Total Items
-                  </label>
-                  <p className="text-gray-900">{order.total_items} items</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <ShippingInfo
+            shipping_address={order.shipping_address}
+            shipping_city={order.shipping_city}
+            payment_method={order.payment_method}
+            total_items={order.total_items}
+          />
           {/* Order Details */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">
-                Order Details
-              </h2>
-            </div>
-            <div className="px-6 py-4 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Order ID
-                  </label>
-                  <p className="text-gray-900 font-mono">{order.id}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Order Date
-                  </label>
-                  <p className="text-gray-900">
-                    {formatDate(order.created_at)}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Last Updated
-                  </label>
-                  <p className="text-gray-900">
-                    {formatDate(order.updated_at)}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Total Amount
-                  </label>
-                  <p className="text-lg font-semibold text-gray-900">
-                    {formatCurrency(order.total_price)}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <OrderDetails
+            id={order.id}
+            created_at={order.created_at}
+            updated_at={order.updated_at}
+            total_price={order.total_price}
+          />
         </div>
 
         {/* Status Update Form */}
@@ -244,37 +114,13 @@ export default async function OrderDetailPage({
           <StatusForm orderId={order.id} currentStatus={order.status as any} />
 
           {/* Order Summary */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">
-                Order Summary
-              </h2>
-            </div>
-            <div className="px-6 py-4">
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">
-                    {formatCurrency(order.total_price)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Total Items</span>
-                  <span className="font-medium">{order.total_items}</span>
-                </div>
-                <div className="border-t border-gray-200 pt-3">
-                  <div className="flex justify-between">
-                    <span className="text-lg font-semibold text-gray-900">
-                      Total
-                    </span>
-                    <span className="text-lg font-semibold text-gray-900">
-                      {formatCurrency(order.total_price)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <OrderSummary
+            total_price={order.total_price}
+            total_items={order.total_items}
+          />
+          <Suspense fallback={<MailLoggerSkeleton />}>
+            <MailLogger orderId={order.id} email={order.customer.email} />
+          </Suspense>
         </div>
       </div>
 

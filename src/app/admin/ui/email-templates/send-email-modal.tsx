@@ -12,11 +12,17 @@ import SendEmailForm from './send-email-form';
 
 interface SendEmailModalProps {
   readonly jsonEmailTemplate: string | null;
+  readonly orderId?: string;
+  readonly to?: string;
 }
 
 const initialState: SendCustomEmailState = { message: null, errors: {} };
 
-const SendEmailModal = ({ jsonEmailTemplate }: SendEmailModalProps) => {
+const SendEmailModal = ({
+  jsonEmailTemplate,
+  orderId,
+  to
+}: SendEmailModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [emailTemplate, setEmailTemplate] =
     useState<EmailTemplateResponse | null>(null);
@@ -45,7 +51,7 @@ const SendEmailModal = ({ jsonEmailTemplate }: SendEmailModalProps) => {
 
     setIsLoading(true);
     const formData = new FormData(e.currentTarget);
-
+    formData.append('orderId', orderId || '');
     try {
       const data = await sendCustomEmail(formData);
       if (data.errors) {
@@ -81,6 +87,7 @@ const SendEmailModal = ({ jsonEmailTemplate }: SendEmailModalProps) => {
           <SendEmailForm
             defaultSubject={emailTemplate.subject}
             defaultHtmlContent={emailTemplate.htmlContent}
+            defaultTo={to || ''}
             onSubmit={handleFormSubmit}
             onCancel={handleClose}
             errors={state.errors || {}}
