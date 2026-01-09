@@ -17,45 +17,25 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 import SimpleDropdown from '@/components/simple-dropdown/simple-downdown';
 
 const ActionDropdown = memo(
-  ({
-    product,
-    onSelectProduct
-  }: {
-    product: ProductResponse;
-    onSelectProduct: (productId: string) => void;
-  }) => {
+  ({ onSelectProduct }: { onSelectProduct: () => void }) => {
     return (
       <div className="flex justify-end items-center">
         <SimpleDropdown
           host={
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-sm btn-ghost btn-circle"
-            >
+            <button type="button" className="btn btn-sm btn-ghost btn-circle">
               <EllipsisVerticalIcon className="w-5" />
-            </div>
+            </button>
           }
           content={
             <>
               <li>
-                <UpdateImage
-                  id={product.id}
-                  onSelectProduct={onSelectProduct}
-                />
+                <UpdateImage onSelectProduct={onSelectProduct} />
               </li>
               <li>
-                <UpdateProduct
-                  id={product.id}
-                  product={product}
-                  onSelectProduct={onSelectProduct}
-                />
+                <UpdateProduct onSelectProduct={onSelectProduct} />
               </li>
               <li>
-                <DeleteProduct
-                  id={product.id}
-                  onSelectProduct={onSelectProduct}
-                />
+                <DeleteProduct onSelectProduct={onSelectProduct} />
               </li>
             </>
           }
@@ -65,19 +45,21 @@ const ActionDropdown = memo(
   }
 );
 
+interface ProductsTableProps {
+  readonly products: ProductResponse[];
+  readonly productTypes: Record<string, string>;
+  readonly productTags: ProductTag[];
+  readonly loading: boolean;
+  readonly onSelectProduct: (product: ProductResponse) => void;
+}
+
 export default function ProductsTable({
   products,
   productTypes,
   productTags,
   loading = false,
   onSelectProduct
-}: {
-  products: ProductResponse[];
-  productTypes: Record<string, string>;
-  productTags: ProductTag[];
-  loading: boolean;
-  onSelectProduct: (productId: string) => void;
-}) {
+}: ProductsTableProps) {
   // Map tag IDs to tag objects for quick lookup
   const tagObj = useMemo(() => {
     return productTags.reduce((acc: Record<string, ProductTag>, tag) => {
@@ -183,8 +165,8 @@ export default function ProductsTable({
       data={products}
       columns={columns}
       keyExtractor={(product) => product.id}
-      actions={(product, index) => (
-        <ActionDropdown product={product} onSelectProduct={onSelectProduct} />
+      actions={(product) => (
+        <ActionDropdown onSelectProduct={() => onSelectProduct(product)} />
       )}
       emptyMessage="No products found"
       loading={loading}

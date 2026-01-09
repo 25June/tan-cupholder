@@ -110,8 +110,8 @@ const DraggableProductType = ({
 };
 
 interface ArrangeProductTypeModalProps {
-  onRefresh?: () => void;
-  productTypesObj: Record<string, ProductType>;
+  readonly onRefresh?: () => void;
+  readonly productTypesObj: Record<string, ProductType>;
 }
 
 export default function ArrangeProductTypeModal({
@@ -120,13 +120,13 @@ export default function ArrangeProductTypeModal({
 }: ArrangeProductTypeModalProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
 
   const fetchProductTypesConfig = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await getAndParseConfig<string[]>('product_types');
+
       if (data) {
         setProductTypes(data.map((id) => productTypesObj[id]));
       }
@@ -137,27 +137,11 @@ export default function ArrangeProductTypeModal({
     }
   }, [productTypesObj]);
 
-  // Listen for modal open event
   useEffect(() => {
-    const modal = document.getElementById(MODAL_ID.ARRANGE_PRODUCT_TYPES);
-    if (modal) {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === 'open') {
-            const isModalOpen = (modal as HTMLDialogElement).open;
-            setIsOpen(isModalOpen);
-            if (isModalOpen) {
-              fetchProductTypesConfig();
-            }
-          }
-        });
-      });
-
-      observer.observe(modal, { attributes: true });
-
-      return () => observer.disconnect();
+    if (Object.keys(productTypesObj).length > 0) {
+      fetchProductTypesConfig();
     }
-  }, [fetchProductTypesConfig]);
+  }, [productTypesObj]);
 
   // Handle drag and drop reordering
   const moveProductType = useCallback(
@@ -217,7 +201,7 @@ export default function ArrangeProductTypeModal({
             </p>
 
             <div className="max-h-96 overflow-y-auto mb-4">
-              {isOpen && (
+              {productTypes.length > 0 && (
                 <DndProvider backend={HTML5Backend}>
                   {productTypes.map((productType, index) => (
                     <DraggableProductType

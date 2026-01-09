@@ -7,15 +7,17 @@ import {
 } from '@/app/admin/ui/product-tags/buttons';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
+interface ProductTagsTableProps {
+  readonly productTags: ProductTag[];
+  readonly loading: boolean;
+  readonly onSelectProductTag: (tag: ProductTag) => void;
+}
+
 export default function ProductTagsTable({
   productTags,
   loading = false,
   onSelectProductTag
-}: {
-  productTags: ProductTag[];
-  loading: boolean;
-  onSelectProductTag: (id: string) => void;
-}) {
+}: ProductTagsTableProps) {
   // Define columns configuration
   const columns: Column<ProductTag>[] = [
     {
@@ -61,12 +63,10 @@ export default function ProductTagsTable({
       actions={(tag) => (
         <div className="flex items-center gap-2">
           <UpdateProductTag
-            id={tag.id}
-            onSelectProductTag={onSelectProductTag}
+            onSelectProductTag={() => onSelectProductTag(tag)}
           />
           <DeleteProductTag
-            id={tag.id}
-            onSelectProductTag={onSelectProductTag}
+            onSelectProductTag={() => onSelectProductTag(tag)}
           />
         </div>
       )}

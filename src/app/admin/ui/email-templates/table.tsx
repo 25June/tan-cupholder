@@ -7,7 +7,7 @@ import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 interface EmailTemplatesTableProps {
   readonly templates: EmailTemplateResponse[];
   readonly loading: boolean;
-  readonly onSelectTemplate: (id: string) => void;
+  readonly onSelectTemplate: (template: EmailTemplateResponse) => void;
 }
 
 export default function EmailTemplatesTable({
@@ -44,7 +44,7 @@ export default function EmailTemplatesTable({
       columns={columns}
       keyExtractor={(template) => template.id}
       actions={(template) => (
-        <More id={template.id} onSelectTemplate={onSelectTemplate} />
+        <More onSelectTemplate={() => onSelectTemplate(template)} />
       )}
       emptyMessage="No email templates found"
       loading={loading}

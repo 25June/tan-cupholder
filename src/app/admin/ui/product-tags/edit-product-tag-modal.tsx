@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   updateProductTag,
-  State,
-  getProductTagById
+  State
 } from '@/app/admin/lib/actions/product-tags.actions';
 import { ProductTag } from '@/models/productTag';
 import { onCloseModal } from '@/shared/utils/modal.utils';
@@ -13,38 +12,38 @@ import { PRODUCT_TAG_SAMPLE_COLOR } from '@/constants/product-tag-sample-color.c
 
 const initialState: State = { message: null, errors: {} };
 
+interface EditProductTagModalProps {
+  readonly productTag: ProductTag | null;
+  readonly onRefresh: () => void;
+  readonly onReset: () => void;
+}
+
 export default function EditProductTagModal({
-  productTagId,
-  onRefresh
-}: {
-  productTagId: string | null;
-  onRefresh: () => void;
-}) {
+  productTag,
+  onRefresh,
+  onReset
+}: EditProductTagModalProps) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [productTag, setProductTag] = useState<ProductTag | null>(null);
   const [color, setColor] = useState<string>('#FF0000');
 
   useEffect(() => {
     const loadData = async () => {
-      if (!productTagId) {
-        setProductTag(null);
+      if (!productTag) {
         setColor('#FF0000');
         setState(initialState);
         return;
       }
 
       try {
-        const productTagData = await getProductTagById(productTagId);
-        setProductTag(productTagData);
-        setColor(productTagData.color || '#FF0000');
+        setColor(productTag.color || '#FF0000');
       } catch (error) {
         console.error('Failed to load product tag data:', error);
       }
     };
 
     loadData();
-  }, [productTagId]);
+  }, [productTag]);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,8 +73,8 @@ export default function EditProductTagModal({
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_PRODUCT_TAG);
     setState(initialState);
-    setProductTag(null);
     setColor('#FF0000');
+    onReset();
     if (refresh) {
       onRefresh();
     }

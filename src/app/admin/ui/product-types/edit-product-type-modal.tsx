@@ -131,9 +131,8 @@ export default function EditProductTypeModal({
 
     const formData = new FormData(e.currentTarget);
     formData.set('id', productType.id);
-    if (uploadImage) {
-      formData.set('imageUrl', uploadImage?.name ?? '');
-    }
+    formData.set('imageUrl', uploadImage?.name ?? productType.image_url ?? '');
+
     formData.delete('image');
     setIsLoading(true);
     return updateProductType(initialState, formData)
@@ -175,13 +174,8 @@ export default function EditProductTypeModal({
     setUploadImage(undefined);
     setPresignedUrl('');
     setImageUploadCompleted(false);
-    const form = document.getElementById(
-      'edit-product-type-form'
-    ) as HTMLFormElement;
     onReset();
-    if (form) {
-      form.reset();
-    }
+
     if (refresh) {
       onRefresh();
     }

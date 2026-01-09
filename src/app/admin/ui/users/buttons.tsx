@@ -21,14 +21,12 @@ export function CreateUser() {
 }
 
 export function UpdateUser({
-  id,
   onSelectUser
 }: {
-  id: string;
-  onSelectUser: (id: string) => void;
+  readonly onSelectUser: () => void;
 }) {
   const handleClick = () => {
-    onSelectUser(id);
+    onSelectUser();
     onOpenModal(MODAL_ID.UPDATE_USER);
   };
 
@@ -43,14 +41,12 @@ export function UpdateUser({
 }
 
 export function DeleteUser({
-  id,
   onSelectUser
 }: {
-  id: string;
-  onSelectUser: (id: string) => void;
+  readonly onSelectUser: () => void;
 }) {
   const handleClick = () => {
-    onSelectUser(id);
+    onSelectUser();
     onOpenModal(MODAL_ID.DELETE_USER);
   };
 

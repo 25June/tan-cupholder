@@ -4,23 +4,27 @@ import { useState } from 'react';
 import { deleteProduct } from '@/app/admin/lib/actions/products.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { ProductResponse } from '@/models/product';
+
+interface DeleteProductModalProps {
+  readonly product: ProductResponse | null;
+  readonly onRefresh: () => void;
+}
 
 export default function DeleteProductModal({
-  productId,
+  product,
   onRefresh
-}: {
-  productId: string | null;
-  onRefresh: () => void;
-}) {
+}: DeleteProductModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmDelete = async () => {
-    if (!productId) return;
+    if (!product?.id) return;
 
     setIsLoading(true);
     try {
-      await deleteProduct(productId);
-      handleClose(true);
+      await deleteProduct(product.id);
+      onRefresh();
+      handleClose();
     } catch (error) {
       console.error('Failed to delete product:', error);
     } finally {
@@ -28,9 +32,8 @@ export default function DeleteProductModal({
     }
   };
 
-  const handleClose = (refresh?: boolean) => {
+  const handleClose = () => {
     onCloseModal(MODAL_ID.DELETE_PRODUCT);
-    refresh && onRefresh();
   };
 
   return (

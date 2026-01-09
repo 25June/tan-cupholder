@@ -6,7 +6,6 @@ import {
   removeImage,
   State
 } from '@/app/admin/lib/actions/images.actions';
-import { Product } from '@/models/product';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import FileUpload from '@/components/file-upload/FileUpload';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
@@ -20,16 +19,20 @@ import {
   fetchProductById,
   updateActiveImage
 } from '@/app/admin/lib/actions/products.actions';
+import { ProductResponse } from '@/models/product';
 
+interface EditProductImageModalProps {
+  readonly product: ProductResponse | null;
+  readonly onRefresh: () => void;
+  readonly onReset: () => void;
+}
 const initialState: State = { message: null, errors: {} };
 
 export default function EditProductImageModal({
-  productId,
-  onRefresh
-}: {
-  productId: string | null;
-  onRefresh: () => void;
-}) {
+  product,
+  onRefresh,
+  onReset
+}: EditProductImageModalProps) {
   const [uploadImages, setUploadImages] = useState<File[]>([]);
   const [presignedUrlObject, setPresignedUrlObject] = useState<
     Record<string, string>
@@ -37,7 +40,6 @@ export default function EditProductImageModal({
   const [imageUploadCompleted, setImageUploadCompleted] = useState<
     Record<string, boolean>
   >({});
-  const [product, setProduct] = useState<Product | null>(null);
   const [images, setImages] = useState<ImageType[]>([]);
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -47,7 +49,6 @@ export default function EditProductImageModal({
   const mainImage = images.find((image) => image.isMain);
 
   const resetState = () => {
-    setProduct(null);
     setImages([]);
     setUploadImages([]);
     setPresignedUrlObject({});
@@ -55,19 +56,18 @@ export default function EditProductImageModal({
     setState(initialState);
     setIsMain({});
     setShouldRefresh(false);
+    onReset();
   };
 
   useEffect(() => {
     const loadData = async () => {
-      if (!productId) {
+      if (!product?.id) {
         resetState();
         return;
       }
 
       try {
-        const { product: productData, images: imagesData } =
-          await fetchProductById(productId);
-        setProduct(productData);
+        const { images: imagesData } = await fetchProductById(product.id);
         setImages(imagesData);
       } catch (error) {
         console.error('Failed to load product data:', error);
@@ -75,15 +75,15 @@ export default function EditProductImageModal({
     };
 
     loadData();
-  }, [productId]);
+  }, [product]);
 
   useEffect(() => {
     if (
       Object.values(imageUploadCompleted).length &&
       Object.values(imageUploadCompleted).every((value) => value === true)
     ) {
-      if (productId) {
-        fetchProductById(productId).then(({ images: imagesData }) => {
+      if (product?.id) {
+        fetchProductById(product.id).then(({ images: imagesData }) => {
           setImages(imagesData);
         });
       }
@@ -91,14 +91,14 @@ export default function EditProductImageModal({
       setImageUploadCompleted({});
       setPresignedUrlObject({});
     }
-  }, [imageUploadCompleted, productId]);
+  }, [imageUploadCompleted, product]);
 
   const onSelectImages = (files: FileList) => {
     setUploadImages(Array.from(files));
   };
 
   const handleFormSubmit = async () => {
-    if (!uploadImages.length || !product || !productId) {
+    if (!uploadImages.length || !product?.id) {
       console.error('No file selected or product not loaded');
       return Promise.reject(new Error('No file selected'));
     }
@@ -136,8 +136,8 @@ export default function EditProductImageModal({
       setIsLoading(true);
       try {
         await removeImage(id);
-        if (productId) {
-          const { images: imagesData } = await fetchProductById(productId);
+        if (product?.id) {
+          const { images: imagesData } = await fetchProductById(product.id);
           setImages(imagesData);
         }
         setShouldRefresh(true);
@@ -153,8 +153,8 @@ export default function EditProductImageModal({
     setIsLoading(true);
     try {
       await updateActiveImage(id, mainImage?.id || '');
-      if (productId) {
-        const { images: imagesData } = await fetchProductById(productId);
+      if (product?.id) {
+        const { images: imagesData } = await fetchProductById(product.id);
         setImages(imagesData);
       }
       setShouldRefresh(true);
@@ -177,7 +177,7 @@ export default function EditProductImageModal({
     <dialog id={MODAL_ID.EDIT_PRODUCT_IMAGE} className="modal">
       <div className="modal-box max-w-6xl max-h-[90vh] overflow-y-auto">
         <h3 className="font-bold text-lg mb-4">Edit Product Images</h3>
-        {!product ? (
+        {!product?.id ? (
           <div className="flex justify-center items-center p-8">
             <span className="loading loading-spinner loading-lg"></span>
           </div>

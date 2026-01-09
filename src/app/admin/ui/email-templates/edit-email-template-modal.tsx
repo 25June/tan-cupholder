@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   updateEmailTemplate,
-  State,
-  fetchEmailTemplateById
+  State
 } from '@/app/admin/lib/actions/email-templates.actions';
 import { EmailTemplateResponse } from '@/models/emailTemplate';
 import { onCloseModal } from '@/shared/utils/modal.utils';
@@ -14,18 +13,18 @@ import Form from './form';
 const initialState: State = { message: null, errors: {} };
 
 interface EditEmailTemplateModalProps {
-  readonly emailTemplateId: string | null;
+  readonly emailTemplate: EmailTemplateResponse | null;
   readonly onRefresh: () => void;
+  readonly onReset: () => void;
 }
 
 export default function EditEmailTemplateModal({
-  emailTemplateId,
-  onRefresh
+  emailTemplate,
+  onRefresh,
+  onReset
 }: EditEmailTemplateModalProps) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [emailTemplate, setEmailTemplate] =
-    useState<EmailTemplateResponse | null>(null);
   const [mainContent, setMainContent] = useState<string>('');
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,31 +63,16 @@ export default function EditEmailTemplateModal({
   };
 
   useEffect(() => {
-    const loadData = async () => {
-      if (!emailTemplateId) {
-        setEmailTemplate(null);
-        setMainContent('');
-        setState(initialState);
-        return;
-      }
-
-      try {
-        const templateData = await fetchEmailTemplateById(emailTemplateId);
-        setEmailTemplate(templateData);
-        setMainContent(templateData.htmlContent || '');
-      } catch (error) {
-        console.error('Failed to load email template data:', error);
-      }
-    };
-
-    loadData();
-  }, [emailTemplateId]);
+    if (!emailTemplate) {
+      setState(initialState);
+    }
+  }, [emailTemplate]);
 
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_EMAIL_TEMPLATE);
     setState(initialState);
-    setEmailTemplate(null);
     setMainContent('');
+    onReset();
     if (refresh) {
       onRefresh();
     }

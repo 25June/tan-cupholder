@@ -16,15 +16,17 @@ import PrimaryColorPicker from '@/components/color-picker/PrimaryColorPicker';
 
 const initialState: State = { message: null, errors: {} };
 
+interface CreateProductModalProps {
+  readonly productTypes: ProductType[];
+  readonly productTags: ProductTag[];
+  readonly onRefresh: () => void;
+}
+
 export default function CreateProductModal({
   productTypes,
   productTags,
   onRefresh
-}: {
-  productTypes: ProductType[];
-  productTags: ProductTag[];
-  onRefresh: () => void;
-}) {
+}: CreateProductModalProps) {
   const [formId, setFormId] = useState<string>('');
   const [state, setState] = useState<State>(initialState);
   const [tagIds, setTagIds] = useState<string[]>([]);

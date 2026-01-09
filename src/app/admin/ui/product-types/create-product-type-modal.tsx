@@ -88,6 +88,9 @@ export default function CreateProductTypeModal({
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.ADD_PRODUCT_TYPE);
     setState(initialState);
+    setUploadImage(undefined);
+    setPresignedUrl('');
+    setImageUploadCompleted(false);
     if (refresh) {
       onRefresh();
     }

@@ -4,22 +4,24 @@ import { useState } from 'react';
 import { deleteProductTag } from '@/app/admin/lib/actions/product-tags.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { ProductTag } from '@/models/productTag';
 
+interface DeleteProductTagModalProps {
+  readonly productTag: ProductTag | null;
+  readonly onRefresh: () => void;
+}
 export default function DeleteProductTagModal({
-  productTagId,
+  productTag,
   onRefresh
-}: {
-  productTagId: string | null;
-  onRefresh: () => void;
-}) {
+}: DeleteProductTagModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmDelete = async () => {
-    if (!productTagId) return;
+    if (!productTag?.id) return;
 
     setIsLoading(true);
     try {
-      await deleteProductTag(productTagId);
+      await deleteProductTag(productTag.id);
       handleClose(true);
     } catch (error) {
       console.error('Failed to delete product tag:', error);

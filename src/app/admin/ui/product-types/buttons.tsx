@@ -40,13 +40,15 @@ export function ArrangeProductTypes() {
   );
 }
 
+interface UpdateProductTypeProps {
+  readonly id: string;
+  readonly onSelectProductType: (id: string) => void;
+}
+
 export function UpdateProductType({
   id,
   onSelectProductType
-}: {
-  id: string;
-  onSelectProductType: (id: string) => void;
-}) {
+}: UpdateProductTypeProps) {
   const handleClick = () => {
     onSelectProductType(id);
     onOpenModal(MODAL_ID.UPDATE_PRODUCT_TYPE);

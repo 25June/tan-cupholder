@@ -42,6 +42,10 @@ export default function SendEmailToCustomer({
     onOpenModal(MODAL_ID.SEND_EMAIL);
   };
 
+  const onReset = () => {
+    setSelectedEmailTemplate(null);
+  };
+
   return (
     <div className="flex flex-col items-center gap-4">
       <select
@@ -69,9 +73,10 @@ export default function SendEmailToCustomer({
         Send Email
       </button>
       <SendEmailModal
-        jsonEmailTemplate={JSON.stringify(selectedEmailTemplate)}
+        emailTemplate={selectedEmailTemplate}
         orderId={orderId}
         to={email}
+        onReset={onReset}
       />
     </div>
   );

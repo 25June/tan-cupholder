@@ -32,9 +32,8 @@ export default function Page() {
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [productTags, setProductTags] = useState<ProductTag[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(
-    null
-  );
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductResponse | null>(null);
 
   // Fetch product types only once on initial render
   useEffect(() => {
@@ -81,7 +80,7 @@ export default function Page() {
         fetchProducts({ query, page: currentPage.toString() }),
         fetchTotalProducts()
       ]);
-      console.log('productsData', productsData);
+
       setProducts(productsData);
       setTotalProducts(totalData);
     } catch (error) {
@@ -91,14 +90,12 @@ export default function Page() {
     }
   };
 
-  const onRefresh = (refresh?: boolean) => {
-    if (refresh) {
-      onFetchProducts();
-    }
+  const onRefresh = () => {
+    onFetchProducts();
   };
 
   const onReset = () => {
-    setSelectedProductId(null);
+    setSelectedProduct(null);
   };
 
   const formattedProducts = useMemo(
@@ -130,7 +127,7 @@ export default function Page() {
         productTypes={formattedProducts}
         productTags={productTags}
         loading={isLoading}
-        onSelectProduct={setSelectedProductId}
+        onSelectProduct={setSelectedProduct}
       />
       <div className="mt-5 flex w-full justify-center">
         <PaginationState
@@ -145,9 +142,9 @@ export default function Page() {
         productTags={productTags}
         onRefresh={onFetchProducts}
       />
-      <DeleteProductModal productId={selectedProductId} onRefresh={onRefresh} />
+      <DeleteProductModal product={selectedProduct} onRefresh={onRefresh} />
       <EditProductModal
-        productId={selectedProductId}
+        product={selectedProduct}
         productTypes={productTypes}
         productTags={productTags}
         onRefresh={onRefresh}
@@ -155,8 +152,9 @@ export default function Page() {
       />
 
       <EditProductImageModal
-        productId={selectedProductId}
+        product={selectedProduct}
         onRefresh={onRefresh}
+        onReset={onReset}
       />
     </main>
   );

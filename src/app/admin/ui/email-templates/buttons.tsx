@@ -1,10 +1,11 @@
 'use client';
 
-import { EnvelopeIcon, PlusIcon } from '@heroicons/react/24/outline';
 import {
   PencilIcon,
   TrashIcon,
-  EllipsisVerticalIcon
+  EllipsisVerticalIcon,
+  EnvelopeIcon,
+  PlusIcon
 } from '@heroicons/react/24/outline';
 import { onOpenModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
@@ -27,14 +28,12 @@ export function CreateEmailTemplate() {
 }
 
 export function UpdateEmailTemplate({
-  id,
   onSelectTemplate
 }: {
-  id: string;
-  onSelectTemplate: (id: string) => void;
+  readonly onSelectTemplate: () => void;
 }) {
   const handleClick = () => {
-    onSelectTemplate(id);
+    onSelectTemplate();
     onOpenModal(MODAL_ID.UPDATE_EMAIL_TEMPLATE);
   };
 
@@ -50,14 +49,12 @@ export function UpdateEmailTemplate({
 }
 
 export function DeleteEmailTemplate({
-  id,
   onSelectTemplate
 }: {
-  id: string;
-  onSelectTemplate: (id: string) => void;
+  readonly onSelectTemplate: () => void;
 }) {
   const handleClick = () => {
-    onSelectTemplate(id);
+    onSelectTemplate();
     onOpenModal(MODAL_ID.DELETE_EMAIL_TEMPLATE);
   };
 
@@ -74,14 +71,12 @@ export function DeleteEmailTemplate({
 }
 
 export function SendEmailTemplate({
-  id,
   onSelectTemplate
 }: {
-  id: string;
-  onSelectTemplate: (id: string) => void;
+  readonly onSelectTemplate: () => void;
 }) {
   const handleClick = () => {
-    onSelectTemplate(id);
+    onSelectTemplate();
     onOpenModal(MODAL_ID.SEND_EMAIL);
   };
   return (
@@ -97,34 +92,31 @@ export function SendEmailTemplate({
 }
 
 export function More({
-  id,
   onSelectTemplate
 }: {
-  id: string;
-  onSelectTemplate: (id: string) => void;
+  readonly onSelectTemplate: () => void;
 }) {
   return (
     <SimpleDropdown
       host={
-        <div
-          tabIndex={0}
-          role="button"
+        <button
+          type="button"
           className="rounded-md border border-gray-500 hover:border-gray-700 transition-all duration-100 p-2 hover:bg-gray-100"
         >
           <span className="sr-only">More</span>
           <EllipsisVerticalIcon className="w-5 text-gray-500" />
-        </div>
+        </button>
       }
       content={
         <>
           <li>
-            <UpdateEmailTemplate id={id} onSelectTemplate={onSelectTemplate} />
+            <UpdateEmailTemplate onSelectTemplate={onSelectTemplate} />
           </li>
           <li>
-            <DeleteEmailTemplate id={id} onSelectTemplate={onSelectTemplate} />
+            <DeleteEmailTemplate onSelectTemplate={onSelectTemplate} />
           </li>
           <li>
-            <SendEmailTemplate id={id} onSelectTemplate={onSelectTemplate} />
+            <SendEmailTemplate onSelectTemplate={onSelectTemplate} />
           </li>
         </>
       }

@@ -4,22 +4,25 @@ import { useState } from 'react';
 import { deleteEmailTemplate } from '@/app/admin/lib/actions/email-templates.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { EmailTemplateResponse } from '@/models/emailTemplate';
+
+interface DeleteEmailTemplateModalProps {
+  readonly emailTemplate: EmailTemplateResponse | null;
+  readonly onRefresh: () => void;
+}
 
 export default function DeleteEmailTemplateModal({
-  emailTemplateId,
+  emailTemplate,
   onRefresh
-}: {
-  emailTemplateId: string | null;
-  onRefresh: () => void;
-}) {
+}: DeleteEmailTemplateModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmDelete = async () => {
-    if (!emailTemplateId) return;
+    if (!emailTemplate?.id) return;
 
     setIsLoading(true);
     try {
-      await deleteEmailTemplate(emailTemplateId);
+      await deleteEmailTemplate(emailTemplate.id);
       handleClose(true);
     } catch (error) {
       console.error('Failed to delete email template:', error);

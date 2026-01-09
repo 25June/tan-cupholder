@@ -11,39 +11,29 @@ import { onCloseModal } from '@/shared/utils/modal.utils';
 import SendEmailForm from './send-email-form';
 
 interface SendEmailModalProps {
-  readonly jsonEmailTemplate: string | null;
+  readonly emailTemplate: EmailTemplateResponse | null;
   readonly orderId?: string;
   readonly to?: string;
+  readonly onReset: () => void;
 }
 
 const initialState: SendCustomEmailState = { message: null, errors: {} };
 
 const SendEmailModal = ({
-  jsonEmailTemplate,
+  emailTemplate,
   orderId,
-  to
+  to,
+  onReset
 }: SendEmailModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [emailTemplate, setEmailTemplate] =
-    useState<EmailTemplateResponse | null>(null);
+
   const [state, setState] = useState<SendCustomEmailState>(initialState);
 
   useEffect(() => {
-    if (!jsonEmailTemplate) {
-      setEmailTemplate(null);
+    if (!emailTemplate) {
       setState(initialState);
-      return;
     }
-    try {
-      const templateData = JSON.parse(
-        jsonEmailTemplate
-      ) as EmailTemplateResponse;
-      setEmailTemplate(templateData);
-    } catch (error) {
-      console.error('Failed to parse email template:', error);
-      setEmailTemplate(null);
-    }
-  }, [jsonEmailTemplate]);
+  }, [emailTemplate]);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +66,7 @@ const SendEmailModal = ({
   const handleClose = () => {
     onCloseModal(MODAL_ID.SEND_EMAIL);
     setState(initialState);
-    setEmailTemplate(null);
+    onReset();
   };
 
   return (

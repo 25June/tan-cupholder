@@ -14,7 +14,7 @@ const initialState: State = { message: null, errors: {} };
 export default function CreateProductTagModal({
   onRefresh
 }: {
-  onRefresh: () => void;
+  readonly onRefresh: () => void;
 }) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);

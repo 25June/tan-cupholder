@@ -29,9 +29,6 @@ export default function Page() {
   );
   const [totalTemplates, setTotalTemplates] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedEmailTemplateId, setSelectedEmailTemplateId] = useState<
-    string | null
-  >(null);
   const [selectedEmailTemplate, setSelectedEmailTemplate] =
     useState<EmailTemplateResponse | null>(null);
 
@@ -63,7 +60,6 @@ export default function Page() {
 
   const handleRefresh = () => {
     loadEmailTemplates();
-    setSelectedEmailTemplateId(null);
     setSelectedEmailTemplate(null);
   };
 
@@ -91,14 +87,8 @@ export default function Page() {
       <EmailTemplatesTable
         templates={emailTemplates}
         loading={isLoading}
-        onSelectTemplate={(id) => {
-          setSelectedEmailTemplateId(id);
-          const template = emailTemplates.find(
-            (template) => template.id === id
-          );
-          if (template) {
-            setSelectedEmailTemplate(template);
-          }
+        onSelectTemplate={(template) => {
+          setSelectedEmailTemplate(template);
         }}
       />
       <div className="mt-5 flex w-full justify-center">
@@ -106,17 +96,17 @@ export default function Page() {
       </div>
       <CreateEmailTemplateModal onRefresh={handleRefresh} />
       <EditEmailTemplateModal
-        emailTemplateId={selectedEmailTemplateId}
+        emailTemplate={selectedEmailTemplate}
         onRefresh={handleRefresh}
+        onReset={() => setSelectedEmailTemplate(null)}
       />
       <DeleteEmailTemplateModal
-        emailTemplateId={selectedEmailTemplateId}
+        emailTemplate={selectedEmailTemplate}
         onRefresh={handleRefresh}
       />
       <SendEmailModal
-        jsonEmailTemplate={
-          selectedEmailTemplate ? JSON.stringify(selectedEmailTemplate) : null
-        }
+        emailTemplate={selectedEmailTemplate}
+        onReset={() => setSelectedEmailTemplate(null)}
       />
     </main>
   );

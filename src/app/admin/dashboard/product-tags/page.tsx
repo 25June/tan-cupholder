@@ -24,9 +24,8 @@ export default function Page() {
   const [productTags, setProductTags] = useState<ProductTag[]>([]);
   const [totalProductTags, setTotalProductTags] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedProductTagId, setSelectedProductTagId] = useState<
-    string | null
-  >(null);
+  const [selectedProductTag, setSelectedProductTag] =
+    useState<ProductTag | null>(null);
 
   const onFetchProductTags = useCallback(async () => {
     setIsLoading(true);
@@ -54,7 +53,7 @@ export default function Page() {
 
   const handleRefresh = () => {
     onFetchProductTags();
-    setSelectedProductTagId(null);
+    setSelectedProductTag(null);
   };
 
   return (
@@ -71,18 +70,19 @@ export default function Page() {
       <ProductTagsTable
         productTags={productTags}
         loading={isLoading}
-        onSelectProductTag={setSelectedProductTagId}
+        onSelectProductTag={setSelectedProductTag}
       />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalProductTags / 50)} />
       </div>
       <CreateProductTagModal onRefresh={onFetchProductTags} />
       <EditProductTagModal
-        productTagId={selectedProductTagId}
+        productTag={selectedProductTag}
         onRefresh={handleRefresh}
+        onReset={() => setSelectedProductTag(null)}
       />
       <DeleteProductTagModal
-        productTagId={selectedProductTagId}
+        productTag={selectedProductTag}
         onRefresh={handleRefresh}
       />
     </main>

@@ -10,7 +10,6 @@ import {
 import { onOpenModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
 import Spinner from '@/components/spinner/Spinner';
-import { ProductResponse } from '@/models/product';
 
 export function CreateProduct() {
   const handleClick = () => {
@@ -29,23 +28,13 @@ export function CreateProduct() {
 }
 
 export function UpdateProduct({
-  id,
-  product,
   onSelectProduct
 }: {
-  id: string;
-  product: ProductResponse;
-  onSelectProduct: (id: string) => void;
+  readonly onSelectProduct: () => void;
 }) {
   const handleClick = () => {
-    const modal = document.getElementById(
-      MODAL_ID.UPDATE_PRODUCT
-    ) as HTMLDialogElement;
-    if (modal && product) {
-      modal.setAttribute('data-product', JSON.stringify(product));
-      onSelectProduct(id);
-      onOpenModal(MODAL_ID.UPDATE_PRODUCT);
-    }
+    onSelectProduct();
+    onOpenModal(MODAL_ID.UPDATE_PRODUCT);
   };
 
   return (
@@ -60,14 +49,12 @@ export function UpdateProduct({
 }
 
 export function UpdateImage({
-  id,
   onSelectProduct
 }: {
-  id: string;
-  onSelectProduct: (id: string) => void;
+  readonly onSelectProduct: () => void;
 }) {
   const handleClick = () => {
-    onSelectProduct(id);
+    onSelectProduct();
     onOpenModal(MODAL_ID.EDIT_PRODUCT_IMAGE);
   };
 
@@ -82,15 +69,13 @@ export function UpdateImage({
   );
 }
 
-export function DeleteProduct({
-  id,
-  onSelectProduct
-}: {
-  id: string;
-  onSelectProduct: (id: string) => void;
-}) {
+interface DeleteProductProps {
+  readonly onSelectProduct: () => void;
+}
+
+export function DeleteProduct({ onSelectProduct }: DeleteProductProps) {
   const handleClick = () => {
-    onSelectProduct(id);
+    onSelectProduct();
     onOpenModal(MODAL_ID.DELETE_PRODUCT);
   };
 

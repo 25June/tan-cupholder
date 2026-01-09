@@ -18,9 +18,8 @@ import CustomerInfo from '@/app/admin/ui/orders/customer-info';
 import ShippingInfo from '@/app/admin/ui/orders/shipping-info';
 import OrderDetails from '@/app/admin/ui/orders/order-details';
 import OrderSummary from '@/app/admin/ui/orders/order-summary';
-import MailLogger, {
-  MailLoggerSkeleton
-} from '@/app/admin/ui/orders/mail-logger';
+import MailLogger from '@/app/admin/ui/orders/mail-logger';
+import { MailLoggerSkeleton } from '@/app/admin/ui/skeletons';
 import { Suspense } from 'react';
 interface OrderDetailPageProps {
   params: Promise<{ id: string }>;
