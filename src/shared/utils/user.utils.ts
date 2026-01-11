@@ -18,15 +18,6 @@ export const formatUserData = (formData: FormData) => {
       : role === USER_ROLE_LABEL[UserRole.Staff]
       ? UserRole.Staff
       : null;
-  console.log({
-    firstName,
-    lastName,
-    email,
-    role,
-    status,
-    fullName,
-    mappedRole
-  });
   // Construct new FormData with mapped values
   const newData = new FormData();
   newData.append('firstName', firstName);
