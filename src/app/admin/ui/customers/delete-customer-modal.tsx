@@ -4,22 +4,24 @@ import { useState } from 'react';
 import { deleteCustomer } from '@/app/admin/lib/actions/customers.action';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { Customer } from '@/models/customer';
 
+interface DeleteCustomerModalProps {
+  readonly customer: Customer | null;
+  readonly onRefresh: () => void;
+}
 export default function DeleteCustomerModal({
-  customerId,
+  customer,
   onRefresh
-}: {
-  customerId: string | null;
-  onRefresh: () => void;
-}) {
+}: DeleteCustomerModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmDelete = async () => {
-    if (!customerId) return;
+    if (!customer?.id) return;
 
     setIsLoading(true);
     try {
-      await deleteCustomer(customerId);
+      await deleteCustomer(customer.id);
       handleClose(true);
     } catch (error) {
       console.error('Failed to delete customer:', error);

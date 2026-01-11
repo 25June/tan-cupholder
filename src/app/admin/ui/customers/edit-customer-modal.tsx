@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   updateCustomer,
-  State,
-  fetchCustomerById
+  State
 } from '@/app/admin/lib/actions/customers.action';
 import { Customer } from '@/models/customer';
 import { onCloseModal } from '@/shared/utils/modal.utils';
@@ -13,35 +12,25 @@ import Image from 'next/image';
 
 const initialState: State = { message: null, errors: {} };
 
+interface EditCustomerModalProps {
+  readonly customer: Customer | null;
+  readonly onRefresh: () => void;
+  readonly onReset: () => void;
+}
+
 export default function EditCustomerModal({
-  customerId,
-  onRefresh
-}: {
-  customerId: string | null;
-  onRefresh: () => void;
-}) {
+  customer,
+  onRefresh,
+  onReset
+}: EditCustomerModalProps) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [customer, setCustomer] = useState<Customer | null>(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      if (!customerId) {
-        setCustomer(null);
-        setState(initialState);
-        return;
-      }
-
-      try {
-        const customerData = await fetchCustomerById(customerId);
-        setCustomer(customerData);
-      } catch (error) {
-        console.error('Failed to load customer data:', error);
-      }
-    };
-
-    loadData();
-  }, [customerId]);
+    if (!customer) {
+      setState(initialState);
+    }
+  }, [customer]);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,7 +38,9 @@ export default function EditCustomerModal({
 
     const formData = new FormData(e.currentTarget);
     formData.set('id', customer.id);
+    formData.set('image_url', '');
     setIsLoading(true);
+
     return updateCustomer(initialState, formData)
       .then((res: any) => {
         if (res.errors) {
@@ -76,7 +67,7 @@ export default function EditCustomerModal({
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_CUSTOMER);
     setState(initialState);
-    setCustomer(null);
+    onReset();
     if (refresh) {
       onRefresh();
     }
@@ -178,16 +169,17 @@ export default function EditCustomerModal({
                     </div>
                   </fieldset>
 
-                  <fieldset className="fieldset">
+                  {/* <fieldset className="fieldset">
                     <legend className="fieldset-legend">Image URL</legend>
                     <input
-                      type="url"
+                      type="text"
                       name="image_url"
                       className="input w-full"
                       placeholder="https://example.com/image.jpg"
                       defaultValue={customer.image_url || ''}
+                      disabled
                     />
-                  </fieldset>
+                  </fieldset> */}
 
                   <fieldset className="fieldset">
                     <legend className="fieldset-legend">Email Verified</legend>

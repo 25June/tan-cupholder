@@ -27,7 +27,7 @@ export default function CreateCustomerModal({
     newFormData.append('email', formData.get('email') as string);
     newFormData.append('phone_number', formData.get('phone_number') as string);
     newFormData.append('address', formData.get('address') as string);
-    newFormData.append('image_url', formData.get('image_url') as string);
+    newFormData.append('image_url', '');
     newFormData.append(
       'is_email_verified',
       formData.get('is_email_verified') as string
@@ -145,7 +145,7 @@ export default function CreateCustomerModal({
                   </div>
                 </fieldset>
 
-                <fieldset className="fieldset">
+                {/* <fieldset className="fieldset">
                   <legend className="fieldset-legend">Image URL</legend>
                   <input
                     type="url"
@@ -153,7 +153,7 @@ export default function CreateCustomerModal({
                     className="input w-full"
                     placeholder="https://example.com/image.jpg"
                   />
-                </fieldset>
+                </fieldset> */}
 
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Email Verified</legend>

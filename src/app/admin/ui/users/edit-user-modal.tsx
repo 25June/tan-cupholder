@@ -1,11 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  updateUser,
-  State,
-  fetchUserById
-} from '@/app/admin/lib/actions/user.actions';
+import { updateUser, State } from '@/app/admin/lib/actions/user.actions';
 import { UserInfo } from '@/models/user';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
@@ -14,44 +10,35 @@ import { formatUserData } from '@/shared/utils/user.utils';
 
 const initialState: State = { message: null, errors: {} };
 
+interface EditUserModalProps {
+  readonly user: UserInfo | null;
+  readonly onRefresh: () => void;
+  readonly onReset: () => void;
+}
+
 export default function EditUserModal({
-  userId,
-  onRefresh
-}: {
-  userId: string | null;
-  onRefresh: () => void;
-}) {
+  user,
+  onRefresh,
+  onReset
+}: EditUserModalProps) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<UserInfo | null>(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      if (!userId) {
-        setUser(null);
-        setState(initialState);
-        return;
-      }
-
-      try {
-        const userData = await fetchUserById(userId);
-        setUser(userData);
-      } catch (error) {
-        console.error('Failed to load user data:', error);
-      }
-    };
-
-    loadData();
-  }, [userId]);
+    if (!user) {
+      setState(initialState);
+    }
+  }, [user]);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) return;
 
     const formData = new FormData(e.currentTarget);
-    formData.set('id', user.id);
     setIsLoading(true);
     const newData = formatUserData(formData);
+    newData.set('id', user.id);
+
     return updateUser(initialState, newData)
       .then((res: any) => {
         if (res.errors) {
@@ -78,7 +65,7 @@ export default function EditUserModal({
   const handleClose = (refresh?: boolean) => {
     onCloseModal(MODAL_ID.UPDATE_USER);
     setState(initialState);
-    setUser(null);
+    onReset();
     if (refresh) {
       onRefresh();
     }

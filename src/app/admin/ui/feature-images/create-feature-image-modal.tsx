@@ -15,7 +15,7 @@ const initialState: State = { message: null, errors: {} };
 export default function CreateFeatureImageModal({
   onRefresh
 }: {
-  onRefresh: () => void;
+  readonly onRefresh: () => void;
 }) {
   const [state, setState] = useState<State>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);

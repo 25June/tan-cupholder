@@ -1,31 +1,27 @@
 'use client';
 
-import Image from 'next/image';
 import { Customer } from '@/models/customer';
 import { DeleteCustomer, UpdateCustomer } from './buttons';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
+
+interface CustomersTableProps {
+  readonly customers: Customer[];
+  readonly loading: boolean;
+  readonly onSelectCustomer: (customer: Customer) => void;
+}
 
 export default function CustomersTable({
   customers,
   loading = false,
   onSelectCustomer
-}: {
-  customers: Customer[];
-  loading: boolean;
-  onSelectCustomer: (id: string) => void;
-}) {
+}: CustomersTableProps) {
   const columns: Column<Customer>[] = [
     {
       header: 'Name',
       render: (customer) => (
         <div className="flex items-center gap-3">
-          <Image
-            src={customer.image_url || '/cup.png'}
-            className="rounded-full w-16 h-16 object-cover shrink-0"
-            alt={`${customer.name}'s profile picture`}
-            width={64}
-            height={64}
-          />
+          <UserCircleIcon className="w-8 h-8 text-logo-orange-border" />
           <p className="font-medium">{customer.name}</p>
         </div>
       )
@@ -64,14 +60,8 @@ export default function CustomersTable({
       keyExtractor={(customer) => customer.id}
       actions={(customer) => (
         <div className="flex items-center gap-2">
-          <UpdateCustomer
-            id={customer.id}
-            onSelectCustomer={onSelectCustomer}
-          />
-          <DeleteCustomer
-            id={customer.id}
-            onSelectCustomer={onSelectCustomer}
-          />
+          <UpdateCustomer onSelectCustomer={() => onSelectCustomer(customer)} />
+          <DeleteCustomer onSelectCustomer={() => onSelectCustomer(customer)} />
         </div>
       )}
       loading={loading}

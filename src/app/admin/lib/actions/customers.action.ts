@@ -46,7 +46,7 @@ export async function createCustomer(prevState: State, formData: FormData) {
     email: formData.get('email'),
     phone_number: formData.get('phone_number'),
     address: formData.get('address'),
-    image_url: formData.get('image_url'),
+    image_url: formData.get('image_url') || '',
     is_email_verified: formData.get('is_email_verified') === 'true'
   });
 
@@ -83,7 +83,7 @@ export async function updateCustomer(prevState: State, formData: FormData) {
     email: formData.get('email'),
     phone_number: formData.get('phone_number'),
     address: formData.get('address'),
-    image_url: formData.get('image_url'),
+    image_url: formData.get('image_url') || '',
     is_email_verified: formData.get('is_email_verified') === 'true'
   });
 
@@ -104,18 +104,18 @@ export async function updateCustomer(prevState: State, formData: FormData) {
     is_email_verified
   } = validatedFields.data;
   const date = new Date().toISOString();
-
   try {
     await sql`
       UPDATE customers
       SET name = ${name}, email = ${email}, phone_number = ${
-      phone_number || null
-    }, address = ${address || null}, image_url = ${
-      image_url || null
+      phone_number || ''
+    }, address = ${address || ''}, image_url = ${
+      image_url || ''
     }, is_email_verified = ${is_email_verified || false}, updated_at = ${date}
       WHERE id = ${id}
     `;
   } catch (error) {
+    console.log('Database Error: Failed to Update Customer.', error);
     return { message: 'Database Error: Failed to Update Customer.' };
   }
 

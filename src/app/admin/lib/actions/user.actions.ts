@@ -15,10 +15,10 @@ const UserSchema = z.object({
   lastName: z.string().min(1, { message: 'Last name is required' }),
   email: z.string().email({ message: 'Invalid email address' }),
   fullName: z.string(),
-  avatarURL: z.string(),
+  avatarURL: z.string().optional(),
   role: z.string().min(1, { message: 'Role is required' }),
   status: z.string().min(1, { message: 'Status is required' }),
-  emailVerified: z.boolean(),
+  emailVerified: z.boolean().optional(),
   emailVerifiedAt: z.string().optional().nullable(),
   createdAt: z.string(),
   updatedAt: z.string()
@@ -37,7 +37,11 @@ const CreateUser = UserSchema.omit({
   emailVerified: true,
   emailVerifiedAt: true
 });
-const UpdateUser = UserSchema.omit({ createdAt: true, updatedAt: true });
+const UpdateUser = UserSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  email: true
+});
 const DeleteUser = UserSchema.omit({
   id: true,
   createdAt: true,
@@ -139,6 +143,7 @@ export async function updateUser(prevState: State, formData: FormData) {
   });
 
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Update User.'
@@ -156,6 +161,7 @@ export async function updateUser(prevState: State, formData: FormData) {
       WHERE id = ${id}
     `;
   } catch (error) {
+    console.error('Database Error:', error);
     return { message: 'Database Error: Failed to Update User.' };
   }
 

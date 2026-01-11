@@ -4,22 +4,25 @@ import { useState } from 'react';
 import { deleteUser } from '@/app/admin/lib/actions/user.actions';
 import { onCloseModal } from '@/shared/utils/modal.utils';
 import { MODAL_ID } from '@/constants/modal.const';
+import { UserInfo } from '@/models/user';
+
+interface DeleteUserModalProps {
+  readonly user: UserInfo | null;
+  readonly onRefresh: () => void;
+}
 
 export default function DeleteUserModal({
-  userId,
+  user,
   onRefresh
-}: {
-  userId: string | null;
-  onRefresh: () => void;
-}) {
+}: DeleteUserModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmDelete = async () => {
-    if (!userId) return;
+    if (!user?.id) return;
 
     setIsLoading(true);
     try {
-      await deleteUser(userId);
+      await deleteUser(user?.id);
       handleClose(true);
     } catch (error) {
       console.error('Failed to delete user:', error);

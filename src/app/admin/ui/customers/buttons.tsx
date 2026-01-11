@@ -21,14 +21,12 @@ export function CreateCustomer() {
 }
 
 export function UpdateCustomer({
-  id,
   onSelectCustomer
 }: {
-  id: string;
-  onSelectCustomer: (id: string) => void;
+  readonly onSelectCustomer: () => void;
 }) {
   const handleClick = () => {
-    onSelectCustomer(id);
+    onSelectCustomer();
     onOpenModal(MODAL_ID.UPDATE_CUSTOMER);
   };
 
@@ -43,14 +41,12 @@ export function UpdateCustomer({
 }
 
 export function DeleteCustomer({
-  id,
   onSelectCustomer
 }: {
-  id: string;
-  onSelectCustomer: (id: string) => void;
+  readonly onSelectCustomer: () => void;
 }) {
   const handleClick = () => {
-    onSelectCustomer(id);
+    onSelectCustomer();
     onOpenModal(MODAL_ID.DELETE_CUSTOMER);
   };
 

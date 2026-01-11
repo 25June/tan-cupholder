@@ -24,7 +24,7 @@ export default function Page() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [totalCustomers, setTotalCustomers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
 
@@ -54,9 +54,9 @@ export default function Page() {
 
   const handleRefresh = () => {
     onFetchCustomers();
-    setSelectedCustomerId(null);
+    setSelectedCustomer(null);
   };
-
+  console.log(selectedCustomer);
   return (
     <main>
       <div className="flex w-full items-center justify-between mb-8">
@@ -71,18 +71,19 @@ export default function Page() {
       <CustomersTable
         customers={customers}
         loading={isLoading}
-        onSelectCustomer={setSelectedCustomerId}
+        onSelectCustomer={setSelectedCustomer}
       />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalCustomers / 10)} />
       </div>
       <CreateCustomerModal onRefresh={onFetchCustomers} />
       <EditCustomerModal
-        customerId={selectedCustomerId}
+        customer={selectedCustomer}
         onRefresh={handleRefresh}
+        onReset={() => setSelectedCustomer(null)}
       />
       <DeleteCustomerModal
-        customerId={selectedCustomerId}
+        customer={selectedCustomer}
         onRefresh={handleRefresh}
       />
     </main>

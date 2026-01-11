@@ -24,7 +24,7 @@ export default function Page() {
   const [users, setUsers] = useState<UserInfo[]>([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
 
   const onFetchUsers = useCallback(async () => {
     setIsLoading(true);
@@ -49,7 +49,7 @@ export default function Page() {
 
   const handleRefresh = () => {
     onFetchUsers();
-    setSelectedUserId(null);
+    setSelectedUser(null);
   };
 
   return (
@@ -64,14 +64,18 @@ export default function Page() {
       <UsersTable
         users={users}
         loading={isLoading}
-        onSelectUser={setSelectedUserId}
+        onSelectUser={setSelectedUser}
       />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={Math.ceil(totalUsers / 10)} />
       </div>
       <CreateUserModal onRefresh={onFetchUsers} />
-      <EditUserModal userId={selectedUserId} onRefresh={handleRefresh} />
-      <DeleteUserModal userId={selectedUserId} onRefresh={handleRefresh} />
+      <EditUserModal
+        user={selectedUser}
+        onRefresh={handleRefresh}
+        onReset={() => setSelectedUser(null)}
+      />
+      <DeleteUserModal user={selectedUser} onRefresh={handleRefresh} />
     </main>
   );
 }

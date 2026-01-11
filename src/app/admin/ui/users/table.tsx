@@ -6,15 +6,17 @@ import { DeleteUser, UpdateUser } from './buttons';
 import { UserRole } from '@/constants/user';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 
+interface UsersTableProps {
+  readonly users: UserInfo[];
+  readonly loading: boolean;
+  readonly onSelectUser: (user: UserInfo) => void;
+}
+
 export default function UsersTable({
   users,
   loading = false,
   onSelectUser
-}: {
-  users: UserInfo[];
-  loading: boolean;
-  onSelectUser: (id: string) => void;
-}) {
+}: UsersTableProps) {
   const columns: Column<UserInfo>[] = [
     {
       header: 'User',
@@ -100,8 +102,8 @@ export default function UsersTable({
       keyExtractor={(user) => user.id}
       actions={(user) => (
         <div className="flex items-center gap-2">
-          <UpdateUser id={user.id} onSelectUser={onSelectUser} />
-          <DeleteUser id={user.id} onSelectUser={onSelectUser} />
+          <UpdateUser onSelectUser={() => onSelectUser(user)} />
+          <DeleteUser onSelectUser={() => onSelectUser(user)} />
         </div>
       )}
       emptyMessage="No users found"
