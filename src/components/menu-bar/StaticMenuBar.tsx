@@ -8,19 +8,28 @@ import { useEffect, useState } from 'react';
 import CartIcon from '@/components/cart-icon/CartIcon';
 import { getCartCountFromStorage } from '@/shared/utils/storage';
 
-interface Props {
-  triggerCartCount?: number;
-}
-
-const StaticMenuBar = ({ triggerCartCount }: Props) => {
+const StaticMenuBar = () => {
   const t = useTranslations('Menu');
   const [cartCount, setCartCount] = useState<number>(0);
+
   useEffect(() => {
-    if (triggerCartCount) {
-      const count = getCartCountFromStorage();
-      setCartCount(count);
-    }
-  }, [triggerCartCount]);
+    const handleCartUpdate = (event: CustomEvent<{ type: string }>) => {
+      console.log('handleCartUpdate', event);
+      if (event.detail.type === 'cartCount') {
+        const count = getCartCountFromStorage();
+        setCartCount(count);
+      }
+    };
+    // Listen for 'cartCount' custom event dispatched from product pages
+    document.addEventListener('cartCount', handleCartUpdate as EventListener);
+    return () => {
+      document.removeEventListener(
+        'cartCount',
+        handleCartUpdate as EventListener
+      );
+    };
+  }, []);
+
   return (
     <header className="max-w-screen w-full mx-auto relative border-b-1 border-gray-200 z-10">
       <section className="max-w-8xl bg-white mx-auto flex justify-between md:justify-evenly p-2 md:p-4">

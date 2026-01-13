@@ -8,8 +8,8 @@ export default function AboutUsLayout({
 }: Readonly<PropsWithChildren>) {
   return (
     <div className="relative min-h-screen">
-      <StaticMenuBar triggerCartCount={1} />
-      <main className="relative z-1 max-w-7xl p-4 mx-auto">{children}</main>
+      <StaticMenuBar />
+      <main className="relative z-1 max-w-4xl p-4 mx-auto">{children}</main>
       <Footer />
     </div>
   );

@@ -93,83 +93,79 @@ export default function CartPage() {
     return Object.keys(products);
   }, [products]);
   return (
-    <div className="flex flex-col min-h-screen">
-      <StaticMenuBar triggerCartCount={1} />
-      <main className="max-w-7xl w-full p-4 mx-auto grow flex flex-col md:flex-row gap-4">
-        <section className="flex flex-col gap-4 w-full flex-grow">
-          <h1 className="text-3xl font-bold mb-4 text-center mt-12 uppercase">
-            Cart
-          </h1>
-          {loading && <Spinner />}
-          {!loading && productIds.length === 0 && (
-            <div className="text-center text-xl max-w-sm mx-auto">
-              <p className="mb-4">No products in cart</p>
-              <Link
-                href="/products"
-                className="btn btn-primary btn-lg w-full text-white"
-                prefetch={true}
-              >
-                Let's shopping
-              </Link>
-            </div>
-          )}
-          {productIds.map((productId) => (
-            <ProductCard
-              key={productId}
-              product={products[productId]}
-              onUpdateQuantity={onUpdateQuantity}
-            />
-          ))}
-        </section>
-        <section className="max-w-full md:max-w-[300px] w-full">
-          <h2 className="text-3xl font-bold mb-8 text-center mt-12 uppercase">
-            Total
-          </h2>
-          <div className="border border-gray-200 rounded-lg p-4 w-full max-w-full md:max-w-[300px]">
-            {Object.values(products).map((product) => (
-              <div
-                key={product.id}
-                className="grid grid-cols-[50%_10%_auto] gap-4 py-2"
-              >
-                <p className="text-sm">{product.name}</p>
-                <p className="text-sm">x {product.quantity}</p>
-                <p className="text-sm">
-                  {formatPrice(product.price * product.quantity)}
-                </p>
-              </div>
-            ))}
-            <div className="mt-4 flex justify-between">
-              <span className="text-sm font-bold ">Total amount:</span>
-              <span className="text-lg font-bold text-right">
-                {totalQuantity}
-              </span>
-            </div>
-            <div className="mb-4 flex justify-between">
-              <span className="text-sm font-bold ">Total price:</span>
-              <span className="text-lg font-bold text-right">
-                {formatPrice(totalAmount)}
-              </span>
-            </div>
-
+    <main className="max-w-4xl w-full p-4 mx-auto grow flex flex-col md:flex-row gap-4">
+      <section className="flex flex-col gap-4 w-full grow">
+        <h1 className="text-3xl font-bold mb-4 text-center mt-12 uppercase">
+          Cart
+        </h1>
+        {loading && <Spinner />}
+        {!loading && productIds.length === 0 && (
+          <div className="text-center text-xl max-w-sm mx-auto">
+            <p className="mb-4">No products in cart</p>
             <Link
-              href="/payment"
-              className={`btn btn-primary btn-lg w-full text-white ${
-                totalQuantity === 0 ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-              scroll={false}
-              onClick={(e) => {
-                if (totalQuantity === 0) {
-                  e.preventDefault();
-                }
-              }}
+              href="/products"
+              className="btn btn-primary btn-lg w-full text-white"
               prefetch={true}
             >
-              Checkout
+              Let's shopping
             </Link>
           </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+        )}
+        {productIds.map((productId) => (
+          <ProductCard
+            key={productId}
+            product={products[productId]}
+            onUpdateQuantity={onUpdateQuantity}
+          />
+        ))}
+      </section>
+      <section className="max-w-full md:max-w-[300px] w-full">
+        <h2 className="text-3xl font-bold mb-8 text-center mt-12 uppercase">
+          Total
+        </h2>
+        <div className="border border-gray-200 rounded-lg p-4 w-full max-w-full md:max-w-[300px]">
+          {Object.values(products).map((product) => (
+            <div
+              key={product.id}
+              className="grid grid-cols-[50%_10%_auto] gap-4 py-2"
+            >
+              <p className="text-sm">{product.name}</p>
+              <p className="text-sm">x {product.quantity}</p>
+              <p className="text-sm">
+                {formatPrice(product.price * product.quantity)}
+              </p>
+            </div>
+          ))}
+          <div className="mt-4 flex justify-between">
+            <span className="text-sm font-bold ">Total amount:</span>
+            <span className="text-lg font-bold text-right">
+              {totalQuantity}
+            </span>
+          </div>
+          <div className="mb-4 flex justify-between">
+            <span className="text-sm font-bold ">Total price:</span>
+            <span className="text-lg font-bold text-right">
+              {formatPrice(totalAmount)}
+            </span>
+          </div>
+
+          <Link
+            href="/payment"
+            className={`btn btn-primary btn-lg w-full text-white ${
+              totalQuantity === 0 ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            scroll={false}
+            onClick={(e) => {
+              if (totalQuantity === 0) {
+                e.preventDefault();
+              }
+            }}
+            prefetch={true}
+          >
+            Checkout
+          </Link>
+        </div>
+      </section>
+    </main>
   );
 }

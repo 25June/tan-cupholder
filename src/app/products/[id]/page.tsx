@@ -22,19 +22,17 @@ export default async function ProductPage({ params }: Props) {
 
   const { product, images, productType, tags } = data;
   return (
-    <div className="min-h-screen">
-      <ProductPageClient
-        product={product}
-        images={images}
-        productType={productType}
-        productId={id}
-        tags={tags}
-      >
-        {/* Related products stream in via Suspense */}
-        <Suspense fallback={<RelatedProductsSkeleton />}>
-          <RelatedProductsServer />
-        </Suspense>
-      </ProductPageClient>
-    </div>
+    <ProductPageClient
+      product={product}
+      images={images}
+      productType={productType}
+      productId={id}
+      tags={tags}
+    >
+      {/* Related products stream in via Suspense */}
+      <Suspense fallback={<RelatedProductsSkeleton />}>
+        <RelatedProductsServer />
+      </Suspense>
+    </ProductPageClient>
   );
 }

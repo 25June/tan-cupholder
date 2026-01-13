@@ -123,7 +123,7 @@ export default function ProductDetailClient({
   return (
     <>
       {/* Product detail section */}
-      <section className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row items-center">
+      <section className="w-full max-w-4xl mx-auto flex gap-12 flex-col md:flex-row items-center">
         <ImageGallery product={product} images={images} />
 
         <div className="flex-1 flex flex-col gap-4 justify-between">

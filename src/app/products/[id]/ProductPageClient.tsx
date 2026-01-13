@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import Breadcrumbs from '@/app/admin/ui/invoices/breadcrumbs';
 import ProductDetailClient from './ProductDetailClient';
 import { Product } from '@/models/product';
@@ -27,16 +26,16 @@ export default function ProductPageClient({
   tags,
   children
 }: Props) {
-  const [triggerCartCount, setTriggerCartCount] = useState<number>(Date.now());
-
   const handleCartUpdate = () => {
-    setTriggerCartCount(Date.now());
+    document.dispatchEvent(
+      new CustomEvent('cartCount', { detail: { type: 'cartCount' } })
+    );
   };
 
   return (
-    <main className="relative h-full flex flex-col justify-between mt-4 md:mt-24 p-4">
+    <main className="relative h-full flex flex-col justify-between mt-4 md:mt-16 p-4">
       {/* Breadcrumb navigation */}
-      <nav className="w-full max-w-7xl mx-auto" aria-label="Breadcrumb">
+      <nav className="w-full max-w-4xl mx-auto" aria-label="Breadcrumb">
         <Breadcrumbs
           breadcrumbs={[
             { label: 'Home', href: '/' },

@@ -1,6 +1,6 @@
 export default function ProductDetailSkeleton() {
   return (
-    <div className="w-full max-w-7xl mx-auto flex gap-12 flex-col md:flex-row">
+    <div className="w-full max-w-4xl mx-auto flex gap-12 flex-col md:flex-row">
       <div className="flex flex-1 gap-4 flex-col-reverse md:flex-row">
         <div className="flex-1 hidden md:flex flex-row md:flex-col gap-2">
           {Array.from({ length: 3 }).map((_, index) => (

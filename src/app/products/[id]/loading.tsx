@@ -10,7 +10,7 @@ export default function Loading() {
 
       <main className="relative h-full flex flex-col justify-between mt-4 md:mt-24 p-4">
         {/* Breadcrumb skeleton */}
-        <nav className="w-full max-w-7xl mx-auto mb-8">
+        <nav className="w-full max-w-4xl mx-auto mb-8">
           <div className="flex items-center gap-2">
             <div className="h-4 w-12 bg-gray-200 rounded animate-pulse" />
             <span className="text-gray-300">/</span>
