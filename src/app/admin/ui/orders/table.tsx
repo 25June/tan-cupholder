@@ -7,16 +7,18 @@ import {
   getOrderStatusColor,
   getOrderStatusText
 } from '@/shared/utils/order.utils';
-import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
+import { formatPrice } from '@/shared/utils/formatPrice';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
+
+interface OrdersTableProps {
+  readonly orders: OrderWithCustomer[];
+  readonly loading: boolean;
+}
 
 export default function OrdersTable({
   orders,
   loading = false
-}: {
-  orders: OrderWithCustomer[];
-  loading: boolean;
-}) {
+}: OrdersTableProps) {
   const columns: Column<OrderWithCustomer>[] = [
     {
       header: 'Order ID',
@@ -71,9 +73,7 @@ export default function OrdersTable({
     {
       header: 'Total Price',
       render: (order) => (
-        <span className="font-medium">
-          {formatPriceWithoutSymbol(order.total_price)}
-        </span>
+        <span className="font-medium">{formatPrice(order.total_price)}</span>
       )
     },
     {

@@ -53,7 +53,7 @@ const ProductCard = memo(
                 {product.name}
               </p>
               <p className="text-gray-500 text-sm mb-2">
-                {formatPrice(product.price, 'VND')}
+                {formatPrice(product.price)}
               </p>
             </div>
 
@@ -134,7 +134,7 @@ export default function CartPage() {
                 <p className="text-sm">{product.name}</p>
                 <p className="text-sm">x {product.quantity}</p>
                 <p className="text-sm">
-                  {formatPrice(product.price * product.quantity, 'VND')}
+                  {formatPrice(product.price * product.quantity)}
                 </p>
               </div>
             ))}
@@ -147,7 +147,7 @@ export default function CartPage() {
             <div className="mb-4 flex justify-between">
               <span className="text-sm font-bold ">Total price:</span>
               <span className="text-lg font-bold text-right">
-                {formatPrice(totalAmount, 'VND')}
+                {formatPrice(totalAmount)}
               </span>
             </div>
 

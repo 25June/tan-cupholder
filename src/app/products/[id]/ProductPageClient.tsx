@@ -34,37 +34,33 @@ export default function ProductPageClient({
   };
 
   return (
-    <>
-      <StaticMenuBar triggerCartCount={triggerCartCount} />
-
-      <main className="relative h-full flex flex-col justify-between mt-4 md:mt-24 p-4">
-        {/* Breadcrumb navigation */}
-        <nav className="w-full max-w-7xl mx-auto" aria-label="Breadcrumb">
-          <Breadcrumbs
-            breadcrumbs={[
-              { label: 'Home', href: '/' },
-              { label: 'Products', href: '/products' },
-              {
-                label: product.name,
-                href: `/products/${productId}`,
-                active: true
-              }
-            ]}
-          />
-        </nav>
-
-        {/* Product details */}
-        <ProductDetailClient
-          product={product}
-          images={images}
-          productType={productType}
-          onCartUpdate={handleCartUpdate}
-          tags={tags}
+    <main className="relative h-full flex flex-col justify-between mt-4 md:mt-24 p-4">
+      {/* Breadcrumb navigation */}
+      <nav className="w-full max-w-7xl mx-auto" aria-label="Breadcrumb">
+        <Breadcrumbs
+          breadcrumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Products', href: '/products' },
+            {
+              label: product.name,
+              href: `/products/${productId}`,
+              active: true
+            }
+          ]}
         />
+      </nav>
 
-        {/* Related products - Streamed from server via children */}
-        {children}
-      </main>
-    </>
+      {/* Product details */}
+      <ProductDetailClient
+        product={product}
+        images={images}
+        productType={productType}
+        onCartUpdate={handleCartUpdate}
+        tags={tags}
+      />
+
+      {/* Related products - Streamed from server via children */}
+      {children}
+    </main>
   );
 }

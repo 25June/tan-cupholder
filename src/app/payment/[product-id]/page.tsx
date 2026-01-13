@@ -173,7 +173,7 @@ export default function PaymentPage() {
                           {t('quantity')}: {quantity}
                         </span>
                         <span className="text-sm text-gray-500">
-                          {t('price')}: {formatPrice(discountedPrice, 'VND')}
+                          {t('price')}: {formatPrice(discountedPrice)}
                         </span>
                       </div>
                     </div>
@@ -189,7 +189,7 @@ export default function PaymentPage() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">{t('unitPrice')}</span>
                       <span className="font-medium">
-                        {formatPrice(discountedPrice, 'VND')}
+                        {formatPrice(discountedPrice)}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -202,7 +202,7 @@ export default function PaymentPage() {
                           {t('total')}
                         </span>
                         <span className="text-lg font-bold text-gray-900">
-                          {formatPrice(totalPrice, 'VND')}
+                          {formatPrice(totalPrice)}
                         </span>
                       </div>
                     </div>

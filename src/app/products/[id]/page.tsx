@@ -35,10 +35,6 @@ export default async function ProductPage({ params }: Props) {
           <RelatedProductsServer />
         </Suspense>
       </ProductPageClient>
-
-      <div className="mt-8 md:mt-24">
-        <Footer />
-      </div>
     </div>
   );
 }

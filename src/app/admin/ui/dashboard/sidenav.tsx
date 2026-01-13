@@ -21,7 +21,7 @@ function UserEmail() {
 
   return (
     <div className="bg-gray-50 p-3 flex items-center justify-between">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap w-full">
         Hi <span className="font-bold">{user?.email}</span>
       </p>
       <Link

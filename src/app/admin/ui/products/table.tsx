@@ -11,7 +11,7 @@ import {
   MagnifyingGlassIcon,
   BoltIcon
 } from '@heroicons/react/24/outline';
-import { formatPriceWithoutSymbol } from '@/shared/utils/formatPrice';
+import { formatPrice } from '@/shared/utils/formatPrice';
 import { ProductTag } from '@/models/productTag';
 import SimpleTable, { Column } from '@/components/simple-table/SimpleTable';
 import SimpleDropdown from '@/components/simple-dropdown/simple-downdown';
@@ -105,7 +105,7 @@ export default function ProductsTable({
     },
     {
       header: 'Price',
-      render: (product) => formatPriceWithoutSymbol(product.price)
+      render: (product) => formatPrice(product.price)
     },
     {
       header: 'Type',

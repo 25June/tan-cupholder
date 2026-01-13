@@ -66,11 +66,11 @@ export default function SpecialCard({ item }: SpecialCardProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-slate-400 line-through decoration-slate-400">
-            {formatPrice(item.price, '', true)}
+            {formatPrice(item.price)}
           </span>
           <ArrowLongRightIcon className="size-4" />
           <span className="text-logo-orange font-extrabold">
-            {formatPrice(calculatePercent(item.price, item.sale), '')}
+            {formatPrice(calculatePercent(item.price, item.sale))}
           </span>
         </div>
       </div>
