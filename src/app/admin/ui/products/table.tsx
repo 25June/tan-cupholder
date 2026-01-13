@@ -21,11 +21,7 @@ const ActionDropdown = memo(
     return (
       <div className="flex justify-end items-center">
         <SimpleDropdown
-          host={
-            <button type="button" className="btn btn-sm btn-ghost btn-circle">
-              <EllipsisVerticalIcon className="w-5" />
-            </button>
-          }
+          host={<EllipsisVerticalIcon className="w-5" />}
           content={
             <>
               <li>

@@ -82,12 +82,13 @@ export default function EditEmailTemplateModal({
     <dialog id={MODAL_ID.UPDATE_EMAIL_TEMPLATE} className="modal">
       <div className="modal-box max-w-6xl">
         <h3 className="font-bold text-lg mb-4">Edit Email Template</h3>
-        {isLoading ? (
+        {isLoading && !emailTemplate ? (
           <div className="flex justify-center items-center p-8">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
         ) : (
           <Form
+            key={emailTemplate?.id}
             defaultValues={emailTemplate}
             onSubmit={handleFormSubmit}
             onCancel={handleClose}

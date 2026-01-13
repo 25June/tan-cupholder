@@ -18,6 +18,7 @@ export function CreateEmailTemplate() {
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       className="flex h-10 items-center rounded-lg bg-logo-orange-border px-4 text-sm font-medium text-white transition-colors hover:bg-logo-orange-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-logo-orange-border"
     >
@@ -39,6 +40,7 @@ export function UpdateEmailTemplate({
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       className="rounded-md p-2  w-full flex items-center gap-2"
     >
@@ -99,13 +101,10 @@ export function More({
   return (
     <SimpleDropdown
       host={
-        <button
-          type="button"
-          className="rounded-md border border-gray-500 hover:border-gray-700 transition-all duration-100 p-2 hover:bg-gray-100"
-        >
+        <>
           <span className="sr-only">More</span>
           <EllipsisVerticalIcon className="w-5 text-gray-500" />
-        </button>
+        </>
       }
       content={
         <>

@@ -16,6 +16,7 @@ const SimpleDropdown = ({ host, content }: Props) => {
       <button
         type="button"
         popoverTarget={popoverId}
+        className="rounded-md border border-gray-500 hover:border-gray-700 transition-all duration-100 p-2 hover:bg-gray-100"
         style={{ anchorName } as React.CSSProperties}
       >
         {host}
