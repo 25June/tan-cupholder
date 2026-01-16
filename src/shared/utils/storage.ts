@@ -1,10 +1,10 @@
 'use client';
 
-import {
-  getCookie,
-  removeCookie,
-  setCookie
-} from '@/shared/utils/cookies.utils';
+// import {
+//   getCookie,
+//   removeCookie,
+//   setCookie
+// } from '@/shared/utils/cookies.utils';
 import { LocalStorageKey } from '@/constants/storageKey.const';
 
 export const getStorage = (key: string) => {
@@ -12,8 +12,8 @@ export const getStorage = (key: string) => {
     const value = window.localStorage.getItem(key);
     return value ? JSON.parse(value) : null;
   } catch (error) {
-    const value = getCookie(key);
-    return value ? JSON.parse(value) : null;
+    console.error('Error getting storage', error);
+    return null;
   }
 };
 
@@ -21,7 +21,8 @@ export const setStorage = (key: string, value: any) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
-    setCookie(key, JSON.stringify(value));
+    console.error('Error setting storage', error);
+    return null;
   }
 };
 
@@ -29,7 +30,8 @@ export const removeStorage = (key: string) => {
   try {
     window.localStorage.removeItem(key);
   } catch (error) {
-    removeCookie(key);
+    console.error('Error removing storage', error);
+    return null;
   }
 };
 

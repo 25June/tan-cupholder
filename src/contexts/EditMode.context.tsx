@@ -19,6 +19,7 @@ import {
 } from '@/shared/utils/storage';
 import { setCookie, getCookie } from '@/shared/utils/cookies.utils';
 import { CookieKey } from '@/constants/storageKey.const';
+import Toast from '@/components/toast/Toast';
 
 export interface ModesContextProps {
   isEditorMode?: boolean;
@@ -100,6 +101,7 @@ export const ModesProvider = ({ children }: PropsWithChildren) => {
   return (
     <ModesContext.Provider value={contextValues}>
       {children}
+      <Toast />
     </ModesContext.Provider>
   );
 };
