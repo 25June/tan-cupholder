@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { publicFetchProductById } from '@/app/lib/public-products.actions';
-import Footer from '@/components/footer/Footer';
 import ProductPageClient from './ProductPageClient';
 import RelatedProductsServer from './RelatedProductsServer';
 import RelatedProductsSkeleton from './RelatedProductsSkeleton';

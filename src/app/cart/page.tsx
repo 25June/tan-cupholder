@@ -5,8 +5,6 @@ import {
   useGetProductsFromCart,
   ProductWithQuantity
 } from '@/hooks/useGetProductsFromCart';
-import Footer from '@/components/footer/Footer';
-import StaticMenuBar from '@/components/menu-bar/StaticMenuBar';
 import { getImageUrl } from '@/shared/utils/getImageUrl';
 import { formatImagePath } from '@/shared/utils/formatImagePath.utils';
 import Image from 'next/image';
@@ -92,6 +90,7 @@ export default function CartPage() {
   const productIds = useMemo(() => {
     return Object.keys(products);
   }, [products]);
+
   return (
     <main className="max-w-4xl w-full p-4 mx-auto grow flex flex-col md:flex-row gap-4">
       <section className="flex flex-col gap-4 w-full grow">

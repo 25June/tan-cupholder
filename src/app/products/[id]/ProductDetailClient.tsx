@@ -17,6 +17,7 @@ import {
   saveViewedProductToStorage
 } from '@/shared/utils/storage';
 import { ProductTag } from '@/models/productTag';
+import { showToast } from '@/components/toast/Toast';
 
 interface Props {
   readonly product: Product;
@@ -53,7 +54,13 @@ const PurchaseActions = ({
 
   return (
     <div>
-      <Quantity setQuantity={setQuantity} quantity={quantity} />
+      <Quantity
+        setQuantity={(newQuantity) => {
+          setQuantity(newQuantity);
+          showToast(`Added ${product.name} to cart`, 'success');
+        }}
+        quantity={quantity}
+      />
       <div className="flex gap-4 mt-4">
         <button
           className="btn btn-primary btn-md btn-outline flex-1"

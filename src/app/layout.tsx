@@ -5,6 +5,7 @@ import { geistMono, geistSans, comingSoon, yuseiMagic } from '@/styles/fonts';
 import './globals.css';
 import { getLocale } from 'next-intl/server';
 import { ModesProvider } from '@/contexts/EditMode.context';
+import Toast from '@/components/toast/Toast';
 
 export const metadata: Metadata = {
   title: 'TaN',
@@ -91,6 +92,7 @@ export default async function RootLayout({
             <ModesProvider>{children}</ModesProvider>
           </NextIntlClientProvider>
         </SessionProvider>
+        <Toast />
       </body>
     </html>
   );

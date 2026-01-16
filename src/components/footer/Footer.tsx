@@ -20,7 +20,7 @@ export default function Footer() {
           className="w-full h-full object-cover object-bottom overflow-x-hidden color-transparent min-w-[768px]"
         />
       </div>
-      <footer className="text-[16px] text-white max-w-8xl mx-auto leading-[24px] grid sm:grid-cols-2 grid-cols-1 justify-between sm:px-8 px-4 py-[40px] sm:py-[48px] font-bold">
+      <footer className="text-[16px] text-white max-w-8xl mx-auto leading-[24px] grid sm:grid-cols-2 grid-cols-1 justify-between sm:px-8 px-4 py-[40px] sm:py-[48px] md:py-[56px] lg:py-[64px] font-bold">
         <motion.div
           className="flex flex-col sm:gap-3 gap-5 md:justify-between"
           initial="offscreen"

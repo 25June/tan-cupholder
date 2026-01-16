@@ -28,7 +28,7 @@ export default function ProductsContainer() {
       <div className="relative h-full max-w-8xl mx-auto p-4 pb-20 gap-16 md:p-20">
         {/* Header with search and filter */}
         <header className="flex justify-between items-start md:items-end flex-col md:flex-row">
-          <div className="shrink-0 w-full">
+          <div className="shrink-0">
             <h2 className="text-md md:text-lg text-slate-400">
               Environment Friendly
             </h2>
@@ -38,7 +38,7 @@ export default function ProductsContainer() {
               Low Impact Collections
             </h3>
           </div>
-          <div className="flex gap-2 mb-4 w-full justify-end">
+          <div className="flex grow gap-2 mb-4 w-full justify-end">
             <SearchProducts onSearch={onSearch} />
             <ColorFilter
               defaultColor={''}
