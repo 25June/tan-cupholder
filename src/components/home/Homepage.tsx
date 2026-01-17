@@ -15,6 +15,9 @@ export default function Homepage() {
   return (
     <div className="relative min-h-screen">
       <Preload isLoading={isLoading} />
+      <div className="w-screen z-50 fixed top-0 left-0">
+        <div className="w-0 h-[4px] md:h-[8px] bg-logo-orange-border progress"></div>
+      </div>
       <MenuBar />
 
       <main className="flex flex-col text-logo-text">

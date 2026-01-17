@@ -67,7 +67,7 @@ export function MenuBar() {
 
         <div
           className={` flex justify-between md:justify-evenly p-1 md:p-2 rounded-3xl
-  duration-300  `}
+  duration-300`}
         >
           <button
             id={`link-${View.HERO}`}

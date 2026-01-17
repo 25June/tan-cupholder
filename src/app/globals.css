@@ -175,3 +175,15 @@ input[type='number']::-webkit-outer-spin-button {
 .admin-layout h5 {
   font-family: var(--font-lusitana);
 }
+
+.progress {
+  box-shadow: 0 2px 8px 0 #fff;
+  animation: grow linear forwards;
+  animation-timeline: scroll();
+}
+
+@keyframes grow {
+  to {
+    width: 100%;
+  }
+}
