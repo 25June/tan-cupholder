@@ -1,10 +1,10 @@
 'use client';
 
-// import {
-//   getCookie,
-//   removeCookie,
-//   setCookie
-// } from '@/shared/utils/cookies.utils';
+import {
+  getCookie,
+  removeCookie,
+  setCookie
+} from '@/shared/utils/cookies.utils';
 import { LocalStorageKey } from '@/constants/storageKey.const';
 
 export const getStorage = (key: string) => {
@@ -13,7 +13,13 @@ export const getStorage = (key: string) => {
     return value ? JSON.parse(value) : null;
   } catch (error) {
     console.error('Error getting storage', error);
-    return null;
+    try {
+      const value = getCookie(key);
+      return value ? JSON.parse(value) : null;
+    } catch (error) {
+      console.error('Error getting cookie', error);
+      return null;
+    }
   }
 };
 
@@ -22,7 +28,11 @@ export const setStorage = (key: string, value: any) => {
     window.localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
     console.error('Error setting storage', error);
-    return null;
+    try {
+      setCookie(key, JSON.stringify(value));
+    } catch (error) {
+      console.error('Error setting cookie', error);
+    }
   }
 };
 
@@ -31,7 +41,11 @@ export const removeStorage = (key: string) => {
     window.localStorage.removeItem(key);
   } catch (error) {
     console.error('Error removing storage', error);
-    return null;
+    try {
+      removeCookie(key);
+    } catch (error) {
+      console.error('Error removing cookie', error);
+    }
   }
 };
 
