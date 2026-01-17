@@ -10,7 +10,7 @@ const MotionLink = motion(Link);
 export default function Footer() {
   const t = useTranslations('HomePage.FooterSection');
   return (
-    <div className="bg-logo-orange-border relative">
+    <div className="bg-logo-orange-border relative mt-8">
       <div className="absolute w-full overflow-x-hidden transform -translate-y-[95%]">
         <Image
           src={'/bottom-wave.svg'}
